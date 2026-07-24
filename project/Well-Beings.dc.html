@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-c9c225e3-98ec-423c-a59a-b98caa45220d/styles.css">
+  <script src="_ds/nocturne-c9c225e3-98ec-423c-a59a-b98caa45220d/_ds_bundle.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);}
+    a{color:var(--color-accent-300);text-decoration:none;}
+    a:hover{color:var(--color-accent-200);text-decoration:underline;}
+    @keyframes msgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+    @keyframes dotPulse{0%,80%,100%{opacity:.25;}40%{opacity:1;}}
+    @keyframes breatheRing{0%{transform:scale(.72);}30%{transform:scale(.94);}38%{transform:scale(1);}55%{transform:scale(1);}100%{transform:scale(.72);}}
+  </style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:14.5px;line-height:1.55;">
+
+  <header class="nav" style="display:flex;align-items:center;gap:16px;padding:10px 22px;border-bottom:1px solid var(--color-divider);position:sticky;top:0;background:color-mix(in srgb, var(--color-bg) 92%, transparent);backdrop-filter:blur(8px);z-index:40;">
+    <div class="nav-brand" style="display:flex;align-items:center;gap:9px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--color-accent);"><path d="M12 21c-4.5-2.9-8-6.1-8-10a5 5 0 0 1 9-3 5 5 0 0 1 7 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path><path d="M13 17h2.2l1.3-3 2 5 1.3-2H22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <span style="font-family:var(--font-heading);font-weight:500;font-size:15px;letter-spacing:.01em;">Well-Beings</span>
+    </div>
+    <span class="tag tag-neutral" style="font-size:10.5px;">On-device · no third parties</span>
+    <div style="flex:1;"></div>
+    <button class="btn btn-ghost" onClick="{{ openHelp }}" style="font-size:12.5px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="color:currentColor;margin-right:6px;vertical-align:-2px;"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+      Help now
+    </button>
+  </header>
+
+  <sc-if value="{{ screenWelcome }}" hint-placeholder-val="{{ true }}">
+    <main data-screen-label="Welcome" style="flex:1;display:flex;flex-direction:column;">
+      <div style="max-width:1060px;width:100%;margin:0 auto;padding:64px 24px 40px;box-sizing:border-box;display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;">
+        <div style="flex:1 1 480px;min-width:320px;">
+          <div class="tag tag-accent" style="margin-bottom:18px;">Evidence-based · built on 15+ peer-reviewed studies</div>
+          <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(30px,4.5vw,44px);line-height:1.12;margin:0 0 16px;letter-spacing:-0.01em;">A system for your energy,<br>not just your to-do list.</h1>
+          <p style="color:var(--color-neutral-400);font-size:16px;max-width:520px;margin:0 0 26px;text-wrap:pretty;">A 5-minute check-in about your sleep, mood, stress and goals — using the same short screeners clinicians use — then a personalised daily system designed to raise output and keep you clear of burnout.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px;">
+            <button class="btn btn-primary" onClick="{{ startChat }}" style="font-size:14px;padding:10px 20px;">Start the check-in · ~5 min</button>
+            <button class="btn btn-secondary" onClick="{{ startDemo }}" style="font-size:14px;padding:10px 20px;">Preview a sample profile</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:640px;">
+            <div style="border-top:1px solid var(--color-accent-700);padding-top:10px;">
+              <div style="font-weight:500;font-size:13px;margin-bottom:3px;">Private by design</div>
+              <div style="color:var(--color-neutral-500);font-size:12.5px;">Everything stays in your browser. Nothing is uploaded, shared or sold. Delete it anytime.</div>
+            </div>
+            <div style="border-top:1px solid var(--color-accent-700);padding-top:10px;">
+              <div style="font-weight:500;font-size:13px;margin-bottom:3px;">Adaptive, not exhausting</div>
+              <div style="color:var(--color-neutral-500);font-size:12.5px;">Short screeners first; deeper questions only if something flags — the approach validated in JAMA.</div>
+            </div>
+            <div style="border-top:1px solid var(--color-accent-700);padding-top:10px;">
+              <div style="font-weight:500;font-size:13px;margin-bottom:3px;">Research-backed only</div>
+              <div style="color:var(--color-neutral-500);font-size:12.5px;">Every practice cites its meta-analysis or trial — and says so when evidence is young.</div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:0 1 320px;min-width:280px;display:flex;flex-direction:column;gap:12px;">
+          <div class="card" style="padding:18px;">
+            <div class="card-kicker" style="font-size:10.5px;color:var(--color-neutral-500);letter-spacing:.08em;text-transform:uppercase;">From the research inside</div>
+            <div style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:8px 0 2px;color:var(--color-accent-300);">−38%</div>
+            <div style="font-size:12.5px;color:var(--color-neutral-400);">depression risk for people with a regular sleep window — independent of hours slept. Cohort of 79,666 (Psychological Medicine, 2025).</div>
+          </div>
+          <div class="card" style="padding:18px;">
+            <div style="font-family:var(--font-heading);font-weight:500;font-size:26px;margin:0 0 2px;color:var(--color-accent-300);">d = .65</div>
+            <div style="font-size:12.5px;color:var(--color-neutral-400);">effect of "if-then" planning on goal attainment across 94 tests (Gollwitzer &amp; Sheeran meta-analysis).</div>
+          </div>
+          <div style="font-size:11px;color:var(--color-neutral-600);line-height:1.5;">Well-Beings is a self-guidance tool, not a medical device. Its screeners signal — they don't diagnose. If you're in crisis, use <a href="#" onClick="{{ openHelpA }}">Help now</a>.</div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ screenChat }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Check-in chat" style="flex:1;display:flex;flex-direction:column;max-width:680px;width:100%;margin:0 auto;padding:0 16px;box-sizing:border-box;min-height:0;">
+      <div style="display:flex;align-items:center;gap:10px;padding:14px 4px 10px;">
+        <span class="tag tag-accent" style="font-size:10.5px;">{{ progSec }}</span>
+        <div style="flex:1;height:2px;background:var(--color-neutral-900);border-radius:2px;overflow:hidden;"><div style="height:100%;background:linear-gradient(90deg,var(--color-accent-700),var(--color-accent-400));width:{{ progPct }};transition:width .4s ease;"></div></div>
+        <span style="font-size:11px;color:var(--color-neutral-500);">{{ progLabel }}</span>
+      </div>
+      <div ref="{{ chatRef }}" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:8px 4px 16px;min-height:0;">
+        <sc-for list="{{ messages }}" as="m" hint-placeholder-count="0">
+          <div style="display:flex;flex-direction:column;">
+            <sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ true }}">
+              <div style="align-self:flex-start;max-width:86%;background:var(--color-surface);border:1px solid var(--color-divider);border-radius:12px 12px 12px 4px;padding:10px 14px;animation:msgIn .25s ease;white-space:pre-line;">{{ m.text }}</div>
+            </sc-if>
+            <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+              <div style="align-self:flex-end;max-width:86%;background:var(--color-accent-900);border:1px solid var(--color-accent-800);border-radius:12px 12px 4px 12px;padding:10px 14px;animation:msgIn .25s ease;color:var(--color-accent-100);">{{ m.text }}</div>
+            </sc-if>
+            <sc-if value="{{ m.isCrisis }}" hint-placeholder-val="{{ false }}">
+              <div style="align-self:stretch;background:linear-gradient(135deg,var(--color-section),var(--color-section-glow));border:1px solid var(--color-accent-500);border-radius:12px;padding:16px 18px;animation:msgIn .3s ease;margin:4px 0;">
+                <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:6px;">You matter — and support exists right now.</div>
+                <div style="font-size:13px;color:var(--color-accent-200);margin-bottom:12px;text-wrap:pretty;">Thanks for being honest. That answer isn't stored anywhere but this device — and it deserves a human, not an app. If these thoughts get heavy, please reach out:</div>
+                <sc-for list="{{ m.lines }}" as="h" hint-placeholder-count="2">
+                  <div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid color-mix(in srgb, var(--color-accent-300) 25%, transparent);font-size:13px;">
+                    <span>{{ h.name }}</span><span style="font-weight:500;color:var(--color-accent-200);white-space:nowrap;">{{ h.contact }}</span>
+                  </div>
+                </sc-for>
+                <div style="font-size:11.5px;color:var(--color-accent-300);margin-top:10px;">Free · confidential · 24/7. If you're in immediate danger, call your local emergency number.</div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:flex-start;background:var(--color-surface);border:1px solid var(--color-divider);border-radius:12px 12px 12px 4px;padding:12px 16px;display:flex;gap:5px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--color-neutral-400);animation:dotPulse 1.2s infinite;"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--color-neutral-400);animation:dotPulse 1.2s .2s infinite;"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--color-neutral-400);animation:dotPulse 1.2s .4s infinite;"></span>
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding:10px 4px 18px;border-top:1px solid var(--color-divider);">
+        <sc-if value="{{ qSub }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--color-neutral-500);margin-bottom:9px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="color:var(--color-accent-400);"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8"></path></svg>
+            {{ qSub }}
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasOptions }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <sc-for list="{{ currentOpts }}" as="opt" hint-placeholder-count="0">
+              <button class="btn btn-secondary" onClick="{{ opt.onPick }}" style="{{ opt.style }}">{{ opt.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ awaitingText }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;">
+            <input class="input" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onDraftKey }}" placeholder="Type here… (or just send to skip)" style="flex:1;">
+            <button class="btn btn-primary" onClick="{{ sendDraft }}">Send</button>
+          </div>
+        </sc-if>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ screenResults }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="Results" style="flex:1;max-width:1060px;width:100%;margin:0 auto;padding:44px 24px 60px;box-sizing:border-box;">
+      <div class="tag tag-accent" style="margin-bottom:14px;">Your read-out</div>
+      <h1 style="font-family:var(--font-heading);font-weight:500;font-size:clamp(26px,3.6vw,36px);margin:0 0 8px;letter-spacing:-0.01em;">{{ resultsTitle }}</h1>
+      <p style="color:var(--color-neutral-400);max-width:600px;margin:0 0 28px;text-wrap:pretty;">Screener scores are signals, not diagnoses. Here's what flagged, what didn't, and what your system will focus on.</p>
+      <sc-if value="{{ crisis }}" hint-placeholder-val="{{ false }}">
+        <div style="background:linear-gradient(135deg,var(--color-section),var(--color-section-glow));border:1px solid var(--color-accent-500);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:26px;">
+          <div style="font-family:var(--font-heading);font-weight:500;font-size:16px;margin-bottom:4px;">Before anything else — real support</div>
+          <div style="font-size:13px;color:var(--color-accent-200);margin-bottom:10px;max-width:640px;text-wrap:pretty;">You mentioned thoughts of self-harm. An app is the wrong tool for that moment — a person is the right one. These lines are free, confidential and open 24/7:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <sc-for list="{{ regionLines }}" as="h" hint-placeholder-count="2">
+              <div style="background:color-mix(in srgb, var(--color-bg) 45%, transparent);border:1px solid color-mix(in srgb, var(--color-accent-300) 30%, transparent);border-radius:var(--radius-md);padding:9px 14px;font-size:13px;"><span style="color:var(--color-accent-300);">{{ h.name }}</span> · <span style="font-weight:500;">{{ h.contact }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-bottom:30px;">
+        <sc-for list="{{ resultCards }}" as="r" hint-placeholder-count="4">
+          <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:8px;min-height:150px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+              <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-500);">{{ r.domain }}</span>
+              <span class="tag" style="{{ r.tagStyle }}">{{ r.band }}</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:6px;">
+              <span style="font-family:var(--font-heading);font-weight:500;font-size:30px;">{{ r.score }}</span>
+              <span style="font-size:12px;color:var(--color-neutral-500);">{{ r.outOf }}</span>
+            </div>
+            <div style="height:3px;border-radius:2px;background:var(--color-neutral-900);overflow:hidden;"><div style="height:100%;background:var(--color-accent-500);width:{{ r.pct }};"></div></div>
+            <div style="font-size:12.5px;color:var(--color-neutral-400);text-wrap:pretty;">{{ r.text }}</div>
+            <div style="font-size:10.5px;color:var(--color-neutral-600);margin-top:auto;">{{ r.src }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ seekHelp }}" hint-placeholder-val="{{ false }}">
+        <div class="card" style="padding:16px 18px;margin-bottom:26px;border-left:none;display:flex;gap:12px;align-items:flex-start;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--color-accent-400);flex:none;margin-top:2px;"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 8v5M12 16v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+          <div style="font-size:13px;color:var(--color-neutral-300);text-wrap:pretty;">Some scores are in a range where talking to a professional genuinely helps — screeners at this level are exactly what clinicians use to start that conversation. Your plan below still applies; it works alongside support, not instead of it. <a href="#" onClick="{{ openHelpA }}">See support options →</a></div>
+        </div>
+      </sc-if>
+      <button class="btn btn-primary" onClick="{{ buildSystem }}" style="font-size:14.5px;padding:11px 24px;">Build my system →</button>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ screenApp }}" hint-placeholder-val="{{ false }}">
+    <main data-screen-label="App" style="flex:1;display:flex;flex-direction:column;">
+      <div style="border-bottom:1px solid var(--color-divider);">
+        <div style="max-width:1060px;margin:0 auto;padding:0 24px;display:flex;gap:4px;overflow-x:auto;">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+            <button onClick="{{ t.onSel }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="max-width:1060px;width:100%;margin:0 auto;padding:30px 24px 70px;box-sizing:border-box;">
+
+        <sc-if value="{{ tabToday }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Today" style="display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start;">
+            <div style="flex:1 1 440px;min-width:300px;">
+              <h2 style="font-family:var(--font-heading);font-weight:500;font-size:24px;margin:0 0 2px;">{{ greeting }}</h2>
+              <div style="color:var(--color-neutral-500);font-size:12.5px;margin-bottom:20px;">{{ todayLine }}</div>
+              <div style="display:flex;flex-direction:column;">
+                <sc-for list="{{ schedule }}" as="s" hint-placeholder-count="6">
+                  <div style="display:flex;gap:14px;padding:9px 0;border-bottom:1px solid var(--color-divider);">
+                    <span style="width:66px;flex:none;font-size:12px;color:var(--color-accent-300);font-weight:500;padding-top:2px;">{{ s.t }}</span>
+                    <div style="flex:1;">
+                      <div style="font-size:13.5px;">{{ s.label }}</div>
+                      <sc-if value="{{ s.note }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;color:var(--color-neutral-500);">{{ s.note }}</div></sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-size:11.5px;color:var(--color-neutral-600);margin-top:10px;">Blocks flex around classes and shifts — the anchors that matter most are the wake time, the shutdown, and lights-out.</div>
+            </div>
+            <div style="flex:0 1 340px;min-width:290px;display:flex;flex-direction:column;gap:16px;">
+              <div class="card" style="padding:18px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                  <span style="font-family:var(--font-heading);font-weight:500;font-size:15px;">Daily check-in</span>
+                  <sc-if value="{{ checkedInToday }}" hint-placeholder-val="{{ false }}"><span class="tag tag-accent" style="font-size:10px;">Logged today</span></sc-if>
+                </div>
+                <sc-for list="{{ checkinRows }}" as="row" hint-placeholder-count="3">
+                  <div style="margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--color-neutral-500);margin-bottom:5px;"><span>{{ row.label }}</span><span>{{ row.hint }}</span></div>
+                    <div style="display:flex;gap:6px;">
+                      <sc-for list="{{ row.opts }}" as="o" hint-placeholder-count="5">
+                        <button onClick="{{ o.onPick }}" style="{{ o.style }}">{{ o.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+                <div style="font-size:10.5px;color:var(--color-neutral-600);">Feeds your burnout radar. 10 seconds, stays on this device.</div>
+              </div>
+              <div class="card" style="padding:18px;">
+                <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:4px;">Habit stack</div>
+                <div style="font-size:11.5px;color:var(--color-neutral-500);margin-bottom:12px;">Anchored to things you already do. Missing a day doesn't reset progress — the research says it doesn't matter.</div>
+                <sc-for list="{{ habits }}" as="h" hint-placeholder-count="3">
+                  <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--color-divider);">
+                    <button onClick="{{ h.onToggle }}" style="{{ h.boxStyle }}">
+                      <sc-if value="{{ h.done }}" hint-placeholder-val="{{ false }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></sc-if>
+                    </button>
+                    <div style="flex:1;">
+                      <div style="font-size:11px;color:var(--color-neutral-500);">{{ h.anchor }}</div>
+                      <div style="font-size:13px;">{{ h.habit }}</div>
+                    </div>
+                    <span style="font-size:11px;color:var(--color-accent-300);white-space:nowrap;">{{ h.streak }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabPlan }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Plan">
+            <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:30px;">
+              <div class="card" style="flex:1 1 300px;padding:20px;background:linear-gradient(135deg,var(--color-section),var(--color-section-glow));border:none;">
+                <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-300);margin-bottom:8px;">Your sleep window</div>
+                <div style="font-family:var(--font-heading);font-weight:500;font-size:28px;">{{ sleepWindow }}</div>
+                <div style="font-size:12.5px;color:var(--color-accent-200);margin-top:6px;text-wrap:pretty;">{{ sleepWindowWhy }}</div>
+              </div>
+              <div class="card" style="flex:1 1 300px;padding:20px;">
+                <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:8px;">This week's focus</div>
+                <div style="font-family:var(--font-heading);font-weight:500;font-size:19px;">{{ weekFocus }}</div>
+                <div style="font-size:12.5px;color:var(--color-neutral-400);margin-top:6px;text-wrap:pretty;">{{ weekFocusWhy }}</div>
+              </div>
+            </div>
+            <h3 style="font-family:var(--font-heading);font-weight:500;font-size:18px;margin:0 0 4px;">Your interventions</h3>
+            <p style="color:var(--color-neutral-500);font-size:12.5px;margin:0 0 16px;">Chosen from your flags. Each one names its evidence — tap through to the paper in the Library.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:34px;">
+              <sc-for list="{{ interventions }}" as="iv" hint-placeholder-count="4">
+                <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:9px;">
+                  <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+                    <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;">{{ iv.title }}</div>
+                    <span class="tag tag-outline" style="font-size:10px;flex:none;">{{ iv.tag }}</span>
+                  </div>
+                  <div style="font-size:12.5px;color:var(--color-neutral-400);text-wrap:pretty;">{{ iv.why }}</div>
+                  <div style="display:flex;flex-direction:column;gap:5px;">
+                    <sc-for list="{{ iv.steps }}" as="st" hint-placeholder-count="3">
+                      <div style="display:flex;gap:8px;font-size:12.5px;"><span style="color:var(--color-accent-400);">→</span><span>{{ st }}</span></div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ iv.tryBreath }}" hint-placeholder-val="{{ false }}">
+                    <button class="btn btn-secondary" onClick="{{ openBreath }}" style="align-self:flex-start;font-size:12px;">Try it now · 1 min</button>
+                  </sc-if>
+                  <div style="font-size:10.5px;color:var(--color-neutral-600);margin-top:auto;">{{ iv.src }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <h3 style="font-family:var(--font-heading);font-weight:500;font-size:18px;margin:0 0 4px;">Weekly recovery quota</h3>
+            <p style="color:var(--color-neutral-500);font-size:12.5px;margin:0 0 16px;">Recovery isn't a reward for finishing — it's what keeps the engine running. Tick them off through the week.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;">
+              <sc-for list="{{ weekly }}" as="w" hint-placeholder-count="4">
+                <button onClick="{{ w.onToggle }}" style="{{ w.style }}">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px;">
+                    <span style="font-weight:500;font-size:13.5px;">{{ w.title }}</span>
+                    <span style="{{ w.checkStyle }}">✓</span>
+                  </div>
+                  <div style="font-size:11.5px;color:var(--color-neutral-500);text-align:left;text-wrap:pretty;">{{ w.desc }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabBurnout }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Burnout radar" style="display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start;">
+            <div style="flex:1 1 400px;min-width:300px;">
+              <div class="card" style="padding:22px;margin-bottom:18px;">
+                <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+                  <div style="{{ radarRingStyle }}">
+                    <span style="font-family:var(--font-heading);font-weight:500;font-size:22px;">{{ radarScore }}</span>
+                  </div>
+                  <div style="flex:1;min-width:200px;">
+                    <div style="font-family:var(--font-heading);font-weight:500;font-size:18px;margin-bottom:3px;">{{ radarLabel }}</div>
+                    <div style="font-size:12.5px;color:var(--color-neutral-400);text-wrap:pretty;">{{ radarText }}</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:3px;margin-top:16px;align-items:flex-end;height:44px;">
+                  <sc-for list="{{ radarBars }}" as="b" hint-placeholder-count="7">
+                    <div style="{{ b.style }}" title="{{ b.tip }}"></div>
+                  </sc-for>
+                </div>
+                <div style="font-size:10.5px;color:var(--color-neutral-600);margin-top:6px;">Last 14 days of check-ins · drain level per day. Log daily on the Today tab to sharpen this.</div>
+              </div>
+              <div class="card" style="padding:18px;">
+                <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:10px;">Early-warning signs</div>
+                <sc-for list="{{ warnSigns }}" as="ws" hint-placeholder-count="4">
+                  <div style="display:flex;gap:9px;padding:6px 0;border-top:1px solid var(--color-divider);font-size:12.5px;color:var(--color-neutral-300);"><span style="color:var(--color-accent-400);flex:none;">◆</span><span>{{ ws }}</span></div>
+                </sc-for>
+                <div style="font-size:11px;color:var(--color-neutral-600);margin-top:10px;">Two or more, most days, for two weeks → shrink commitments and raise recovery. That pattern predicts exhaustion in longitudinal studies.</div>
+              </div>
+            </div>
+            <div style="flex:1 1 380px;min-width:300px;">
+              <h3 style="font-family:var(--font-heading);font-weight:500;font-size:16px;margin:0 0 4px;">The four recovery channels</h3>
+              <p style="font-size:12.5px;color:var(--color-neutral-500);margin:0 0 14px;text-wrap:pretty;">A meta-analysis of 99,329 people found four distinct experiences that refill you. Cover all four across a week — they're not interchangeable.</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;">
+                <sc-for list="{{ recoveryCards }}" as="rc" hint-placeholder-count="4">
+                  <div class="card" style="padding:16px;">
+                    <div style="font-weight:500;font-size:13.5px;margin-bottom:4px;color:var(--color-accent-300);">{{ rc.name }}</div>
+                    <div style="font-size:12px;color:var(--color-neutral-400);margin-bottom:8px;text-wrap:pretty;">{{ rc.what }}</div>
+                    <div style="font-size:11.5px;color:var(--color-neutral-500);">e.g. {{ rc.eg }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabLibrary }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Evidence library">
+            <h2 style="font-family:var(--font-heading);font-weight:500;font-size:22px;margin:0 0 4px;">Why each practice is here</h2>
+            <p style="color:var(--color-neutral-500);font-size:13px;margin:0 0 22px;max-width:620px;text-wrap:pretty;">Every recommendation in Well-Beings traces to peer-reviewed research — mostly meta-analyses and large cohorts, sourced via PubMed &amp; Consensus. Where the evidence is young or mixed, the card says so.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;">
+              <sc-for list="{{ evidence }}" as="ev" hint-placeholder-count="6">
+                <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <span class="tag tag-accent" style="font-size:10px;">{{ ev.tag }}</span>
+                    <span class="tag tag-neutral" style="font-size:10px;">{{ ev.design }}</span>
+                  </div>
+                  <div style="font-size:13.5px;text-wrap:pretty;">{{ ev.finding }}</div>
+                  <div style="font-size:12px;color:var(--color-neutral-500);">In Well-Beings: {{ ev.use }}</div>
+                  <a href="{{ ev.url }}" target="_blank" rel="noopener" style="font-size:11.5px;margin-top:auto;">{{ ev.cite }} ↗</a>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabHelp }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Help and privacy" style="max-width:720px;">
+            <h2 style="font-family:var(--font-heading);font-weight:500;font-size:22px;margin:0 0 4px;">Support, whenever you need it</h2>
+            <p style="color:var(--color-neutral-500);font-size:13px;margin:0 0 20px;text-wrap:pretty;">If things feel heavy — or you just need someone to talk to — these services are free, confidential and open 24/7. You never need to be "in crisis enough" to call.</p>
+            <div class="card" style="padding:20px;margin-bottom:18px;">
+              <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-500);margin-bottom:10px;">{{ helpRegionLabel }}</div>
+              <sc-for list="{{ regionLines }}" as="h" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--color-divider);font-size:13.5px;flex-wrap:wrap;">
+                  <span>{{ h.name }}</span><span style="font-weight:500;color:var(--color-accent-300);">{{ h.contact }}</span>
+                </div>
+              </sc-for>
+              <div style="font-size:11.5px;color:var(--color-neutral-600);margin-top:10px;">Anywhere else: <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> lists verified lines for 130+ countries. Immediate danger → your local emergency number.</div>
+            </div>
+            <div class="card" style="padding:20px;margin-bottom:18px;">
+              <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:8px;">When to seek professional support</div>
+              <div style="font-size:12.5px;color:var(--color-neutral-400);text-wrap:pretty;">If low mood or anxiety scores sit in the moderate+ range for two weeks, if sleep stays broken despite a steady window, or if you're using more and more effort to do less and less — that's the point where a GP, counsellor or school/uni mental-health service genuinely changes the curve. Taking your Results screen to that conversation is a strong start.</div>
+            </div>
+            <div class="card" style="padding:20px;">
+              <div style="font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:8px;">Your data</div>
+              <div style="font-size:12.5px;color:var(--color-neutral-400);margin-bottom:14px;">Everything — answers, scores, check-ins — lives in this browser's local storage. No account, no server, no analytics, no third parties. Deleting it is instant and irreversible.</div>
+              <button class="btn btn-secondary" onClick="{{ deleteData }}" style="font-size:12.5px;">Delete all my data</button>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ helpOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" onClick="{{ closeHelp }}" style="position:fixed;inset:0;background:rgba(10,11,20,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;">
+      <div class="dialog" onClick="{{ stopClick }}" style="max-width:440px;width:100%;background:var(--color-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:24px;">
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:17px;margin-bottom:4px;">Help, right now</div>
+        <div style="font-size:12.5px;color:var(--color-neutral-400);margin-bottom:14px;">Free, confidential, 24/7 — for any level of "not okay".</div>
+        <sc-for list="{{ regionLines }}" as="h" hint-placeholder-count="3">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--color-divider);font-size:13.5px;">
+            <span>{{ h.name }}</span><span style="font-weight:500;color:var(--color-accent-300);white-space:nowrap;">{{ h.contact }}</span>
+          </div>
+        </sc-for>
+        <div style="font-size:11.5px;color:var(--color-neutral-600);margin:10px 0 16px;">Elsewhere: <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> · Immediate danger → local emergency number.</div>
+        <button class="btn btn-primary" onClick="{{ closeHelp }}" style="width:100%;">Close</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ breathOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" onClick="{{ closeBreath }}" style="position:fixed;inset:0;background:rgba(10,11,20,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;">
+      <div class="dialog" onClick="{{ stopClick }}" style="max-width:400px;width:100%;background:var(--color-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:28px;text-align:center;">
+        <div style="font-family:var(--font-heading);font-weight:500;font-size:17px;margin-bottom:2px;">Cyclic sighing</div>
+        <div style="font-size:12px;color:var(--color-neutral-500);margin-bottom:22px;">Follow the ring · ~6 breaths is enough to shift state</div>
+        <div style="display:flex;align-items:center;justify-content:center;height:170px;margin-bottom:20px;">
+          <div style="width:150px;height:150px;border-radius:50%;border:2px solid var(--color-accent-500);box-shadow:0 0 40px color-mix(in srgb, var(--color-accent) 25%, transparent), inset 0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);animation:breatheRing 10s ease-in-out infinite;"></div>
+        </div>
+        <div style="font-size:13px;color:var(--color-neutral-300);text-align:left;display:flex;flex-direction:column;gap:6px;margin-bottom:20px;">
+          <div><span style="color:var(--color-accent-300);font-weight:500;">1.</span> Inhale through the nose…</div>
+          <div><span style="color:var(--color-accent-300);font-weight:500;">2.</span> …then a second, shorter sip of air on top</div>
+          <div><span style="color:var(--color-accent-300);font-weight:500;">3.</span> Long, slow exhale through the mouth (the ring shrinking)</div>
+        </div>
+        <button class="btn btn-primary" onClick="{{ closeBreath }}" style="width:100%;">Done</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <footer style="border-top:1px solid var(--color-divider);padding:14px 24px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;font-size:11px;color:var(--color-neutral-600);">
+    <span>Well-Beings — a self-guidance prototype. Not a medical device; screeners signal, they don't diagnose.</span>
+    <span>All data stays on this device.</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;persona&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;live (my data)&quot;,&quot;options&quot;:[&quot;live (my data)&quot;,&quot;sample: running hot&quot;,&quot;sample: steady&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;,&quot;description&quot;:&quot;Jump into a filled-in dashboard with a sample profile instead of taking the check-in&quot;},&quot;planIntensity&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;balanced&quot;,&quot;options&quot;:[&quot;gentle&quot;,&quot;balanced&quot;,&quot;driven&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;System&quot;,&quot;description&quot;:&quot;Reshapes the daily schedule: recovery-first, balanced, or maximum deep-work blocks&quot;},&quot;calmMode&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;System&quot;,&quot;description&quot;:&quot;Low-stimulation mode: scores and streak numbers become words — for anxiety-sensitive users&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'welcome', messages: [], typing: false, q: null, draft: '', tab: 'today', helpOpen: false, breathOpen: false, checkins: {}, habitsDone: {}, weeklyDone: {}, profile: null, crisis: false, progSec: 'Basics', progN: 1 };
+  KEY = 'wellbeings-v1';
+  chatRef = React.createRef();
+  answers = {}; pending = [];
+  sectionOf = { Basics: 1, Sleep: 2, Rhythm: 3, Mood: 4, Stress: 5 };
+  SCALE = [['Not at all',0],['Several days',1],['More than half the days',2],['Nearly every day',3]];
+  FREQ = [['Never',0],['Rarely',1],['Sometimes',2],['Often',3],['Almost always',4]];
+
+  HELPLINES = {
+    us:{label:'United States',lines:[{name:'988 Suicide & Crisis Lifeline',contact:'Call or text 988'},{name:'Crisis Text Line',contact:'Text HOME to 741741'},{name:'Emergency',contact:'911'}]},
+    uk:{label:'United Kingdom',lines:[{name:'Samaritans',contact:'116 123'},{name:'Shout (text support)',contact:'Text SHOUT to 85258'},{name:'Emergency',contact:'999'}]},
+    ca:{label:'Canada',lines:[{name:'Suicide Crisis Helpline',contact:'Call or text 988'},{name:'Kids Help Phone',contact:'1-800-668-6868'},{name:'Emergency',contact:'911'}]},
+    au:{label:'Australia',lines:[{name:'Lifeline',contact:'13 11 14'},{name:'Kids Helpline (ages 5–25)',contact:'1800 55 1800'},{name:'Emergency',contact:'000'}]},
+    in:{label:'India',lines:[{name:'Tele-MANAS (Govt., 20+ languages)',contact:'14416'},{name:'KIRAN helpline',contact:'1800-599-0019'},{name:'Emergency',contact:'112'}]},
+    nz:{label:'New Zealand',lines:[{name:'Need to Talk?',contact:'Call or text 1737'},{name:'Youthline',contact:'0800 376 633'},{name:'Emergency',contact:'111'}]},
+    intl:{label:'International',lines:[{name:'Find a Helpline (130+ countries)',contact:'findahelpline.com'},{name:'Befrienders Worldwide',contact:'befrienders.org'},{name:'Emergency',contact:'Your local number'}]}
+  };
+
+  EVIDENCE = [
+    {tag:'Screening',design:'IPD meta-analysis · 100 studies · N=44,318',finding:'Starting with the 2-item PHQ-2 and expanding to the full PHQ-9 only when flagged matches full-screening sensitivity with better specificity — and cuts questions by ~57%.',use:'why the chat starts short and goes deeper only if something flags.',cite:'Levis et al., 2020, JAMA',url:'https://consensus.app/papers/details/6ceb082f92f259f59c2fa9d8fa960712/'},
+    {tag:'Screening',design:'Clinical cohort · 2,183 visits, ages 12–25',finding:'In adolescents and young adults, a PHQ-2 score of ≥2 caught 89% of people with moderate-or-greater depressive symptoms.',use:'the youth-calibrated cutoff that triggers the deeper mood questions.',cite:'Pitts et al., 2023, J. Adolescent Health',url:'https://consensus.app/papers/details/d1249c895e1d5747b54ccb24654945fa/'},
+    {tag:'Sleep',design:'Meta-analysis · 65 RCTs · N=8,608',finding:'Improving sleep causes medium-sized improvements in depression (g −0.63), anxiety (g −0.51) and rumination — with a dose-response: better sleep, better mind.',use:'sleep is pillar #1 of every plan, before any productivity tactic.',cite:'Scott et al., 2021, Sleep Medicine Reviews',url:'https://consensus.app/papers/details/14ed5f49d1765b1ebef825aa4216a8f3/'},
+    {tag:'Sleep',design:'Accelerometer cohort · N=79,666 · 7.5 yrs',finding:'Regular sleepers had 38% lower risk of developing depression and 33% lower anxiety risk. Meeting duration guidelines did not cancel the risk of an irregular schedule.',use:'your plan fixes the window first, the hours second.',cite:'Li et al., 2025, Psychological Medicine',url:'https://consensus.app/papers/details/7ab87f554d8854c4bb416480de802a17/'},
+    {tag:'Sleep',design:'Wearable cohort · N≈100,000',finding:'A consistent nightly window beat raw duration for preventing mental disorders; 25%+ of people break routine on weekends, raising risk ~10%.',use:'the weekend rule: keep your window within ±30 min, all 7 days.',cite:'Moebus et al., 2025, BMC Public Health',url:'https://consensus.app/papers/details/480edbdabe4f58a8867a727589630ee6/'},
+    {tag:'Sleep',design:'Meta-analysis · 11 studies · N=5,267 students',finding:'Sleep programs for university students moderately reduced sleep disturbance and also improved anxiety and depression, holding at follow-up.',use:'evidence the sleep-first approach works for this app\u2019s core audience.',cite:'Chandler et al., 2022, Sleep Medicine',url:'https://consensus.app/papers/details/c754d2b6e8925e2a954b02f32d937a51/'},
+    {tag:'Burnout',design:'Meta-analysis · 316 samples · N=99,329',finding:'Psychologically detaching after work reduces exhaustion; relaxation and mastery raise engagement and well-being. The four recovery channels are distinct — not interchangeable.',use:'the shutdown ritual and the four-channel weekly recovery quota.',cite:'Headrick et al., 2022, J. Business & Psychology',url:'https://consensus.app/papers/details/b4b32af90fcd550d93e987eff3b59f43/'},
+    {tag:'Burnout',design:'Review · stressor–detachment model',finding:'High workload predicts low detachment, and low detachment predicts strain, burnout and lower life satisfaction — a loop that compounds if unbroken.',use:'the burnout radar watches your drain trend so you can break the loop early.',cite:'Sonnentag & Fritz, 2015, J. Organizational Behavior',url:'https://consensus.app/papers/details/a7fcb2608dea5efb8b589f690f2c76f5/'},
+    {tag:'Focus',design:'Meta-analysis · 22 samples · N=2,335',finding:'Micro-breaks (~2–10 min) reliably boosted vigor (d=.36) and cut fatigue (d=.35); recovery from heavy cognitive work needs longer than 10 minutes.',use:'the 50-on / 10-off rhythm inside your deep blocks.',cite:'Albulescu et al., 2022, PLoS ONE',url:'https://consensus.app/papers/details/ad9eb8a31f8e5a589ac6eecae765a6bb/'},
+    {tag:'Goals',design:'Meta-analysis · 94 tests',finding:'"If-then" plans (implementation intentions) improved goal attainment with a medium-to-large effect (d=.65) by automating the start of the behaviour.',use:'the one-line if-then you write at shutdown for tomorrow\u2019s first block.',cite:'Gollwitzer & Sheeran, 2006, Adv. Exp. Soc. Psych.',url:'https://consensus.app/papers/details/5f23556f39a35b74957933d9aac4c90f/'},
+    {tag:'Goals',design:'Meta-analysis · 29 experiments, clinical samples',finding:'If-then planning worked even better for people with mental-health difficulties (d≈.99) — structure compensates when self-regulation is depleted.',use:'plans get more specific, not more ambitious, when your scores are elevated.',cite:'Toli et al., 2016, Brit. J. Clinical Psychology',url:'https://consensus.app/papers/details/d8ccca83d3525ab09af97d4c7f3a3830/'},
+    {tag:'Habits',design:'Daily-tracking field studies · N=96 & 192',finding:'New habits took 18–254 days to become automatic (median ≈2 months); missing a single day made no measurable difference; stable context cues sped everything up.',use:'streaks that forgive misses, and habits anchored to routines you already have.',cite:'Lally et al., 2010, EJSP · Keller et al., 2021',url:'https://consensus.app/papers/details/c8c012abb9895e38bfd6d92c34b47a3e/'},
+    {tag:'Mood',design:'Meta-analysis · 16 RCTs, ages 12–25',finding:'Physical activity had a large effect on depression symptoms in young people (SMD −0.82); a 375-RCT umbrella review confirms benefits for anxiety too.',use:'the 30-min movement block, 3× a week, in mood-flagged plans.',cite:'Bailey et al., 2017, Psych. Medicine · Singh et al., 2025, JAACAP',url:'https://consensus.app/papers/details/3ee0b6c765075a05b08fbf5f9938dfcc/'},
+    {tag:'Mood',design:'Prospective cohorts · 49 studies · N=266,939',finding:'People with high physical activity had 17% lower odds of developing depression over the years — protection held across ages and regions.',use:'movement is prevention, not just treatment — it stays in every plan.',cite:'Schuch et al., 2018, Am. J. Psychiatry',url:'https://consensus.app/papers/details/ae4cd4ca223353a6a231e0fe11dd44f8/'},
+    {tag:'Stress',design:'RCT · 1 month · daily 5-min practices',finding:'Five minutes of exhale-weighted "cyclic sighing" daily improved mood and lowered resting respiratory rate more than mindfulness meditation.',use:'the 1-minute breathing tool. Honesty note: a placebo-controlled trial of a related technique found no benefit over placebo — so we treat breathwork as a quick state-shifter, not a cure.',cite:'Balban et al., 2023, Cell Reports Medicine',url:'https://consensus.app/papers/details/252fb4e9655a544f84d9b7d7bef57bdc/'},
+    {tag:'Stress',design:'Meta-analysis · 12 RCTs · N=785',finding:'Breathwork showed small-to-medium reductions in subjective stress (g −0.35), anxiety and depressive symptoms versus controls.',use:'why the breathing tool is offered for acute stress, with expectations set honestly.',cite:'Fincham et al., 2023, Scientific Reports',url:'https://consensus.app/papers/details/47b3b407e9505d2298d4ed70da367884/'}
+  ];
+
+  PERSONAS = {
+    'running-hot': { name:'Sam', age:'19-25', region:'us', situation:'University', sleepHours:6.5, sleepReg:2, sleepQual:2, sleepLatency:3, sleepScreens:4, chrono:'owl', wake:8, workload:3, phq:[1,1,2,1,1,1,1,1,0], phqExpanded:true, gad:[2,2,2,1,1,1,1], gadExpanded:true, bo:[3,3,3], goal:'Grades / exams' },
+    'steady': { name:'Alex', age:'16-18', region:'uk', situation:'School', sleepHours:7.5, sleepReg:0, sleepQual:1, chrono:'between', wake:7, workload:1, phq:[0,1], phqExpanded:false, gad:[1,0], gadExpanded:false, bo:[1,1,1], goal:'Build consistent routines' }
+  };
+
+  componentDidMount() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(this.KEY) || 'null');
+      if (saved && saved.profile) { this.setState({ profile: saved.profile, checkins: saved.checkins || {}, habitsDone: saved.habitsDone || {}, weeklyDone: saved.weeklyDone || {}, crisis: !!saved.crisis, screen: 'app' }); }
+    } catch (e) {}
+  }
+  componentDidUpdate() { const el = this.chatRef.current; if (el) el.scrollTop = el.scrollHeight; }
+  save(next) {
+    const s = { ...this.state, ...next };
+    try { localStorage.setItem(this.KEY, JSON.stringify({ profile: s.profile, checkins: s.checkins, habitsDone: s.habitsDone, weeklyDone: s.weeklyDone, crisis: s.crisis })); } catch (e) {}
+  }
+  dateKey(offset) { const d = new Date(); d.setDate(d.getDate() + (offset || 0)); return d.toISOString().slice(0, 10); }
+
+  // ---------- chat engine ----------
+  push(m) { this.setState(s => ({ messages: [...s.messages, m] })); }
+  say(list, done) {
+    this.setState({ typing: true, q: null });
+    const step = (i) => {
+      if (i >= list.length) { this.setState({ typing: false }); done && done(); return; }
+      setTimeout(() => { this.push({ isBot: true, text: list[i] }); if (i + 1 < list.length) this.setState({ typing: true }); else this.setState({ typing: false }); step(i + 1); }, i === 0 ? 500 : 850);
+    };
+    step(0);
+  }
+  ask(q) { this.setState({ progSec: q.section, progN: this.sectionOf[q.section] || 1 }); this.say([q.text], () => this.setState({ q })); }
+  next() { const q = this.pending.shift(); if (!q) return this.finishChat(); this.ask(q); }
+  answer(val, label) {
+    const q = this.state.q; if (!q) return;
+    this.push({ isUser: true, text: label });
+    this.answers[q.id] = val;
+    this.setState({ q: null });
+    if (q.after) q.after(val);
+    setTimeout(() => this.next(), 250);
+  }
+
+  startChat = () => {
+    this.answers = {}; this.pending = this.buildFlow();
+    this.setState({ screen: 'chat', messages: [], crisis: false, profile: null });
+    this.say(['Hey — I\u2019m your Well-Beings check-in. About 5 minutes, mostly taps.', 'First, the important bit: everything you answer stays in this browser. No account, no server, no third parties — and you can delete it all with one tap, anytime.'], () => this.next());
+  };
+  startDemo = () => { const p = this.buildProfile(this.PERSONAS['running-hot']); this.setState({ profile: p, screen: 'results', crisis: false }); };
+
+  buildFlow() {
+    const S = this.SCALE.map(([label, value]) => ({ label, value }));
+    const F = this.FREQ.map(([label, value]) => ({ label, value }));
+    const phqSub = 'PHQ — the standard clinical screener · answers never leave this device';
+    const gadSub = 'GAD — the standard anxiety screener · answers never leave this device';
+    const A = this.answers;
+    const flow = [
+      { id:'name', section:'Basics', type:'text', text:'What should I call you? (First name, nickname — or just hit send to skip.)' },
+      { id:'age', section:'Basics', type:'choice', text:'How old are you? This sets your sleep target — teens genuinely need more.', opts:[{label:'Under 16',value:'u16'},{label:'16–18',value:'16-18'},{label:'19–25',value:'19-25'},{label:'26 or older',value:'26+'}] },
+      { id:'region', section:'Basics', type:'choice', text:'Where are you based? Only used to show the right local support lines — never sent anywhere.', opts:[{label:'United States',value:'us'},{label:'United Kingdom',value:'uk'},{label:'Canada',value:'ca'},{label:'Australia',value:'au'},{label:'India',value:'in'},{label:'New Zealand',value:'nz'},{label:'Somewhere else',value:'intl'}] },
+      { id:'situation', section:'Basics', type:'choice', text:'What fills most of your week?', opts:[{label:'School',value:'School'},{label:'University',value:'University'},{label:'Working',value:'Working'},{label:'A mix of these',value:'A mix'}] },
+      { id:'sleepHours', section:'Sleep', type:'choice', text:'On a normal night, how much sleep do you actually get?', opts:[{label:'Under 6h',value:5.5},{label:'6–7h',value:6.5},{label:'7–8h',value:7.5},{label:'8–9h',value:8.5},{label:'9h or more',value:9.5}] },
+      { id:'sleepReg', section:'Sleep', type:'choice', text:'Do you fall asleep and wake at roughly the same times every day — weekends included?', opts:[{label:'Yes, within ~30 min',value:0},{label:'Weekdays yes, weekends drift',value:1},{label:'Honestly, it changes all the time',value:2}] },
+      { id:'sleepQual', section:'Sleep', type:'choice', text:'And the quality — do you wake up feeling actually restored?', opts:[{label:'Most mornings',value:0},{label:'Some mornings',value:1},{label:'Rarely',value:2},{label:'Basically never',value:3}],
+        after:(v)=>{ if (v >= 2 || A.sleepHours <= 6.5) this.pending.unshift(
+          { id:'sleepLatency', section:'Sleep', type:'choice', text:'Going a level deeper on sleep, since it flagged. How often does falling asleep take you more than 30 minutes?', opts:F },
+          { id:'sleepScreens', section:'Sleep', type:'choice', text:'How often are you on your phone in bed right up until you fall asleep?', opts:F }
+        ); } },
+      { id:'chrono', section:'Rhythm', type:'choice', text:'When does your brain actually work best?', opts:[{label:'Morning person',value:'morning'},{label:'Somewhere in between',value:'between'},{label:'Night owl',value:'owl'}] },
+      { id:'wake', section:'Rhythm', type:'choice', text:'What time do you need to be up on a typical day?', opts:[{label:'Before 6:30',value:6.25},{label:'6:30–7:30',value:7},{label:'7:30–8:30',value:8},{label:'After 8:30',value:8.75}] },
+      { id:'workload', section:'Rhythm', type:'choice', text:'Be honest — a typical week feels…', opts:[{label:'Comfortable',value:0},{label:'Full, but doable',value:1},{label:'Overloaded',value:2},{label:'Crushing',value:3}] },
+      { id:'phq1', section:'Mood', type:'choice', sub:phqSub, text:'Now two standard mood questions — same ones clinicians use.\n\nOver the last 2 weeks, how often have you had little interest or pleasure in doing things?', opts:S },
+      { id:'phq2', section:'Mood', type:'choice', sub:phqSub, text:'…and how often have you felt down, depressed, or hopeless?', opts:S,
+        after:(v)=>{ if ((A.phq1 || 0) + v >= 2) this.pending.unshift(
+          { id:'phq3', section:'Mood', type:'choice', sub:phqSub, text:'That\u2019s worth a closer look — the full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?', opts:S },
+          { id:'phq4', section:'Mood', type:'choice', sub:phqSub, text:'Feeling tired or having little energy?', opts:S },
+          { id:'phq5', section:'Mood', type:'choice', sub:phqSub, text:'Poor appetite — or overeating?', opts:S },
+          { id:'phq6', section:'Mood', type:'choice', sub:phqSub, text:'Feeling bad about yourself — that you\u2019re a failure, or have let yourself or your family down?', opts:S },
+          { id:'phq7', section:'Mood', type:'choice', sub:phqSub, text:'Trouble concentrating on things like reading or watching a video?', opts:S },
+          { id:'phq8', section:'Mood', type:'choice', sub:phqSub, text:'Moving or speaking noticeably slowly — or the opposite, being fidgety and restless?', opts:S },
+          { id:'phq9', section:'Mood', type:'choice', sub:phqSub, text:'This one matters, and it\u2019s safe to answer honestly here: thoughts that you\u2019d be better off dead, or of hurting yourself in some way?', opts:S,
+            after:(v9)=>{ if (v9 >= 1) { this.setState({ crisis: true }); const r = this.HELPLINES[A.region] || this.HELPLINES.intl; this.push({ isCrisis: true, lines: r.lines }); } } }
+        ); } },
+      { id:'gad1', section:'Stress', type:'choice', sub:gadSub, text:'Two on stress and worry.\n\nOver the last 2 weeks, how often have you felt nervous, anxious, or on edge?', opts:S },
+      { id:'gad2', section:'Stress', type:'choice', sub:gadSub, text:'…and how often were you not able to stop or control worrying?', opts:S,
+        after:(v)=>{ if ((A.gad1 || 0) + v >= 2) this.pending.unshift(
+          { id:'gad3', section:'Stress', type:'choice', sub:gadSub, text:'Going deeper here too — 5 more, quick taps.\n\nWorrying too much about different things?', opts:S },
+          { id:'gad4', section:'Stress', type:'choice', sub:gadSub, text:'Trouble relaxing?', opts:S },
+          { id:'gad5', section:'Stress', type:'choice', sub:gadSub, text:'Being so restless that it\u2019s hard to sit still?', opts:S },
+          { id:'gad6', section:'Stress', type:'choice', sub:gadSub, text:'Becoming easily annoyed or irritable?', opts:S },
+          { id:'gad7', section:'Stress', type:'choice', sub:gadSub, text:'Feeling afraid, as if something awful might happen?', opts:S }
+        ); } },
+      { id:'bo1', section:'Stress', type:'choice', text:'Last stretch — three on energy and burnout.\n\nHow often do you feel drained before the day has even started?', opts:F },
+      { id:'bo2', section:'Stress', type:'choice', text:'How often do you feel cynical or detached about your study or work — a "what\u2019s the point" feeling?', opts:F },
+      { id:'bo3', section:'Stress', type:'choice', text:'After you stop for the day, how often does your mind keep grinding on it — unable to switch off?', opts:F },
+      { id:'goal', section:'Stress', type:'choice', text:'And what should this system aim at first?', opts:[{label:'Grades / exams',value:'Grades / exams'},{label:'Ship a project',value:'Ship a project'},{label:'Build consistent routines',value:'Build consistent routines'},{label:'Just feel less exhausted',value:'Just feel less exhausted'}] }
+    ];
+    return flow;
+  }
+
+  finishChat() {
+    const A = this.answers;
+    const raw = { name: A.name || '', age: A.age, region: A.region, situation: A.situation, sleepHours: A.sleepHours, sleepReg: A.sleepReg, sleepQual: A.sleepQual, sleepLatency: A.sleepLatency, sleepScreens: A.sleepScreens, chrono: A.chrono, wake: A.wake, workload: A.workload,
+      phq: ['phq1','phq2','phq3','phq4','phq5','phq6','phq7','phq8','phq9'].map(k => A[k]).filter(v => v !== undefined),
+      phqExpanded: A.phq3 !== undefined, gad: ['gad1','gad2','gad3','gad4','gad5','gad6','gad7'].map(k => A[k]).filter(v => v !== undefined),
+      gadExpanded: A.gad3 !== undefined, bo: [A.bo1 || 0, A.bo2 || 0, A.bo3 || 0], goal: A.goal };
+    const profile = this.buildProfile(raw);
+    this.say(['Done — thank you for being straight with me.', 'Crunching your read-out…'], () => setTimeout(() => { this.setState({ profile, screen: 'results' }); this.save({ profile }); }, 700));
+  }
+
+  buildProfile(raw) {
+    const sum = a => a.reduce((x, y) => x + (y || 0), 0);
+    const phqScore = sum(raw.phq), gadScore = sum(raw.gad), boScore = sum(raw.bo);
+    const need = (raw.age === 'u16' || raw.age === '16-18') ? 9 : 8;
+    const sleepFlag = (raw.sleepHours <= 6.5 ? 2 : raw.sleepHours <= 7.5 && need === 9 ? 1 : 0) + (raw.sleepReg || 0) + (raw.sleepQual >= 2 ? 2 : raw.sleepQual || 0) + (raw.sleepLatency >= 3 ? 1 : 0) + (raw.sleepScreens >= 3 ? 1 : 0);
+    return { ...raw, phqScore, gadScore, boScore, need, sleepScore: Math.min(sleepFlag, 10),
+      moodFlag: raw.phqExpanded ? phqScore >= 10 : false, moodWatch: raw.phqExpanded ? phqScore >= 5 : (phqScore >= 2),
+      anxFlag: raw.gadExpanded ? gadScore >= 10 : false, anxWatch: raw.gadExpanded ? gadScore >= 5 : (gadScore >= 2),
+      sleepBad: sleepFlag >= 4, sleepWatch: sleepFlag >= 2, boHigh: boScore >= 8, boWatch: boScore >= 5, overloaded: (raw.workload || 0) >= 2 };
+  }
+
+  // ---------- derived ----------
+  prof() { const pv = this.props.persona; if (pv && pv !== 'live (my data)') return this.buildProfile(this.PERSONAS[pv === 'sample: steady' ? 'steady' : 'running-hot']); return this.state.profile; }
+  fmt(h) { h = ((h % 24) + 24) % 24; const m = Math.round((h % 1) * 60); const hh = Math.floor(h); const ap = hh >= 12 ? 'pm' : 'am'; const h12 = ((hh + 11) % 12) + 1; return h12 + (m ? ':' + String(m).padStart(2, '0') : ':00') + ' ' + ap; }
+
+  buildSchedule(p, intensity) {
+    const wake = p.wake || 7, owl = p.chrono === 'owl';
+    const lightsOut = (wake - p.need + 24) % 24;
+    const blocks = [];
+    const add = (t, label, note) => blocks.push({ t: this.fmt(t), label, note: note || '' });
+    add(wake, 'Wake — daylight + water, before the phone', 'Light within 30 min anchors your body clock');
+    if (!owl) { add(wake + 0.75, 'Deep block 1 — the hardest thing', '50 on / 10 off; your if-then starts it'); add(wake + 2.75, 'Micro-break — move, water, window', '3 min is enough to reset'); add(wake + 3, 'Deep block 2', 'Protect it: notifications off'); }
+    else { add(wake + 0.75, 'Shallow start — admin, notes, small tasks', 'Your peak comes later; don\u2019t fight it'); add(wake + 2.5, 'Deep block 1 — the hardest thing', '50 on / 10 off; your if-then starts it'); }
+    add(wake + 5, 'Lunch + 10-min walk outside', 'Daylight + movement: a two-for-one');
+    if (intensity !== 'gentle') add(wake + 6, owl ? 'Deep block 2 — your real peak' : 'Deep block 3 — or admin if tank is low', '50 on / 10 off');
+    if (intensity === 'driven') add(wake + 7.5, 'Deep block ' + (owl ? '3' : '4') + ' — optional overdrive', 'Skip it the moment quality drops — hours ≠ output');
+    if (intensity === 'gentle') add(wake + 7, 'Recovery slot — pick any channel', 'Detach, relax, mastery or control — your choice');
+    add(wake + 9, p.moodWatch || p.moodFlag ? 'Movement — 30 min, moderate, any kind' : 'Movement / sport — 30 min', p.moodWatch || p.moodFlag ? 'Your mood scores make this the highest-leverage block' : 'Protects mood and focus');
+    add(lightsOut - 1.25, 'Hard shutdown — write tomorrow\u2019s one-line if-then', 'Closes the mental tabs so your brain can detach');
+    add(lightsOut - 0.75, 'Wind-down — screens dim, lights low', p.sleepScreens >= 3 ? 'Your phone-in-bed habit flagged: charge it out of reach' : 'Same ritual nightly = faster sleep onset');
+    add(lightsOut, 'Lights out', 'Window: ' + this.fmt(lightsOut) + ' – ' + this.fmt(wake) + ', all 7 days');
+    return blocks;
+  }
+
+  buildInterventions(p) {
+    const iv = [];
+    if (p.sleepWatch || p.sleepBad) iv.push({ title: 'Fix the window, not the hours', tag: 'Sleep', why: 'Your sleep flagged mostly on regularity. In 79,666 adults, a regular sleep window cut depression risk 38% — even when total hours were fine.', steps: ['Pick one wake time; keep it within ±30 min, weekends too', 'Anchor it: daylight within 30 min of waking', 'Let bedtime drift earlier naturally — never force it'], src: 'Li et al. 2025 · Moebus et al. 2025', tryBreath: false });
+    if (p.sleepBad) iv.push({ title: 'Stimulus control basics', tag: 'Sleep', why: 'Bed stays for sleep only — the strongest-evidence behavioural insomnia tool, and the core of what worked in the student sleep trials.', steps: ['In bed >20 min and wide awake? Get up, low light, boring task', 'Phone charges out of arm\u2019s reach', 'Same wind-down ritual nightly — it becomes the cue'], src: 'Chandler et al. 2022 · Kodsi et al. 2021', tryBreath: false });
+    if (p.moodWatch || p.moodFlag) iv.push({ title: 'Movement as mood medicine', tag: 'Mood', why: 'For ages 12–25, exercise showed a large effect on low mood (SMD −0.82) — comparable to first-line treatments in head-to-head reviews.', steps: ['30 min, moderate — brisk walk, cycle, gym, sport, dance', '3× a week minimum; scheduled, not "when I feel like it"', 'Pair it with people when you can — double benefit'], src: 'Bailey et al. 2017 · Singh et al. 2025', tryBreath: false });
+    if (p.anxWatch || p.anxFlag) iv.push({ title: 'Cyclic sighing — 5 min/day', tag: 'Stress', why: 'Exhale-weighted breathing beat mindfulness meditation for daily mood in a month-long RCT. Evidence is young — treat it as a state-shifter, not a cure.', steps: ['Two nose inhales (second one short), long mouth exhale', '5 minutes daily, or ~6 breaths before stressful moments', 'Stack it onto an anchor — after sitting down to study'], src: 'Balban et al. 2023 · Fincham et al. 2023', tryBreath: true });
+    if (p.boWatch || p.boHigh || p.bo[2] >= 3) iv.push({ title: 'The hard shutdown ritual', tag: 'Burnout', why: 'Psychological detachment — actually stopping work thoughts after hours — is the recovery channel that most strongly predicts lower exhaustion across 99,329 people.', steps: ['Fixed end time; write tomorrow\u2019s one-line if-then', 'Say it out loud: "done for today" — corny, effective', 'No study/work apps after shutdown; separate spaces if you can'], src: 'Headrick et al. 2022 · Sonnentag & Fritz 2015', tryBreath: false });
+    if (p.overloaded) iv.push({ title: 'Subtract before you add', tag: 'Load', why: 'Workload is the #1 predictor of failed detachment — no tactic outruns a crushing load. Recovery starts with the calendar, not willpower.', steps: ['List commitments; mark the two lowest-value ones', 'Drop, shrink or defer one this week', 'Guard the freed slot for a recovery channel'], src: 'Sonnentag & Fritz 2015', tryBreath: false });
+    iv.push({ title: 'If-then your first block', tag: 'Focus', why: 'Implementation intentions raise the odds of actually starting (d=.65; stronger when mood is low). The plan removes the decision.', steps: ['Tonight: "If it\u2019s [time] and I\u2019m at [place], then I open [exact task]"', 'One line, absurdly specific, rehearse it once', 'The morning follows the sentence — not the mood'], src: 'Gollwitzer & Sheeran 2006 · Toli et al. 2016', tryBreath: false });
+    iv.push({ title: 'The 50/10 rhythm', tag: 'Focus', why: 'Micro-breaks reliably restore vigor and cut fatigue; heavy cognitive work needs the longer 10-min kind between blocks.', steps: ['50 min single-task, notifications off', '10 min genuinely off — move, window, water; not another feed', 'After 2–3 cycles, take a real 30-min break'], src: 'Albulescu et al. 2022', tryBreath: false });
+    return iv.slice(0, 6);
+  }
+
+  // ---------- UI actions ----------
+  openHelp = () => this.setState({ helpOpen: true });
+  openHelpA = (e) => { e.preventDefault(); this.setState({ helpOpen: true }); };
+  closeHelp = () => this.setState({ helpOpen: false });
+  openBreath = () => this.setState({ breathOpen: true });
+  closeBreath = () => this.setState({ breathOpen: false });
+  stopClick = (e) => e.stopPropagation();
+  buildSystem = () => { this.setState({ screen: 'app', tab: 'today' }); this.save({ screen: 'app' }); };
+  onDraft = (e) => this.setState({ draft: e.target.value });
+  onDraftKey = (e) => { if (e.key === 'Enter') this.sendDraft(); };
+  sendDraft = () => { const v = this.state.draft.trim(); this.setState({ draft: '' }); this.answer(v, v || '(skipped)'); };
+  deleteData = () => { try { localStorage.removeItem(this.KEY); } catch (e) {} this.answers = {}; this.setState({ profile: null, checkins: {}, habitsDone: {}, weeklyDone: {}, crisis: false, screen: 'welcome', tab: 'today', messages: [] }); };
+
+  logCheckin(field, v) { const k = this.dateKey(0); this.setState(s => { const c = { ...s.checkins, [k]: { ...(s.checkins[k] || {}), [field]: v } }; this.save({ checkins: c }); return { checkins: c }; }); }
+  toggleHabit(id) { const k = this.dateKey(0); this.setState(s => { const arr = new Set(s.habitsDone[id] || []); arr.has(k) ? arr.delete(k) : arr.add(k); const h = { ...s.habitsDone, [id]: [...arr] }; this.save({ habitsDone: h }); return { habitsDone: h }; }); }
+  streak(id) { const done = new Set(this.state.habitsDone[id] || []); let n = 0, misses = 0; for (let i = 0; i < 60; i++) { if (done.has(this.dateKey(-i))) n++; else { misses++; if (misses > 1 || i === 0 && misses > 1) {} if (misses > 1) break; } } return n; }
+  toggleWeekly(id) { this.setState(s => { const w = { ...s.weeklyDone, [id]: !s.weeklyDone[id] }; this.save({ weeklyDone: w }); return { weeklyDone: w }; }); }
+
+  renderVals() {
+    const st = this.state, calm = !!this.props.calmMode, intensity = this.props.planIntensity || 'balanced';
+    const personaActive = this.props.persona && this.props.persona !== 'live (my data)';
+    const p = this.prof();
+    const screen = personaActive ? 'app' : st.screen;
+    const region = this.HELPLINES[(p && p.region) || 'intl'] || this.HELPLINES.intl;
+    const q = st.q;
+    const totalSections = 5;
+    const out = {
+      screenWelcome: screen === 'welcome', screenChat: screen === 'chat', screenResults: screen === 'results', screenApp: screen === 'app' && !!p,
+      startChat: this.startChat, startDemo: this.startDemo, openHelp: this.openHelp, openHelpA: this.openHelpA, closeHelp: this.closeHelp, stopClick: this.stopClick,
+      openBreath: this.openBreath, closeBreath: this.closeBreath, buildSystem: this.buildSystem, deleteData: this.deleteData,
+      helpOpen: st.helpOpen, breathOpen: st.breathOpen, messages: st.messages, typing: st.typing, chatRef: this.chatRef,
+      draft: st.draft, onDraft: this.onDraft, onDraftKey: this.onDraftKey, sendDraft: this.sendDraft,
+      progSec: st.progSec, progPct: Math.round(st.progN / totalSections * 100) + '%', progLabel: 'part ' + st.progN + ' of ' + totalSections,
+      qSub: q && q.sub || '', hasOptions: !!(q && q.type === 'choice'), awaitingText: !!(q && q.type === 'text'),
+      currentOpts: (q && q.type === 'choice' ? q.opts : []).map(o => ({ label: o.label, onPick: () => this.answer(o.value, o.label), style: { fontSize: '12.5px', flex: '0 1 auto' } })),
+      regionLines: region.lines, helpRegionLabel: 'Helplines — ' + region.label, crisis: personaActive ? false : st.crisis
+    };
+    if (!p) return out;
+
+    // results
+    const bandTag = (level) => level === 2 ? { background: 'var(--color-accent-800)', color: 'var(--color-accent-200)', fontSize: '10px', display: calm ? 'none' : undefined } : level === 1 ? { background: 'var(--color-neutral-800)', color: 'var(--color-neutral-300)', fontSize: '10px', display: calm ? 'none' : undefined } : { background: 'transparent', border: '1px solid var(--color-divider)', color: 'var(--color-neutral-400)', fontSize: '10px', display: calm ? 'none' : undefined };
+    const mkCard = (domain, score, outOf, max, band, level, text, src) => ({ domain, band, tagStyle: bandTag(level), score: calm ? band : String(score), outOf: calm ? '' : outOf, pct: Math.min(100, Math.round(score / max * 100)) + '%', text, src });
+    const phqBand = !p.phqExpanded ? [p.phqScore >= 2 ? 'Watch' : 'Clear', p.phqScore >= 2 ? 1 : 0] : p.phqScore >= 15 ? ['High', 2] : p.phqScore >= 10 ? ['Moderate', 2] : p.phqScore >= 5 ? ['Mild', 1] : ['Minimal', 0];
+    const gadBand = !p.gadExpanded ? [p.gadScore >= 2 ? 'Watch' : 'Clear', p.gadScore >= 2 ? 1 : 0] : p.gadScore >= 15 ? ['High', 2] : p.gadScore >= 10 ? ['Moderate', 2] : p.gadScore >= 5 ? ['Mild', 1] : ['Minimal', 0];
+    const slBand = p.sleepBad ? ['Disrupted', 2] : p.sleepWatch ? ['Wobbly', 1] : ['Solid', 0];
+    const boBand = p.boHigh ? ['Elevated', 2] : p.boWatch ? ['Watch', 1] : ['Low', 0];
+    out.resultsTitle = (p.name ? p.name + ', here' : 'Here') + '\u2019s your read-out';
+    out.resultCards = [
+      mkCard('Mood', p.phqScore, p.phqExpanded ? '/ 27 · PHQ-9' : '/ 6 · PHQ-2', p.phqExpanded ? 27 : 6, phqBand[0], phqBand[1], p.phqExpanded ? (p.phqScore >= 10 ? 'In the range where extra support genuinely helps — your plan leans on movement, sleep and structure.' : 'Some signal; your plan leans on the strongest mood levers: movement and sleep.') : (p.phqScore >= 2 ? 'Low signal, worth watching — the daily check-in will track it.' : 'No flag. The short screener was enough — no need for the long form.'), p.phqExpanded ? 'PHQ-9 · Kroenke et al.' : 'PHQ-2 · cutoff ≥2 (youth-calibrated)'),
+      mkCard('Anxiety', p.gadScore, p.gadExpanded ? '/ 21 · GAD-7' : '/ 6 · GAD-2', p.gadExpanded ? 21 : 6, gadBand[0], gadBand[1], p.gadExpanded ? (p.gadScore >= 10 ? 'Worry is taking real energy. Breathing tools + a worry-boundary go into your plan.' : 'Mild but present — quick state-shifters and structure will help.') : (p.gadScore >= 2 ? 'Low signal, worth watching.' : 'No flag — short screener was enough.'), p.gadExpanded ? 'GAD-7 · Spitzer et al.' : 'GAD-2 · cutoff ≥2'),
+      mkCard('Sleep', p.sleepScore, '/ 10 · composite', 10, slBand[0], slBand[1], p.sleepBad ? 'Your biggest lever. Irregular window + ' + (p.sleepHours <= 6.5 ? 'short hours' : 'poor restoration') + ' — the plan starts here.' : p.sleepWatch ? 'Mostly fine; the weekend drift is the thing to fix first.' : 'Solid foundation — protect the window you already have.', 'Duration + regularity + quality'),
+      mkCard('Burnout risk', p.boScore, '/ 12 · exhaustion-detachment', 12, boBand[0], boBand[1], p.boHigh ? 'Drained + cynical + can\u2019t switch off: the classic pattern. Recovery becomes non-negotiable, scheduled like classes.' : p.boWatch ? 'Early signs. Cheap to fix now — the radar will watch your trend.' : 'Low risk. Keep the recovery channels topped up.', 'Adapted OLBI/MBI signals')
+    ];
+    out.seekHelp = !calm && (p.moodFlag || p.anxFlag || st.crisis);
+
+    // app shell
+    const tabDefs = [['today', 'Today'], ['plan', 'My system'], ['burnout', 'Burnout radar'], ['library', 'Evidence'], ['help', 'Help & privacy']];
+    out.tabs = tabDefs.map(([id, label]) => ({ label, onSel: () => this.setState({ tab: id }), style: { background: 'none', border: 'none', borderBottom: st.tab === id ? '2px solid var(--color-accent)' : '2px solid transparent', color: st.tab === id ? 'var(--color-text)' : 'var(--color-neutral-500)', font: '500 13px/1 var(--font-body)', padding: '13px 14px', cursor: 'pointer', whiteSpace: 'nowrap' } }));
+    out.tabToday = st.tab === 'today'; out.tabPlan = st.tab === 'plan'; out.tabBurnout = st.tab === 'burnout'; out.tabLibrary = st.tab === 'library'; out.tabHelp = st.tab === 'help';
+
+    // today
+    const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()];
+    out.greeting = 'Your ' + day + (p.name ? ', ' + p.name : '');
+    out.todayLine = (p.chrono === 'owl' ? 'Built for a late peak' : p.chrono === 'morning' ? 'Built around your morning peak' : 'Built for a steady middle') + ' · ' + (intensity === 'gentle' ? 'gentle pace — recovery first' : intensity === 'driven' ? 'driven pace — watch the radar' : 'balanced pace') + ' · aim: ' + (p.goal || 'consistency');
+    out.schedule = this.buildSchedule(p, intensity);
+    const k = this.dateKey(0), today = st.checkins[k] || {};
+    out.checkedInToday = today.mood != null && today.energy != null && today.sleep != null;
+    const face = ['1', '2', '3', '4', '5'];
+    out.checkinRows = [['mood', 'Mood', 'low → great'], ['energy', 'Energy', 'empty → full'], ['sleep', 'Last night\u2019s sleep', 'rough → restful']].map(([f, label, hint]) => ({ label, hint, opts: face.map((l, i) => ({ label: l, onPick: () => this.logCheckin(f, i + 1), style: { flex: 1, minWidth: '34px', minHeight: '30px', borderRadius: 'var(--radius-sm)', border: today[f] === i + 1 ? '1px solid var(--color-accent)' : '1px solid var(--color-divider)', background: today[f] === i + 1 ? 'var(--color-accent-900)' : 'transparent', color: today[f] === i + 1 ? 'var(--color-accent-200)' : 'var(--color-neutral-400)', font: '500 12px var(--font-body)', cursor: 'pointer' } })) }));
+    const habitDefs = [
+      { id: 'light', anchor: 'After I wake up…', habit: 'Daylight + a glass of water, before the phone' },
+      { id: 'walk', anchor: 'After lunch…', habit: '10-minute walk outside' },
+      { id: 'ifthen', anchor: 'After my last block…', habit: 'Write tomorrow\u2019s one-line if-then' },
+      { id: 'phone', anchor: 'When wind-down starts…', habit: 'Phone on charge, out of reach' }
+    ];
+    out.habits = habitDefs.map(h => { const done = (st.habitsDone[h.id] || []).includes(k); const n = this.streak(h.id); return { ...h, done, onToggle: () => this.toggleHabit(h.id), streak: calm ? (done ? '✓ today' : '') : (n > 0 ? n + '-day streak' : '—'), boxStyle: { width: '20px', height: '20px', flex: 'none', borderRadius: '6px', border: done ? '1px solid var(--color-accent)' : '1px solid var(--color-neutral-700)', background: done ? 'var(--color-accent-800)' : 'transparent', color: 'var(--color-accent-200)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, marginTop: '3px' } }; });
+
+    // plan
+    const lightsOut = (p.wake - p.need + 24) % 24;
+    out.sleepWindow = this.fmt(lightsOut) + ' – ' + this.fmt(p.wake);
+    out.sleepWindowWhy = (p.need === 9 ? 'Teen target: 8–10h. ' : 'Adult target: 7–9h. ') + 'Held within ±30 min all 7 days — regularity beats duration for mental health risk.';
+    out.weekFocus = p.sleepBad ? 'Stabilise the sleep window' : p.boHigh || p.boWatch ? 'Rebuild recovery' : p.moodWatch || p.anxWatch ? 'Movement + one worry boundary' : 'Consistency over intensity';
+    out.weekFocusWhy = p.sleepBad ? 'One lever, one week: same wake time daily. Everything else in the plan gets easier once this holds.' : p.boHigh || p.boWatch ? 'Your drain pattern says the tank refills slower than it empties. This week recovery is scheduled, not leftover.' : p.moodWatch || p.anxWatch ? 'Three movement sessions and a hard shutdown — the two highest-evidence moves for your flags.' : 'Nothing is broken. The win is repetition: same window, same blocks, same shutdown.';
+    out.interventions = this.buildInterventions(p);
+    const weeklyDefs = [
+      { id: 'detach', title: 'Detach ×3 evenings', desc: 'Three evenings fully off study/work — no tabs open in the head. The channel that cuts exhaustion most.' },
+      { id: 'relax', title: 'Relax ×2', desc: 'Two deliberately calm sessions — music, bath, slow walk, nothing productive.' },
+      { id: 'mastery', title: 'One mastery hour', desc: 'An hour on a skill that has nothing to do with your grades or job. Mastery refills engagement.' },
+      { id: 'control', title: 'One self-directed half-day', desc: 'A block where you choose everything. Control is its own recovery channel.' }
+    ];
+    out.weekly = weeklyDefs.map(w => { const done = !!st.weeklyDone[w.id]; return { ...w, onToggle: () => this.toggleWeekly(w.id), style: { textAlign: 'left', background: done ? 'var(--color-accent-900)' : 'var(--color-surface)', border: done ? '1px solid var(--color-accent-700)' : '1px solid var(--color-divider)', borderRadius: 'var(--radius-md)', padding: '14px 16px', cursor: 'pointer', color: 'var(--color-text)', font: 'inherit' }, checkStyle: { width: '20px', height: '20px', borderRadius: '50%', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', border: done ? '1px solid var(--color-accent)' : '1px solid var(--color-neutral-700)', background: done ? 'var(--color-accent-700)' : 'transparent', color: done ? 'var(--color-accent-100)' : 'transparent' } }; });
+
+    // burnout radar
+    const days = []; for (let i = 13; i >= 0; i--) { const c = st.checkins[this.dateKey(-i)]; days.push(c && c.mood != null ? ((6 - c.mood) + (6 - (c.energy || 3)) + (6 - (c.sleep || 3))) / 3 : null); }
+    const logged = days.filter(v => v != null);
+    const base = p.boScore / 12 * 4 + 1;
+    const level = logged.length ? logged.slice(-7).reduce((a, b) => a + b, 0) / Math.min(logged.length, 7) : base;
+    const pct = Math.round((level - 1) / 4 * 100);
+    const rBand = pct >= 60 ? ['High drain', 'var(--color-accent-300)'] : pct >= 35 ? ['Warming up', 'var(--color-accent-400)'] : ['Steady', 'var(--color-neutral-400)'];
+    out.radarScore = calm ? (pct >= 60 ? 'High' : pct >= 35 ? 'Warm' : 'OK') : pct + '%';
+    out.radarLabel = rBand[0];
+    out.radarText = logged.length ? 'Based on your last ' + logged.length + ' check-in' + (logged.length > 1 ? 's' : '') + (pct >= 60 ? ' — drain is outpacing recovery. Shrink one commitment this week and hit the recovery quota hard.' : pct >= 35 ? ' — trending warm. Protect the shutdown ritual and the sleep window this week.' : ' — recovery is keeping pace. Keep the rhythm.') : 'Seeded from your assessment (' + (p.boScore) + '/12). Log daily check-ins to make this live.';
+    out.radarRingStyle = { width: '84px', height: '84px', borderRadius: '50%', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'conic-gradient(var(--color-accent-500) ' + pct + '%, var(--color-neutral-900) 0)', WebkitMask: 'none', boxShadow: 'inset 0 0 0 6px var(--color-bg)', border: '1px solid var(--color-divider)', color: rBand[1] };
+    out.radarBars = days.map((v, i) => ({ tip: v == null ? 'no log' : 'drain ' + v.toFixed(1) + '/5', style: { flex: 1, borderRadius: '2px 2px 0 0', height: (v == null ? 8 : 8 + (v - 1) / 4 * 36) + 'px', background: v == null ? 'var(--color-neutral-900)' : v >= 3.4 ? 'var(--color-accent-400)' : 'var(--color-accent-700)' } }));
+    out.warnSigns = ['Waking tired even after a full-length night', 'Cynicism: "what\u2019s the point" showing up about things you used to care about', 'Working longer but producing less', 'Can\u2019t switch off — study/work thoughts colonise evenings', 'Small tasks feel disproportionately heavy', 'Withdrawing from people you normally like'];
+    out.recoveryCards = [
+      { name: 'Detachment', what: 'Mentally off the clock — not thinking about the work at all.', eg: 'sport, gaming with friends, cooking' },
+      { name: 'Relaxation', what: 'Low-effort calm; parasympathetic mode.', eg: 'slow walk, music, long shower' },
+      { name: 'Mastery', what: 'Getting better at something unrelated.', eg: 'guitar, climbing, a language' },
+      { name: 'Control', what: 'Time where you decide everything.', eg: 'a self-planned Saturday morning' }
+    ];
+    out.evidence = this.EVIDENCE;
+    return out;
+  }
+}
+</script>
+</body>
+</html>
