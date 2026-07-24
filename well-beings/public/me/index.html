@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aryan Manhas — NeuroBioPsych</title>
+<meta name="description" content="Aryan Manhas builds evidence-based tools for mental well-being. Vision: NeuroBioPsych — treating minds across the neural, biological and psychosocial layers at once.">
+<style>
+  :root {
+    --bg: #161826;
+    --surface: #232532;
+    --surface-2: #292b31;
+    --text: #e9e9ed;
+    --muted: #9397ab;
+    --faint: #75798c;
+    --accent: #9184d9;
+    --accent-soft: #b5abfc;
+    --accent-deep: #262a60;
+    --accent-glow: #353b80;
+    --divider: rgba(233, 233, 237, 0.14);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-soft); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- hero ---- */
+  header {
+    position: relative;
+    padding: 96px 0 72px;
+    overflow: hidden;
+  }
+  header::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 10%, var(--accent-glow) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 15% 90%, var(--accent-deep) 0%, transparent 70%);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  header .wrap { position: relative; }
+  .kicker {
+    display: inline-block;
+    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent-soft);
+    border: 1px solid var(--divider);
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin-bottom: 28px;
+    background: rgba(145, 132, 217, 0.08);
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin-bottom: 18px;
+  }
+  h1 .grad {
+    background: linear-gradient(100deg, #b5abfc, #9184d9 55%, #a7a1db);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .lede {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 40rem;
+    margin-bottom: 36px;
+  }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.95rem; font-weight: 500;
+    border: 1px solid var(--divider);
+    color: var(--text);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn.primary {
+    background: linear-gradient(120deg, #796cbf, #9184d9);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(145, 132, 217, 0.35);
+  }
+  .btn.ghost:hover { background: rgba(233, 233, 237, 0.06); }
+
+  /* ---- sections ---- */
+  section { padding: 56px 0; border-top: 1px solid var(--divider); }
+  h2 {
+    font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .sub { color: var(--faint); font-size: 0.95rem; margin-bottom: 32px; }
+
+  /* vision pillars */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+  }
+  .pillar .tag {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-soft); margin-bottom: 10px; display: block;
+  }
+  .pillar p { font-size: 0.92rem; color: var(--muted); }
+  .vision-copy { max-width: 44rem; color: var(--text); }
+  .vision-copy p + p { margin-top: 16px; }
+  .vision-copy .dim { color: var(--muted); }
+
+  /* project card */
+  .project {
+    background: linear-gradient(145deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--divider);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .project::after {
+    content: "";
+    position: absolute; top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(145,132,217,0.22), transparent 70%);
+    pointer-events: none;
+  }
+  .project h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 6px; }
+  .project .status {
+    display: inline-block; font-size: 12px; font-weight: 500;
+    color: #8fd9a8; background: rgba(143, 217, 168, 0.1);
+    border: 1px solid rgba(143, 217, 168, 0.25);
+    border-radius: 999px; padding: 3px 10px; margin-left: 10px;
+    vertical-align: middle;
+  }
+  .project p { color: var(--muted); max-width: 42rem; margin: 12px 0 20px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip {
+    font-size: 12px; color: var(--faint);
+    border: 1px solid var(--divider); border-radius: 999px;
+    padding: 4px 12px;
+  }
+
+  /* goals */
+  .goals { list-style: none; display: grid; gap: 14px; max-width: 46rem; }
+  .goals li {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .goals .n {
+    flex: none;
+    width: 28px; height: 28px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 13px; font-weight: 600;
+    color: var(--accent-soft);
+    background: rgba(145, 132, 217, 0.12);
+    border: 1px solid rgba(145, 132, 217, 0.25);
+  }
+  .goals p { color: var(--muted); font-size: 0.95rem; }
+  .goals strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; }
+
+  /* connect */
+  .connect-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  footer {
+    border-top: 1px solid var(--divider);
+    padding: 36px 0 48px;
+    color: var(--faint);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 64px 0 48px; }
+    .pillars { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="kicker">NeuroBioPsych</span>
+    <h1>Aryan Manhas builds <span class="grad">evidence-based tools</span> for mental well-being.</h1>
+    <p class="lede">
+      Mental-health care can't reach everyone who needs it — technology that carries
+      real clinical evidence can help close that gap. That's the work.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="../">Try Well-Beings</a>
+      <a class="btn ghost" href="#connect">Connect with me</a>
+    </div>
+  </div>
+</header>
+
+<section id="vision">
+  <div class="wrap">
+    <h2>The vision — NeuroBioPsych</h2>
+    <p class="sub">One mind, three layers. Treat all of them.</p>
+    <div class="vision-copy">
+      <p>
+        Mental health doesn't live in one place. It's neural circuits, it's biology —
+        sleep, stress physiology, what the body is doing — and it's the psychological
+        and social world a person actually lives in. Care that looks at only one layer
+        misses the other two.
+      </p>
+      <p class="dim">
+        Nowhere is that gap more urgent than in India: over a billion people, and a
+        severe shortage of psychiatrists and psychologists to serve them. Most people
+        who need support never receive any. Software won't replace clinicians — but
+        evidence-first tools can screen, guide and support people the system can't
+        yet reach, and can do it privately, in their own language of daily life.
+      </p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="tag">Neuro</span>
+        <p>How circuits for attention, mood and stress actually behave — and how habits and interventions reshape them.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">Bio</span>
+        <p>Sleep, exercise, light, physiology — the biological levers with the strongest research behind them.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">Psych</span>
+        <p>Validated screeners, CBT-family techniques and the lived context that decides whether any of it sticks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <h2>Projects</h2>
+    <p class="sub">Built and shipped — more coming.</p>
+    <div class="project">
+      <h3>Well-Beings <span class="status">Live</span></h3>
+      <p>
+        A privacy-first productivity &amp; mental well-being app for teens and young
+        adults. A 5-minute chat-style check-in built on the same short screeners
+        clinicians use (PHQ-2&rarr;9, GAD-2&rarr;7, sleep, burnout) generates a personalised
+        daily system: a time-blocked schedule, evidence-cited intervention cards, a
+        habit stack, a weekly recovery quota and a burnout radar. Region-local crisis
+        helplines are one tap away, always. Everything runs in the browser — no
+        account, no server, no data leaves the device.
+      </p>
+      <div class="chips">
+        <span class="chip">Next.js + TypeScript</span>
+        <span class="chip">16 cited studies</span>
+        <span class="chip">PHQ-9 / GAD-7</span>
+        <span class="chip">100% client-side</span>
+        <span class="chip">Crisis-safe design</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn primary" href="../">Open the app</a>
+        <a class="btn ghost" href="https://github.com/aryanmanhas12/Well-beings">Source on GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goals">
+  <div class="wrap">
+    <h2>Goals &amp; aspirations</h2>
+    <p class="sub">Where this is heading.</p>
+    <ul class="goals">
+      <li>
+        <span class="n">1</span>
+        <p><strong>Grow NeuroBioPsych from a vision into a body of work</strong>
+        Research, writing and software that treat the neural, biological and psychosocial layers of mental health as one problem.</p>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <p><strong>Help close India's mental-health treatment gap</strong>
+        Build tools that are private, free at the point of use, and grounded in clinical evidence — reaching people long before a clinic can.</p>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <p><strong>Keep every claim evidence-first</strong>
+        No wellness fluff: every practice shipped cites its meta-analysis, RCT or cohort study — and says so when the evidence is young or mixed.</p>
+      </li>
+      <li>
+        <span class="n">4</span>
+        <p><strong>Find the others</strong>
+        Connect with researchers, clinicians, designers and developers who want to work on minds — seriously, and together.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="connect">
+  <div class="wrap">
+    <h2>Connect</h2>
+    <p class="sub">If any of this resonates — reach out. I reply.</p>
+    <div class="connect-row">
+      <a class="btn primary" href="mailto:aryanmanhas12@gmail.com">aryanmanhas12@gmail.com</a>
+      <a class="btn ghost" href="https://github.com/aryanmanhas12">github.com/aryanmanhas12</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Aryan Manhas · NeuroBioPsych · Built with <a href="https://claude.ai/code">Claude Code</a>
+  </div>
+</footer>
+
+</body>
+</html>

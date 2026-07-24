@@ -6,6 +6,8 @@ burnout), which then generates a personalised daily system: a time-blocked sched
 intervention cards, a habit stack, a weekly recovery quota and a burnout radar.
 
 **Live app:** https://aryanmanhas12.github.io/Well-beings/
+**About the author:** https://aryanmanhas12.github.io/Well-beings/me/ — Aryan Manhas, the
+NeuroBioPsych vision, goals and ways to connect.
 
 Everything runs in the browser. Answers, scores and check-ins live in `localStorage` — no account,
 no server, no analytics, no third parties. Region-local crisis helplines are shown instantly if the
