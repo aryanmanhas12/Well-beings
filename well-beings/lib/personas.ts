@@ -1,0 +1,43 @@
+import { RawAnswers } from "./types";
+
+/** Sample profiles for "preview a sample profile" — never real user data. */
+export const PERSONAS: Record<string, RawAnswers> = {
+  "running-hot": {
+    name: "Sam",
+    age: "19-25",
+    region: "us",
+    situation: "University",
+    sleepHours: 6.5,
+    sleepReg: 2,
+    sleepQual: 2,
+    sleepLatency: 3,
+    sleepScreens: 4,
+    chrono: "owl",
+    wake: 8,
+    workload: 3,
+    phq: [1, 1, 2, 1, 1, 1, 1, 1, 0],
+    phqExpanded: true,
+    gad: [2, 2, 2, 1, 1, 1, 1],
+    gadExpanded: true,
+    bo: [3, 3, 3],
+    goal: "Grades / exams",
+  },
+  steady: {
+    name: "Alex",
+    age: "16-18",
+    region: "uk",
+    situation: "School",
+    sleepHours: 7.5,
+    sleepReg: 0,
+    sleepQual: 1,
+    chrono: "between",
+    wake: 7,
+    workload: 1,
+    phq: [0, 1],
+    phqExpanded: false,
+    gad: [1, 0],
+    gadExpanded: false,
+    bo: [1, 1, 1],
+    goal: "Build consistent routines",
+  },
+};
