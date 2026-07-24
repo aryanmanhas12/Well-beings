@@ -1,25 +1,46 @@
-# CODING AGENTS: READ THIS FIRST
+# Well-Beings
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+A privacy-first productivity and mental well-being app for teens and young adults — a 5-minute,
+chat-style check-in built on the same short screeners clinicians use (PHQ-2→9, GAD-2→7, sleep,
+burnout), which then generates a personalised daily system: a time-blocked schedule, evidence-cited
+intervention cards, a habit stack, a weekly recovery quota and a burnout radar.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+**Live app:** https://aryanmanhas12.github.io/Well-beings/
 
-## What you should do — IMPORTANT
+Everything runs in the browser. Answers, scores and check-ins live in `localStorage` — no account,
+no server, no analytics, no third parties. Region-local crisis helplines are shown instantly if the
+self-harm screener item flags, and are always one tap away under "Help now".
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+> Well-Beings is a self-guidance tool, not a medical device. Its screeners signal — they don't
+> diagnose. If you're struggling, [findahelpline.com](https://findahelpline.com) lists verified,
+> free, 24/7 support lines for 130+ countries.
 
-**Read `project/Well-Beings.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Repository layout
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+| Path | What it is |
+| --- | --- |
+| `well-beings/` | The app — Next.js 16 + TypeScript, statically exported |
+| `project/` | The original Claude Design prototype this was built from |
+| `chats/` | The design-session transcript (the intent behind the design) |
+| `.github/workflows/deploy.yml` | Builds and publishes the app to GitHub Pages on every push to `main` |
 
-## About the design files
+## Develop
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+```bash
+cd well-beings
+npm install
+npm run dev        # http://localhost:3000
+```
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Build / deploy
 
-## Bundle contents
+Pushing to `main` triggers the GitHub Actions workflow, which builds a static export
+(`NEXT_PUBLIC_BASE_PATH=/Well-beings npm run build` → `out/`) and deploys it to GitHub Pages.
+First-time setup: if the workflow can't enable Pages itself, flip **Settings → Pages → Source**
+to **GitHub Actions** once and re-run it.
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Well-Beings productivity and mental health app` project files (HTML prototypes, assets, components)
+## Evidence
+
+Every practice in the app cites its meta-analysis, RCT or cohort study — 16 papers sourced via
+Consensus/PubMed during the design session, browsable in the app's **Evidence** tab. Where the
+evidence is young or mixed (e.g. breathwork), the app says so.
