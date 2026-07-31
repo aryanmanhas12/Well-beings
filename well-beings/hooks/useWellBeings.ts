@@ -54,6 +54,21 @@ export function useWellBeings() {
   const pendingRef = useRef<Question[]>([]);
   const answersRef = useRef<Record<string, string | number | undefined>>({});
 
+  /** One snapshot per answered question, so "change that" can rewind exactly. */
+  const historyRef = useRef<
+    {
+      q: Question;
+      pending: Question[];
+      answers: Record<string, string | number | undefined>;
+      messages: ChatMessage[];
+      crisis: boolean;
+    }[]
+  >([]);
+  const messagesRef = useRef<ChatMessage[]>([]);
+  messagesRef.current = messages;
+  const crisisRef = useRef(false);
+  crisisRef.current = crisis;
+
   // Hydrate any saved session from localStorage after mount — deliberate:
   // the server render must always paint "welcome" or hydration mismatches.
   useEffect(() => {
@@ -130,6 +145,14 @@ export function useWellBeings() {
   function answer(value: string | number, label: string) {
     const q = currentQuestion;
     if (!q) return;
+    // Snapshot before anything mutates — this is what `back()` restores.
+    historyRef.current.push({
+      q,
+      pending: [...pendingRef.current],
+      answers: { ...answersRef.current },
+      messages: messagesRef.current,
+      crisis: crisisRef.current,
+    });
     push({ isUser: true, text: label });
     answersRef.current[q.id] = value;
     setCurrentQuestion(null);
@@ -144,17 +167,35 @@ export function useWellBeings() {
     setTimeout(next, 250);
   }
 
+  /** Rewind one question. Restores the queue too, so adaptive follow-ups
+      enqueued by the answer we're undoing disappear with it. */
+  function back() {
+    const snap = historyRef.current.pop();
+    if (!snap) return;
+    pendingRef.current = snap.pending;
+    answersRef.current = snap.answers;
+    setMessages(snap.messages);
+    setCrisis(snap.crisis);
+    setTyping(false);
+    setDraft("");
+    setCurrentQuestion(snap.q);
+    setProgSec(snap.q.section);
+    setProgN(SECTION_OF[snap.q.section] || 1);
+  }
+
   function startChat() {
     answersRef.current = {};
     pendingRef.current = buildFlow();
+    historyRef.current = [];
     setMessages([]);
     setCrisis(false);
     setDemoProfile(null);
     setScreen("chat");
     say(
       [
-        "Hey — I’m your Well-Beings check-in. About 5 minutes, mostly taps.",
-        "First, the important bit: everything you answer stays in this browser. No account, no server, no third parties — and you can delete it all with one tap, anytime.",
+        "Hey — I’m your Well-Beings check-in. About five minutes, mostly taps. You can change any answer as you go, and there’s a help button on every screen.",
+        "The important bit first: nothing leaves this device. No account, no server, no third parties — and you can delete all of it with one tap, whenever you want.",
+        "The questions come from screeners clinicians actually use. They signal what’s worth attention — they don’t diagnose you. Any question can tell you why it’s being asked.",
       ],
       next
     );
@@ -301,6 +342,8 @@ export function useWellBeings() {
     onDraftKeyDown,
     sendDraft,
     answer,
+    back,
+    canGoBack: historyRef.current.length > 0,
     progSec,
     progPct: Math.round((progN / TOTAL_SECTIONS) * 100),
     progLabel: `part ${progN} of ${TOTAL_SECTIONS}`,

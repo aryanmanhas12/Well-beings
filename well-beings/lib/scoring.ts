@@ -150,7 +150,7 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Movement as mood medicine",
       tag: "Mood",
-      why: "For ages 12–25, exercise showed a large effect on low mood (SMD −0.82) — comparable to first-line treatments in head-to-head reviews.",
+      why: "In trials with 12–25 year olds, exercise lifted low mood by about as much as front-line treatments do. Roughly 8 in 10 young people who moved regularly did better than those who didn't.",
       steps: [
         "30 min, moderate — brisk walk, cycle, gym, sport, dance",
         "3× a week minimum; scheduled, not \"when I feel like it\"",
@@ -205,7 +205,7 @@ export function buildInterventions(p: Profile): Intervention[] {
   iv.push({
     title: "If-then your first block",
     tag: "Focus",
-    why: "Implementation intentions raise the odds of actually starting (d=.65; stronger when mood is low). The plan removes the decision.",
+    why: "Deciding the exact when and where in advance beats deciding in the moment — across 94 studies, about 7 in 10 people did better with a plan than without. It works even better when mood is low, because the plan removes the decision.",
     steps: [
       "Tonight: \"If it’s [time] and I’m at [place], then I open [exact task]\"",
       "One line, absurdly specific, rehearse it once",

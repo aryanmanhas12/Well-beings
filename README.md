@@ -8,6 +8,10 @@ intervention cards, a habit stack, a weekly recovery quota and a burnout radar.
 **Live app:** https://aryanmanhas12.github.io/Well-beings/
 **About the author:** https://aryanmanhas12.github.io/Well-beings/me/ — Aryan Manhas, the
 NeuroBioPsych vision, goals and ways to connect.
+**Companion project:** [Psych Screener](https://aryanmanhas12.github.io/Psych/) — the wider,
+shallower net (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages). Well-Beings is the
+follow-through for someone who has a result and wants a routine built around it; the `/me`
+page shares its design system so the two read as one body of work.
 
 Everything runs in the browser. Answers, scores and check-ins live in `localStorage` — no account,
 no server, no analytics, no third parties. Region-local crisis helplines are shown instantly if the

@@ -1,5 +1,5 @@
-import { KeyboardEvent, useEffect, useRef } from "react";
-import { LockIcon } from "./icons";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { LockIcon, ShieldIcon } from "./icons";
 import { ChatMessage } from "@/lib/types";
 import { WellBeings } from "@/hooks/useWellBeings";
 
@@ -113,6 +113,43 @@ function TypingDots() {
   );
 }
 
+/** "Why are you asking me this?" — collapsed by default; never blocks answering. */
+function WhyNote({ why }: { why: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginBottom: 9 }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        style={{
+          all: "unset",
+          cursor: "pointer",
+          fontSize: 11.5,
+          color: "var(--color-accent-400)",
+          textDecoration: "underline",
+          textUnderlineOffset: 3,
+        }}
+      >
+        {open ? "Hide" : "Why am I being asked this?"}
+      </button>
+      {open && (
+        <p
+          style={{
+            fontSize: 12,
+            color: "var(--color-neutral-400)",
+            margin: "8px 0 0",
+            paddingLeft: 10,
+            borderLeft: "2px solid var(--color-accent-800)",
+            textWrap: "pretty",
+          }}
+        >
+          {why}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ChatScreen({ wb }: { wb: WellBeings }) {
   const q = wb.currentQuestion;
   const hasOptions = !!q && q.type === "choice";
@@ -124,6 +161,24 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
     const el = chatRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, typing]);
+
+  // Number keys pick an option; the whole check-in is answerable from the keyboard.
+  useEffect(() => {
+    if (!hasOptions) return;
+    const opts = q?.opts || [];
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= opts.length) {
+        e.preventDefault();
+        const opt = opts[n - 1];
+        wb.answer(opt.value, opt.label);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [hasOptions, q, wb]);
 
   return (
     <main
@@ -178,15 +233,21 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
             {q.sub}
           </div>
         )}
+        {q?.why && <WhyNote why={q.why} />}
         {hasOptions && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {(q!.opts || []).map((opt) => (
+            {(q!.opts || []).map((opt, i) => (
               <button
                 key={String(opt.value)}
                 className="btn btn-secondary"
                 onClick={() => wb.answer(opt.value, opt.label)}
                 style={{ fontSize: 12.5, flex: "0 1 auto" }}
               >
+                {i < 9 && (
+                  <span aria-hidden="true" style={{ color: "var(--color-neutral-600)", marginRight: 7, fontSize: 11 }}>
+                    {i + 1}
+                  </span>
+                )}
                 {opt.label}
               </button>
             ))}
@@ -207,6 +268,49 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
             </button>
           </div>
         )}
+
+        {/* Escape hatches, always reachable: change the last answer, or leave
+            for a helpline. The crisis route never depends on a flagged score. */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 14,
+            marginTop: 12,
+            paddingTop: 10,
+            borderTop: "1px solid var(--color-divider)",
+          }}
+        >
+          {wb.canGoBack && (
+            <button
+              onClick={wb.back}
+              style={{
+                all: "unset",
+                cursor: "pointer",
+                fontSize: 11.5,
+                color: "var(--color-neutral-500)",
+              }}
+            >
+              ← Change my last answer
+            </button>
+          )}
+          <div style={{ flex: 1 }} />
+          <button
+            onClick={wb.openHelp}
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              fontSize: 11.5,
+              color: "var(--color-accent-400)",
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+            }}
+          >
+            <ShieldIcon style={{ color: "currentColor" }} />
+            I need help now
+          </button>
+        </div>
       </div>
     </main>
   );

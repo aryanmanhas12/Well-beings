@@ -27,6 +27,8 @@ export interface Question {
   type: "choice" | "text";
   text: string;
   sub?: string;
+  /** Answers "why are you asking me this?" — shown on demand, never forced. */
+  why?: string;
   opts?: ChoiceOption[];
   /** Runs after the user answers; may enqueue deeper follow-up questions. */
   after?: (value: string | number, ctx: FlowCtx) => void;
@@ -108,10 +110,21 @@ export interface Intervention {
   tryBreath: boolean;
 }
 
+/** How big the effect is, in words rather than notation. */
+export type EvidenceStrength = "large" | "moderate" | "small" | "mixed";
+
 export interface EvidenceItem {
   tag: string;
   design: string;
+  /** Headline number, e.g. "38%" or "8 in 10" — the one figure worth remembering. */
+  figure: string;
+  /** What that number actually means, in plain words. */
+  caption: string;
+  strength: EvidenceStrength;
+  /** The finding in plain English — no bare effect sizes. */
   finding: string;
+  /** The original statistic, kept for anyone who wants it, always glossed. */
+  technical?: string;
   use: string;
   cite: string;
   url: string;

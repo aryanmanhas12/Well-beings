@@ -4,323 +4,447 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aryan Manhas — NeuroBioPsych</title>
-<meta name="description" content="Aryan Manhas builds evidence-based tools for mental well-being. Vision: NeuroBioPsych — treating minds across the neural, biological and psychosocial layers at once.">
+<meta name="description" content="Aryan Manhas builds free, private, evidence-based mental-health tools — the Psych Screener and Well-Beings. The NeuroBioPsych vision: treat the neural, biological and psychosocial layers as one problem.">
+<meta name="color-scheme" content="light dark">
 <style>
-  :root {
-    --bg: #161826;
-    --surface: #232532;
-    --surface-2: #292b31;
-    --text: #e9e9ed;
-    --muted: #9397ab;
-    --faint: #75798c;
-    --accent: #9184d9;
-    --accent-soft: #b5abfc;
-    --accent-deep: #262a60;
-    --accent-glow: #353b80;
-    --divider: rgba(233, 233, 237, 0.14);
-    --radius: 14px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--accent-soft); text-decoration: none; }
-  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* ══════════════════════════════════════════════════════════════
+   Aryan Manhas — personal site
+   ──────────────────────────────────────────────────────────────
+   Deliberately built on the Psych Screener design system (tokens,
+   nav, panels, figure bands) so the two projects and this page read
+   as one body of work rather than three unrelated sites.
+   ══════════════════════════════════════════════════════════════ */
 
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+@font-face{
+  font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;
+  src:url('anton.woff2') format('woff2');
+}
 
-  /* ---- hero ---- */
-  header {
-    position: relative;
-    padding: 96px 0 72px;
-    overflow: hidden;
+/* ── tokens ── */
+:root{
+  --ink:#151C2E;
+  --paper:#F6F4EE;
+  --card:#FFFFFF;
+  --marigold:#E6A11C;
+  --stamp:#B23A2E;
+  --heal:#2F6E5E;
+  --line:#D8D3C6;
+  --muted:#54596A;
+  --deep:#151C2E;
+  --on-deep:#F6F4EE;
+  --e-out1:cubic-bezier(.25,.46,.45,.94);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EDEAE2; --paper:#12161F; --card:#1A1F2B; --line:#333B4C;
+    --muted:#9AA3B5; --marigold:#F0B53C; --stamp:#E4796B; --heal:#5FB39C;
+    --deep:#0A0D14; --on-deep:#EDEAE2;
   }
-  header::before {
-    content: "";
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 70% 10%, var(--accent-glow) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 15% 90%, var(--accent-deep) 0%, transparent 70%);
-    opacity: 0.55;
-    pointer-events: none;
-  }
-  header .wrap { position: relative; }
-  .kicker {
-    display: inline-block;
-    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--accent-soft);
-    border: 1px solid var(--divider);
-    border-radius: 999px;
-    padding: 6px 14px;
-    margin-bottom: 28px;
-    background: rgba(145, 132, 217, 0.08);
-  }
-  h1 {
-    font-size: clamp(2.4rem, 6vw, 3.6rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.12;
-    margin-bottom: 18px;
-  }
-  h1 .grad {
-    background: linear-gradient(100deg, #b5abfc, #9184d9 55%, #a7a1db);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-  }
-  .lede {
-    font-size: 1.2rem;
-    color: var(--muted);
-    max-width: 40rem;
-    margin-bottom: 36px;
-  }
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-size: 0.95rem; font-weight: 500;
-    border: 1px solid var(--divider);
-    color: var(--text);
-    transition: transform 0.15s ease, background 0.15s ease;
-  }
-  .btn:hover { text-decoration: none; transform: translateY(-1px); }
-  .btn.primary {
-    background: linear-gradient(120deg, #796cbf, #9184d9);
-    border-color: transparent;
-    color: #fff;
-    box-shadow: 0 6px 24px rgba(145, 132, 217, 0.35);
-  }
-  .btn.ghost:hover { background: rgba(233, 233, 237, 0.06); }
+}
+:root[data-theme="dark"]{
+  --ink:#EDEAE2; --paper:#12161F; --card:#1A1F2B; --line:#333B4C;
+  --muted:#9AA3B5; --marigold:#F0B53C; --stamp:#E4796B; --heal:#5FB39C;
+  --deep:#0A0D14; --on-deep:#EDEAE2;
+}
+:root[data-theme="light"]{
+  --ink:#151C2E; --paper:#F6F4EE; --card:#FFFFFF; --line:#D8D3C6;
+  --muted:#54596A; --marigold:#E6A11C; --stamp:#B23A2E; --heal:#2F6E5E;
+  --deep:#151C2E; --on-deep:#F6F4EE;
+}
 
-  /* ---- sections ---- */
-  section { padding: 56px 0; border-top: 1px solid var(--divider); }
-  h2 {
-    font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em;
-    margin-bottom: 8px;
-  }
-  .sub { color: var(--faint); font-size: 0.95rem; margin-bottom: 32px; }
+/* ── reset & base ── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:17px;}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:system-ui,-apple-system,'Segoe UI','Noto Sans',Roboto,Arial,sans-serif;
+  line-height:1.65;font-size:1rem;
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+  html{scroll-behavior:auto;}
+}
+a{color:var(--heal);}
+a:hover{text-decoration-thickness:2px;}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--stamp);outline-offset:3px;}
+img,svg{max-width:100%;}
 
-  /* vision pillars */
-  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
-  .pillar {
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius);
-    padding: 22px 20px;
-  }
-  .pillar .tag {
-    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--accent-soft); margin-bottom: 10px; display: block;
-  }
-  .pillar p { font-size: 0.92rem; color: var(--muted); }
-  .vision-copy { max-width: 44rem; color: var(--text); }
-  .vision-copy p + p { margin-top: 16px; }
-  .vision-copy .dim { color: var(--muted); }
+.display{
+  font-family:'Anton',sans-serif;letter-spacing:.01em;line-height:1.08;
+  text-transform:uppercase;text-wrap:balance;
+}
+.mono{font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;}
+.wrap{max-width:min(60rem,100%);margin:0 auto;padding:0 1.3rem;}
 
-  /* project card */
-  .project {
-    background: linear-gradient(145deg, var(--surface), var(--surface-2));
-    border: 1px solid var(--divider);
-    border-radius: var(--radius);
-    padding: 30px 28px;
-    position: relative;
-    overflow: hidden;
-  }
-  .project::after {
-    content: "";
-    position: absolute; top: -60px; right: -60px;
-    width: 220px; height: 220px;
-    background: radial-gradient(circle, rgba(145,132,217,0.22), transparent 70%);
-    pointer-events: none;
-  }
-  .project h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 6px; }
-  .project .status {
-    display: inline-block; font-size: 12px; font-weight: 500;
-    color: #8fd9a8; background: rgba(143, 217, 168, 0.1);
-    border: 1px solid rgba(143, 217, 168, 0.25);
-    border-radius: 999px; padding: 3px 10px; margin-left: 10px;
-    vertical-align: middle;
-  }
-  .project p { color: var(--muted); max-width: 42rem; margin: 12px 0 20px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
-  .chip {
-    font-size: 12px; color: var(--faint);
-    border: 1px solid var(--divider); border-radius: 999px;
-    padding: 4px 12px;
-  }
+/* ── crisis strip: identical to the other two sites, by design ── */
+.topstrip{
+  background:var(--stamp);color:#fff;
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.76rem;padding:.5rem 0;letter-spacing:.03em;
+}
+.topstrip .wrap{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;}
+.topstrip a{color:#fff;font-weight:700;}
 
-  /* goals */
-  .goals { list-style: none; display: grid; gap: 14px; max-width: 46rem; }
-  .goals li {
-    display: flex; gap: 14px; align-items: flex-start;
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    border-radius: 12px;
-    padding: 16px 18px;
-  }
-  .goals .n {
-    flex: none;
-    width: 28px; height: 28px; border-radius: 8px;
-    display: grid; place-items: center;
-    font-size: 13px; font-weight: 600;
-    color: var(--accent-soft);
-    background: rgba(145, 132, 217, 0.12);
-    border: 1px solid rgba(145, 132, 217, 0.25);
-  }
-  .goals p { color: var(--muted); font-size: 0.95rem; }
-  .goals strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; }
+/* ── nav ── */
+nav.site{background:var(--deep);padding:.8rem 0;}
+nav.site .wrap{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;}
+nav.site .brand{
+  font-family:'Anton',sans-serif;color:var(--on-deep);font-size:1.15rem;
+  text-transform:uppercase;letter-spacing:.04em;margin-right:auto;text-decoration:none;
+}
+nav.site .brand .accent{color:var(--marigold);}
+nav.site a.navlink{
+  color:var(--on-deep);text-decoration:none;
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.79rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:.5rem .15rem;border-bottom:2px solid transparent;display:inline-block;
+}
+nav.site a.navlink:hover,nav.site a.navlink:focus-visible{border-bottom-color:var(--marigold);}
 
-  /* connect */
-  .connect-row { display: flex; flex-wrap: wrap; gap: 12px; }
+/* ── page furniture ── */
+header.hero{padding:3.2rem 0 2.4rem;border-bottom:3px solid var(--ink);}
+.eyebrow{
+  display:inline-block;font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.79rem;letter-spacing:.13em;text-transform:uppercase;
+  border:1.5px solid var(--heal);color:var(--heal);padding:.25rem .6rem;margin-bottom:1.1rem;
+}
+h1{font-size:clamp(1.9rem,5.5vw,3.4rem);}
+h1 .accent{color:var(--heal);}
+h2{font-size:clamp(1.4rem,3.6vw,2.2rem);margin-bottom:.6rem;}
+.lede{max-width:66ch;font-size:1.06rem;margin-top:1rem;}
 
-  footer {
-    border-top: 1px solid var(--divider);
-    padding: 36px 0 48px;
-    color: var(--faint);
-    font-size: 0.85rem;
-  }
+section{padding:2.8rem 0 .3rem;}
+.sec-label{
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.79rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--stamp);margin-bottom:.6rem;
+}
+.sec-sub{max-width:66ch;color:var(--muted);font-size:.95rem;margin-bottom:1.4rem;}
 
-  @media (max-width: 640px) {
-    header { padding: 64px 0 48px; }
-    .pillars { grid-template-columns: 1fr; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .btn { transition: none; }
-  }
+/* ── panels ── */
+.panel{
+  background:var(--card);border:2px solid var(--ink);border-left:.5rem solid var(--heal);
+  padding:1.15rem 1.4rem;margin-bottom:.9rem;
+}
+.panel h3{font-size:1.1rem;font-weight:700;margin-bottom:.4rem;}
+.panel p{font-size:.94rem;margin-bottom:.5rem;}
+.panel p:last-child{margin-bottom:0;}
+.panel.warn{border-left-color:var(--marigold);}
+.panel.hard{border-left-color:var(--stamp);}
+.panel .tag{
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--heal);margin-bottom:.35rem;
+}
+
+/* ── figure band ── */
+.figs{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));
+  gap:2px;background:var(--ink);border:2px solid var(--ink);margin-bottom:1.3rem;
+}
+.fig{background:var(--deep);color:var(--on-deep);padding:1.1rem 1rem;}
+.fig .n{
+  font-family:'Anton',sans-serif;font-size:2.1rem;line-height:1;
+  color:var(--marigold);display:block;font-variant-numeric:tabular-nums;
+}
+.fig .l{font-size:.83rem;line-height:1.45;margin-top:.45rem;opacity:.93;}
+.fig .s{
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.64rem;opacity:.6;margin-top:.45rem;display:block;
+}
+
+/* ── project cards ── */
+.project{
+  background:var(--card);border:2px solid var(--ink);
+  padding:1.4rem 1.5rem;margin-bottom:1.1rem;
+}
+.project .head{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem;}
+.project h3{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.35rem;letter-spacing:.01em;}
+.project .status{
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--heal);color:#fff;padding:.16rem .5rem;
+}
+.project p{font-size:.94rem;margin-bottom:.8rem;max-width:62ch;}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;}
+.chip{
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+  font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;
+  border:1px solid var(--line);color:var(--muted);padding:.2rem .55rem;
+}
+
+/* ── buttons ── */
+.btn{
+  font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em;
+  font-size:.95rem;background:var(--ink);color:var(--paper);border:none;
+  padding:.75rem 1.3rem;cursor:pointer;transition:transform .12s var(--e-out1);
+  text-decoration:none;display:inline-block;min-height:2.75rem;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--heal);}
+.btn.secondary{background:transparent;color:var(--ink);border:2px solid var(--ink);}
+.btnrow{display:flex;flex-wrap:wrap;gap:.7rem;}
+
+/* ── goals ── */
+ol.goals{list-style:none;counter-reset:g;}
+ol.goals li{
+  counter-increment:g;position:relative;
+  padding:.2rem 0 1.1rem 3.2rem;margin-bottom:.2rem;
+  border-bottom:1px solid var(--line);
+}
+ol.goals li:last-child{border-bottom:0;}
+ol.goals li::before{
+  content:counter(g,decimal-leading-zero);
+  position:absolute;left:0;top:.15rem;
+  font-family:'Anton',sans-serif;font-size:1.5rem;color:var(--marigold);
+}
+ol.goals strong{display:block;font-size:1rem;margin-bottom:.15rem;}
+ol.goals p{font-size:.92rem;color:var(--muted);max-width:60ch;}
+
+/* ── footer ── */
+footer{
+  padding:2.5rem 0 3.5rem;font-size:.87rem;color:var(--muted);
+  border-top:3px solid var(--ink);margin-top:2.6rem;
+}
+footer p{max-width:72ch;}
+footer .byline{
+  margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--line);
+  display:flex;gap:.8rem;flex-wrap:wrap;align-items:baseline;
+  font-family:ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;font-size:.78rem;
+}
+footer .byline strong{color:var(--ink);font-size:.85rem;}
+
+@media(max-width:640px){
+  header.hero{padding:2rem 0 1.6rem;}
+  section{padding:2rem 0 .3rem;}
+  h1{font-size:clamp(1.55rem,7vw,2rem);}
+  .lede{font-size:.95rem;}
+  .topstrip{font-size:.66rem;padding:.4rem 0;line-height:1.45;}
+  .topstrip .wrap{gap:.15rem .8rem;}
+  .panel,.project{padding:.95rem 1.1rem;}
+  nav.site .wrap{gap:.7rem;}
+}
+@media print{
+  .topstrip,nav.site,.noprint{display:none!important;}
+  body{background:#fff;color:#000;}
+}
 </style>
 </head>
 <body>
 
-<header>
+<div class="topstrip">
   <div class="wrap">
-    <span class="kicker">NeuroBioPsych</span>
-    <h1>Aryan Manhas builds <span class="grad">evidence-based tools</span> for mental well-being.</h1>
+    <span>If you need help right now — <a href="https://findahelpline.com">findahelpline.com</a>, 130+ countries</span>
+    <span>India: Tele-MANAS <strong>14416</strong> · KIRAN <strong>1800-599-0019</strong> · Emergency <strong>112</strong></span>
+  </div>
+</div>
+
+<nav class="site">
+  <div class="wrap">
+    <a class="brand" href="#top">Aryan <span class="accent">Manhas</span></a>
+    <a class="navlink" href="#vision">Vision</a>
+    <a class="navlink" href="#work">Work</a>
+    <a class="navlink" href="#goals">Goals</a>
+    <a class="navlink" href="#connect">Connect</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">NeuroBioPsych</span>
+    <h1 class="display">The waiting room is full. <span class="accent">So build the front door.</span></h1>
     <p class="lede">
-      Mental-health care can't reach everyone who needs it — technology that carries
-      real clinical evidence can help close that gap. That's the work.
+      I'm Aryan Manhas. I build free, private, evidence-based mental-health tools — a screener that
+      finds people early, and a system that helps them keep going afterwards. No accounts, no servers,
+      no data leaving the device. Every claim carries a citation.
     </p>
-    <div class="cta-row">
-      <a class="btn primary" href="../">Try Well-Beings</a>
-      <a class="btn ghost" href="#connect">Connect with me</a>
-    </div>
   </div>
 </header>
 
 <section id="vision">
   <div class="wrap">
-    <h2>The vision — NeuroBioPsych</h2>
-    <p class="sub">One mind, three layers. Treat all of them.</p>
-    <div class="vision-copy">
-      <p>
-        Mental health doesn't live in one place. It's neural circuits, it's biology —
-        sleep, stress physiology, what the body is doing — and it's the psychological
-        and social world a person actually lives in. Care that looks at only one layer
-        misses the other two.
-      </p>
-      <p class="dim">
-        Nowhere is that gap more urgent than in India: over a billion people, and a
-        severe shortage of psychiatrists and psychologists to serve them. Most people
-        who need support never receive any. Software won't replace clinicians — but
-        evidence-first tools can screen, guide and support people the system can't
-        yet reach, and can do it privately, in their own language of daily life.
-      </p>
-    </div>
-    <div class="pillars">
-      <div class="pillar">
-        <span class="tag">Neuro</span>
-        <p>How circuits for attention, mood and stress actually behave — and how habits and interventions reshape them.</p>
+    <p class="sec-label">The Thesis</p>
+    <h2 class="display">One mind, three layers — <span style="color:var(--heal)">treat all of them.</span></h2>
+    <p class="sec-sub">
+      Mental health doesn't live in one place, which is why single-layer care keeps missing. NeuroBioPsych
+      is the commitment to work across all three at once.
+    </p>
+
+    <div class="figs">
+      <div class="fig">
+        <span class="n">14.5</span>
+        <span class="l">Years — the peak age at which mental disorders begin</span>
+        <span class="s">Solmi et al., Molecular Psychiatry 2021 · 708,561 people</span>
       </div>
-      <div class="pillar">
-        <span class="tag">Bio</span>
-        <p>Sleep, exercise, light, physiology — the biological levers with the strongest research behind them.</p>
+      <div class="fig">
+        <span class="n">48%</span>
+        <span class="l">Have already begun before age 18</span>
+        <span class="s">Same review, 192 studies</span>
       </div>
-      <div class="pillar">
-        <span class="tag">Psych</span>
-        <p>Validated screeners, CBT-family techniques and the lived context that decides whether any of it sticks.</p>
+      <div class="fig">
+        <span class="n">3%</span>
+        <span class="l">Of people with depression in low-income countries get adequate treatment</span>
+        <span class="s">Moitra et al., PLoS Medicine 2022</span>
+      </div>
+      <div class="fig">
+        <span class="n">0.75</span>
+        <span class="l">Psychiatrists per 100,000 people in India — against a WHO floor of 3+</span>
+        <span class="s">The arithmetic this work starts from</span>
       </div>
     </div>
+
+    <div class="panel">
+      <p class="tag">Neuro</p>
+      <h3>The circuits</h3>
+      <p>How attention, mood and stress systems actually behave — and how habits, sleep and intervention reshape them over weeks rather than moments.</p>
+    </div>
+    <div class="panel warn">
+      <p class="tag" style="color:var(--marigold)">Bio</p>
+      <h3>The body</h3>
+      <p>Sleep timing, movement, light, physiology. These carry some of the strongest evidence in the entire field, and they are the levers a person can actually pull without a prescription.</p>
+    </div>
+    <div class="panel hard">
+      <p class="tag" style="color:var(--stamp)">Psych</p>
+      <h3>The person and their world</h3>
+      <p>Validated screeners, CBT-family techniques, and the lived context — money, family, exams, isolation — that decides whether any of it survives contact with a real week.</p>
+    </div>
+
+    <p style="font-size:.94rem;max-width:66ch;margin-top:1.2rem;">
+      Software will never replace clinicians, and nothing here pretends to. But in a country with 0.75
+      psychiatrists per 100,000 people, the binding constraint isn't knowledge — it's reach. Evidence-first
+      tools can find people earlier and hold them steadier than a waiting list can, and they can do it
+      privately, for free, at the scale the gap actually demands.
+    </p>
   </div>
 </section>
 
-<section id="projects">
+<section id="work">
   <div class="wrap">
-    <h2>Projects</h2>
-    <p class="sub">Built and shipped — more coming.</p>
+    <p class="sec-label">The Work</p>
+    <h2 class="display">Two halves of one problem</h2>
+    <p class="sec-sub">
+      Finding people earlier, and giving them something to do next. The screener is the front door;
+      Well-Beings is the room behind it.
+    </p>
+
     <div class="project">
-      <h3>Well-Beings <span class="status">Live</span></h3>
+      <div class="head">
+        <h3>Psych Screener</h3>
+        <span class="status">Live</span>
+      </div>
       <p>
-        A privacy-first productivity &amp; mental well-being app for teens and young
-        adults. A 5-minute chat-style check-in built on the same short screeners
-        clinicians use (PHQ-2&rarr;9, GAD-2&rarr;7, sleep, burnout) generates a personalised
-        daily system: a time-blocked schedule, evidence-cited intervention cards, a
-        habit stack, a weekly recovery quota and a burnout radar. Region-local crisis
-        helplines are one tap away, always. Everything runs in the browser — no
-        account, no server, no data leaves the device.
+        A free, private, multilingual mental-health screening tool — built for India, usable anywhere.
+        Validated instruments (PHQ-9, GAD-7, PHQ-4, AUDIT-C) in six languages, a guided conversation for
+        people who don't know where to start, crisis lines for 130+ countries, and score history you keep.
+        Alongside it: an evidence register, an ethics charter, and a manifesto on the treatment gap.
       </p>
       <div class="chips">
-        <span class="chip">Next.js + TypeScript</span>
+        <span class="chip">6 languages</span>
+        <span class="chip">Offline-capable</span>
+        <span class="chip">No tracking</span>
+        <span class="chip">MIT licensed</span>
+      </div>
+      <div class="btnrow">
+        <a class="btn" href="https://aryanmanhas12.github.io/Psych/">Open the screener</a>
+        <a class="btn secondary" href="https://github.com/aryanmanhas12/Psych">Source</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="head">
+        <h3>Well-Beings</h3>
+        <span class="status">Live</span>
+      </div>
+      <p>
+        Screening tells you where you stand; it doesn't tell you what to do on Tuesday. Well-Beings is a
+        five-minute chat-style check-in built on the same clinical screeners — PHQ-2→9, GAD-2→7, sleep and
+        burnout — that turns the result into a working system: a time-blocked day, evidence-cited
+        intervention cards, a habit stack that forgives missed days, a weekly recovery quota and a burnout
+        radar. Every practice states its effect in plain English, not statistical notation.
+      </p>
+      <div class="chips">
         <span class="chip">16 cited studies</span>
-        <span class="chip">PHQ-9 / GAD-7</span>
-        <span class="chip">100% client-side</span>
-        <span class="chip">Crisis-safe design</span>
+        <span class="chip">Adaptive screening</span>
+        <span class="chip">100% on-device</span>
+        <span class="chip">Crisis-safe</span>
       </div>
-      <div class="cta-row">
-        <a class="btn primary" href="../">Open the app</a>
-        <a class="btn ghost" href="https://github.com/aryanmanhas12/Well-beings">Source on GitHub</a>
+      <div class="btnrow">
+        <a class="btn" href="../">Open Well-Beings</a>
+        <a class="btn secondary" href="https://github.com/aryanmanhas12/Well-beings">Source</a>
       </div>
+    </div>
+
+    <div class="panel">
+      <p class="tag">How they fit</p>
+      <h3>Screen early, then act early</h3>
+      <p>
+        The screener is deliberately the shallower, wider net — one visit, no commitment, six languages,
+        pointed straight at people who may never have named what they're feeling. Well-Beings is the deeper,
+        narrower follow-through for someone who has a result and wants a routine that accounts for it. Both
+        run entirely in the browser, both cite their sources, and neither ever asks who you are.
+      </p>
     </div>
   </div>
 </section>
 
 <section id="goals">
   <div class="wrap">
-    <h2>Goals &amp; aspirations</h2>
-    <p class="sub">Where this is heading.</p>
-    <ul class="goals">
+    <p class="sec-label">Where This Goes</p>
+    <h2 class="display">Goals &amp; aspirations</h2>
+    <p class="sec-sub">Stated plainly, so they can be held against results.</p>
+    <ol class="goals">
       <li>
-        <span class="n">1</span>
-        <p><strong>Grow NeuroBioPsych from a vision into a body of work</strong>
-        Research, writing and software that treat the neural, biological and psychosocial layers of mental health as one problem.</p>
+        <strong>Grow NeuroBioPsych from a thesis into a body of work</strong>
+        <p>Research, writing and software that treat the neural, biological and psychosocial layers as one problem instead of three specialities that rarely talk.</p>
       </li>
       <li>
-        <span class="n">2</span>
-        <p><strong>Help close India's mental-health treatment gap</strong>
-        Build tools that are private, free at the point of use, and grounded in clinical evidence — reaching people long before a clinic can.</p>
+        <strong>Close a measurable piece of India's treatment gap</strong>
+        <p>Tools that are free, private and in the languages people actually think in — reaching them years before a clinic could, in a system with 0.75 psychiatrists per 100,000.</p>
       </li>
       <li>
-        <span class="n">3</span>
-        <p><strong>Keep every claim evidence-first</strong>
-        No wellness fluff: every practice shipped cites its meta-analysis, RCT or cohort study — and says so when the evidence is young or mixed.</p>
+        <strong>Keep every claim falsifiable</strong>
+        <p>No wellness fluff. Every practice cites its meta-analysis, RCT or cohort — and says so out loud when the evidence is young, mixed, or weaker than the marketing around it.</p>
       </li>
       <li>
-        <span class="n">4</span>
-        <p><strong>Find the others</strong>
-        Connect with researchers, clinicians, designers and developers who want to work on minds — seriously, and together.</p>
+        <strong>Study this properly</strong>
+        <p>Take the work into formal training in psychiatry and neuroscience, where the questions get harder and the standards get stricter.</p>
       </li>
-    </ul>
+      <li>
+        <strong>Find the others</strong>
+        <p>Researchers, clinicians, designers and developers who want to work on minds — seriously, and together. Most of what's missing here is collaborators, not ideas.</p>
+      </li>
+    </ol>
   </div>
 </section>
 
 <section id="connect">
   <div class="wrap">
-    <h2>Connect</h2>
-    <p class="sub">If any of this resonates — reach out. I reply.</p>
-    <div class="connect-row">
-      <a class="btn primary" href="mailto:aryanmanhas12@gmail.com">aryanmanhas12@gmail.com</a>
-      <a class="btn ghost" href="https://github.com/aryanmanhas12">github.com/aryanmanhas12</a>
+    <p class="sec-label">Get In Touch</p>
+    <h2 class="display">If any of this is your problem too</h2>
+    <p class="sec-sub">
+      I'm interested in collaborators, critics and anyone working the same gap from another angle —
+      clinical, technical or lived. Tell me where the reasoning is wrong; that's the useful kind of mail.
+    </p>
+    <div class="btnrow">
+      <a class="btn" href="mailto:aryanmanhas12@gmail.com">aryanmanhas12@gmail.com</a>
+      <a class="btn secondary" href="https://github.com/aryanmanhas12">GitHub</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    Aryan Manhas · NeuroBioPsych · Built with <a href="https://claude.ai/code">Claude Code</a>
+    <p>
+      <strong>Neither of these tools is a medical device.</strong> Screeners signal — they do not diagnose.
+      If you are struggling, a real human is better than any app on this page:
+      <a href="https://findahelpline.com">findahelpline.com</a> lists verified, free, 24/7 lines for over
+      130 countries.
+    </p>
+    <div class="byline">
+      <strong>Aryan Manhas</strong>
+      <span>NeuroBioPsych</span>
+      <span>·</span>
+      <a href="https://github.com/aryanmanhas12">github.com/aryanmanhas12</a>
+    </div>
   </div>
 </footer>
 

@@ -4,6 +4,13 @@ import { FlowCtx, Question } from "./types";
 const phqSub = "PHQ — the standard clinical screener · answers never leave this device";
 const gadSub = "GAD — the standard anxiety screener · answers never leave this device";
 
+const phqWhy =
+  "These are the first two items of the PHQ-9, the most-validated depression questionnaire there is — the same wording a GP would use. Asking two first and the other seven only if something flags catches just as many people while cutting the questions by more than half.";
+const phqDeepWhy =
+  "You're seeing the remaining PHQ-9 items because the first two flagged. Nine questions map onto the clinical criteria for depression; a score of 10 or more is the line where clinicians usually look closer. This app signals — it does not diagnose.";
+const gadWhy =
+  "These two open the GAD-7, the standard anxiety screener, developed across 2,740 patients and since tested in 24 languages. Same adaptive rule: two now, five more only if these flag.";
+
 const S = SCALE.map(([label, value]) => ({ label, value }));
 const F = FREQ.map(([label, value]) => ({ label, value }));
 
@@ -146,6 +153,7 @@ export function buildFlow(): Question[] {
       section: "Mood",
       type: "choice",
       sub: phqSub,
+      why: phqWhy,
       text: "Now two standard mood questions — same ones clinicians use.\n\nOver the last 2 weeks, how often have you had little interest or pleasure in doing things?",
       opts: S,
     },
@@ -154,22 +162,24 @@ export function buildFlow(): Question[] {
       section: "Mood",
       type: "choice",
       sub: phqSub,
+      why: phqWhy,
       text: "…and how often have you felt down, depressed, or hopeless?",
       opts: S,
       after: (v, ctx: FlowCtx) => {
         if ((Number(ctx.answers.phq1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
-            { id: "phq3", section: "Mood", type: "choice", sub: phqSub, text: "That’s worth a closer look — the full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?", opts: S },
-            { id: "phq4", section: "Mood", type: "choice", sub: phqSub, text: "Feeling tired or having little energy?", opts: S },
-            { id: "phq5", section: "Mood", type: "choice", sub: phqSub, text: "Poor appetite — or overeating?", opts: S },
-            { id: "phq6", section: "Mood", type: "choice", sub: phqSub, text: "Feeling bad about yourself — that you’re a failure, or have let yourself or your family down?", opts: S },
-            { id: "phq7", section: "Mood", type: "choice", sub: phqSub, text: "Trouble concentrating on things like reading or watching a video?", opts: S },
-            { id: "phq8", section: "Mood", type: "choice", sub: phqSub, text: "Moving or speaking noticeably slowly — or the opposite, being fidgety and restless?", opts: S },
+            { id: "phq3", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "That’s worth a closer look — the full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?", opts: S },
+            { id: "phq4", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling tired or having little energy?", opts: S },
+            { id: "phq5", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Poor appetite — or overeating?", opts: S },
+            { id: "phq6", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling bad about yourself — that you’re a failure, or have let yourself or your family down?", opts: S },
+            { id: "phq7", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Trouble concentrating on things like reading or watching a video?", opts: S },
+            { id: "phq8", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Moving or speaking noticeably slowly — or the opposite, being fidgety and restless?", opts: S },
             {
               id: "phq9",
               section: "Mood",
               type: "choice",
               sub: phqSub,
+              why: phqDeepWhy,
               text: "This one matters, and it’s safe to answer honestly here: thoughts that you’d be better off dead, or of hurting yourself in some way?",
               opts: S,
               after: (v9, ctx2: FlowCtx) => {
@@ -180,22 +190,23 @@ export function buildFlow(): Question[] {
         }
       },
     },
-    { id: "gad1", section: "Stress", type: "choice", sub: gadSub, text: "Two on stress and worry.\n\nOver the last 2 weeks, how often have you felt nervous, anxious, or on edge?", opts: S },
+    { id: "gad1", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Two on stress and worry.\n\nOver the last 2 weeks, how often have you felt nervous, anxious, or on edge?", opts: S },
     {
       id: "gad2",
       section: "Stress",
       type: "choice",
       sub: gadSub,
+      why: gadWhy,
       text: "…and how often were you not able to stop or control worrying?",
       opts: S,
       after: (v, ctx: FlowCtx) => {
         if ((Number(ctx.answers.gad1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
-            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, text: "Going deeper here too — 5 more, quick taps.\n\nWorrying too much about different things?", opts: S },
-            { id: "gad4", section: "Stress", type: "choice", sub: gadSub, text: "Trouble relaxing?", opts: S },
-            { id: "gad5", section: "Stress", type: "choice", sub: gadSub, text: "Being so restless that it’s hard to sit still?", opts: S },
-            { id: "gad6", section: "Stress", type: "choice", sub: gadSub, text: "Becoming easily annoyed or irritable?", opts: S },
-            { id: "gad7", section: "Stress", type: "choice", sub: gadSub, text: "Feeling afraid, as if something awful might happen?", opts: S },
+            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too — 5 more, quick taps.\n\nWorrying too much about different things?", opts: S },
+            { id: "gad4", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Trouble relaxing?", opts: S },
+            { id: "gad5", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Being so restless that it’s hard to sit still?", opts: S },
+            { id: "gad6", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Becoming easily annoyed or irritable?", opts: S },
+            { id: "gad7", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Feeling afraid, as if something awful might happen?", opts: S },
           ]);
         }
       },
