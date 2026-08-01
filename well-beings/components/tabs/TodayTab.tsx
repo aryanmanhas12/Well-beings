@@ -1,4 +1,5 @@
 import { CheckIcon } from "../icons";
+import { ProgressCard } from "../ProgressCard";
 import { buildSchedule } from "@/lib/scoring";
 import { WellBeings } from "@/hooks/useWellBeings";
 
@@ -102,6 +103,8 @@ export function TodayTab({ wb }: { wb: WellBeings }) {
             Feeds your burnout radar. 10 seconds, stays on this device.
           </div>
         </div>
+
+        <ProgressCard wb={wb} />
 
         <div className="card" style={{ padding: 18 }}>
           <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Habit stack</div>
