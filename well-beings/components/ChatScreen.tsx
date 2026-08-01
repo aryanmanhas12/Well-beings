@@ -87,6 +87,7 @@ function CrisisBubble({ m }: { m: ChatMessage }) {
 function TypingDots() {
   return (
     <div
+      aria-label="Typing…"
       style={{
         alignSelf: "flex-start",
         background: "var(--color-surface)",
@@ -199,22 +200,36 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
         <span className="tag tag-accent" style={{ fontSize: 10.5 }}>
           {wb.progSec}
         </span>
-        <div style={{ flex: 1, height: 2, background: "var(--color-neutral-900)", borderRadius: 2, overflow: "hidden" }}>
+        <div
+          role="progressbar"
+          aria-valuenow={wb.progPct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={"Check-in progress: " + wb.progLabel}
+          style={{ flex: 1, height: 2, background: "var(--color-neutral-900)", borderRadius: 2, overflow: "hidden" }}
+        >
+          {/* scaleX rather than width: width relayouts every frame, transform doesn't. */}
           <div
             style={{
               height: "100%",
               background: "linear-gradient(90deg,var(--color-accent-700),var(--color-accent-400))",
-              width: wb.progPct + "%",
-              transition: "width .4s ease",
+              width: "100%",
+              transformOrigin: "left center",
+              transform: `scaleX(${wb.progPct / 100})`,
+              transition: "transform var(--dur-slow) var(--ease-out)",
             }}
           />
         </div>
-        <span style={{ fontSize: 11, color: "var(--color-neutral-500)" }}>{wb.progLabel}</span>
+        <span style={{ fontSize: 11, color: "var(--color-neutral-500)", fontVariantNumeric: "tabular-nums" }}>
+          {wb.progLabel}
+        </span>
       </div>
 
       <div
         ref={chatRef}
-        style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 10, padding: "8px 4px 16px", minHeight: 0 }}
+        aria-live="polite"
+        aria-atomic="false"
+        style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 10, padding: "8px 4px 16px", minHeight: 0, overscrollBehavior: "contain" }}
       >
         {messages.map((m) => (
           <div key={m.id} style={{ display: "flex", flexDirection: "column" }}>

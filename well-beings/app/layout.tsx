@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -15,13 +15,20 @@ export const metadata: Metadata = {
     "A privacy-first, evidence-based check-in for sleep, mood and burnout that builds you a personalised daily system.",
 };
 
+/** themeColor matches --color-bg so mobile browser chrome doesn't seam
+    against the page. Zoom is left enabled deliberately. */
+export const viewport: Viewport = {
+  themeColor: "#161826",
+  colorScheme: "dark",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} style={{ colorScheme: "dark" }}>
       <body>{children}</body>
     </html>
   );

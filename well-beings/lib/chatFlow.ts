@@ -17,7 +17,7 @@ const F = FREQ.map(([label, value]) => ({ label, value }));
 /** The full check-in flow — adaptive follow-ups are enqueued by `after` via ctx.insertNext. */
 export function buildFlow(): Question[] {
   return [
-    { id: "name", section: "Basics", type: "text", text: "What should I call you? (First name, nickname — or just hit send to skip.)" },
+    { id: "name", section: "Basics", type: "text", text: "What should I call you? (First name, nickname — or hit send to skip.)" },
     {
       id: "age",
       section: "Basics",
@@ -202,7 +202,7 @@ export function buildFlow(): Question[] {
       after: (v, ctx: FlowCtx) => {
         if ((Number(ctx.answers.gad1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
-            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too — 5 more, quick taps.\n\nWorrying too much about different things?", opts: S },
+            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too — 5 more, then we move on.\n\nWorrying too much about different things?", opts: S },
             { id: "gad4", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Trouble relaxing?", opts: S },
             { id: "gad5", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Being so restless that it’s hard to sit still?", opts: S },
             { id: "gad6", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Becoming easily annoyed or irritable?", opts: S },

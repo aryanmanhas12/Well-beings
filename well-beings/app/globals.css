@@ -384,3 +384,162 @@ button {
     transform: scale(0.72);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Motion system
+   ─────────────────────────────────────────────────────────────
+   Two rules govern everything below.
+
+   1. Only transform and opacity animate. Both are compositor
+      properties, so a slow phone keeps 60fps instead of relaying
+      out the page mid-tap.
+   2. Motion confirms an action; it never announces the interface.
+      Durations stay under ~320ms, easing decelerates rather than
+      bounces. This app is used by people who are tired, anxious or
+      both — a UI that performs at them is a UI they close.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+  /* Decelerating: quick to start, settles softly. */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Slight overshoot — reserved for completing something. */
+  --ease-pop: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* Taps feel instant: no 300ms double-tap wait, no grey flash. */
+button,
+.btn,
+a,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* — entrances — */
+.anim-in {
+  animation: fadeUp var(--dur-slow) var(--ease-out) backwards;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* — habit tick: the one moment in the app that should feel good —
+   Pressing gives immediately (scale down), completing pops. The reward
+   is proportional: noticeable, over in a third of a second, never confetti. */
+.habit-check {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+.habit-check:active {
+  transform: scale(0.88);
+}
+.habit-check[data-done="true"] {
+  animation: checkPop var(--dur-slow) var(--ease-pop);
+}
+@keyframes checkPop {
+  0% {
+    transform: scale(0.82);
+  }
+  55% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.habit-check svg {
+  animation: checkDraw var(--dur-base) var(--ease-out) backwards;
+}
+@keyframes checkDraw {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* The streak count re-reads when it changes — a nudge, not a fanfare. */
+.streak-tick {
+  animation: streakTick var(--dur-slow) var(--ease-pop);
+}
+@keyframes streakTick {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* — buttons answer the finger before they answer the network — */
+.btn {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* — cards lift slightly on hover, only where hovering is real — */
+@media (hover: hover) and (pointer: fine) {
+  .card-interactive {
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
+  }
+  .card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* — reduced motion —
+   Honoured globally, with one deliberate exception. The breathing pacer
+   is not decoration: its rhythm IS the instruction, so removing it would
+   remove the tool. Under reduced-motion it keeps the same 10s cadence and
+   swaps scaling for a brightness change, which does not trigger vestibular
+   symptoms the way looming movement does. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .breathe-ring {
+    animation: breatheFade 10s ease-in-out infinite !important;
+    animation-duration: 10s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+@keyframes breatheFade {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  38%,
+  55% {
+    opacity: 1;
+  }
+}

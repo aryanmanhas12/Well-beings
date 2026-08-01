@@ -1,6 +1,56 @@
+import { useEffect, useRef } from "react";
 import { HelplineRegion } from "@/lib/types";
 
+/**
+ * Escape closes, focus moves into the dialog on open and returns to whatever
+ * opened it on close, and background scrolling is locked. Someone reaching the
+ * crisis dialog may be doing it by keyboard, in a hurry — it has to behave.
+ */
+function useDialogBehaviour(onClose: () => void) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    ref.current?.querySelector<HTMLElement>("button, [href]")?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !ref.current) return;
+      // Keep Tab inside the dialog while it's open.
+      const items = ref.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      opener?.focus?.();
+    };
+  }, [onClose]);
+
+  return ref;
+}
+
 export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClose: () => void }) {
+  const ref = useDialogBehaviour(onClose);
   return (
     <div
       className="dialog-backdrop"
@@ -18,7 +68,8 @@ export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClos
       }}
     >
       <div
-        className="dialog"
+        ref={ref}
+        className="dialog anim-in"
         role="dialog"
         aria-modal="true"
         aria-label="Help, right now"
@@ -30,6 +81,9 @@ export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClos
           borderRadius: "var(--radius-lg)",
           boxShadow: "var(--shadow-lg)",
           padding: 24,
+          maxHeight: "calc(100dvh - 40px)",
+          overflowY: "auto",
+          overscrollBehavior: "contain",
         }}
       >
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 17, marginBottom: 4 }}>
@@ -70,6 +124,7 @@ export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClos
 }
 
 export function BreathDialog({ onClose }: { onClose: () => void }) {
+  const ref = useDialogBehaviour(onClose);
   return (
     <div
       className="dialog-backdrop"
@@ -87,7 +142,8 @@ export function BreathDialog({ onClose }: { onClose: () => void }) {
       }}
     >
       <div
-        className="dialog"
+        ref={ref}
+        className="dialog anim-in"
         role="dialog"
         aria-modal="true"
         aria-label="Cyclic sighing"
@@ -100,6 +156,9 @@ export function BreathDialog({ onClose }: { onClose: () => void }) {
           boxShadow: "var(--shadow-lg)",
           padding: 28,
           textAlign: "center",
+          maxHeight: "calc(100dvh - 40px)",
+          overflowY: "auto",
+          overscrollBehavior: "contain",
         }}
       >
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 17, marginBottom: 2 }}>
@@ -119,6 +178,8 @@ export function BreathDialog({ onClose }: { onClose: () => void }) {
                 "0 0 40px color-mix(in srgb, var(--color-accent) 25%, transparent), inset 0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent)",
               animation: "breatheRing 10s ease-in-out infinite",
             }}
+            className="breathe-ring"
+            aria-hidden="true"
           />
         </div>
         <div

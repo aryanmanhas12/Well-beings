@@ -22,6 +22,8 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
             <button
               key={id}
               onClick={() => wb.setTab(id)}
+              role="tab"
+              aria-selected={wb.tab === id}
               style={{
                 background: "none",
                 border: "none",
@@ -31,6 +33,7 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
                 padding: "13px 14px",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
+                transition: "color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out)",
               }}
             >
               {label}
@@ -38,7 +41,13 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
           ))}
         </div>
       </div>
-      <div style={{ maxWidth: 1060, width: "100%", margin: "0 auto", padding: "30px 24px 70px", boxSizing: "border-box" }}>
+      {/* Keyed on the tab so switching replays the entrance — the panel reads
+          as new content arriving rather than the old one being overwritten. */}
+      <div
+        key={wb.tab}
+        className="anim-in"
+        style={{ maxWidth: 1060, width: "100%", margin: "0 auto", padding: "30px 24px 70px", boxSizing: "border-box" }}
+      >
         {wb.tab === "today" && <TodayTab wb={wb} />}
         {wb.tab === "plan" && <PlanTab wb={wb} />}
         {wb.tab === "burnout" && <BurnoutTab wb={wb} />}

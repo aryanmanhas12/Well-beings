@@ -15,7 +15,7 @@ export const EFFECT_SCALE = {
     {
       band: "around 0.2",
       word: "Small",
-      plain: "Real, but you might not notice it day to day. Worth doing when it’s free and easy.",
+      plain: "Real, but you might not notice it day to day. Worth doing when it costs you nothing.",
     },
     {
       band: "around 0.5",
@@ -29,7 +29,7 @@ export const EFFECT_SCALE = {
     },
   ],
   note:
-    "A minus sign just means the thing went down — for symptoms, down is good. And an effect size is an average across many people, not a promise about you.",
+    "A minus sign means the thing went down — for symptoms, down is good. And an effect size is an average across many people, not a promise about you.",
 } as const;
 
 export const EVIDENCE: EvidenceItem[] = [
@@ -213,7 +213,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Daily breathing that beat meditation on mood in a head-to-head trial",
     strength: "mixed",
     finding:
-      "Five minutes a day of exhale-weighted “cyclic sighing” improved mood and lowered resting breathing rate more than mindfulness meditation did. Being honest about the other side: a placebo-controlled trial of a related technique found no benefit over placebo. So we treat breathwork as a quick way to shift your state, not a treatment.",
+      "Five minutes a day of exhale-weighted “cyclic sighing” improved mood and lowered resting breathing rate more than mindfulness meditation did. Being honest about the other side: a placebo-controlled trial of a related technique found no benefit over placebo. So we treat breathwork as a way to shift your state in a minute, not a treatment.",
     use: "the 1-minute breathing tool — offered for acute stress, with expectations set honestly.",
     cite: "Balban et al., 2023, Cell Reports Medicine",
     url: "https://consensus.app/papers/details/252fb4e9655a544f84d9b7d7bef57bdc/",

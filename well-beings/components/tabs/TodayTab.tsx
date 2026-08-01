@@ -116,7 +116,10 @@ export function TodayTab({ wb }: { wb: WellBeings }) {
             return (
               <div key={h.id} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "8px 0", borderTop: "1px solid var(--color-divider)" }}>
                 <button
+                  className="habit-check"
+                  data-done={done}
                   onClick={() => wb.toggleHabit(h.id)}
+                  aria-pressed={done}
                   aria-label={(done ? "Un-tick" : "Tick") + " habit: " + h.habit}
                   style={{
                     width: 20,
@@ -136,11 +139,25 @@ export function TodayTab({ wb }: { wb: WellBeings }) {
                 >
                   {done && <CheckIcon />}
                 </button>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 11, color: "var(--color-neutral-500)" }}>{h.anchor}</div>
                   <div style={{ fontSize: 13 }}>{h.habit}</div>
                 </div>
-                <span style={{ fontSize: 11, color: "var(--color-accent-300)", whiteSpace: "nowrap" }}>{streakLabel}</span>
+                <span
+                  /* Re-keyed on the streak value so the count animates only
+                     when it actually changes, not on every unrelated render. */
+                  key={h.id + ":" + n}
+                  className={done && n > 0 ? "streak-tick" : undefined}
+                  style={{
+                    fontSize: 11,
+                    color: "var(--color-accent-300)",
+                    whiteSpace: "nowrap",
+                    display: "inline-block",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  {streakLabel}
+                </span>
               </div>
             );
           })}
