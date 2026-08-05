@@ -182,6 +182,31 @@ export const EVIDENCE: EvidenceItem[] = [
     url: "https://consensus.app/papers/details/c8c012abb9895e38bfd6d92c34b47a3e/",
   },
   {
+    tag: "Drinking",
+    design: "Diagnostic validation · 621 adolescents, ages 12–19",
+    figure: "95%",
+    caption: "Of problem drinking in teens caught by a 3-question screen",
+    strength: "large",
+    finding:
+      "The AUDIT-C — three questions from the WHO — caught 95% of adolescents who turned out to have a real drinking problem, at a single cutoff that doesn't require asking anyone's sex. That single-cutoff version is what this app uses, since it never collects sex as a data point.",
+    technical: "Optimal cutoff ≥3 in this sample; sensitivity 0.952, specificity 0.663.",
+    use: "the one-item drinking question, expanded to the full 3 only if you don't say “never.”",
+    cite: "Liskola et al., 2018, Drug & Alcohol Dependence",
+    url: "https://consensus.app/papers/details/781774ed00bd59ac8d00328015879db2/",
+  },
+  {
+    tag: "Drinking",
+    design: "Systematic review · 135 validation studies, ages under 25",
+    figure: "0.91",
+    caption: "AUC for brief alcohol screens in young people — strong discrimination",
+    strength: "large",
+    finding:
+      "Across every validation study on youth alcohol screening the reviewers could find, brief instruments — led by the AUDIT-C — discriminated real problem drinking from the rest with an AUC of 0.91, on par with much longer instruments. Honest caveat: the sex-specific cutoffs clinicians use (≥4 men, ≥3 women) are more precise than this app's single cutoff — a deliberate tradeoff for not asking.",
+    use: "why AUDIT-C, not a longer instrument, sits inside a 5-minute check-in.",
+    cite: "Toner et al., 2019, Drug & Alcohol Dependence",
+    url: "https://consensus.app/papers/details/197d93fc28b151c2a57c84b1c7e148b8/",
+  },
+  {
     tag: "Mood",
     design: "Meta-analysis · 16 randomised trials, ages 12–25",
     figure: "8 in 10",

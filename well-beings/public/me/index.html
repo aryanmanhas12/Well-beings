@@ -332,8 +332,8 @@ section[id]{scroll-margin-top:1.5rem;}
     </div>
 
     <p style="font-size:.94rem;max-width:66ch;margin-top:1.2rem;">
-      Software will never replace clinicians, and nothing here pretends to. But in a country with 0.75
-      psychiatrists per 100,000 people, the binding constraint isn't knowledge — it's reach. Evidence-first
+      Software will never replace clinicians, and nothing here pretends to. But where there's roughly one
+      psychiatrist for every 133,000 people, the binding constraint isn't knowledge — it's reach. Evidence-first
       tools can find people earlier and hold them steadier than a waiting list can, and they can do it
       privately, for free, at the scale the gap actually demands.
     </p>
@@ -421,7 +421,7 @@ section[id]{scroll-margin-top:1.5rem;}
       </li>
       <li>
         <strong>Close a measurable piece of India's treatment gap</strong>
-        <p>Tools that are free, private and in the languages people actually think in — reaching them years before a clinic could, in a system with 0.75 psychiatrists per 100,000.</p>
+        <p>Tools that are free, private and in the languages people actually think in — reaching them years before a clinic could, in a system that's roughly four times short of the WHO's own floor.</p>
       </li>
       <li>
         <strong>Keep every claim falsifiable</strong>
@@ -478,8 +478,17 @@ section[id]{scroll-margin-top:1.5rem;}
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (reduce.matches || !('IntersectionObserver' in window)) return;
-  var targets = document.querySelectorAll('.panel, .project, .figs, ol.goals li');
+  var targets = document.querySelectorAll('.panel, .project, .fig, ol.goals li');
   targets.forEach(function(el){ el.classList.add('reveal'); });
+  // Stagger siblings that enter as a visual group (the three pillar panels,
+  // the four figure cells) so they read as a sequence, not one flat block.
+  // Reset per parent so unrelated sections don't inherit each other's count.
+  var seen = new Map();
+  targets.forEach(function(el){
+    var n = (seen.get(el.parentElement) || 0);
+    seen.set(el.parentElement, n + 1);
+    el.style.transitionDelay = Math.min(n * 70, 350) + 'ms';
+  });
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if (!e.isIntersecting) return;

@@ -76,7 +76,7 @@ export function PlanTab({ wb }: { wb: WellBeings }) {
       </p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginBottom: 34 }}>
         {interventions.map((iv) => (
-          <div key={iv.title} className="card" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 9 }}>
+          <div key={iv.title} className="card card-interactive" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 9 }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "flex-start" }}>
               <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>{iv.title}</div>
               <span className="tag tag-outline" style={{ fontSize: 10, flex: "none" }}>

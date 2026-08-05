@@ -2,8 +2,8 @@ export type Region = "us" | "uk" | "ca" | "au" | "in" | "nz" | "intl";
 
 export type Age = "u16" | "16-18" | "19-25" | "26+";
 export type Chrono = "morning" | "between" | "owl";
-export type Situation = "School" | "University" | "Working" | "A mix";
-export type Section = "Basics" | "Sleep" | "Rhythm" | "Mood" | "Stress";
+export type Situation = "School" | "University" | "Working" | "Between things" | "Caregiving" | "A mix";
+export type Section = "Basics" | "Sleep" | "Rhythm" | "Mood" | "Stress" | "Habits";
 export type PlanIntensity = "gentle" | "balanced" | "driven";
 
 export interface HelplineEntry {
@@ -59,6 +59,8 @@ export interface RawAnswers {
   gad: number[];
   gadExpanded: boolean;
   bo: [number, number, number];
+  /** AUDIT-C, adaptive: [0] alone if "never drinks"; all 3 items otherwise. */
+  audit: number[];
   goal: string;
 }
 
@@ -78,6 +80,9 @@ export interface Profile extends RawAnswers {
   boHigh: boolean;
   boWatch: boolean;
   overloaded: boolean;
+  auditScore: number;
+  auditWatch: boolean;
+  auditFlag: boolean;
 }
 
 export interface ChatMessage {

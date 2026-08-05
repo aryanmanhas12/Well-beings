@@ -61,6 +61,7 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
           : ["Minimal", 0];
   const slBand: [string, number] = p.sleepBad ? ["Disrupted", 2] : p.sleepWatch ? ["Wobbly", 1] : ["Solid", 0];
   const boBand: [string, number] = p.boHigh ? ["Elevated", 2] : p.boWatch ? ["Watch", 1] : ["Low", 0];
+  const auBand: [string, number] = p.auditFlag ? ["Worth a look", 2] : p.auditWatch ? ["Watch", 1] : ["Low", 0];
 
   return [
     mk(
@@ -124,6 +125,20 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
           ? "Early signs. Cheap to fix now — the radar will watch your trend."
           : "Low risk. Keep the recovery channels topped up.",
       "Adapted OLBI/MBI signals"
+    ),
+    mk(
+      "Drinking",
+      p.auditScore,
+      "/ 12 · AUDIT-C",
+      12,
+      auBand[0],
+      auBand[1],
+      p.auditFlag
+        ? "Worth a straight conversation with a GP or counsellor — no judgement, just a number worth a second look."
+        : p.auditWatch
+          ? "Nothing alarming, just worth keeping an eye on."
+          : "No flag on this one.",
+      "AUDIT-C · WHO, single youth-calibrated cutoff"
     ),
   ];
 }

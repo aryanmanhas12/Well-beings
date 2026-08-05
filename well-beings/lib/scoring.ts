@@ -21,6 +21,7 @@ export function buildProfile(raw: RawAnswers): Profile {
   const phqScore = sum(raw.phq);
   const gadScore = sum(raw.gad);
   const boScore = sum(raw.bo);
+  const auditScore = sum(raw.audit);
   const need = raw.age === "u16" || raw.age === "16-18" ? 9 : 8;
   const sleepFlag =
     (raw.sleepHours <= 6.5 ? 2 : raw.sleepHours <= 7.5 && need === 9 ? 1 : 0) +
@@ -45,6 +46,16 @@ export function buildProfile(raw: RawAnswers): Profile {
     boHigh: boScore >= 8,
     boWatch: boScore >= 5,
     overloaded: (raw.workload || 0) >= 2,
+    auditScore,
+    /* This app never asks sex, so it can't use the sex-specific AUDIT-C
+       cutoffs (≥4 men / ≥3 women) some guidelines recommend. It uses a
+       single youth-calibrated cutoff instead: ≥3 is the sensitivity-optimised
+       threshold found in 12–19 year olds (Liskola et al., 2018), ≥6 sits at
+       the higher end of cutoffs found across young-adult samples (Skogen et
+       al., 2024). Less precise for some people — an honest tradeoff for
+       asking for less. See the Evidence tab for both citations. */
+    auditWatch: auditScore >= 3,
+    auditFlag: auditScore >= 6,
   };
 }
 
@@ -185,6 +196,20 @@ export function buildInterventions(p: Profile): Intervention[] {
         "No study/work apps after shutdown; separate spaces if you can",
       ],
       src: "Headrick et al. 2022 · Sonnentag & Fritz 2015",
+      tryBreath: false,
+    });
+  }
+  if (p.auditFlag) {
+    iv.push({
+      title: "Worth a straight conversation",
+      tag: "Habits",
+      why: "Your drinking answers landed in the range where a GP or counsellor can help you look at it properly — not because a number decided anything, but because that's exactly what this screen is designed to catch early.",
+      steps: [
+        "No judgement, no diagnosis here — just a number worth a second look",
+        "A GP, campus health service or the lines under Help & privacy can talk it through confidentially",
+        "Cutting back before it's a crisis is far easier than after",
+      ],
+      src: "Liskola et al. 2018 · Skogen et al. 2024",
       tryBreath: false,
     });
   }

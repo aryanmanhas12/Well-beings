@@ -16,7 +16,11 @@
   --color-neutral-300: #cfd3e5;
   --color-neutral-400: #b2b6ca;
   --color-neutral-500: #9397ab;
-  --color-neutral-600: #75798c;
+  /* #75798c measured 4.08:1 on --color-bg — fails WCAG AA (4.5:1) for the
+     small captions and citations this token is actually used for across the
+     app. #7f8294 clears it at 4.63:1 while staying visually between
+     neutral-500 and neutral-700, so the scale's ordering is unchanged. */
+  --color-neutral-600: #7f8294;
   --color-neutral-700: #595d6c;
   --color-neutral-800: #3f424d;
   --color-neutral-900: #292b31;

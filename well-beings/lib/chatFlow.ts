@@ -10,6 +10,8 @@ const phqDeepWhy =
   "You're seeing the remaining PHQ-9 items because the first two flagged. Nine questions map onto the clinical criteria for depression; a score of 10 or more is the line where clinicians usually look closer. This app signals — it does not diagnose.";
 const gadWhy =
   "These two open the GAD-7, the standard anxiety screener, developed across 2,740 patients and since tested in 24 languages. Same adaptive rule: two now, five more only if these flag.";
+const auditWhy =
+  "This is the AUDIT-C, the WHO's own 3-question alcohol screen — one of the two instruments actually validated for people under 25. Answer honestly or skip it entirely; it only goes deeper if the first answer isn't \"never.\" One thing worth knowing: this app never asks your sex, so it can't use the sex-specific cutoff some guidelines recommend — it uses one calibrated for this app's age group instead. Less precise for some people, on purpose, for asking less.";
 
 const S = SCALE.map(([label, value]) => ({ label, value }));
 const F = FREQ.map(([label, value]) => ({ label, value }));
@@ -17,6 +19,50 @@ const F = FREQ.map(([label, value]) => ({ label, value }));
 /** The full check-in flow — adaptive follow-ups are enqueued by `after` via ctx.insertNext. */
 export function buildFlow(): Question[] {
   return [
+    {
+      id: "entry",
+      section: "Basics",
+      type: "choice",
+      text: "Before we start — what brings you here today?",
+      opts: [
+        { label: "I'm ready for my check-in", value: "ready" },
+        { label: "I'm not sure where to start", value: "unsure" },
+        { label: "I'm worried about someone else", value: "other" },
+        { label: "I need help right now", value: "crisis" },
+      ],
+      after: (v, ctx: FlowCtx) => {
+        // Crisis is never gated behind the rest of the form — the card
+        // appears immediately, then the check-in continues as normal,
+        // same pattern used when the PHQ-9 self-harm item flags mid-flow.
+        if (v === "crisis") {
+          ctx.triggerCrisis();
+          return;
+        }
+        if (v === "unsure") {
+          ctx.insertNext([
+            {
+              id: "entryAck",
+              section: "Basics",
+              type: "choice",
+              text: "That's exactly what this is for. A few short questions, plain language, and I'll tell you why I'm asking anything you're unsure about. No right answers.",
+              opts: [{ label: "Okay, let's go", value: "ok" }],
+            },
+          ]);
+          return;
+        }
+        if (v === "other") {
+          ctx.insertNext([
+            {
+              id: "entryAck",
+              section: "Basics",
+              type: "choice",
+              text: "Good on you for looking. The most useful thing you can do is ask directly — \"are you doing okay?\" doesn't plant ideas, it opens a door. Listen without rushing to fix it. If you want, run this check-in yourself first so you know what you'd actually be suggesting.",
+              opts: [{ label: "Continue", value: "ok" }],
+            },
+          ]);
+        }
+      },
+    },
     { id: "name", section: "Basics", type: "text", text: "What should I call you? (First name, nickname — or hit send to skip.)" },
     {
       id: "age",
@@ -54,6 +100,8 @@ export function buildFlow(): Question[] {
         { label: "School", value: "School" },
         { label: "University", value: "University" },
         { label: "Working", value: "Working" },
+        { label: "Between things right now", value: "Between things" },
+        { label: "Caregiving", value: "Caregiving" },
         { label: "A mix of these", value: "A mix" },
       ],
     },
@@ -211,7 +259,7 @@ export function buildFlow(): Question[] {
         }
       },
     },
-    { id: "bo1", section: "Stress", type: "choice", text: "Last stretch — three on energy and burnout.\n\nHow often do you feel drained before the day has even started?", opts: F },
+    { id: "bo1", section: "Stress", type: "choice", text: "Three on energy and burnout.\n\nHow often do you feel drained before the day has even started?", opts: F },
     { id: "bo2", section: "Stress", type: "choice", text: "How often do you feel cynical or detached about your study or work — a \"what’s the point\" feeling?", opts: F },
     { id: "bo3", section: "Stress", type: "choice", text: "After you stop for the day, how often does your mind keep grinding on it — unable to switch off?", opts: F },
     {
@@ -226,8 +274,56 @@ export function buildFlow(): Question[] {
         { label: "Just feel less exhausted", value: "Just feel less exhausted" },
       ],
     },
+    {
+      id: "audit1",
+      section: "Habits",
+      type: "choice",
+      why: auditWhy,
+      text: "Last stretch — one on drinking, entirely optional territory.\n\nHow often do you have a drink containing alcohol?",
+      opts: [
+        { label: "Never", value: 0 },
+        { label: "Monthly or less", value: 1 },
+        { label: "2–4 times a month", value: 2 },
+        { label: "2–3 times a week", value: 3 },
+        { label: "4+ times a week", value: 4 },
+      ],
+      after: (v, ctx: FlowCtx) => {
+        if (Number(v) >= 1) {
+          ctx.insertNext([
+            {
+              id: "audit2",
+              section: "Habits",
+              type: "choice",
+              why: auditWhy,
+              text: "On a typical day when you're drinking, how many drinks do you have?",
+              opts: [
+                { label: "1–2", value: 0 },
+                { label: "3–4", value: 1 },
+                { label: "5–6", value: 2 },
+                { label: "7–9", value: 3 },
+                { label: "10 or more", value: 4 },
+              ],
+            },
+            {
+              id: "audit3",
+              section: "Habits",
+              type: "choice",
+              why: auditWhy,
+              text: "How often do you have six or more drinks on one occasion?",
+              opts: [
+                { label: "Never", value: 0 },
+                { label: "Less than monthly", value: 1 },
+                { label: "Monthly", value: 2 },
+                { label: "Weekly", value: 3 },
+                { label: "Daily or almost daily", value: 4 },
+              ],
+            },
+          ]);
+        }
+      },
+    },
   ];
 }
 
-export const SECTION_OF: Record<string, number> = { Basics: 1, Sleep: 2, Rhythm: 3, Mood: 4, Stress: 5 };
-export const TOTAL_SECTIONS = 5;
+export const SECTION_OF: Record<string, number> = { Basics: 1, Sleep: 2, Rhythm: 3, Mood: 4, Stress: 5, Habits: 6 };
+export const TOTAL_SECTIONS = 6;

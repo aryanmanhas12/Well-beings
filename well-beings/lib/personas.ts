@@ -20,6 +20,7 @@ export const PERSONAS: Record<string, RawAnswers> = {
     gad: [2, 2, 2, 1, 1, 1, 1],
     gadExpanded: true,
     bo: [3, 3, 3],
+    audit: [2, 2, 1],
     goal: "Grades / exams",
   },
   steady: {
@@ -38,6 +39,7 @@ export const PERSONAS: Record<string, RawAnswers> = {
     gad: [1, 0],
     gadExpanded: false,
     bo: [1, 1, 1],
+    audit: [0],
     goal: "Build consistent routines",
   },
 };

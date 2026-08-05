@@ -212,6 +212,7 @@ export function useWellBeings() {
     const A = answersRef.current;
     const phqKeys = ["phq1", "phq2", "phq3", "phq4", "phq5", "phq6", "phq7", "phq8", "phq9"];
     const gadKeys = ["gad1", "gad2", "gad3", "gad4", "gad5", "gad6", "gad7"];
+    const auditKeys = ["audit1", "audit2", "audit3"];
     const raw: RawAnswers = {
       name: (A.name as string) || "",
       age: A.age as RawAnswers["age"],
@@ -230,6 +231,7 @@ export function useWellBeings() {
       gad: gadKeys.map((k) => A[k]).filter((v) => v !== undefined).map(Number),
       gadExpanded: A.gad3 !== undefined,
       bo: [Number(A.bo1) || 0, Number(A.bo2) || 0, Number(A.bo3) || 0],
+      audit: auditKeys.map((k) => A[k]).filter((v) => v !== undefined).map(Number),
       goal: (A.goal as string) || "",
     };
     const builtProfile = buildProfile(raw);
