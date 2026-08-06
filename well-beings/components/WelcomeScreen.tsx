@@ -111,11 +111,11 @@ export function WelcomeScreen({
           </div>
           <div className="card" style={{ padding: 18 }}>
             <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 26, margin: "0 0 2px", color: "var(--color-accent-300)" }}>
-              d = .65
+              7 in 10
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)" }}>
-              effect of &quot;if-then&quot; planning on goal attainment across 94 tests (Gollwitzer &amp; Sheeran
-              meta-analysis).
+              do better at reaching a goal with an &quot;if-then&quot; plan than without one — across 94 tests
+              (Gollwitzer &amp; Sheeran meta-analysis).
             </div>
           </div>
           <div style={{ fontSize: 11, color: "var(--color-neutral-600)", lineHeight: 1.5 }}>

@@ -7,7 +7,7 @@ const INTENSITIES: { value: PlanIntensity; label: string; desc: string }[] = [
   { value: "driven", label: "Driven", desc: "maximum deep work" },
 ];
 
-export function HelpTab({ wb }: { wb: WellBeings }) {
+export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: () => void }) {
   const region = wb.region;
 
   return (
@@ -48,6 +48,30 @@ export function HelpTab({ wb }: { wb: WellBeings }) {
           </a>{" "}
           lists verified lines for 130+ countries. Immediate danger → your local emergency number.
         </div>
+      </div>
+
+      <div className="card" data-tour="companion-screener" style={{ padding: 20, marginBottom: 18 }}>
+        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>
+          Companion screener
+        </div>
+        <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
+          Well-Beings is the day-to-day journal. The{" "}
+          <a href="https://aryanmanhas12.github.io/Psych/" target="_blank" rel="noopener noreferrer">
+            Psych Screener
+          </a>{" "}
+          is its companion app — the full clinical picture in six languages, with your score history kept over
+          time and a guided conversation if you&apos;re not sure where to start. Free, private, on-device, same
+          as this one. Go back and forth between them whenever it&apos;s useful.
+        </div>
+        <a
+          href="https://aryanmanhas12.github.io/Psych/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-secondary"
+          style={{ fontSize: 12.5 }}
+        >
+          Open Psych Screener →
+        </a>
       </div>
 
       <div className="card" style={{ padding: 20, marginBottom: 18 }}>
@@ -101,6 +125,11 @@ export function HelpTab({ wb }: { wb: WellBeings }) {
               Low-stimulation mode: scores and streak numbers become words — for anxiety-sensitive users.
             </div>
           </div>
+        </div>
+        <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--color-divider)" }}>
+          <button className="btn btn-secondary" onClick={onReplayTour} style={{ fontSize: 12.5 }}>
+            Show me around →
+          </button>
         </div>
       </div>
 

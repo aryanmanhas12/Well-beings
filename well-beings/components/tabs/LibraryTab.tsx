@@ -20,7 +20,7 @@ const STRENGTH_COLOR: Record<EvidenceStrength, string> = {
 function EffectScaleNote() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="card" style={{ padding: 16, marginBottom: 20 }}>
+    <div className="card" data-tour="effect-scale" style={{ padding: 16, marginBottom: 20 }}>
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}

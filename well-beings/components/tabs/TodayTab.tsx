@@ -58,7 +58,7 @@ export function TodayTab({ wb }: { wb: WellBeings }) {
       </div>
 
       <div style={{ flex: "0 1 340px", minWidth: 290, display: "flex", flexDirection: "column", gap: 16 }}>
-        <div className="card" style={{ padding: 18 }}>
+        <div className="card" data-tour="daily-checkin" style={{ padding: 18 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
             <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>Daily check-in</span>
             {checkedInToday && (
@@ -106,7 +106,7 @@ export function TodayTab({ wb }: { wb: WellBeings }) {
 
         <ProgressCard wb={wb} />
 
-        <div className="card" style={{ padding: 18 }}>
+        <div className="card" data-tour="habits" style={{ padding: 18 }}>
           <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Habit stack</div>
           <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginBottom: 12 }}>
             Anchored to things you already do. Missing a day doesn&apos;t reset progress — the research says it

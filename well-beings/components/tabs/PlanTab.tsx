@@ -74,7 +74,7 @@ export function PlanTab({ wb }: { wb: WellBeings }) {
       <p style={{ color: "var(--color-neutral-500)", fontSize: 12.5, margin: "0 0 16px" }}>
         Chosen from your flags. Each one names its evidence — tap through to the paper in the Library.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginBottom: 34 }}>
+      <div data-tour="interventions" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginBottom: 34 }}>
         {interventions.map((iv) => (
           <div key={iv.title} className="card card-interactive" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 9 }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "flex-start" }}>
@@ -107,7 +107,7 @@ export function PlanTab({ wb }: { wb: WellBeings }) {
         Recovery isn&apos;t a reward for finishing — it&apos;s what keeps the engine running. Tick them off
         through the week.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 12 }}>
+      <div data-tour="recovery-quota" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 12 }}>
         {WEEKLY_DEFS.map((w) => {
           const done = !!wb.weeklyDone[w.id];
           return (

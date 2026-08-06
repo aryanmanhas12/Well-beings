@@ -50,7 +50,7 @@ export function BurnoutTab({ wb }: { wb: WellBeings }) {
   return (
     <div data-screen-label="Burnout radar" style={{ display: "flex", flexWrap: "wrap", gap: 26, alignItems: "flex-start" }}>
       <div style={{ flex: "1 1 400px", minWidth: 300 }}>
-        <div className="card" style={{ padding: 22, marginBottom: 18 }}>
+        <div className="card" data-tour="radar" style={{ padding: 22, marginBottom: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div
               style={{

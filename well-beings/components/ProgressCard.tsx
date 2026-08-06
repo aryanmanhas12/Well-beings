@@ -54,7 +54,7 @@ export function ProgressCard({ wb }: { wb: WellBeings }) {
   const calm = wb.settings.calmMode;
 
   return (
-    <div className="card" style={{ padding: 18 }}>
+    <div className="card" data-tour="trend" style={{ padding: 18 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, marginBottom: 2 }}>
         <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>Your trend</span>
         {p.direction !== "insufficient" && !calm && p.delta != null && (

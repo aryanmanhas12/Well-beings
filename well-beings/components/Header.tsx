@@ -19,7 +19,7 @@ export function Header({ onHelp }: { onHelp: () => void }) {
     >
       <div className="nav-brand" style={{ display: "flex", alignItems: "center", gap: 9 }}>
         <LogoIcon style={{ color: "var(--color-accent)" }} />
-        <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, letterSpacing: ".01em" }}>
+        <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, letterSpacing: ".01em", whiteSpace: "nowrap" }}>
           Well-Beings
         </span>
       </div>
@@ -27,7 +27,7 @@ export function Header({ onHelp }: { onHelp: () => void }) {
         On-device · no third parties
       </span>
       <div style={{ flex: 1 }} />
-      <button className="btn btn-ghost" onClick={onHelp} style={{ fontSize: 12.5 }}>
+      <button className="btn btn-ghost" data-tour="help-now" onClick={onHelp} style={{ fontSize: 12.5 }}>
         <ShieldIcon style={{ color: "currentColor", marginRight: 6, verticalAlign: -2 }} />
         Help now
       </button>

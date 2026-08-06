@@ -2,6 +2,16 @@ import { CSSProperties } from "react";
 import { InfoIcon } from "./icons";
 import { Profile, HelplineRegion } from "@/lib/types";
 
+/**
+ * Well-Beings and the Psych Screener are two halves of one project: this app
+ * is the day-to-day journal, that one runs the fuller clinical instruments
+ * (PHQ-9/GAD-7/AUDIT-C, in six languages) and score history. Both are
+ * static sites on the same GitHub Pages origin, so this is a plain link, not
+ * an integration — nothing is passed between them, on purpose, since neither
+ * app sends data anywhere.
+ */
+const PSYCH_SCREENER_URL = "https://aryanmanhas12.github.io/Psych/";
+
 interface ResultCard {
   domain: string;
   band: string;
@@ -160,6 +170,8 @@ export function ResultsScreen({
 }) {
   const cards = buildResultCards(profile, calm);
   const seekHelp = !calm && (profile.moodFlag || profile.anxFlag || crisis);
+  const suggestFullScreener =
+    crisis || profile.moodFlag || profile.anxFlag || profile.sleepBad || profile.boHigh || profile.auditFlag;
 
   return (
     <main
@@ -219,6 +231,41 @@ export function ResultsScreen({
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {suggestFullScreener && (
+        <div
+          className="card"
+          style={{
+            padding: "18px 20px",
+            marginBottom: 26,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 16,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ maxWidth: 560 }}>
+            <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 14.5, marginBottom: 4 }}>
+              This looks like more than a quick check-in
+            </div>
+            <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
+              The Psych Screener is Well-Beings&apos; companion app — the full PHQ-9/GAD-7/AUDIT-C picture, in six
+              languages, with score history over time and a guided conversation if you&apos;re not sure where to
+              start. It&apos;s free, private, and runs entirely on-device, same as this one.
+            </div>
+          </div>
+          <a
+            href={PSYCH_SCREENER_URL + (crisis ? "#resources" : "#guide")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+            style={{ fontSize: 13, whiteSpace: "nowrap", flex: "none" }}
+          >
+            Take the full screener →
+          </a>
         </div>
       )}
 

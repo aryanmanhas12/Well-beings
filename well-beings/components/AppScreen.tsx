@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { Tab, WellBeings } from "@/hooks/useWellBeings";
 import { TodayTab } from "./tabs/TodayTab";
 import { PlanTab } from "./tabs/PlanTab";
 import { BurnoutTab } from "./tabs/BurnoutTab";
 import { LibraryTab } from "./tabs/LibraryTab";
 import { HelpTab } from "./tabs/HelpTab";
+import { Tour } from "./Tour";
+import { APP_TOUR, hasTakenTour, markTourTaken } from "@/lib/tour";
 
 const TAB_DEFS: [Tab, string][] = [
   ["today", "Today"],
@@ -14,10 +17,28 @@ const TAB_DEFS: [Tab, string][] = [
 ];
 
 export function AppScreen({ wb }: { wb: WellBeings }) {
+  const [tourOpen, setTourOpen] = useState(false);
+
+  // Auto-launch once, ever, per device — never on the demo profile (a
+  // sample dashboard is a strange place to be told how the real one works).
+  useEffect(() => {
+    if (!wb.isDemo && !hasTakenTour()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTourOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function closeTour() {
+    setTourOpen(false);
+    markTourTaken();
+  }
+
   return (
     <main data-screen-label="App" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      {tourOpen && <Tour steps={APP_TOUR} currentTab={wb.tab} setTab={wb.setTab} onFinish={closeTour} />}
       <div style={{ borderBottom: "1px solid var(--color-divider)" }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 24px", display: "flex", gap: 4, overflowX: "auto" }}>
+        <div data-tour="tabs" style={{ maxWidth: 1060, margin: "0 auto", padding: "0 24px", display: "flex", gap: 4, overflowX: "auto" }}>
           {TAB_DEFS.map(([id, label]) => (
             <button
               key={id}
@@ -52,7 +73,7 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
         {wb.tab === "plan" && <PlanTab wb={wb} />}
         {wb.tab === "burnout" && <BurnoutTab wb={wb} />}
         {wb.tab === "library" && <LibraryTab />}
-        {wb.tab === "help" && <HelpTab wb={wb} />}
+        {wb.tab === "help" && <HelpTab wb={wb} onReplayTour={() => setTourOpen(true)} />}
       </div>
     </main>
   );
