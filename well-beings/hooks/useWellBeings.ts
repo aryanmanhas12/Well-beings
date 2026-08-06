@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { buildFlow, SECTION_OF, TOTAL_SECTIONS } from "@/lib/chatFlow";
+import { InboundHandoff, readInboundHandoff } from "@/lib/bridge";
 import { HELPLINES } from "@/lib/helplines";
 import { PERSONAS } from "@/lib/personas";
 import { buildProfile, dateKey } from "@/lib/scoring";
@@ -50,6 +51,7 @@ export function useWellBeings() {
   const [weeklyDone, setWeeklyDone] = useState<Record<string, boolean>>({});
   const [crisis, setCrisis] = useState(false);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const [handoff, setHandoff] = useState<InboundHandoff | null>(null);
 
   const pendingRef = useRef<Question[]>([]);
   const answersRef = useRef<Record<string, string | number | undefined>>({});
@@ -85,6 +87,15 @@ export function useWellBeings() {
     } else if (saved) {
       setSettings(saved.settings);
     }
+  }, []);
+
+  // Arriving from the Psych Screener's results view: read the severity band
+  // it passed once, then let the URL go back to plain — a refresh or a
+  // shared link should never re-show the banner this drives.
+  useEffect(() => {
+    const h = readInboundHandoff();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (h) setHandoff(h);
   }, []);
 
   function persist(next: Partial<PersistedState>) {
@@ -336,6 +347,8 @@ export function useWellBeings() {
     setScreen,
     tab,
     setTab,
+    handoff,
+    dismissHandoff: () => setHandoff(null),
     messages,
     typing,
     currentQuestion,

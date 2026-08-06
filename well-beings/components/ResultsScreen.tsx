@@ -1,16 +1,7 @@
 import { CSSProperties } from "react";
 import { InfoIcon } from "./icons";
 import { Profile, HelplineRegion } from "@/lib/types";
-
-/**
- * Well-Beings and the Psych Screener are two halves of one project: this app
- * is the day-to-day journal, that one runs the fuller clinical instruments
- * (PHQ-9/GAD-7/AUDIT-C, in six languages) and score history. Both are
- * static sites on the same GitHub Pages origin, so this is a plain link, not
- * an integration — nothing is passed between them, on purpose, since neither
- * app sends data anywhere.
- */
-const PSYCH_SCREENER_URL = "https://aryanmanhas12.github.io/Psych/";
+import { psychScreenerLink } from "@/lib/bridge";
 
 interface ResultCard {
   domain: string;
@@ -258,7 +249,7 @@ export function ResultsScreen({
             </div>
           </div>
           <a
-            href={PSYCH_SCREENER_URL + (crisis ? "#resources" : "#guide")}
+            href={psychScreenerLink({ crisis })}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"

@@ -7,6 +7,7 @@ import { ChatScreen } from "./ChatScreen";
 import { ResultsScreen } from "./ResultsScreen";
 import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
+import { PsychHandoffBanner } from "./PsychHandoffBanner";
 
 export function WellBeingsApp() {
   const wb = useWellBeings();
@@ -25,6 +26,17 @@ export function WellBeingsApp() {
       }}
     >
       <Header onHelp={wb.openHelp} />
+
+      {wb.handoff && (
+        <PsychHandoffBanner
+          handoff={wb.handoff}
+          screen={wb.screen}
+          onStartChat={wb.startChat}
+          onGoToday={() => wb.setTab("today")}
+          onOpenHelp={wb.openHelp}
+          onDismiss={wb.dismissHandoff}
+        />
+      )}
 
       {wb.screen === "welcome" && (
         <WelcomeScreen onStartChat={wb.startChat} onStartDemo={wb.startDemo} onOpenHelp={wb.openHelp} />

@@ -1,5 +1,6 @@
 import { PlanIntensity } from "@/lib/types";
 import { WellBeings } from "@/hooks/useWellBeings";
+import { psychScreenerLink } from "@/lib/bridge";
 
 const INTENSITIES: { value: PlanIntensity; label: string; desc: string }[] = [
   { value: "gentle", label: "Gentle", desc: "recovery-first" },
@@ -56,7 +57,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
         </div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
           Well-Beings is the day-to-day journal. The{" "}
-          <a href="https://aryanmanhas12.github.io/Psych/" target="_blank" rel="noopener noreferrer">
+          <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
             Psych Screener
           </a>{" "}
           is its companion app — the full clinical picture in six languages, with your score history kept over
@@ -64,7 +65,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
           as this one. Go back and forth between them whenever it&apos;s useful.
         </div>
         <a
-          href="https://aryanmanhas12.github.io/Psych/"
+          href={psychScreenerLink()}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-secondary"

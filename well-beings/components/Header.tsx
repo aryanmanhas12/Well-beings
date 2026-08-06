@@ -23,7 +23,11 @@ export function Header({ onHelp }: { onHelp: () => void }) {
           Well-Beings
         </span>
       </div>
-      <span className="tag tag-neutral" style={{ fontSize: 10.5 }}>
+      {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped
+          to two cramped lines between the logo and Help now. The same
+          promise already lives in the footer and throughout the app, so
+          hiding it here loses nothing, not just moves the wrap elsewhere. */}
+      <span className="tag tag-neutral nav-privacy-tag" style={{ fontSize: 10.5, whiteSpace: "nowrap" }}>
         On-device · no third parties
       </span>
       <div style={{ flex: 1 }} />

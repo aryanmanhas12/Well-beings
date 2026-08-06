@@ -547,3 +547,19 @@ a,
     opacity: 1;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive
+   ─────────────────────────────────────────────────────────────
+   At phone widths the header's three-way flex (logo, privacy tag,
+   Help now) had nowhere to put the tag's ~24 characters, so it wrapped
+   to two lines and looked broken. The trust message it carries is
+   repeated in the footer and throughout the app, so hiding it here on
+   narrow screens loses nothing — it just stops fighting for space it
+   doesn't have.
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .nav-privacy-tag {
+    display: none;
+  }
+}
