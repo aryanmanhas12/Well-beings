@@ -33,6 +33,7 @@ export function Tour({
      reached the handler at all. Keeping a stable, always-mounted focus
      target fixes that regardless of when the spotlight itself appears. */
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const autoAdvanceRef = useRef<NodeJS.Timeout | null>(null);
   const step = steps[index];
   const isLast = index === steps.length - 1;
 
@@ -81,11 +82,24 @@ export function Tour({
     dialogRef.current?.focus();
   }, [index]);
 
+  useEffect(() => {
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    autoAdvanceRef.current = setTimeout(() => {
+      next();
+    }, 7000);
+    return () => {
+      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+
   function next() {
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
     if (isLast) onFinish();
     else setIndex((i) => i + 1);
   }
   function back() {
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
     setIndex((i) => Math.max(0, i - 1));
   }
 
@@ -94,6 +108,7 @@ export function Tour({
   // a focused button plus this handler both firing would double-advance.
   // Arrow keys and Escape never collide with a button's own behaviour.
   function onKeyDown(e: React.KeyboardEvent) {
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
     if (e.key === "Escape") {
       e.stopPropagation();
       onFinish();
