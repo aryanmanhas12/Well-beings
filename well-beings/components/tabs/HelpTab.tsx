@@ -1,6 +1,21 @@
 import { PlanIntensity } from "@/lib/types";
+import { Theme } from "@/lib/storage";
 import { WellBeings } from "@/hooks/useWellBeings";
 import { psychScreenerLink } from "@/lib/bridge";
+
+const THEMES: { value: Theme; label: string }[] = [
+  { value: "auto", label: "Auto" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+];
+
+/* 1.15 and 1.35 mirror the screener's scale, so someone who set a size
+   there isn't surprised by a different jump here. */
+const SIZES: { value: number; label: string; preview: number }[] = [
+  { value: 1, label: "A", preview: 13 },
+  { value: 1.15, label: "A", preview: 15 },
+  { value: 1.35, label: "A", preview: 17 },
+];
 
 const INTENSITIES: { value: PlanIntensity; label: string; desc: string }[] = [
   { value: "gentle", label: "Gentle", desc: "recovery-first" },
@@ -84,6 +99,69 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
           steady window, or if you&apos;re using more and more effort to do less and less — that&apos;s the point
           where a GP, counsellor or school/uni mental-health service genuinely changes the curve. Taking your
           Results screen to that conversation is a strong start.
+        </div>
+      </div>
+
+      <div className="card" data-tour="display-settings" style={{ padding: 20, marginBottom: 18 }}>
+        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Display</div>
+        <div style={{ fontSize: 12, color: "var(--color-neutral-500)", marginBottom: 14, textWrap: "pretty" }}>
+          These stick to this device and apply everywhere in the app.
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 8 }}>Theme</div>
+          <div className="seg" role="radiogroup" aria-label="Theme">
+            {THEMES.map((t) => (
+              <button
+                key={t.value}
+                className="seg-opt"
+                role="radio"
+                aria-checked={wb.settings.theme === t.value}
+                data-checked={wb.settings.theme === t.value}
+                onClick={() => wb.setTheme(t.value)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 8 }}>Text size</div>
+          <div className="seg" role="radiogroup" aria-label="Text size">
+            {SIZES.map((sz) => (
+              <button
+                key={sz.value}
+                className="seg-opt"
+                role="radio"
+                aria-checked={wb.settings.scale === sz.value}
+                data-checked={wb.settings.scale === sz.value}
+                onClick={() => wb.setScale(sz.value)}
+                style={{ fontSize: sz.preview }}
+              >
+                {sz.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button
+            className="switch"
+            role="switch"
+            aria-checked={wb.settings.contrast}
+            aria-label="High contrast"
+            data-on={wb.settings.contrast}
+            onClick={() => wb.setContrast(!wb.settings.contrast)}
+          >
+            <span className="switch-knob" />
+          </button>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 500 }}>High contrast</div>
+            <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)" }}>
+              Maximum separation between text and background, with solid borders.
+            </div>
+          </div>
         </div>
       </div>
 

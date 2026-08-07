@@ -42,6 +42,20 @@ export const APP_TOUR: TourStep[] = [
     body: "Anchored to routines you already have. Missing one day doesn't reset anything — the research on habit formation says it genuinely doesn't matter.",
   },
   {
+    id: "journal",
+    tab: "journal",
+    selector: '[data-tour="journal-write"]',
+    title: "The part with the longest evidence behind it",
+    body: "Guided expressive writing. Prompts alternate between getting something out and looking at it again — that combination beat either one alone in trials.",
+  },
+  {
+    id: "journal-rhythm",
+    tab: "journal",
+    selector: '[data-tour="journal-cadence"]',
+    title: "Every day or two, not every week",
+    body: "Sessions 1–3 days apart did measurably more than spaced-out ones. No streaks, no guilt — just the interval the research actually supports.",
+  },
+  {
     id: "interventions",
     tab: "plan",
     selector: '[data-tour="interventions"]',
@@ -68,6 +82,13 @@ export const APP_TOUR: TourStep[] = [
     selector: '[data-tour="effect-scale"]',
     title: "What the numbers actually mean",
     body: "Research reports \"effect sizes\" that read like code. Tap this open once and every card on this page gets easier to trust.",
+  },
+  {
+    id: "display",
+    tab: "help",
+    selector: '[data-tour="display-settings"]',
+    title: "Make it readable for you",
+    body: "Light or dark, three text sizes, and a high-contrast mode. Set once and it sticks to this device.",
   },
   {
     id: "companion",

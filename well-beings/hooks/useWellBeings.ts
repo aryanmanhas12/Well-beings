@@ -7,11 +7,12 @@ import { InboundHandoff, readInboundHandoff } from "@/lib/bridge";
 import { HELPLINES } from "@/lib/helplines";
 import { PERSONAS } from "@/lib/personas";
 import { buildProfile, dateKey } from "@/lib/scoring";
-import { DEFAULT_SETTINGS, loadState, PersistedState, saveState, clearState, Settings } from "@/lib/storage";
+import { applyDisplayPrefs, DEFAULT_SETTINGS, loadState, PersistedState, saveState, clearState, Settings, Theme } from "@/lib/storage";
+import { JournalEntry, countWords, mentionsCrisis } from "@/lib/journal";
 import { CheckinEntry, ChatMessage, FlowCtx, PlanIntensity, Profile, Question, RawAnswers } from "@/lib/types";
 
 export type Screen = "welcome" | "chat" | "results" | "app";
-export type Tab = "today" | "plan" | "burnout" | "library" | "help";
+export type Tab = "today" | "journal" | "plan" | "burnout" | "library" | "help";
 
 let msgSeq = 0;
 const nextMsgId = () => "m" + msgSeq++;
@@ -49,6 +50,7 @@ export function useWellBeings() {
   const [checkins, setCheckins] = useState<Record<string, CheckinEntry>>({});
   const [habitsDone, setHabitsDone] = useState<Record<string, string[]>>({});
   const [weeklyDone, setWeeklyDone] = useState<Record<string, boolean>>({});
+  const [journal, setJournal] = useState<JournalEntry[]>([]);
   const [crisis, setCrisis] = useState(false);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [handoff, setHandoff] = useState<InboundHandoff | null>(null);
@@ -81,11 +83,14 @@ export function useWellBeings() {
       setCheckins(saved.checkins);
       setHabitsDone(saved.habitsDone);
       setWeeklyDone(saved.weeklyDone);
+      setJournal(saved.journal);
       setCrisis(saved.crisis);
       setSettings(saved.settings);
+      applyDisplayPrefs(saved.settings);
       setScreen("app");
     } else if (saved) {
       setSettings(saved.settings);
+      applyDisplayPrefs(saved.settings);
     }
   }, []);
 
@@ -104,6 +109,7 @@ export function useWellBeings() {
       checkins: next.checkins ?? checkins,
       habitsDone: next.habitsDone ?? habitsDone,
       weeklyDone: next.weeklyDone ?? weeklyDone,
+      journal: next.journal ?? journal,
       crisis: next.crisis !== undefined ? next.crisis : crisis,
       settings: next.settings ?? settings,
     };
@@ -274,6 +280,7 @@ export function useWellBeings() {
     setCheckins({});
     setHabitsDone({});
     setWeeklyDone({});
+    setJournal([]);
     setCrisis(false);
     setSettings(DEFAULT_SETTINGS);
     setScreen("welcome");
@@ -326,6 +333,53 @@ export function useWellBeings() {
       return next;
     });
   }
+  /** Saves an entry and reports back whether the text tripped the crisis
+      check, so the caller can offer helplines rather than storing silently. */
+  function addJournalEntry(promptId: string, kind: JournalEntry["kind"], text: string): { flagged: boolean } {
+    const entry: JournalEntry = {
+      at: new Date().toISOString(),
+      promptId,
+      kind,
+      text,
+      words: countWords(text),
+    };
+    const nextJournal = [...journal, entry];
+    setJournal(nextJournal);
+    persist({ journal: nextJournal });
+    return { flagged: mentionsCrisis(text) };
+  }
+
+  function deleteJournalEntry(at: string) {
+    const nextJournal = journal.filter((e) => e.at !== at);
+    setJournal(nextJournal);
+    persist({ journal: nextJournal });
+  }
+
+  function setTheme(v: Theme) {
+    setSettings((prev) => {
+      const next = { ...prev, theme: v };
+      persist({ settings: next });
+      applyDisplayPrefs(next);
+      return next;
+    });
+  }
+  function setScale(v: number) {
+    setSettings((prev) => {
+      const next = { ...prev, scale: v };
+      persist({ settings: next });
+      applyDisplayPrefs(next);
+      return next;
+    });
+  }
+  function setContrast(v: boolean) {
+    setSettings((prev) => {
+      const next = { ...prev, contrast: v };
+      persist({ settings: next });
+      applyDisplayPrefs(next);
+      return next;
+    });
+  }
+
   function setCalmMode(v: boolean) {
     setSettings((prev) => {
       const next = { ...prev, calmMode: v };
@@ -388,6 +442,12 @@ export function useWellBeings() {
     settings,
     setPlanIntensity,
     setCalmMode,
+    setTheme,
+    setScale,
+    setContrast,
+    journal,
+    addJournalEntry,
+    deleteJournalEntry,
   };
 }
 

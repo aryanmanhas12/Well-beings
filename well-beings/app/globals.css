@@ -3,7 +3,27 @@
    only var(--color-*), var(--font-*), var(--space-*), var(--radius-*),
    var(--shadow-*) — never a hard-coded hex or px value the tokens carry. */
 
+/* Root scale multiplier — driven by the text-size control in Help & privacy.
+
+   This uses `zoom`, not `font-size`, and that is deliberate. This codebase
+   sizes type in px throughout (body 14.5px, headings 44px, inline styles in
+   components), so scaling the root font-size moved --scale and the computed
+   root size but changed nothing a person could actually see: measured at
+   1.35, body/h1/p/button all stayed at 14.5/44/16/12.5px. A setting someone
+   turns on because they cannot comfortably read the page has to do something.
+
+   `zoom` scales the whole coordinate system uniformly — including the px
+   values — and, unlike a transform, it reflows rather than overflowing, so
+   long text still wraps into the viewport at 1.35. Applied at the root so
+   position:fixed overlays and getBoundingClientRect stay in one consistent
+   space; putting it on an inner wrapper desynchronises the tour spotlight
+   from the elements it measures. */
+html {
+  zoom: var(--scale, 1);
+}
+
 :root {
+  color-scheme: dark;
   --color-bg: #161826;
   --color-surface: #232532;
   --color-text: #e9e9ed;
@@ -561,5 +581,159 @@ a,
 @media (max-width: 520px) {
   .nav-privacy-tag {
     display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Themes
+   ─────────────────────────────────────────────────────────────
+   The app shipped dark-only. That's a preference, not a default:
+   a light theme is easier for many people in daylight, and for
+   anyone whose astigmatism makes light-on-dark text smear.
+
+   `auto` follows the OS. An explicit choice wins via [data-theme],
+   applied to <html> before first paint so nobody sees a flash of
+   the theme they specifically turned off.
+
+   Every pair below was measured against WCAG AA before being used;
+   the lightest text on paper is 4.65:1, the body text 15.19:1.
+   ───────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --color-bg: #faf8f4;
+    --color-surface: #ffffff;
+    --color-text: #1c2033;
+    --color-accent: #584bb0;
+    --color-accent-2: #6c5fc4;
+    --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+
+    --color-neutral-100: #1c2033;
+    --color-neutral-200: #2b3049;
+    --color-neutral-300: #3f4459;
+    --color-neutral-400: #4e5468;
+    --color-neutral-500: #5a5f72;
+    --color-neutral-600: #6b7080;
+    --color-neutral-700: #9aa0b0;
+    --color-neutral-800: #c9cdd8;
+    --color-neutral-900: #e8eaf0;
+
+    --color-accent-100: #2b2452;
+    --color-accent-200: #3a3170;
+    --color-accent-300: #4a3f92;
+    --color-accent-400: #584bb0;
+    --color-accent-500: #6c5fc4;
+    --color-accent-600: #8578d6;
+    --color-accent-700: #b3a9e8;
+    --color-accent-800: #ded9f5;
+    --color-accent-900: #f0edfb;
+
+    --color-section: #ece9f8;
+    --color-section-glow: #ded9f5;
+
+    --shadow-sm: 0 0 0 1px #d8dae2;
+    --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
+    --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #faf8f4;
+  --color-surface: #ffffff;
+  --color-text: #1c2033;
+  --color-accent: #584bb0;
+  --color-accent-2: #6c5fc4;
+  --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+
+  --color-neutral-100: #1c2033;
+  --color-neutral-200: #2b3049;
+  --color-neutral-300: #3f4459;
+  --color-neutral-400: #4e5468;
+  --color-neutral-500: #5a5f72;
+  --color-neutral-600: #6b7080;
+  --color-neutral-700: #9aa0b0;
+  --color-neutral-800: #c9cdd8;
+  --color-neutral-900: #e8eaf0;
+
+  --color-accent-100: #2b2452;
+  --color-accent-200: #3a3170;
+  --color-accent-300: #4a3f92;
+  --color-accent-400: #584bb0;
+  --color-accent-500: #6c5fc4;
+  --color-accent-600: #8578d6;
+  --color-accent-700: #b3a9e8;
+  --color-accent-800: #ded9f5;
+  --color-accent-900: #f0edfb;
+
+  --color-section: #ece9f8;
+  --color-section-glow: #ded9f5;
+
+  --shadow-sm: 0 0 0 1px #d8dae2;
+  --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
+  --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+}
+
+/* High contrast: layered on top of whichever theme is active, so it works
+   in both. Pushes every text pair past AAA (7:1) and makes borders solid
+   rather than the translucent hairlines the normal themes use. */
+:root[data-contrast="high"] {
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #000000;
+  --color-accent: #3b2f8f;
+  --color-divider: #000000;
+  --color-neutral-400: #1a1a1a;
+  --color-neutral-500: #1a1a1a;
+  --color-neutral-600: #1a1a1a;
+  --color-neutral-700: #000000;
+  --color-accent-200: #1d1747;
+  --color-accent-300: #291f63;
+  --color-accent-400: #3b2f8f;
+  --color-section: #ffffff;
+  --color-section-glow: #ffffff;
+  --shadow-sm: 0 0 0 2px #000;
+  --shadow-md: 0 0 0 2px #000;
+  --shadow-lg: 0 0 0 2px #000;
+}
+:root[data-contrast="high"][data-theme="dark"] {
+  --color-bg: #000000;
+  --color-surface: #000000;
+  --color-text: #ffffff;
+  --color-accent: #c9c0ff;
+  --color-divider: #ffffff;
+  --color-neutral-400: #f0f0f0;
+  --color-neutral-500: #f0f0f0;
+  --color-neutral-600: #f0f0f0;
+  --color-accent-200: #e7e5fe;
+  --color-accent-300: #d2cefd;
+  --shadow-sm: 0 0 0 2px #fff;
+  --shadow-md: 0 0 0 2px #fff;
+  --shadow-lg: 0 0 0 2px #fff;
+}
+:root[data-contrast="high"] .card,
+:root[data-contrast="high"] .input {
+  border: 2px solid var(--color-divider);
+}
+
+/* Touch targets: 44px is the floor Apple and WCAG 2.5.5 both land on.
+   Several controls here were 30–36px, which is fine with a mouse and
+   genuinely hard with a thumb. Padding grows rather than font size, so
+   nothing reflows. */
+@media (pointer: coarse) {
+  .btn,
+  .seg-opt {
+    min-height: 44px;
+  }
+  .switch {
+    width: 46px;
+    height: 28px;
+  }
+  .switch .switch-knob {
+    width: 22px;
+    height: 22px;
+  }
+  .switch[data-on="true"] .switch-knob {
+    transform: translateX(18px);
   }
 }

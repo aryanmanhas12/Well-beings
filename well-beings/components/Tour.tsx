@@ -106,11 +106,27 @@ export function Tour({
     }
   }
 
-  const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
-  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  /* The text-size control zooms the document root, and zoom splits the two
+     coordinate systems this component straddles: getBoundingClientRect
+     reports SCREEN pixels, while a CSS `left` set on a fixed child is
+     multiplied by zoom when painted. Measured directly, the spotlight
+     landed 224px off its target at 1.35. Dividing measurements (and the
+     viewport used for clamping) by the zoom factor puts every number in
+     the same space the styles are interpreted in. */
+  const zoom =
+    typeof window !== "undefined"
+      ? parseFloat(getComputedStyle(document.documentElement).zoom || "1") || 1
+      : 1;
+  const vw = (typeof window !== "undefined" ? window.innerWidth : 1280) / zoom;
+  const vh = (typeof window !== "undefined" ? window.innerHeight : 800) / zoom;
 
   const spot = rect
-    ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 }
+    ? {
+        top: rect.top / zoom - PAD,
+        left: rect.left / zoom - PAD,
+        width: rect.width / zoom + PAD * 2,
+        height: rect.height / zoom + PAD * 2,
+      }
     : null;
 
   // Place the bubble on whichever side has the most room, then clamp it

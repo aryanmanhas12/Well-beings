@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Tab, WellBeings } from "@/hooks/useWellBeings";
 import { TodayTab } from "./tabs/TodayTab";
+import { JournalTab } from "./tabs/JournalTab";
 import { PlanTab } from "./tabs/PlanTab";
 import { BurnoutTab } from "./tabs/BurnoutTab";
 import { LibraryTab } from "./tabs/LibraryTab";
@@ -10,6 +11,7 @@ import { APP_TOUR, hasTakenTour, markTourTaken } from "@/lib/tour";
 
 const TAB_DEFS: [Tab, string][] = [
   ["today", "Today"],
+  ["journal", "Journal"],
   ["plan", "My system"],
   ["burnout", "Burnout radar"],
   ["library", "Evidence"],
@@ -70,6 +72,7 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
         style={{ maxWidth: 1060, width: "100%", margin: "0 auto", padding: "30px 24px 70px", boxSizing: "border-box" }}
       >
         {wb.tab === "today" && <TodayTab wb={wb} />}
+        {wb.tab === "journal" && <JournalTab wb={wb} />}
         {wb.tab === "plan" && <PlanTab wb={wb} />}
         {wb.tab === "burnout" && <BurnoutTab wb={wb} />}
         {wb.tab === "library" && <LibraryTab />}
