@@ -77,8 +77,34 @@ export interface Strings {
   crisisBody: string;
   crisisFooter: string;
 
+  /* tabs */
+  tabToday: string;
+  tabJournal: string;
+  tabPlan: string;
+  tabBurnout: string;
+  tabLibrary: string;
+  tabHelp: string;
+
+  /* results */
+  resultsKicker: string;
+  resultsTitle: string;
+  resultsTitleNamed: (name: string) => string;
+  resultsLead: string;
+  buildSystem: string;
+  whichScreener: string;
+
+  /* check-in chrome */
+  changeLastAnswer: string;
+  whyAsked: string;
+  hideWhy: string;
+  typeHere: string;
+  send: string;
+  partOf: (n: number, total: number) => string;
+
   /* honesty */
   checkinEnglishOnly: string;
+  screenerItemsEnglish: string;
+  appContentEnglish: string;
 }
 
 const en: Strings = {
@@ -138,8 +164,34 @@ const en: Strings = {
     "Thanks for being honest. That answer isn’t stored anywhere but this device — and it deserves a human, not an app. If these thoughts get heavy, please reach out:",
   crisisFooter: "Free · confidential · 24/7. If you’re in immediate danger, call your local emergency number.",
 
+  tabToday: "Today",
+  tabJournal: "Journal",
+  tabPlan: "My system",
+  tabBurnout: "Burnout radar",
+  tabLibrary: "Evidence",
+  tabHelp: "Help & privacy",
+
+  resultsKicker: "Your read-out",
+  resultsTitle: "Here’s your read-out",
+  resultsTitleNamed: (name) => `${name}, here’s your read-out`,
+  resultsLead:
+    "Screener scores are signals, not diagnoses. Here’s what flagged, what didn’t, and what your system will focus on.",
+  buildSystem: "Build my system →",
+  whichScreener: "Which screener?",
+
+  changeLastAnswer: "← Change my last answer",
+  whyAsked: "Why am I being asked this?",
+  hideWhy: "Hide",
+  typeHere: "Type here… (or just send to skip)",
+  send: "Send",
+  partOf: (n, total) => `part ${n} of ${total}`,
+
   checkinEnglishOnly:
     "The check-in itself stays in English: PHQ-9 and GAD-7 are validated word-for-word, and a loose translation would quietly break the scores. For properly localised instruments, use the Psych Screener.",
+  screenerItemsEnglish:
+    "The buttons and headings around the questions follow your language. The screener questions themselves stay in English — they're validated word-for-word.",
+  appContentEnglish:
+    "Navigation and your read-out are in Hindi. The daily plan text inside these tabs is still English — it's being translated properly rather than machine-translated, which the research says is the difference between people staying and leaving.",
 };
 
 const hi: Strings = {
@@ -200,8 +252,34 @@ const hi: Strings = {
   crisisFooter:
     "नि:शुल्क · गोपनीय · चौबीसों घंटे। अगर आप तत्काल ख़तरे में हैं, तो अपने स्थानीय आपातकालीन नंबर पर कॉल करें।",
 
+  tabToday: "आज",
+  tabJournal: "जर्नल",
+  tabPlan: "मेरी व्यवस्था",
+  tabBurnout: "बर्नआउट रडार",
+  tabLibrary: "प्रमाण",
+  tabHelp: "मदद और निजता",
+
+  resultsKicker: "आपका ब्यौरा",
+  resultsTitle: "यह रहा आपका ब्यौरा",
+  resultsTitleNamed: (name) => `${name}, यह रहा आपका ब्यौरा`,
+  resultsLead:
+    "स्क्रीनर के अंक संकेत हैं, निदान नहीं। यहाँ देखिए किन बातों पर ध्यान चाहिए, किन पर नहीं, और आपकी व्यवस्था किस पर टिकेगी।",
+  buildSystem: "मेरी व्यवस्था बनाएँ →",
+  whichScreener: "कौन-सा स्क्रीनर?",
+
+  changeLastAnswer: "← पिछला उत्तर बदलें",
+  whyAsked: "यह सवाल क्यों पूछा जा रहा है?",
+  hideWhy: "छिपाएँ",
+  typeHere: "यहाँ लिखें… (या छोड़ने के लिए भेजें)",
+  send: "भेजें",
+  partOf: (n, total) => `भाग ${n} / ${total}`,
+
   checkinEnglishOnly:
     "जाँच स्वयं अंग्रेज़ी में ही रहती है: PHQ-9 और GAD-7 शब्द-दर-शब्द प्रमाणित हैं, और ढीला अनुवाद चुपचाप उनके स्कोर बिगाड़ देगा। सही ढंग से अनूदित प्रश्नावली के लिए Psych Screener इस्तेमाल करें।",
+  screenerItemsEnglish:
+    "सवालों के आस-पास के बटन और शीर्षक आपकी भाषा में हैं। स्क्रीनर के सवाल स्वयं अंग्रेज़ी में रहते हैं — वे शब्द-दर-शब्द प्रमाणित हैं।",
+  appContentEnglish:
+    "नेविगेशन और आपका ब्यौरा हिन्दी में हैं। इन टैब के अंदर की दैनिक योजना अभी अंग्रेज़ी में है — उसका ठीक से अनुवाद किया जा रहा है, मशीनी अनुवाद नहीं, क्योंकि शोध के मुताबिक़ यही फ़र्क़ तय करता है कि लोग टिकते हैं या छोड़ देते हैं।",
 };
 
 export const STRINGS: Record<Lang, Strings> = { en, hi };

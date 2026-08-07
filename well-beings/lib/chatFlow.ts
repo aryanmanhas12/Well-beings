@@ -81,12 +81,14 @@ export function buildFlow(): Question[] {
       section: "Basics",
       type: "choice",
       text: "Where are you based? Only used to show the right local support lines — never sent anywhere.",
+      // India first: it's this app's default region and its largest audience,
+      // and the first option in a list is the one people scan for.
       opts: [
-        { label: "United States", value: "us" },
+        { label: "India", value: "in" },
         { label: "United Kingdom", value: "uk" },
+        { label: "United States", value: "us" },
         { label: "Canada", value: "ca" },
         { label: "Australia", value: "au" },
-        { label: "India", value: "in" },
         { label: "New Zealand", value: "nz" },
         { label: "Somewhere else", value: "intl" },
       ],

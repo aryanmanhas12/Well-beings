@@ -18,6 +18,19 @@ import { DirectoryLink, HelplineRegion, Region } from "./types";
  * where browsing is the point.
  */
 
+/**
+ * The region assumed before anyone has told us where they are.
+ *
+ * This used to be `intl`, which meant the very first thing someone saw in
+ * the Help dialog was a directory to go and search, and — if they'd got as
+ * far as picking a country — a US 911. India is where this app is built and
+ * where most of its users are, so India is the honest default: real numbers,
+ * reachable immediately, on the first tap. Anyone elsewhere gets their own
+ * region the moment they answer the "where are you based?" question, and
+ * `intl` still exists for everyone the list doesn't name.
+ */
+export const DEFAULT_REGION: Region = "in";
+
 /** Directories that work from anywhere — appended to every region. */
 export const GLOBAL_LINKS: DirectoryLink[] = [
   {

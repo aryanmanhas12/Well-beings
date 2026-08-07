@@ -138,6 +138,34 @@ export const STATEMENTS: Statement[] = [
     url: "https://consensus.app/papers/details/b4b32af90fcd550d93e987eff3b59f43/",
   },
   {
+    id: "india-treatment-gap",
+    text: {
+      en: "Most people in India with depression or anxiety are getting some kind of treatment.",
+      hi: "भारत में अवसाद या चिंता से जूझ रहे ज़्यादातर लोगों को किसी न किसी तरह का इलाज मिल रहा है।",
+    },
+    researchAgrees: false,
+    reveal: {
+      en: "Four in five get none. India's National Mental Health Survey covered 39,532 adults across 12 states: about 1 in 20 currently has a depressive or anxiety disorder, and the treatment gap is 80%. Nearly 60% reported disability of some severity.",
+      hi: "पाँच में से चार को कुछ नहीं मिलता। भारत के राष्ट्रीय मानसिक स्वास्थ्य सर्वेक्षण ने 12 राज्यों के 39,532 वयस्कों को शामिल किया: लगभग हर 20 में से 1 व्यक्ति इस समय अवसाद या चिंता विकार से जूझ रहा है, और इलाज की खाई 80% है। लगभग 60% ने किसी न किसी स्तर की अशक्तता बताई।",
+    },
+    cite: "Jayasankar et al., 2022, Indian J. Psychiatry",
+    url: "https://consensus.app/papers/details/a5f36aaf85645e3ea622482e1e9e8386/",
+  },
+  {
+    id: "india-stigma",
+    text: {
+      en: "India's treatment gap is mainly about people not knowing the services exist.",
+      hi: "भारत में इलाज की खाई मुख्य रूप से इसलिए है कि लोगों को सेवाओं के बारे में पता नहीं।",
+    },
+    researchAgrees: false,
+    reveal: {
+      en: "When researchers actually asked, women in Mysuru knew the psychiatric services in their city and recommended them to others — then refused them for their own distress, citing stigma and the sense that clinical care didn't address social causes. The barrier is rarely information.",
+      hi: "जब शोधकर्ताओं ने सचमुच पूछा, तो मैसूरु की महिलाओं को अपने शहर की मनोरोग सेवाओं की जानकारी थी और उन्होंने दूसरों को उनकी सलाह भी दी — पर अपने लिए मना कर दिया, कलंक का डर बताते हुए और यह कि नैदानिक इलाज सामाजिक कारणों को नहीं छूता। रुकावट शायद ही कभी जानकारी की होती है।",
+    },
+    cite: "Weaver et al., 2022, SSM — Mental Health",
+    url: "https://consensus.app/papers/details/ed357c10914554708e054fc0362692a0/",
+  },
+  {
     id: "translation",
     text: {
       en: "Translating a mental-health tool is enough to make it work in another culture.",

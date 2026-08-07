@@ -280,6 +280,31 @@ export const EVIDENCE: EvidenceItem[] = [
     url: "https://consensus.app/papers/details/0ae37e9270f05c45a01c25fc635e7f9b/",
   },
   {
+    tag: "India",
+    design: "National survey · 39,532 adults · 12 states",
+    figure: "80%",
+    caption: "Of Indians with a common mental disorder receive no treatment at all",
+    strength: "large",
+    finding:
+      "India's National Mental Health Survey found that roughly 1 in 20 adults currently has a depressive or anxiety disorder — and four in five of them get no treatment. Nearly 60% reported disability of some severity. The gap isn't at the edges; it is the normal case.",
+    technical: "Weighted current prevalence of common mental disorders 5.1% (95% CI 5.06–5.13); treatment gap 80.4%.",
+    use: "why this app defaults to India, and why it is free, private and needs no referral to start.",
+    cite: "Jayasankar et al., 2022, Indian J. Psychiatry",
+    url: "https://consensus.app/papers/details/a5f36aaf85645e3ea622482e1e9e8386/",
+  },
+  {
+    tag: "India",
+    design: "Community interview study · 66 women · Mysuru, Karnataka",
+    figure: "Not access",
+    caption: "People knew the services existed and still didn't want them",
+    strength: "moderate",
+    finding:
+      "The usual explanation for India's treatment gap is that people lack awareness or access. When researchers actually asked, women knew the psychiatric services in their city and recommended them to others — then refused them for their own distress, citing stigma and a sense that clinical care didn't address social causes. Building more clinics doesn't fix that on its own.",
+    use: "why this is private by design, needs no account, and never asks you to be “ill enough” — the barrier being designed around is stigma, not availability.",
+    cite: "Weaver et al., 2022, SSM — Mental Health",
+    url: "https://consensus.app/papers/details/ed357c10914554708e054fc0362692a0/",
+  },
+  {
     tag: "Stress",
     design: "Randomised trial · 1 month · daily 5-min practice",
     figure: "5 min",

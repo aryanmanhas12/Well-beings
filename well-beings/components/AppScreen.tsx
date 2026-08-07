@@ -8,14 +8,16 @@ import { LibraryTab } from "./tabs/LibraryTab";
 import { HelpTab } from "./tabs/HelpTab";
 import { Tour } from "./Tour";
 import { APP_TOUR, hasTakenTour, markTourTaken } from "@/lib/tour";
+import { Strings } from "@/lib/i18n";
 
-const TAB_DEFS: [Tab, string][] = [
-  ["today", "Today"],
-  ["journal", "Journal"],
-  ["plan", "My system"],
-  ["burnout", "Burnout radar"],
-  ["library", "Evidence"],
-  ["help", "Help & privacy"],
+/** Labels come from the string table, so the tab bar follows the language. */
+const TAB_DEFS: [Tab, keyof Strings][] = [
+  ["today", "tabToday"],
+  ["journal", "tabJournal"],
+  ["plan", "tabPlan"],
+  ["burnout", "tabBurnout"],
+  ["library", "tabLibrary"],
+  ["help", "tabHelp"],
 ];
 
 export function AppScreen({ wb }: { wb: WellBeings }) {
@@ -41,7 +43,7 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
       {tourOpen && <Tour steps={APP_TOUR} currentTab={wb.tab} setTab={wb.setTab} onFinish={closeTour} />}
       <div style={{ borderBottom: "1px solid var(--color-divider)" }}>
         <div data-tour="tabs" style={{ maxWidth: 1060, margin: "0 auto", padding: "0 24px", display: "flex", gap: 4, overflowX: "auto" }}>
-          {TAB_DEFS.map(([id, label]) => (
+          {TAB_DEFS.map(([id, key]) => (
             <button
               key={id}
               onClick={() => wb.setTab(id)}
@@ -59,7 +61,7 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
                 transition: "color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out)",
               }}
             >
-              {label}
+              {wb.s[key] as string}
             </button>
           ))}
         </div>
@@ -71,6 +73,22 @@ export function AppScreen({ wb }: { wb: WellBeings }) {
         className="anim-in"
         style={{ maxWidth: 1060, width: "100%", margin: "0 auto", padding: "30px 24px 70px", boxSizing: "border-box" }}
       >
+        {/* Honest about where the translation currently stops, rather than
+            letting a Hindi reader hit an English plan with no explanation. */}
+        {wb.settings.lang !== "en" && (
+          <div
+            style={{
+              fontSize: 11.5,
+              color: "var(--color-neutral-600)",
+              marginBottom: 18,
+              paddingBottom: 14,
+              borderBottom: "1px solid var(--color-divider)",
+              textWrap: "pretty",
+            }}
+          >
+            {wb.s.appContentEnglish}
+          </div>
+        )}
         {wb.tab === "today" && <TodayTab wb={wb} />}
         {wb.tab === "journal" && <JournalTab wb={wb} />}
         {wb.tab === "plan" && <PlanTab wb={wb} />}

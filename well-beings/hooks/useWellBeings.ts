@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { buildFlow, SECTION_OF, TOTAL_SECTIONS } from "@/lib/chatFlow";
 import { InboundHandoff, readInboundHandoff } from "@/lib/bridge";
-import { crisisLines, HELPLINES } from "@/lib/helplines";
+import { crisisLines, DEFAULT_REGION, HELPLINES } from "@/lib/helplines";
 import { PERSONAS } from "@/lib/personas";
 import { buildProfile, dateKey } from "@/lib/scoring";
 import { applyDisplayPrefs, DEFAULT_SETTINGS, loadState, PersistedState, saveState, clearState, Settings, Theme } from "@/lib/storage";
@@ -156,7 +156,8 @@ export function useWellBeings() {
 
   function triggerCrisis() {
     setCrisis(true);
-    const region = HELPLINES[(answersRef.current.region as keyof typeof HELPLINES) || "intl"] || HELPLINES.intl;
+    const region =
+      HELPLINES[(answersRef.current.region as keyof typeof HELPLINES) || DEFAULT_REGION] || HELPLINES[DEFAULT_REGION];
     // The short list, not the directory: a crisis card with eight numbers on
     // it is a card nobody rings.
     push({ isCrisis: true, lines: crisisLines(region) });
@@ -409,7 +410,7 @@ export function useWellBeings() {
   }
 
   const region = useMemo(
-    () => HELPLINES[(activeProfile?.region as keyof typeof HELPLINES) || "intl"] || HELPLINES.intl,
+    () => HELPLINES[(activeProfile?.region as keyof typeof HELPLINES) || DEFAULT_REGION] || HELPLINES[DEFAULT_REGION],
     [activeProfile]
   );
 
@@ -435,7 +436,7 @@ export function useWellBeings() {
     canGoBack: historyRef.current.length > 0,
     progSec,
     progPct: Math.round((progN / TOTAL_SECTIONS) * 100),
-    progLabel: `part ${progN} of ${TOTAL_SECTIONS}`,
+    progLabel: t(settings.lang).partOf(progN, TOTAL_SECTIONS),
     helpOpen,
     openHelp: () => setHelpOpen(true),
     closeHelp: () => setHelpOpen(false),

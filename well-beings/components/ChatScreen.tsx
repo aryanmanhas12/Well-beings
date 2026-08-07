@@ -107,7 +107,7 @@ function TypingDots() {
 }
 
 /** "Why are you asking me this?" — collapsed by default; never blocks answering. */
-function WhyNote({ why }: { why: string }) {
+function WhyNote({ why, s }: { why: string; s: Strings }) {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ marginBottom: 9 }}>
@@ -123,7 +123,7 @@ function WhyNote({ why }: { why: string }) {
           textUnderlineOffset: 3,
         }}
       >
-        {open ? "Hide" : "Why am I being asked this?"}
+        {open ? s.hideWhy : s.whyAsked}
       </button>
       {open && (
         <p
@@ -234,13 +234,20 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
       </div>
 
       <div style={{ padding: "10px 4px 18px", borderTop: "1px solid var(--color-divider)" }}>
+        {/* Said once, up front: the chrome follows your language but the
+            screener items don't, and that's deliberate — see lib/i18n.ts. */}
+        {wb.settings.lang !== "en" && (
+          <div style={{ fontSize: 11, color: "var(--color-neutral-600)", marginBottom: 9, textWrap: "pretty" }}>
+            {wb.s.screenerItemsEnglish}
+          </div>
+        )}
         {q?.sub && (
           <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11.5, color: "var(--color-neutral-500)", marginBottom: 9 }}>
             <LockIcon style={{ color: "var(--color-accent-400)" }} />
             {q.sub}
           </div>
         )}
-        {q?.why && <WhyNote why={q.why} />}
+        {q?.why && <WhyNote why={q.why} s={wb.s} />}
         {hasOptions && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {(q!.opts || []).map((opt, i) => (
@@ -267,11 +274,11 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
               value={wb.draft}
               onChange={(e) => wb.setDraft(e.target.value)}
               onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => wb.onDraftKeyDown(e)}
-              placeholder="Type here… (or just send to skip)"
+              placeholder={wb.s.typeHere}
               style={{ flex: 1 }}
             />
             <button className="btn btn-primary" onClick={wb.sendDraft}>
-              Send
+              {wb.s.send}
             </button>
           </div>
         )}
@@ -298,7 +305,7 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
                 color: "var(--color-neutral-500)",
               }}
             >
-              ← Change my last answer
+              {wb.s.changeLastAnswer}
             </button>
           )}
           <div style={{ flex: 1 }} />

@@ -149,7 +149,7 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
 
 /** Which instrument produced a score — folded away unless asked for, or
     unless the citations preference says always. */
-function InstrumentNote({ src, always }: { src: string; always: boolean }) {
+function InstrumentNote({ src, always, label }: { src: string; always: boolean; label: string }) {
   const [open, setOpen] = useState(false);
   if (always || open) {
     return <div style={{ fontSize: 10.5, color: "var(--color-neutral-600)", marginTop: "auto" }}>{src}</div>;
@@ -167,7 +167,7 @@ function InstrumentNote({ src, always }: { src: string; always: boolean }) {
         textUnderlineOffset: 2,
       }}
     >
-      Which screener?
+      {label}
     </button>
   );
 }
@@ -203,22 +203,22 @@ export function ResultsScreen({
       style={{ flex: 1, maxWidth: 1060, width: "100%", margin: "0 auto", padding: "44px 24px 60px", boxSizing: "border-box" }}
     >
       <div className="tag tag-accent" style={{ marginBottom: 14 }}>
-        Your read-out
+        {s.resultsKicker}
       </div>
       <h1
         style={{
-          fontFamily: "var(--font-heading)",
-          fontWeight: 500,
-          fontSize: "clamp(26px,3.6vw,36px)",
+          fontFamily: "var(--font-display)",
+          fontWeight: 400,
+          letterSpacing: "var(--font-display-tracking)",
+          fontSize: "clamp(28px,4vw,40px)",
+          lineHeight: 1.08,
           margin: "0 0 8px",
-          letterSpacing: "-0.01em",
         }}
       >
-        {(profile.name ? profile.name + ", here" : "Here") + "’s your read-out"}
+        {profile.name ? s.resultsTitleNamed(profile.name) : s.resultsTitle}
       </h1>
       <p style={{ color: "var(--color-neutral-400)", maxWidth: 600, margin: "0 0 28px", textWrap: "pretty" }}>
-        Screener scores are signals, not diagnoses. Here&apos;s what flagged, what didn&apos;t, and what your
-        system will focus on.
+        {s.resultsLead}
       </p>
 
       {crisis && (
@@ -314,7 +314,7 @@ export function ResultsScreen({
               <div style={{ height: "100%", background: "var(--color-accent-500)", width: r.pct }} />
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>{r.text}</div>
-            <InstrumentNote src={r.src} always={showCitations} />
+            <InstrumentNote src={r.src} always={showCitations} label={s.whichScreener} />
           </div>
         ))}
       </div>
@@ -340,7 +340,7 @@ export function ResultsScreen({
       )}
 
       <button className="btn btn-primary" onClick={onBuildSystem} style={{ fontSize: 14.5, padding: "11px 24px" }}>
-        Build my system →
+        {s.buildSystem}
       </button>
     </main>
   );
