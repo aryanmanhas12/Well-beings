@@ -8,12 +8,34 @@ export type PlanIntensity = "gentle" | "balanced" | "driven";
 
 export interface HelplineEntry {
   name: string;
+  /** What to show — "116 123", "Text SHOUT to 85258", "Call or text 988". */
   contact: string;
+  /** Dialable number for a `tel:` href, digits and `+` only. */
+  tel?: string;
+  /** Shortcode for an `sms:` href. */
+  sms?: string;
+  /** Pre-filled SMS body, for lines that need a keyword ("HOME", "SHOUT"). */
+  smsBody?: string;
+  url?: string;
+  /** Set only when the line is NOT 24/7 — the UI prints it beside the number. */
+  hours?: string;
+  /** Who the line is for, when it's narrower than everyone. */
+  who?: string;
+  /** Belongs on a crisis surface, where a long list is a failure mode. */
+  primary?: boolean;
+}
+
+/** A place worth browsing, as opposed to a number to ring right now. */
+export interface DirectoryLink {
+  name: string;
+  url: string;
+  note: string;
 }
 
 export interface HelplineRegion {
   label: string;
   lines: HelplineEntry[];
+  links: DirectoryLink[];
 }
 
 export interface ChoiceOption {

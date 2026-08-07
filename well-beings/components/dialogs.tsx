@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
 import { HelplineRegion } from "@/lib/types";
+import { GLOBAL_LINKS } from "@/lib/helplines";
+import { Lang, t } from "@/lib/i18n";
+import { HelplineList } from "./HelplineList";
 
 /**
  * Escape closes, focus moves into the dialog on open and returns to whatever
@@ -49,8 +52,18 @@ function useDialogBehaviour(onClose: () => void) {
   return ref;
 }
 
-export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClose: () => void }) {
+export function HelpDialog({
+  region,
+  lang = "en",
+  onClose,
+}: {
+  region: HelplineRegion;
+  lang?: Lang;
+  onClose: () => void;
+}) {
   const ref = useDialogBehaviour(onClose);
+  const s = t(lang);
+  const links = [...region.links, ...GLOBAL_LINKS];
   return (
     <div
       className="dialog-backdrop"
@@ -86,37 +99,46 @@ export function HelpDialog({ region, onClose }: { region: HelplineRegion; onClos
           overscrollBehavior: "contain",
         }}
       >
-        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 17, marginBottom: 4 }}>
-          Help, right now
+        <div
+          style={{
+            fontFamily: "var(--font-display)",
+            letterSpacing: "var(--font-display-tracking)",
+            fontSize: 24,
+            lineHeight: 1.1,
+            marginBottom: 4,
+          }}
+        >
+          {s.helpTitle}
         </div>
-        <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 14 }}>
-          Free, confidential, 24/7 — for any level of &quot;not okay&quot;.
+        <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 6 }}>{s.helpSub}</div>
+        <div style={{ fontSize: 11, color: "var(--color-neutral-600)", marginBottom: 8 }}>{region.label}</div>
+
+        <HelplineList lines={region.lines} />
+
+        <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", margin: "12px 0 6px" }}>
+          {s.emergencyNote}
         </div>
-        {region.lines.map((h) => (
-          <div
-            key={h.name}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 12,
-              padding: "9px 0",
-              borderTop: "1px solid var(--color-divider)",
-              fontSize: 13.5,
-            }}
-          >
-            <span>{h.name}</span>
-            <span style={{ fontWeight: 500, color: "var(--color-accent-300)", whiteSpace: "nowrap" }}>{h.contact}</span>
-          </div>
-        ))}
-        <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", margin: "10px 0 16px" }}>
-          Elsewhere:{" "}
-          <a href="https://findahelpline.com" target="_blank" rel="noopener noreferrer">
-            findahelpline.com
-          </a>{" "}
-          · Immediate danger → local emergency number.
-        </div>
+
+        {links.length > 0 && (
+          <details style={{ margin: "6px 0 14px" }}>
+            <summary style={{ cursor: "pointer", fontSize: 12, color: "var(--color-accent-400)" }}>
+              {s.moreResources}
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginTop: 10 }}>
+              {links.map((l) => (
+                <div key={l.url}>
+                  <a href={l.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12.5 }}>
+                    {l.name} ↗
+                  </a>
+                  <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", textWrap: "pretty" }}>{l.note}</div>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
+
         <button className="btn btn-primary" onClick={onClose} style={{ width: "100%" }}>
-          Close
+          {s.helpClose}
         </button>
       </div>
     </div>

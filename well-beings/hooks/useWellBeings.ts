@@ -4,11 +4,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { buildFlow, SECTION_OF, TOTAL_SECTIONS } from "@/lib/chatFlow";
 import { InboundHandoff, readInboundHandoff } from "@/lib/bridge";
-import { HELPLINES } from "@/lib/helplines";
+import { crisisLines, HELPLINES } from "@/lib/helplines";
 import { PERSONAS } from "@/lib/personas";
 import { buildProfile, dateKey } from "@/lib/scoring";
 import { applyDisplayPrefs, DEFAULT_SETTINGS, loadState, PersistedState, saveState, clearState, Settings, Theme } from "@/lib/storage";
 import { JournalEntry, countWords, mentionsCrisis } from "@/lib/journal";
+import { Lang, t } from "@/lib/i18n";
 import { CheckinEntry, ChatMessage, FlowCtx, PlanIntensity, Profile, Question, RawAnswers } from "@/lib/types";
 
 export type Screen = "welcome" | "chat" | "results" | "app";
@@ -156,7 +157,9 @@ export function useWellBeings() {
   function triggerCrisis() {
     setCrisis(true);
     const region = HELPLINES[(answersRef.current.region as keyof typeof HELPLINES) || "intl"] || HELPLINES.intl;
-    push({ isCrisis: true, lines: region.lines });
+    // The short list, not the directory: a crisis card with eight numbers on
+    // it is a card nobody rings.
+    push({ isCrisis: true, lines: crisisLines(region) });
   }
 
   function answer(value: string | number, label: string) {
@@ -388,6 +391,23 @@ export function useWellBeings() {
     });
   }
 
+  function setLang(v: Lang) {
+    setSettings((prev) => {
+      const next = { ...prev, lang: v };
+      persist({ settings: next });
+      applyDisplayPrefs(next);
+      return next;
+    });
+  }
+
+  function setShowCitations(v: boolean) {
+    setSettings((prev) => {
+      const next = { ...prev, showCitations: v };
+      persist({ settings: next });
+      return next;
+    });
+  }
+
   const region = useMemo(
     () => HELPLINES[(activeProfile?.region as keyof typeof HELPLINES) || "intl"] || HELPLINES.intl,
     [activeProfile]
@@ -445,6 +465,10 @@ export function useWellBeings() {
     setTheme,
     setScale,
     setContrast,
+    setLang,
+    setShowCitations,
+    /** Translated UI strings for the current language — see lib/i18n.ts. */
+    s: t(settings.lang),
     journal,
     addJournalEntry,
     deleteJournalEntry,

@@ -1,12 +1,35 @@
+import { Lang, t } from "@/lib/i18n";
+import { StatementIntro } from "./StatementIntro";
+
+/**
+ * The landing page.
+ *
+ * It used to open on a headline and a paragraph of claims about itself. It
+ * now opens on a claim you can be wrong about — see StatementIntro. The
+ * pitch didn't disappear, it moved below the fold, which is the right order:
+ * the deck earns the scroll, and the paragraph explains what you scrolled to.
+ */
 export function WelcomeScreen({
+  lang = "en",
+  showCitations = false,
   onStartChat,
   onStartDemo,
   onOpenHelp,
 }: {
+  lang?: Lang;
+  showCitations?: boolean;
   onStartChat: () => void;
   onStartDemo: () => void;
   onOpenHelp: () => void;
 }) {
+  const s = t(lang);
+
+  const features = [
+    { title: s.featPrivateTitle, body: s.featPrivateBody },
+    { title: s.featAdaptiveTitle, body: s.featAdaptiveBody },
+    { title: s.featEvidenceTitle, body: s.featEvidenceBody },
+  ];
+
   return (
     <main data-screen-label="Welcome" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <div
@@ -14,7 +37,7 @@ export function WelcomeScreen({
           maxWidth: 1060,
           width: "100%",
           margin: "0 auto",
-          padding: "64px 24px 40px",
+          padding: "48px 24px 40px",
           boxSizing: "border-box",
           display: "flex",
           flexWrap: "wrap",
@@ -22,49 +45,31 @@ export function WelcomeScreen({
           alignItems: "flex-start",
         }}
       >
-        <div style={{ flex: "1 1 480px", minWidth: 320 }}>
-          <div className="tag tag-accent" style={{ marginBottom: 18 }}>
-            Evidence-based · built on 15+ peer-reviewed studies
-          </div>
-          <h1
-            style={{
-              fontFamily: "var(--font-heading)",
-              fontWeight: 500,
-              fontSize: "clamp(30px,4.5vw,44px)",
-              lineHeight: 1.12,
-              margin: "0 0 16px",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            A system for your energy,
-            <br />
-            not just your to-do list.
-          </h1>
+        <div style={{ flex: "1 1 480px", minWidth: 300 }}>
+          <StatementIntro lang={lang} showCitations={showCitations} onStartChat={onStartChat} />
+
           <p
             style={{
               color: "var(--color-neutral-400)",
-              fontSize: 16,
-              maxWidth: 520,
-              margin: "0 0 26px",
+              fontSize: 15,
+              maxWidth: 560,
+              margin: "34px 0 20px",
               textWrap: "pretty",
             }}
           >
-            A 5-minute check-in about your sleep, mood, stress and goals — using the same short screeners
-            clinicians use — then a personalised daily system designed to raise output and keep you clear of
-            burnout.
+            {s.heroLead}
           </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 34 }}>
-            <button className="btn btn-primary" onClick={onStartChat} style={{ fontSize: 14, padding: "10px 20px" }}>
-              Start the check-in · ~5 min
-            </button>
+
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 32 }}>
             <button
               className="btn btn-secondary"
               onClick={onStartDemo}
               style={{ fontSize: 14, padding: "10px 20px" }}
             >
-              Preview a sample profile
+              {s.previewProfile}
             </button>
           </div>
+
           <div
             style={{
               display: "grid",
@@ -73,54 +78,69 @@ export function WelcomeScreen({
               maxWidth: 640,
             }}
           >
-            <div style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}>
-              <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 3 }}>Private by design</div>
-              <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5 }}>
-                Everything stays in your browser. Nothing is uploaded, shared or sold. Delete it anytime.
+            {features.map((f) => (
+              <div key={f.title} style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}>
+                <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 3 }}>{f.title}</div>
+                <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5, textWrap: "pretty" }}>{f.body}</div>
               </div>
-            </div>
-            <div style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}>
-              <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 3 }}>Adaptive, not exhausting</div>
-              <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5 }}>
-                Short screeners first; deeper questions only if something flags — the approach validated in JAMA.
-              </div>
-            </div>
-            <div style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}>
-              <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 3 }}>Research-backed only</div>
-              <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5 }}>
-                Every practice cites its meta-analysis or trial — and says so when evidence is young.
-              </div>
-            </div>
+            ))}
           </div>
         </div>
+
         <div style={{ flex: "0 1 320px", minWidth: 280, display: "flex", flexDirection: "column", gap: 12 }}>
           <div className="card" style={{ padding: 18 }}>
             <div
               className="card-kicker"
               style={{ fontSize: 10.5, color: "var(--color-neutral-500)", letterSpacing: ".08em", textTransform: "uppercase" }}
             >
-              From the research inside
+              {s.researchKicker}
             </div>
-            <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 26, margin: "8px 0 2px", color: "var(--color-accent-300)" }}>
+            <div
+              style={{
+                fontFamily: "var(--font-display)",
+                letterSpacing: "var(--font-display-tracking)",
+                fontSize: 38,
+                lineHeight: 1,
+                margin: "10px 0 4px",
+                color: "var(--color-accent-300)",
+              }}
+            >
               −38%
             </div>
-            <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)" }}>
-              depression risk for people with a regular sleep window — independent of hours slept. Cohort of
-              79,666 (Psychological Medicine, 2025).
+            <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
+              {s.statSleepBody}
             </div>
           </div>
           <div className="card" style={{ padding: 18 }}>
-            <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 26, margin: "0 0 2px", color: "var(--color-accent-300)" }}>
+            <div
+              style={{
+                fontFamily: "var(--font-display)",
+                letterSpacing: "var(--font-display-tracking)",
+                fontSize: 38,
+                lineHeight: 1,
+                margin: "0 0 4px",
+                color: "var(--color-accent-300)",
+              }}
+            >
               7 in 10
             </div>
-            <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)" }}>
-              do better at reaching a goal with an &quot;if-then&quot; plan than without one — across 94 tests
-              (Gollwitzer &amp; Sheeran meta-analysis).
+            <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
+              {s.statPlanBody}
             </div>
           </div>
+
+          {/* Said here rather than discovered three questions in — see lib/i18n.ts. */}
+          {lang !== "en" && (
+            <div
+              className="card"
+              style={{ padding: 16, fontSize: 11.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}
+            >
+              {s.checkinEnglishOnly}
+            </div>
+          )}
+
           <div style={{ fontSize: 11, color: "var(--color-neutral-600)", lineHeight: 1.5 }}>
-            Well-Beings is a self-guidance tool, not a medical device. Its screeners signal — they don&apos;t
-            diagnose. If you&apos;re in crisis, use{" "}
+            {s.notMedical}{" "}
             <a
               href="#"
               onClick={(e) => {
@@ -128,9 +148,8 @@ export function WelcomeScreen({
                 onOpenHelp();
               }}
             >
-              Help now
+              {s.helpNow}
             </a>
-            .
           </div>
         </div>
       </div>

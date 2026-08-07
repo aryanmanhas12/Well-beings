@@ -211,10 +211,15 @@ export function Tour({
           bottom: bubbleBottom,
           left: bubbleLeft,
           width: bubbleWidth,
-          background: "var(--color-surface)",
-          border: "1px solid var(--color-accent-700)",
+          /* A tinted, glowing bubble rather than a plain surface panel: it
+             has to read as the one live thing on a dimmed page, and the flat
+             card blended into the very panels it was pointing at. */
+          background:
+            "linear-gradient(150deg, color-mix(in srgb, var(--color-accent-900) 92%, var(--color-surface)), var(--color-surface))",
+          border: "1px solid var(--color-accent-500)",
           borderRadius: "var(--radius-lg)",
-          boxShadow: "var(--shadow-lg)",
+          boxShadow:
+            "var(--shadow-lg), 0 0 26px -6px color-mix(in srgb, var(--color-accent) 55%, transparent)",
           padding: "16px 18px",
         }}
       >
@@ -234,18 +239,32 @@ export function Tour({
               borderLeft: "7px solid transparent",
               borderRight: "7px solid transparent",
               ...(placeBelow
-                ? { borderBottom: "7px solid var(--color-accent-700)" }
-                : { borderTop: "7px solid var(--color-accent-700)" }),
+                ? { borderBottom: "7px solid var(--color-accent-500)" }
+                : { borderTop: "7px solid var(--color-accent-500)" }),
             }}
           />
         )}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-          <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>{step.title}</span>
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              letterSpacing: "var(--font-display-tracking)",
+              fontSize: 19,
+              lineHeight: 1.1,
+            }}
+          >
+            {step.title}
+          </span>
           <span style={{ fontSize: 11, color: "var(--color-neutral-500)", flex: "none", marginLeft: 10 }}>
             {index + 1} / {steps.length}
           </span>
         </div>
-        <p style={{ fontSize: 12.5, color: "var(--color-neutral-300)", margin: "0 0 14px", textWrap: "pretty" }}>{step.body}</p>
+        <p style={{ fontSize: 12.5, color: "var(--color-neutral-300)", margin: "0 0 10px", textWrap: "pretty" }}>{step.body}</p>
+        {/* The 7s auto-advance, made visible — a step that moves on its own
+            with no warning reads as a glitch. key= restarts it per step. */}
+        <div className="deck-timer" style={{ marginBottom: 12 }} aria-hidden="true">
+          <span key={index} />
+        </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button
             onClick={onFinish}

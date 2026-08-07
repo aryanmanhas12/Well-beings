@@ -25,7 +25,7 @@ export function WellBeingsApp() {
         lineHeight: 1.55,
       }}
     >
-      <Header onHelp={wb.openHelp} />
+      <Header s={wb.s} lang={wb.settings.lang} setLang={wb.setLang} onHelp={wb.openHelp} />
 
       {wb.handoff && (
         <PsychHandoffBanner
@@ -39,7 +39,13 @@ export function WellBeingsApp() {
       )}
 
       {wb.screen === "welcome" && (
-        <WelcomeScreen onStartChat={wb.startChat} onStartDemo={wb.startDemo} onOpenHelp={wb.openHelp} />
+        <WelcomeScreen
+          lang={wb.settings.lang}
+          showCitations={wb.settings.showCitations}
+          onStartChat={wb.startChat}
+          onStartDemo={wb.startDemo}
+          onOpenHelp={wb.openHelp}
+        />
       )}
       {wb.screen === "chat" && <ChatScreen wb={wb} />}
       {wb.screen === "results" && wb.profile && (
@@ -48,13 +54,15 @@ export function WellBeingsApp() {
           crisis={wb.crisis}
           calm={wb.settings.calmMode}
           region={wb.region}
+          lang={wb.settings.lang}
+          showCitations={wb.settings.showCitations}
           onBuildSystem={wb.buildSystem}
           onOpenHelp={wb.openHelp}
         />
       )}
       {wb.screen === "app" && wb.profile && <AppScreen wb={wb} />}
 
-      {wb.helpOpen && <HelpDialog region={wb.region} onClose={wb.closeHelp} />}
+      {wb.helpOpen && <HelpDialog region={wb.region} lang={wb.settings.lang} onClose={wb.closeHelp} />}
       {wb.breathOpen && <BreathDialog onClose={wb.closeBreath} />}
 
       <footer
@@ -69,8 +77,8 @@ export function WellBeingsApp() {
           color: "var(--color-neutral-600)",
         }}
       >
-        <span>Well-Beings — a self-guidance prototype. Not a medical device; screeners signal, they don&apos;t diagnose.</span>
-        <span>All data stays on this device.</span>
+        <span>{wb.s.footerDisclaimer}</span>
+        <span>{wb.s.footerPrivacy}</span>
       </footer>
     </div>
   );

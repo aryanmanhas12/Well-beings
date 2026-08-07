@@ -1,7 +1,9 @@
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { LockIcon, ShieldIcon } from "./icons";
 import { ChatMessage } from "@/lib/types";
+import { Strings } from "@/lib/i18n";
 import { WellBeings } from "@/hooks/useWellBeings";
+import { HelplineList } from "./HelplineList";
 
 function BotBubble({ text }: { text: string }) {
   return (
@@ -41,7 +43,7 @@ function UserBubble({ text }: { text: string }) {
   );
 }
 
-function CrisisBubble({ m }: { m: ChatMessage }) {
+function CrisisBubble({ m, s }: { m: ChatMessage; s: Strings }) {
   return (
     <div
       style={{
@@ -54,32 +56,22 @@ function CrisisBubble({ m }: { m: ChatMessage }) {
         margin: "4px 0",
       }}
     >
-      <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 6 }}>
-        You matter — and support exists right now.
+      <div
+        style={{
+          fontFamily: "var(--font-display)",
+          letterSpacing: "var(--font-display-tracking)",
+          fontSize: 21,
+          lineHeight: 1.12,
+          marginBottom: 6,
+        }}
+      >
+        {s.crisisTitle}
       </div>
-      <div style={{ fontSize: 13, color: "var(--color-accent-200)", marginBottom: 12, textWrap: "pretty" }}>
-        Thanks for being honest. That answer isn&apos;t stored anywhere but this device — and it deserves a
-        human, not an app. If these thoughts get heavy, please reach out:
+      <div style={{ fontSize: 13, color: "var(--color-accent-200)", marginBottom: 8, textWrap: "pretty" }}>
+        {s.crisisBody}
       </div>
-      {(m.lines || []).map((h) => (
-        <div
-          key={h.name}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 12,
-            padding: "7px 0",
-            borderTop: "1px solid color-mix(in srgb, var(--color-accent-300) 25%, transparent)",
-            fontSize: 13,
-          }}
-        >
-          <span>{h.name}</span>
-          <span style={{ fontWeight: 500, color: "var(--color-accent-200)", whiteSpace: "nowrap" }}>{h.contact}</span>
-        </div>
-      ))}
-      <div style={{ fontSize: 11.5, color: "var(--color-accent-300)", marginTop: 10 }}>
-        Free · confidential · 24/7. If you&apos;re in immediate danger, call your local emergency number.
-      </div>
+      <HelplineList lines={m.lines || []} tone="accent" />
+      <div style={{ fontSize: 11.5, color: "var(--color-accent-300)", marginTop: 10 }}>{s.crisisFooter}</div>
     </div>
   );
 }
@@ -235,7 +227,7 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
           <div key={m.id} style={{ display: "flex", flexDirection: "column" }}>
             {m.isBot && <BotBubble text={m.text || ""} />}
             {m.isUser && <UserBubble text={m.text || ""} />}
-            {m.isCrisis && <CrisisBubble m={m} />}
+            {m.isCrisis && <CrisisBubble m={m} s={wb.s} />}
           </div>
         ))}
         {typing && <TypingDots />}
@@ -323,7 +315,7 @@ export function ChatScreen({ wb }: { wb: WellBeings }) {
             }}
           >
             <ShieldIcon style={{ color: "currentColor" }} />
-            I need help now
+            {wb.s.helpNow}
           </button>
         </div>
       </div>

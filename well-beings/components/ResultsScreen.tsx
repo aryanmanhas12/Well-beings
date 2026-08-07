@@ -1,7 +1,10 @@
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import { InfoIcon } from "./icons";
 import { Profile, HelplineRegion } from "@/lib/types";
 import { psychScreenerLink } from "@/lib/bridge";
+import { crisisLines } from "@/lib/helplines";
+import { Lang, t } from "@/lib/i18n";
+import { HelplineList } from "./HelplineList";
 
 interface ResultCard {
   domain: string;
@@ -144,11 +147,38 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
   ];
 }
 
+/** Which instrument produced a score — folded away unless asked for, or
+    unless the citations preference says always. */
+function InstrumentNote({ src, always }: { src: string; always: boolean }) {
+  const [open, setOpen] = useState(false);
+  if (always || open) {
+    return <div style={{ fontSize: 10.5, color: "var(--color-neutral-600)", marginTop: "auto" }}>{src}</div>;
+  }
+  return (
+    <button
+      onClick={() => setOpen(true)}
+      style={{
+        all: "unset",
+        cursor: "pointer",
+        marginTop: "auto",
+        fontSize: 10.5,
+        color: "var(--color-neutral-600)",
+        textDecoration: "underline",
+        textUnderlineOffset: 2,
+      }}
+    >
+      Which screener?
+    </button>
+  );
+}
+
 export function ResultsScreen({
   profile,
   crisis,
   calm,
   region,
+  lang = "en",
+  showCitations = false,
   onBuildSystem,
   onOpenHelp,
 }: {
@@ -156,10 +186,13 @@ export function ResultsScreen({
   crisis: boolean;
   calm: boolean;
   region: HelplineRegion;
+  lang?: Lang;
+  showCitations?: boolean;
   onBuildSystem: () => void;
   onOpenHelp: () => void;
 }) {
   const cards = buildResultCards(profile, calm);
+  const s = t(lang);
   const seekHelp = !calm && (profile.moodFlag || profile.anxFlag || crisis);
   const suggestFullScreener =
     crisis || profile.moodFlag || profile.anxFlag || profile.sleepBad || profile.boHigh || profile.auditFlag;
@@ -198,30 +231,25 @@ export function ResultsScreen({
             marginBottom: 26,
           }}
         >
-          <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 16, marginBottom: 4 }}>
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              letterSpacing: "var(--font-display-tracking)",
+              fontSize: 24,
+              lineHeight: 1.1,
+              marginBottom: 6,
+            }}
+          >
             Before anything else — real support
           </div>
-          <div style={{ fontSize: 13, color: "var(--color-accent-200)", marginBottom: 10, maxWidth: 640, textWrap: "pretty" }}>
+          <div style={{ fontSize: 13, color: "var(--color-accent-200)", marginBottom: 4, maxWidth: 640, textWrap: "pretty" }}>
             You mentioned thoughts of self-harm. An app is the wrong tool for that moment — a person is the
             right one. These lines are free, confidential and open 24/7:
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            {region.lines.map((h) => (
-              <div
-                key={h.name}
-                style={{
-                  background: "color-mix(in srgb, var(--color-bg) 45%, transparent)",
-                  border: "1px solid color-mix(in srgb, var(--color-accent-300) 30%, transparent)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "9px 14px",
-                  fontSize: 13,
-                }}
-              >
-                <span style={{ color: "var(--color-accent-300)" }}>{h.name}</span> ·{" "}
-                <span style={{ fontWeight: 500 }}>{h.contact}</span>
-              </div>
-            ))}
+          <div style={{ maxWidth: 560 }}>
+            <HelplineList lines={crisisLines(region)} tone="accent" />
           </div>
+          <div style={{ fontSize: 11.5, color: "var(--color-accent-300)", marginTop: 8 }}>{s.emergencyNote}</div>
         </div>
       )}
 
@@ -286,7 +314,7 @@ export function ResultsScreen({
               <div style={{ height: "100%", background: "var(--color-accent-500)", width: r.pct }} />
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>{r.text}</div>
-            <div style={{ fontSize: 10.5, color: "var(--color-neutral-600)", marginTop: "auto" }}>{r.src}</div>
+            <InstrumentNote src={r.src} always={showCitations} />
           </div>
         ))}
       </div>

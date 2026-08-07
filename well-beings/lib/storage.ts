@@ -1,4 +1,5 @@
 import { JournalEntry } from "./journal";
+import { Lang } from "./i18n";
 import { CheckinEntry, PlanIntensity, Profile } from "./types";
 
 const KEY = "wellbeings-v1";
@@ -12,6 +13,18 @@ export interface Settings {
   /** Root font multiplier — 1 / 1.15 / 1.35, matching the screener's scale. */
   scale: number;
   contrast: boolean;
+  /** UI language. The check-in stays English either way — see lib/i18n.ts. */
+  lang: Lang;
+  /**
+   * Whether a citation rides along with every claim, or waits to be asked for.
+   *
+   * Defaults to off. Sourcing everything was the honest instinct, but in
+   * practice a citation under each of five result cards, each plan item and
+   * each statement turns into visual noise people stop reading — which
+   * defeats the purpose of citing at all. Off means "one tap away", never
+   * "gone": every place that hides one shows a control to open it.
+   */
+  showCitations: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -20,6 +33,8 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: "auto",
   scale: 1,
   contrast: false,
+  lang: "en",
+  showCitations: false,
 };
 
 export interface PersistedState {
@@ -46,6 +61,10 @@ export function applyDisplayPrefs(s: Settings) {
   if (s.contrast) root.setAttribute("data-contrast", "high");
   else root.removeAttribute("data-contrast");
   root.style.setProperty("--scale", String(s.scale));
+  /* data-lang drives the Devanagari font stack in globals.css; lang= is what
+     screen readers and hyphenation actually read. Both, or neither works. */
+  root.setAttribute("data-lang", s.lang);
+  root.setAttribute("lang", s.lang);
 }
 
 export function loadState(): PersistedState | null {

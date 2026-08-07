@@ -2,6 +2,9 @@ import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
 import { WellBeings } from "@/hooks/useWellBeings";
 import { psychScreenerLink } from "@/lib/bridge";
+import { GLOBAL_LINKS } from "@/lib/helplines";
+import { Lang, LANGS } from "@/lib/i18n";
+import { HelplineList } from "../HelplineList";
 
 const THEMES: { value: Theme; label: string }[] = [
   { value: "auto", label: "Auto" },
@@ -25,6 +28,8 @@ const INTENSITIES: { value: PlanIntensity; label: string; desc: string }[] = [
 
 export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: () => void }) {
   const region = wb.region;
+  const s = wb.s;
+  const links = [...region.links, ...GLOBAL_LINKS];
 
   return (
     <div data-screen-label="Help and privacy" style={{ maxWidth: 720 }}>
@@ -40,29 +45,27 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
         <div style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--color-neutral-500)", marginBottom: 10 }}>
           {"Helplines — " + region.label}
         </div>
-        {region.lines.map((h) => (
-          <div
-            key={h.name}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 12,
-              padding: "9px 0",
-              borderTop: "1px solid var(--color-divider)",
-              fontSize: 13.5,
-              flexWrap: "wrap",
-            }}
-          >
-            <span>{h.name}</span>
-            <span style={{ fontWeight: 500, color: "var(--color-accent-300)" }}>{h.contact}</span>
-          </div>
-        ))}
-        <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", marginTop: 10 }}>
-          Anywhere else:{" "}
-          <a href="https://findahelpline.com" target="_blank" rel="noopener noreferrer">
-            findahelpline.com
-          </a>{" "}
-          lists verified lines for 130+ countries. Immediate danger → your local emergency number.
+        <HelplineList lines={region.lines} />
+        <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", marginTop: 10 }}>{s.emergencyNote}</div>
+      </div>
+
+      <div className="card" style={{ padding: 20, marginBottom: 18 }}>
+        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 4 }}>
+          {s.moreResources}
+        </div>
+        <div style={{ fontSize: 12, color: "var(--color-neutral-500)", marginBottom: 12, textWrap: "pretty" }}>
+          Directories and services worth a look when you want to read rather than ring — including the ones that
+          cover countries this app doesn&apos;t list.
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+          {links.map((l) => (
+            <div key={l.url} style={{ paddingTop: 9, borderTop: "1px solid var(--color-divider)" }}>
+              <a href={l.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13 }}>
+                {l.name} ↗
+              </a>
+              <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", textWrap: "pretty" }}>{l.note}</div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -109,6 +112,27 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
         </div>
 
         <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 8 }}>{s.language}</div>
+          <div className="seg" role="radiogroup" aria-label={s.language}>
+            {LANGS.map((l) => (
+              <button
+                key={l.value}
+                className="seg-opt"
+                role="radio"
+                aria-checked={wb.settings.lang === l.value}
+                data-checked={wb.settings.lang === l.value}
+                onClick={() => wb.setLang(l.value as Lang)}
+              >
+                {l.native}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 8, textWrap: "pretty" }}>
+            {s.checkinEnglishOnly}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 8 }}>Theme</div>
           <div className="seg" role="radiogroup" aria-label="Theme">
             {THEMES.map((t) => (
@@ -145,7 +169,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
           <button
             className="switch"
             role="switch"
@@ -160,6 +184,26 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
             <div style={{ fontSize: 13, fontWeight: 500 }}>High contrast</div>
             <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)" }}>
               Maximum separation between text and background, with solid borders.
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button
+            className="switch"
+            role="switch"
+            aria-checked={wb.settings.showCitations}
+            aria-label="Always show sources"
+            data-on={wb.settings.showCitations}
+            onClick={() => wb.setShowCitations(!wb.settings.showCitations)}
+          >
+            <span className="switch-knob" />
+          </button>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 500 }}>Always show sources</div>
+            <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", textWrap: "pretty" }}>
+              Off by default: a citation under every card turns into noise people stop reading. Sources are always
+              one tap away, and the Evidence tab keeps all of them in full.
             </div>
           </div>
         </div>

@@ -72,6 +72,11 @@ html {
   --font-heading: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-heading-weight: 500;
   --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+  /* Display: the condensed, heavy voice used only where type IS the design —
+     statement cards, the tour bubble's title, big pull figures. Kept separate
+     from --font-heading so ordinary headings stay quiet and readable. */
+  --font-display: var(--font-anton), "Anton", "Haettenschweiler", "Arial Narrow", sans-serif;
+  --font-display-tracking: 0.005em;
 
   --space-1: 2.8px;
   --space-2: 5.6px;
@@ -736,4 +741,228 @@ a,
   .switch[data-on="true"] .switch-knob {
     transform: translateX(18px);
   }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Devanagari
+   ─────────────────────────────────────────────────────────────
+   Anton and Inter carry no Devanagari glyphs. Left alone, Hindi
+   silently falls back to whatever the OS supplies — usually a
+   default serif at the wrong optical size, which reads as broken
+   rather than as a language choice. Swapping the whole stack at
+   the root means every component that consumes --font-* gets the
+   right face without knowing the language exists.
+
+   Teko is condensed and heavy like Anton, so the display voice
+   survives translation; Noto Sans Devanagari carries body copy.
+   Devanagari also needs more vertical room than Latin for its
+   matras, hence the slightly looser line-height. */
+:root[data-lang="hi"] {
+  --font-heading: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-inter), system-ui, sans-serif;
+  --font-body: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-teko), "Teko", var(--font-noto-devanagari), sans-serif;
+  --font-display-tracking: 0.01em;
+}
+:root[data-lang="hi"] body {
+  line-height: 1.7;
+}
+:root[data-lang="hi"] h1,
+:root[data-lang="hi"] h2,
+:root[data-lang="hi"] h3 {
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Statement cards
+   ─────────────────────────────────────────────────────────────
+   The landing page opens on a claim rather than a sales pitch, set
+   in display type on a saturated card. The palette here is
+   deliberately NOT the app's surface tokens: this is the one place
+   that should feel like a poster, and a card that quietly turned
+   white in the light theme would lose the whole effect. Each card
+   picks its own hue from --stmt-hue so consecutive statements read
+   as different objects rather than one card changing its text.
+   ───────────────────────────────────────────────────────────── */
+.statement-card {
+  --stmt-hue: 258;
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: clamp(28px, 5vw, 44px) clamp(24px, 4.5vw, 40px);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 140% at 12% 0%, hsl(var(--stmt-hue) 72% 34%) 0%, transparent 58%),
+    linear-gradient(148deg, hsl(var(--stmt-hue) 68% 22%) 0%, hsl(calc(var(--stmt-hue) + 26) 62% 13%) 100%);
+  box-shadow:
+    0 0 0 1px hsl(var(--stmt-hue) 70% 62% / 0.34),
+    0 18px 48px -18px hsl(var(--stmt-hue) 80% 8% / 0.9);
+  color: #fff;
+}
+
+/* A soft moving sheen. Purely decorative, so it is the first thing
+   reduced-motion switches off (via the global rule above). */
+.statement-card::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  background: radial-gradient(40% 40% at 50% 50%, hsl(var(--stmt-hue) 90% 66% / 0.22), transparent 70%);
+  animation: stmtDrift 14s var(--ease-out) infinite alternate;
+}
+@keyframes stmtDrift {
+  from {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8%, 6%, 0) scale(1.15);
+  }
+}
+
+.statement-text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: var(--font-display-tracking);
+  line-height: 1.06;
+  font-size: clamp(26px, 4.4vw, 44px);
+  margin: 0;
+  text-wrap: balance;
+}
+:root[data-lang="hi"] .statement-text {
+  font-weight: 600;
+  line-height: 1.28;
+}
+
+/* The quote marks from the screener's card, redrawn as type. Decorative
+   only — aria-hidden in the markup, so they never reach a screen reader. */
+.statement-quote {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 96px);
+  line-height: 0.6;
+  color: hsl(var(--stmt-hue) 90% 74%);
+  opacity: 0.85;
+  user-select: none;
+}
+.statement-quote-open {
+  top: 14px;
+  left: 16px;
+}
+.statement-quote-close {
+  bottom: 6px;
+  right: 18px;
+}
+
+/* Enter/exit for a card swap. Direction is set by the component. */
+.statement-enter {
+  animation: stmtIn var(--dur-slow) var(--ease-out) backwards;
+}
+@keyframes stmtIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The 7s auto-advance, made visible. An invisible timer that moves the
+   page under someone is disorienting; a bar that shows it coming is not. */
+.deck-timer {
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-neutral-900);
+  overflow: hidden;
+}
+.deck-timer > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-400));
+  transform-origin: left center;
+  animation: deckTimer 7s linear forwards;
+}
+@keyframes deckTimer {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* Reduced motion kills the animation duration globally, which would leave
+   the bar full and lying about the timer. Hide it instead. */
+@media (prefers-reduced-motion: reduce) {
+  .deck-timer {
+    visibility: hidden;
+  }
+}
+
+/* Answer buttons — the No/Yes pair. Sized for a thumb, high contrast on
+   the card's own dark ground rather than the page's. */
+.stmt-btn {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  min-height: 44px;
+  padding: 10px 30px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+.stmt-btn:active {
+  transform: translateY(1px);
+}
+/* These sit on the PAGE, below the card — not on the card's dark ground —
+   so they take their colours from the theme, not from --stmt-hue. An
+   earlier version tinted them per-card and rendered white-on-white in the
+   light theme. The one fixed value is the Yes pill's violet, chosen so
+   white text clears 5:1 on it in both themes rather than flipping with
+   --color-accent (which is light in dark mode and would fail against white). */
+.stmt-btn-yes {
+  background: #6355e0;
+  color: #fff;
+}
+.stmt-btn-yes:hover {
+  background: #5647d6;
+}
+.stmt-btn-no {
+  background: color-mix(in srgb, var(--color-text) 9%, transparent);
+  border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
+  color: var(--color-text);
+}
+.stmt-btn-no:hover {
+  background: color-mix(in srgb, var(--color-text) 16%, transparent);
+}
+.stmt-btn[data-picked="true"] {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+/* High contrast has one job — maximum separation — and a saturated
+   gradient poster is the opposite of that. Flatten it. */
+:root[data-contrast="high"] .statement-card {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: none;
+  border: 2px solid var(--color-divider);
+}
+:root[data-contrast="high"] .statement-card::after {
+  display: none;
+}
+:root[data-contrast="high"] .statement-quote {
+  color: var(--color-accent-400);
+}
+:root[data-contrast="high"] .stmt-btn-yes {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+:root[data-contrast="high"] .stmt-btn-no {
+  background: transparent;
+  border-color: var(--color-divider);
+  color: var(--color-text);
 }
