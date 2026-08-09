@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useWellBeings } from "@/hooks/useWellBeings";
 import { Header } from "./Header";
 import { WelcomeScreen } from "./WelcomeScreen";
@@ -8,24 +9,34 @@ import { ResultsScreen } from "./ResultsScreen";
 import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
 import { PsychHandoffBanner } from "./PsychHandoffBanner";
+import { OpeningQuestionsOverlay } from "./OpeningQuestionsOverlay";
 
 export function WellBeingsApp() {
   const wb = useWellBeings();
+  const [introAnswers, setIntroAnswers] = useState<(boolean | null)[]>([null, null, null]);
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        background: "var(--color-bg)",
-        color: "var(--color-text)",
-        fontFamily: "var(--font-body)",
-        fontSize: 14.5,
-        lineHeight: 1.55,
-      }}
-    >
-      <Header onHelp={wb.openHelp} />
+    <>
+      <OpeningQuestionsOverlay
+        onAnswersChanged={setIntroAnswers}
+        onComplete={() => {
+          // Tailoring logic can be added here based on introAnswers
+          // For example, show different content based on answers[0], answers[1], etc.
+        }}
+      />
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          background: "var(--color-bg)",
+          color: "var(--color-text)",
+          fontFamily: "var(--font-body)",
+          fontSize: 14.5,
+          lineHeight: 1.55,
+        }}
+      >
+        <Header onHelp={wb.openHelp} />
 
       {wb.handoff && (
         <PsychHandoffBanner
@@ -57,21 +68,22 @@ export function WellBeingsApp() {
       {wb.helpOpen && <HelpDialog region={wb.region} onClose={wb.closeHelp} />}
       {wb.breathOpen && <BreathDialog onClose={wb.closeBreath} />}
 
-      <footer
-        style={{
-          borderTop: "1px solid var(--color-divider)",
-          padding: "14px 24px",
-          display: "flex",
-          gap: 14,
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          fontSize: 11,
-          color: "var(--color-neutral-600)",
-        }}
-      >
-        <span>Well-Beings — a self-guidance prototype. Not a medical device; screeners signal, they don&apos;t diagnose.</span>
-        <span>All data stays on this device.</span>
-      </footer>
-    </div>
+        <footer
+          style={{
+            borderTop: "1px solid var(--color-divider)",
+            padding: "14px 24px",
+            display: "flex",
+            gap: 14,
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            fontSize: 11,
+            color: "var(--color-neutral-600)",
+          }}
+        >
+          <span>Well-Beings — a self-guidance prototype. Not a medical device; screeners signal, they don&apos;t diagnose.</span>
+          <span>All data stays on this device.</span>
+        </footer>
+      </div>
+    </>
   );
 }

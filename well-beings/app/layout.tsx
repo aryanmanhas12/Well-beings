@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { PrefsLoader } from "@/components/PrefsLoader";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -41,7 +42,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable} style={{ colorScheme: "dark" }}>
+      <head>
+        {/* Inline script to apply preferences before first paint.
+            Without this, accessibility users see flash of wrong theme. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var p;try{p=JSON.parse(localStorage.getItem("well-beings-prefs")||"{}")}catch(e){return}var root=document.documentElement;if(p.theme&&p.theme!=="auto")root.setAttribute("data-theme",p.theme);if(p.contrast)root.setAttribute("data-contrast","high");if(p.scale&&p.scale!==1)root.style.setProperty("--scale",p.scale.toString())})();`,
+          }}
+        />
+      </head>
       <body>
+        <PrefsLoader />
         {children}
         <ServiceWorker />
       </body>

@@ -198,6 +198,17 @@ button {
 .btn-secondary:active {
   background: color-mix(in srgb, var(--color-text) 14%, transparent);
 }
+.btn-tertiary {
+  color: var(--color-neutral-400);
+  border-color: var(--color-divider);
+}
+.btn-tertiary:hover {
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  color: var(--color-text);
+}
+.btn-tertiary:active {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
 .btn-ghost {
   color: var(--color-accent);
   padding-inline: var(--space-1);
