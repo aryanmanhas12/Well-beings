@@ -1,6 +1,6 @@
 import { LogoIcon, ShieldIcon } from "./icons";
 
-export function Header({ onHelp }: { onHelp: () => void }) {
+export function Header({ onHelp, onSettings }: { onHelp: () => void; onSettings?: () => void }) {
   return (
     <header
       className="nav"
@@ -31,6 +31,11 @@ export function Header({ onHelp }: { onHelp: () => void }) {
         On-device · no third parties
       </span>
       <div style={{ flex: 1 }} />
+      {onSettings && (
+        <button className="btn btn-ghost" onClick={onSettings} style={{ fontSize: 12.5 }}>
+          ⚙️
+        </button>
+      )}
       <button className="btn btn-ghost" data-tour="help-now" onClick={onHelp} style={{ fontSize: 12.5 }}>
         <ShieldIcon style={{ color: "currentColor", marginRight: 6, verticalAlign: -2 }} />
         Help now

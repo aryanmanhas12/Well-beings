@@ -24,54 +24,53 @@ html {
 
 :root {
   color-scheme: dark;
-  --color-bg: #161826;
-  --color-surface: #232532;
-  --color-text: #e9e9ed;
-  --color-accent: #9184d9;
-  --color-accent-2: #a7a1db;
-  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  /* Calm, warm palette for wellbeing focus */
+  --color-bg: #0f1419;
+  --color-surface: #1a1f28;
+  --color-text: #e8e6e1;
+  --color-accent: #b8956a;
+  --color-accent-2: #8b7355;
+  --color-divider: color-mix(in srgb, #e8e6e1 12%, transparent);
 
-  --color-neutral-100: #f3f5fe;
-  --color-neutral-200: #e4e7f5;
-  --color-neutral-300: #cfd3e5;
-  --color-neutral-400: #b2b6ca;
-  --color-neutral-500: #9397ab;
-  /* #75798c measured 4.08:1 on --color-bg — fails WCAG AA (4.5:1) for the
-     small captions and citations this token is actually used for across the
-     app. #7f8294 clears it at 4.63:1 while staying visually between
-     neutral-500 and neutral-700, so the scale's ordering is unchanged. */
-  --color-neutral-600: #7f8294;
-  --color-neutral-700: #595d6c;
-  --color-neutral-800: #3f424d;
-  --color-neutral-900: #292b31;
+  --color-neutral-100: #faf8f3;
+  --color-neutral-200: #f0ede5;
+  --color-neutral-300: #ddd7cc;
+  --color-neutral-400: #c8bfb0;
+  --color-neutral-500: #a89a87;
+  /* Ensure proper contrast for captions and citations */
+  --color-neutral-600: #8f8577;
+  --color-neutral-700: #6b6559;
+  --color-neutral-800: #4f4a40;
+  --color-neutral-900: #3a3530;
 
-  --color-accent-100: #f5f4ff;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
-  --color-accent-400: #b5abfc;
-  --color-accent-500: #968ae0;
-  --color-accent-600: #796cbf;
-  --color-accent-700: #5d5294;
-  --color-accent-800: #423a6a;
-  --color-accent-900: #2b2741;
+  --color-accent-100: #fef9f1;
+  --color-accent-200: #fdf1e3;
+  --color-accent-300: #fce5ca;
+  --color-accent-400: #f9d8ad;
+  --color-accent-500: #d4a574;
+  --color-accent-600: #b8956a;
+  --color-accent-700: #8b7355;
+  --color-accent-800: #6b5847;
+  --color-accent-900: #4d4235;
 
-  --color-accent-2-100: #f5f4ff;
-  --color-accent-2-200: #e7e5fe;
-  --color-accent-2-300: #d2cefd;
-  --color-accent-2-400: #b5afe8;
-  --color-accent-2-500: #9690c9;
-  --color-accent-2-600: #7972a9;
-  --color-accent-2-700: #5c5783;
-  --color-accent-2-800: #423e5d;
-  --color-accent-2-900: #2b293a;
+  --color-accent-2-100: #f9f5f0;
+  --color-accent-2-200: #f0e8df;
+  --color-accent-2-300: #e3d4c2;
+  --color-accent-2-400: #d4c0a7;
+  --color-accent-2-500: #b8956a;
+  --color-accent-2-600: #8b7355;
+  --color-accent-2-700: #6b5847;
+  --color-accent-2-800: #4d4235;
+  --color-accent-2-900: #3a3530;
 
-  --color-section: #262a60;
-  --color-section-glow: #353b80;
-  --color-section-ghost: #4c5397;
+  --color-section: #1a2142;
+  --color-section-glow: #2a3156;
+  --color-section-ghost: #3d4668;
 
-  --font-heading: var(--font-inter), "Inter", system-ui, sans-serif;
+  /* Calligraphic and calm typography */
+  --font-heading: var(--font-playfair), "Playfair Display", Georgia, serif;
   --font-heading-weight: 500;
-  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-body: var(--font-lora), "Lora", Georgia, serif;
 
   --space-1: 2.8px;
   --space-2: 5.6px;
@@ -84,9 +83,74 @@ html {
   --radius-md: 8px;
   --radius-lg: 14px;
 
-  --shadow-sm: 0 0 0 1px #3f424d;
-  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0, 0, 0, 0.65);
+  --shadow-sm: 0 0 0 1px rgba(232, 230, 225, 0.15);
+  --shadow-md: 0 0 0 1px rgba(232, 230, 225, 0.2), 0 6px 18px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 0 0 1px rgba(232, 230, 225, 0.25), 0 16px 40px rgba(0, 0, 0, 0.65);
+}
+
+/* Light theme */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --color-bg: #fefdfb;
+    --color-surface: #faf8f3;
+    --color-text: #2c2420;
+    --color-accent: #b8956a;
+    --color-divider: color-mix(in srgb, #2c2420 8%, transparent);
+
+    --color-neutral-100: #2c2420;
+    --color-neutral-200: #3f3935;
+    --color-neutral-300: #5a5349;
+    --color-neutral-400: #6f6859;
+    --color-neutral-500: #8f8577;
+    --color-neutral-600: #a89a87;
+    --color-neutral-700: #c8bfb0;
+    --color-neutral-800: #ddd7cc;
+    --color-neutral-900: #f0ede5;
+
+    --shadow-sm: 0 0 0 1px rgba(44, 36, 32, 0.1);
+    --shadow-md: 0 0 0 1px rgba(44, 36, 32, 0.15), 0 6px 18px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 0 0 1px rgba(44, 36, 32, 0.2), 0 16px 40px rgba(0, 0, 0, 0.12);
+  }
+}
+
+:root[data-theme="light"] {
+  --color-bg: #fefdfb;
+  --color-surface: #faf8f3;
+  --color-text: #2c2420;
+  --color-accent: #b8956a;
+  --color-divider: color-mix(in srgb, #2c2420 8%, transparent);
+
+  --color-neutral-100: #2c2420;
+  --color-neutral-200: #3f3935;
+  --color-neutral-300: #5a5349;
+  --color-neutral-400: #6f6859;
+  --color-neutral-500: #8f8577;
+  --color-neutral-600: #a89a87;
+  --color-neutral-700: #c8bfb0;
+  --color-neutral-800: #ddd7cc;
+  --color-neutral-900: #f0ede5;
+
+  --shadow-sm: 0 0 0 1px rgba(44, 36, 32, 0.1);
+  --shadow-md: 0 0 0 1px rgba(44, 36, 32, 0.15), 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 0 0 1px rgba(44, 36, 32, 0.2), 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* High-contrast mode */
+:root[data-contrast="high"] {
+  --color-text: #000000;
+  --color-bg: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-accent: #000000;
+  --color-divider: #000000;
+  --color-neutral-600: #000000;
+
+  --shadow-sm: 0 0 0 2px #000000;
+  --shadow-md: 0 0 0 2px #000000, 0 6px 18px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 0 0 2px #000000, 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="dark"]:not([data-contrast="high"]) {
+  /* Dark theme already set above as default */
 }
 
 *,

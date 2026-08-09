@@ -10,10 +10,12 @@ import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
 import { PsychHandoffBanner } from "./PsychHandoffBanner";
 import { OpeningQuestionsOverlay } from "./OpeningQuestionsOverlay";
+import { SettingsDialog } from "./SettingsDialog";
 
 export function WellBeingsApp() {
   const wb = useWellBeings();
   const [introAnswers, setIntroAnswers] = useState<(boolean | null)[]>([null, null, null]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <>
@@ -36,7 +38,7 @@ export function WellBeingsApp() {
           lineHeight: 1.55,
         }}
       >
-        <Header onHelp={wb.openHelp} />
+        <Header onHelp={wb.openHelp} onSettings={() => setSettingsOpen(true)} />
 
       {wb.handoff && (
         <PsychHandoffBanner
@@ -67,6 +69,7 @@ export function WellBeingsApp() {
 
       {wb.helpOpen && <HelpDialog region={wb.region} onClose={wb.closeHelp} />}
       {wb.breathOpen && <BreathDialog onClose={wb.closeBreath} />}
+      <SettingsDialog isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
         <footer
           style={{

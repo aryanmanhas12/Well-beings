@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { PrefsLoader } from "@/components/PrefsLoader";
@@ -10,6 +10,20 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-lora",
   display: "swap",
 });
 
@@ -41,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} style={{ colorScheme: "dark" }}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${lora.variable}`} style={{ colorScheme: "dark" }}>
       <head>
         {/* Inline script to apply preferences before first paint.
             Without this, accessibility users see flash of wrong theme. */}
