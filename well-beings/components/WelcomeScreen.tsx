@@ -1,3 +1,5 @@
+import { TailoringNudge } from "./TailoringNudge";
+
 export function WelcomeScreen({
   onStartChat,
   onStartDemo,
@@ -15,6 +17,17 @@ export function WelcomeScreen({
           width: "100%",
           margin: "0 auto",
           padding: "64px 24px 40px",
+          boxSizing: "border-box",
+        }}
+      >
+        <TailoringNudge />
+      </div>
+      <div
+        style={{
+          maxWidth: 1060,
+          width: "100%",
+          margin: "0 auto",
+          padding: "0 24px 40px",
           boxSizing: "border-box",
           display: "flex",
           flexWrap: "wrap",
