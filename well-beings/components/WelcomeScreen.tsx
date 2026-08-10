@@ -1,5 +1,6 @@
 import { Lang, t } from "@/lib/i18n";
 import { StatementIntro } from "./StatementIntro";
+import { WelcomeAura } from "./WelcomeAura";
 
 /**
  * The landing page.
@@ -46,6 +47,15 @@ export function WelcomeScreen({
         }}
       >
         <div style={{ flex: "1 1 480px", minWidth: 300 }}>
+          {/* The screen opened on text alone. This resolves before a word is
+              read and gives the page somewhere to start — deliberately an
+              orbit rather than a character, since the app's first question
+              is about sleep, mood and burnout and something cheerful sets
+              the wrong expectation for that. Decorative, aria-hidden, and
+              composed to still read when reduced motion freezes it. */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 26 }}>
+            <WelcomeAura size={180} />
+          </div>
           <StatementIntro lang={lang} showCitations={showCitations} onStartChat={onStartChat} />
 
           <p

@@ -966,3 +966,51 @@ a,
   border-color: var(--color-divider);
   color: var(--color-text);
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Welcome orbit
+   ─────────────────────────────────────────────────────────────
+   Three rotations at unrelated periods so the composition never
+   visibly repeats, all slow enough to read as ambient rather than
+   as something loading. transform only — no layout, no paint of
+   anything but the compositor layer. The global reduced-motion
+   rule freezes these, and the rings are already offset from each
+   other at rest so the still frame is a composition, not a
+   collapsed one.
+   ───────────────────────────────────────────────────────────── */
+.aura {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.aura-orbit {
+  transform-origin: 110px 110px;
+  transform-box: view-box;
+}
+.aura-orbit-1 { animation: auraSpin 34s linear infinite; }
+.aura-orbit-2 { animation: auraSpin 52s linear infinite reverse; }
+.aura-orbit-3 { animation: auraSpin 43s linear infinite; }
+.aura-glow,
+.aura-core {
+  transform-origin: 110px 110px;
+  transform-box: view-box;
+  animation: auraBreathe 10s ease-in-out infinite;
+}
+@keyframes auraSpin { to { transform: rotate(360deg); } }
+@keyframes auraBreathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.75; }
+  45%      { transform: scale(1.06); opacity: 1; }
+}
+
+/* Visually hidden, still announced — used by the tour's step counter. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
