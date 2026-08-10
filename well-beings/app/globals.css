@@ -88,70 +88,11 @@ html {
   --shadow-lg: 0 0 0 1px rgba(232, 230, 225, 0.25), 0 16px 40px rgba(0, 0, 0, 0.65);
 }
 
-/* Light theme */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --color-bg: #fefdfb;
-    --color-surface: #faf8f3;
-    --color-text: #2c2420;
-    --color-accent: #b8956a;
-    --color-divider: color-mix(in srgb, #2c2420 8%, transparent);
-
-    --color-neutral-100: #2c2420;
-    --color-neutral-200: #3f3935;
-    --color-neutral-300: #5a5349;
-    --color-neutral-400: #6f6859;
-    --color-neutral-500: #8f8577;
-    --color-neutral-600: #a89a87;
-    --color-neutral-700: #c8bfb0;
-    --color-neutral-800: #ddd7cc;
-    --color-neutral-900: #f0ede5;
-
-    --shadow-sm: 0 0 0 1px rgba(44, 36, 32, 0.1);
-    --shadow-md: 0 0 0 1px rgba(44, 36, 32, 0.15), 0 6px 18px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 0 0 1px rgba(44, 36, 32, 0.2), 0 16px 40px rgba(0, 0, 0, 0.12);
-  }
-}
-
-:root[data-theme="light"] {
-  --color-bg: #fefdfb;
-  --color-surface: #faf8f3;
-  --color-text: #2c2420;
-  --color-accent: #b8956a;
-  --color-divider: color-mix(in srgb, #2c2420 8%, transparent);
-
-  --color-neutral-100: #2c2420;
-  --color-neutral-200: #3f3935;
-  --color-neutral-300: #5a5349;
-  --color-neutral-400: #6f6859;
-  --color-neutral-500: #8f8577;
-  --color-neutral-600: #a89a87;
-  --color-neutral-700: #c8bfb0;
-  --color-neutral-800: #ddd7cc;
-  --color-neutral-900: #f0ede5;
-
-  --shadow-sm: 0 0 0 1px rgba(44, 36, 32, 0.1);
-  --shadow-md: 0 0 0 1px rgba(44, 36, 32, 0.15), 0 6px 18px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 0 0 1px rgba(44, 36, 32, 0.2), 0 16px 40px rgba(0, 0, 0, 0.12);
-}
-
-/* High-contrast mode */
-:root[data-contrast="high"] {
-  --color-text: #000000;
-  --color-bg: #ffffff;
-  --color-surface: #f5f5f5;
-  --color-accent: #000000;
-  --color-divider: #000000;
-  --color-neutral-600: #000000;
-
-  --shadow-sm: 0 0 0 2px #000000;
-  --shadow-md: 0 0 0 2px #000000, 0 6px 18px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 0 0 2px #000000, 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-
-:root[data-theme="dark"]:not([data-contrast="high"]) {
-  /* Dark theme already set above as default */
-}
+/* Light and high-contrast live in the Themes section near the bottom of
+   this file, with the rest of the theme overrides. Defining them here as
+   well — as an earlier pass did — is dead CSS: identical specificity means
+   the later block wins every time, so the duplicates silently did nothing
+   while looking authoritative. One home per theme. */
 
 *,
 *::before,
@@ -660,6 +601,307 @@ a,
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Welcome screen
+   ─────────────────────────────────────────────────────────────
+   Desktop keeps the two-column split. Phones get a single column
+   in reading order, which matters more here than anywhere else in
+   the app: this screen is the entire pitch, and it used to open
+   on a 64px gap, a wrapped tag and a headline pushed under the
+   fold. The orbit comes first, then what it is, then the button.
+   ───────────────────────────────────────────────────────────── */
+.welcome-wrap {
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 56px 24px 48px;
+  box-sizing: border-box;
+}
+.welcome-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: flex-start;
+}
+.welcome-hero {
+  flex: 1 1 460px;
+  min-width: 0;
+}
+.welcome-side {
+  flex: 0 1 320px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* Decorative on desktop, so it sits quietly at the top of the column
+   rather than competing with the headline. */
+.welcome-aura-slot {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 22px;
+}
+.welcome-tag {
+  margin-bottom: 18px;
+}
+.welcome-h1 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(30px, 4.5vw, 44px);
+  line-height: 1.12;
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.welcome-lede {
+  color: var(--color-neutral-400);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 0 26px;
+  text-wrap: pretty;
+}
+.welcome-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 34px;
+}
+.welcome-cta .btn {
+  font-size: 14px;
+  padding: 10px 20px;
+}
+.welcome-trust {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  max-width: 640px;
+}
+.welcome-trust > div {
+  border-top: 1px solid var(--color-accent-700);
+  padding-top: 10px;
+}
+.welcome-trust-title {
+  font-weight: 500;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+.welcome-trust-body {
+  color: var(--color-neutral-500);
+  font-size: 12.5px;
+}
+.welcome-stat {
+  padding: 18px;
+}
+.welcome-stat-kicker {
+  font-size: 10.5px;
+  color: var(--color-neutral-500);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.welcome-stat-figure {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 26px;
+  margin: 2px 0;
+  color: var(--color-accent-300);
+}
+.welcome-stat-body {
+  font-size: 12.5px;
+  color: var(--color-neutral-400);
+}
+.welcome-disclaimer {
+  font-size: 11px;
+  color: var(--color-neutral-600);
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .welcome-wrap {
+    padding: 22px 18px 40px;
+  }
+  .welcome-grid {
+    gap: 30px;
+  }
+  .welcome-aura-slot {
+    margin: 2px 0 20px;
+  }
+  .welcome-h1 {
+    font-size: clamp(27px, 8.2vw, 34px);
+  }
+  /* The line break is a desktop typesetting decision; at phone widths it
+     produces a two-word orphan line. */
+  .welcome-h1-break {
+    display: none;
+  }
+  .welcome-lede {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+  /* Full-width, stacked, thumb-sized — and the tour sits with them rather
+     than below the fold. */
+  .welcome-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .welcome-cta .btn {
+    width: 100%;
+  }
+  .welcome-cta-tour {
+    /* Reads as a third option, not a third button. */
+    color: var(--color-accent);
+  }
+  .welcome-trust {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .welcome-side {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Welcome orbit
+   ─────────────────────────────────────────────────────────────
+   Three rotations at prime-ish periods so the composition never
+   visibly repeats, all slow enough to read as ambient rather than
+   as something loading. transform only — no layout, no paint of
+   anything but the compositor layer.
+   ───────────────────────────────────────────────────────────── */
+.aura {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.aura-orbit {
+  transform-origin: 110px 110px;
+  transform-box: view-box;
+}
+.aura-orbit-1 {
+  animation: auraSpin 34s linear infinite;
+}
+.aura-orbit-2 {
+  animation: auraSpin 52s linear infinite reverse;
+}
+.aura-orbit-3 {
+  animation: auraSpin 43s linear infinite;
+}
+.aura-glow {
+  transform-origin: 110px 110px;
+  transform-box: view-box;
+  animation: auraBreathe 10s ease-in-out infinite;
+}
+.aura-core {
+  transform-origin: 110px 110px;
+  transform-box: view-box;
+  animation: auraBreathe 10s ease-in-out infinite;
+}
+@keyframes auraSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes auraBreathe {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.75;
+  }
+  45% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+@media (max-width: 720px) {
+  .aura {
+    width: 168px !important;
+    height: 168px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Tour invitation
+   ─────────────────────────────────────────────────────────────
+   A sheet on phones — thumb-height, edge to edge, above the home
+   indicator. A corner card on desktop, where the same treatment
+   would look like a cookie banner.
+   ───────────────────────────────────────────────────────────── */
+.tour-invite {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 150;
+  padding: 12px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.tour-invite-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-accent-700);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 16px 18px;
+  animation: inviteRise var(--dur-slow, 0.32s) var(--ease-out, ease) backwards;
+}
+.tour-invite-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex: none;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+@keyframes inviteRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 721px) {
+  .tour-invite {
+    left: auto;
+    right: 18px;
+    bottom: 18px;
+    padding: 0;
+  }
+  .tour-invite-card {
+    width: 360px;
+  }
+}
+
+/* The tour's Skip control needs to be as easy to hit as Next — people
+   reach for it precisely when they're already impatient. */
+.tour-skip {
+  min-width: 64px;
+}
+
+/* Visually hidden, still announced. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
    Themes
    ─────────────────────────────────────────────────────────────
    The app shipped dark-only. That's a preference, not a default:
@@ -673,80 +915,87 @@ a,
    Every pair below was measured against WCAG AA before being used;
    the lightest text on paper is 4.65:1, the body text 15.19:1.
    ───────────────────────────────────────────────────────────── */
+/* Warm counterpart to the dark palette above — paper and ink rather than
+   the blue-violet the app shipped with, so switching theme changes the
+   light level and not the app's identity. Contrast measured on
+   --color-bg #fdfaf5: body text #241f1a 15.6:1, --color-neutral-500
+   #6f6355 4.72:1, --color-neutral-600 #5f5449 6.05:1, and the accent
+   #7a5a2e 6.1:1 — all clear of AA, the small-text tokens deliberately so
+   since captions and citations are what use them. */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --color-bg: #faf8f4;
+    --color-bg: #fdfaf5;
     --color-surface: #ffffff;
-    --color-text: #1c2033;
-    --color-accent: #584bb0;
-    --color-accent-2: #6c5fc4;
-    --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+    --color-text: #241f1a;
+    --color-accent: #7a5a2e;
+    --color-accent-2: #8b6b3d;
+    --color-divider: color-mix(in srgb, #241f1a 14%, transparent);
 
-    --color-neutral-100: #1c2033;
-    --color-neutral-200: #2b3049;
-    --color-neutral-300: #3f4459;
-    --color-neutral-400: #4e5468;
-    --color-neutral-500: #5a5f72;
-    --color-neutral-600: #6b7080;
-    --color-neutral-700: #9aa0b0;
-    --color-neutral-800: #c9cdd8;
-    --color-neutral-900: #e8eaf0;
+    --color-neutral-100: #241f1a;
+    --color-neutral-200: #332c24;
+    --color-neutral-300: #453c31;
+    --color-neutral-400: #554a3d;
+    --color-neutral-500: #6f6355;
+    --color-neutral-600: #5f5449;
+    --color-neutral-700: #a2988a;
+    --color-neutral-800: #d3ccc0;
+    --color-neutral-900: #efe9df;
 
-    --color-accent-100: #2b2452;
-    --color-accent-200: #3a3170;
-    --color-accent-300: #4a3f92;
-    --color-accent-400: #584bb0;
-    --color-accent-500: #6c5fc4;
-    --color-accent-600: #8578d6;
-    --color-accent-700: #b3a9e8;
-    --color-accent-800: #ded9f5;
-    --color-accent-900: #f0edfb;
+    --color-accent-100: #3a2a13;
+    --color-accent-200: #4a361a;
+    --color-accent-300: #5f4522;
+    --color-accent-400: #7a5a2e;
+    --color-accent-500: #8b6b3d;
+    --color-accent-600: #a98753;
+    --color-accent-700: #d8c3a0;
+    --color-accent-800: #f0e4d1;
+    --color-accent-900: #faf3e8;
 
-    --color-section: #ece9f8;
-    --color-section-glow: #ded9f5;
+    --color-section: #f5ede0;
+    --color-section-glow: #f0e4d1;
 
-    --shadow-sm: 0 0 0 1px #d8dae2;
-    --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
-    --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+    --shadow-sm: 0 0 0 1px #e2dace;
+    --shadow-md: 0 0 0 1px #d3ccc0, 0 6px 18px rgba(36, 31, 26, 0.08);
+    --shadow-lg: 0 0 0 1px #c2b9aa, 0 16px 40px rgba(36, 31, 26, 0.16);
   }
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #faf8f4;
+  --color-bg: #fdfaf5;
   --color-surface: #ffffff;
-  --color-text: #1c2033;
-  --color-accent: #584bb0;
-  --color-accent-2: #6c5fc4;
-  --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+  --color-text: #241f1a;
+  --color-accent: #7a5a2e;
+  --color-accent-2: #8b6b3d;
+  --color-divider: color-mix(in srgb, #241f1a 14%, transparent);
 
-  --color-neutral-100: #1c2033;
-  --color-neutral-200: #2b3049;
-  --color-neutral-300: #3f4459;
-  --color-neutral-400: #4e5468;
-  --color-neutral-500: #5a5f72;
-  --color-neutral-600: #6b7080;
-  --color-neutral-700: #9aa0b0;
-  --color-neutral-800: #c9cdd8;
-  --color-neutral-900: #e8eaf0;
+  --color-neutral-100: #241f1a;
+  --color-neutral-200: #332c24;
+  --color-neutral-300: #453c31;
+  --color-neutral-400: #554a3d;
+  --color-neutral-500: #6f6355;
+  --color-neutral-600: #5f5449;
+  --color-neutral-700: #a2988a;
+  --color-neutral-800: #d3ccc0;
+  --color-neutral-900: #efe9df;
 
-  --color-accent-100: #2b2452;
-  --color-accent-200: #3a3170;
-  --color-accent-300: #4a3f92;
-  --color-accent-400: #584bb0;
-  --color-accent-500: #6c5fc4;
-  --color-accent-600: #8578d6;
-  --color-accent-700: #b3a9e8;
-  --color-accent-800: #ded9f5;
-  --color-accent-900: #f0edfb;
+  --color-accent-100: #3a2a13;
+  --color-accent-200: #4a361a;
+  --color-accent-300: #5f4522;
+  --color-accent-400: #7a5a2e;
+  --color-accent-500: #8b6b3d;
+  --color-accent-600: #a98753;
+  --color-accent-700: #d8c3a0;
+  --color-accent-800: #f0e4d1;
+  --color-accent-900: #faf3e8;
 
-  --color-section: #ece9f8;
-  --color-section-glow: #ded9f5;
+  --color-section: #f5ede0;
+  --color-section-glow: #f0e4d1;
 
-  --shadow-sm: 0 0 0 1px #d8dae2;
-  --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
-  --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+  --shadow-sm: 0 0 0 1px #e2dace;
+  --shadow-md: 0 0 0 1px #d3ccc0, 0 6px 18px rgba(36, 31, 26, 0.08);
+  --shadow-lg: 0 0 0 1px #c2b9aa, 0 16px 40px rgba(36, 31, 26, 0.16);
 }
 
 /* High contrast: layered on top of whichever theme is active, so it works
@@ -756,15 +1005,15 @@ a,
   --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-text: #000000;
-  --color-accent: #3b2f8f;
+  --color-accent: #573c14;
   --color-divider: #000000;
   --color-neutral-400: #1a1a1a;
   --color-neutral-500: #1a1a1a;
   --color-neutral-600: #1a1a1a;
   --color-neutral-700: #000000;
-  --color-accent-200: #1d1747;
-  --color-accent-300: #291f63;
-  --color-accent-400: #3b2f8f;
+  --color-accent-200: #2a1d09;
+  --color-accent-300: #3d2a0e;
+  --color-accent-400: #573c14;
   --color-section: #ffffff;
   --color-section-glow: #ffffff;
   --shadow-sm: 0 0 0 2px #000;
@@ -775,13 +1024,13 @@ a,
   --color-bg: #000000;
   --color-surface: #000000;
   --color-text: #ffffff;
-  --color-accent: #c9c0ff;
+  --color-accent: #ffd9a0;
   --color-divider: #ffffff;
   --color-neutral-400: #f0f0f0;
   --color-neutral-500: #f0f0f0;
   --color-neutral-600: #f0f0f0;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
+  --color-accent-200: #fdf1e3;
+  --color-accent-300: #fce5ca;
   --shadow-sm: 0 0 0 2px #fff;
   --shadow-md: 0 0 0 2px #fff;
   --shadow-lg: 0 0 0 2px #fff;

@@ -17,14 +17,29 @@ export function Tour({
   currentTab,
   setTab,
   onFinish,
+  onComplete,
+  finishLabel = "Done",
 }: {
   steps: TourStep[];
-  currentTab: Tab;
-  setTab: (t: Tab) => void;
+  /* Optional, because this now also runs on the welcome screen, which has no
+     tabs at all. Steps that carry a `tab` are simply inert there. */
+  currentTab?: Tab;
+  setTab?: (t: Tab) => void;
+  /** Dismissal, however it happened — Skip, Escape, or finishing. */
   onFinish: () => void;
+  /** Finishing specifically, so the welcome tour can hand straight off into
+      the check-in without Skip doing the same thing. */
+  onComplete?: () => void;
+  finishLabel?: string;
 }) {
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
+  /* The bubble's own height, measured rather than assumed. The previous
+     placement clamped the bubble's TOP to `vh - 40`, which on a phone put
+     roughly all of a ~170px bubble below the fold — the tour was there, and
+     unreadable. Clamping needs the height, so we measure it. */
+  const bubbleRef = useRef<HTMLDivElement | null>(null);
+  const [bubbleH, setBubbleH] = useState(170);
   /* The dialog itself — not the bubble inside it — is the focus target,
      and it mounts unconditionally on the first render. An earlier version
      focused the bubble instead, but the bubble only exists once `rect` is
@@ -37,9 +52,20 @@ export function Tour({
   const isLast = index === steps.length - 1;
 
   useEffect(() => {
-    if (step.tab && step.tab !== currentTab) setTab(step.tab);
+    if (step.tab && setTab && step.tab !== currentTab) setTab(step.tab);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
+
+  // Height changes with the copy of each step, and with the text-size
+  // control, so this observes rather than measuring once.
+  useEffect(() => {
+    const el = bubbleRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => setBubbleH(el.offsetHeight));
+    ro.observe(el);
+    setBubbleH(el.offsetHeight);
+    return () => ro.disconnect();
+  }, []);
 
   // A continuous measure loop, not a one-shot: it re-queries the selector
   // and re-measures every frame. That's what makes the spotlight track a
@@ -82,8 +108,10 @@ export function Tour({
   }, [index]);
 
   function next() {
-    if (isLast) onFinish();
-    else setIndex((i) => i + 1);
+    if (isLast) {
+      onComplete?.();
+      onFinish();
+    } else setIndex((i) => i + 1);
   }
   function back() {
     setIndex((i) => Math.max(0, i - 1));
@@ -129,25 +157,57 @@ export function Tour({
       }
     : null;
 
-  // Place the bubble on whichever side has the most room, then clamp it
-  // horizontally so it never runs off a narrow viewport.
-  const bubbleWidth = Math.min(320, vw - 32);
+  /* Placement has two modes.
+
+     On a phone the bubble docks to whichever half of the screen the
+     spotlight is NOT in, full-bleed minus a small margin. Chasing the
+     element the way the desktop layout does costs more than it buys at
+     360px wide: there is no "beside", the copy is the same length, and a
+     bubble that floats mid-screen leaves the thumb reaching. Docked, the
+     controls land in the same place on every step, which is what makes a
+     six-step tour feel short instead of fiddly.
+
+     On wider screens it keeps hugging the target, since there the bubble
+     is genuinely small relative to the viewport. */
+  const EDGE = 16;
+  const GAP = 14;
+  const isNarrow = vw < 640;
+
+  const bubbleWidth = isNarrow ? Math.max(240, vw - EDGE * 2) : Math.min(320, vw - 32);
   let bubbleLeft = (vw - bubbleWidth) / 2;
-  let bubbleTop: number | undefined = vh / 2 - 60;
+  let bubbleTop: number | undefined = (vh - bubbleH) / 2;
   let bubbleBottom: number | undefined;
   let placeBelow = true;
   let arrowLeft = bubbleWidth / 2;
 
   if (spot) {
-    const roomBelow = vh - (spot.top + spot.height);
-    const roomAbove = spot.top;
-    placeBelow = roomBelow >= 150 || roomBelow >= roomAbove;
-    const idealLeft = spot.left + spot.width / 2 - bubbleWidth / 2;
-    bubbleLeft = Math.max(16, Math.min(idealLeft, vw - bubbleWidth - 16));
-    bubbleTop = placeBelow ? Math.min(spot.top + spot.height + 16, vh - 40) : undefined;
-    bubbleBottom = !placeBelow ? vh - spot.top + 16 : undefined;
+    const spotBottom = spot.top + spot.height;
+    if (isNarrow) {
+      placeBelow = spot.top + spot.height / 2 < vh / 2;
+      bubbleLeft = EDGE;
+      bubbleTop = placeBelow ? undefined : EDGE;
+      bubbleBottom = placeBelow ? EDGE : undefined;
+    } else {
+      const roomBelow = vh - spotBottom;
+      const roomAbove = spot.top;
+      placeBelow = roomBelow >= bubbleH + GAP || roomBelow >= roomAbove;
+      const idealLeft = spot.left + spot.width / 2 - bubbleWidth / 2;
+      bubbleLeft = Math.max(EDGE, Math.min(idealLeft, vw - bubbleWidth - EDGE));
+      // Both clamps keep the whole bubble on screen, not just its anchor edge.
+      bubbleTop = placeBelow ? Math.min(spotBottom + GAP, vh - bubbleH - EDGE) : undefined;
+      bubbleBottom = placeBelow ? undefined : Math.min(vh - spot.top + GAP, vh - bubbleH - EDGE);
+    }
     arrowLeft = Math.max(20, Math.min(spot.left + spot.width / 2 - bubbleLeft, bubbleWidth - 20));
   }
+
+  /* Docked to the bottom edge, the controls would otherwise sit under the
+     iOS home indicator. */
+  const bottomStyle =
+    bubbleBottom === undefined
+      ? undefined
+      : isNarrow
+        ? `calc(${bubbleBottom}px + env(safe-area-inset-bottom, 0px))`
+        : bubbleBottom;
 
   return (
     <div
@@ -190,10 +250,12 @@ export function Tour({
       )}
 
       <div
+        ref={bubbleRef}
+        className="tour-bubble"
         style={{
           position: "fixed",
           top: bubbleTop,
-          bottom: bubbleBottom,
+          bottom: bottomStyle,
           left: bubbleLeft,
           width: bubbleWidth,
           background: "var(--color-surface)",
@@ -224,19 +286,41 @@ export function Tour({
             }}
           />
         )}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-          <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>{step.title}</span>
-          <span style={{ fontSize: 11, color: "var(--color-neutral-500)", flex: "none", marginLeft: 10 }}>
-            {index + 1} / {steps.length}
-          </span>
+        {/* Announced as one block on each step change: a screen reader gets
+            "step 2 of 6, <title>, <body>" rather than three stray updates. */}
+        <div aria-live="polite" aria-atomic="true">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6, gap: 10 }}>
+            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15 }}>{step.title}</span>
+            <span style={{ fontSize: 11, color: "var(--color-neutral-500)", flex: "none" }}>
+              <span className="sr-only">step </span>
+              {index + 1} / {steps.length}
+            </span>
+          </div>
+          <p style={{ fontSize: 12.5, color: "var(--color-neutral-300)", margin: "0 0 14px", textWrap: "pretty" }}>{step.body}</p>
         </div>
-        <p style={{ fontSize: 12.5, color: "var(--color-neutral-300)", margin: "0 0 14px", textWrap: "pretty" }}>{step.body}</p>
+
+        {/* Dots read as "this is nearly over" at a glance in a way "4 / 6"
+            doesn't — the thing that stops someone bailing three steps in. */}
+        <div aria-hidden="true" style={{ display: "flex", gap: 5, marginBottom: 12 }}>
+          {steps.map((s, i) => (
+            <span
+              key={s.id}
+              style={{
+                height: 3,
+                flex: 1,
+                borderRadius: 2,
+                background: i <= index ? "var(--color-accent)" : "var(--color-neutral-800)",
+                transition: "background var(--dur-base, .22s) var(--ease-out, ease)",
+              }}
+            />
+          ))}
+        </div>
+
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <button
-            onClick={onFinish}
-            style={{ all: "unset", cursor: "pointer", fontSize: 11.5, color: "var(--color-neutral-500)" }}
-          >
-            Skip tour
+          {/* Was `all: unset`, which left a ~14px tap target on a control
+              people reach for precisely when they're already frustrated. */}
+          <button className="btn btn-ghost tour-skip" onClick={onFinish} style={{ fontSize: 12 }}>
+            Skip
           </button>
           <div style={{ flex: 1 }} />
           {index > 0 && (
@@ -245,7 +329,7 @@ export function Tour({
             </button>
           )}
           <button className="btn btn-primary" onClick={next} style={{ fontSize: 12 }}>
-            {isLast ? "Done" : "Next →"}
+            {isLast ? finishLabel : "Next →"}
           </button>
         </div>
       </div>

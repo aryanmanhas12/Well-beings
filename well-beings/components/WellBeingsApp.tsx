@@ -9,23 +9,23 @@ import { ResultsScreen } from "./ResultsScreen";
 import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
 import { PsychHandoffBanner } from "./PsychHandoffBanner";
-import { OpeningQuestionsOverlay } from "./OpeningQuestionsOverlay";
 import { SettingsDialog } from "./SettingsDialog";
 
+/* No generic intro overlay in front of this screen any more. It asked three
+   yes/no questions about whether you wanted a personalised system, on top of
+   an app whose entire first screen already answers that — and, being a
+   full-viewport layer, it intercepted every tap on the welcome screen
+   underneath, including the guided tour. The five-minute conversational
+   check-in IS this app's opening questionnaire; it uses real instruments and
+   its answers drive everything downstream. Two screeners stacked on the door
+   is what made a new phone visitor bounce. The components are still in the
+   tree if a lighter version is ever wanted. */
 export function WellBeingsApp() {
   const wb = useWellBeings();
-  const [introAnswers, setIntroAnswers] = useState<(boolean | null)[]>([null, null, null]);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <>
-      <OpeningQuestionsOverlay
-        onAnswersChanged={setIntroAnswers}
-        onComplete={() => {
-          // Tailoring logic can be added here based on introAnswers
-          // For example, show different content based on answers[0], answers[1], etc.
-        }}
-      />
       <div
         style={{
           minHeight: "100vh",
