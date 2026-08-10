@@ -1,4 +1,27 @@
-name: Deploy Well-Beings to GitHub Pages
+name: Publish Well-Beings to GitHub Pages
+
+# Why this publishes to the branch root instead of uploading a Pages artifact.
+#
+# This repository's Pages source is "Deploy from a branch", which means every
+# push starts GitHub's legacy jekyll-build-pages job. That job rendered the
+# root README.md and deployed it as the site. The previous version of this
+# workflow uploaded a proper Pages artifact alongside it, so the two raced —
+# and Jekyll, running last, kept winning. The live site was the README.
+#
+# Rather than fight that, this builds the static export and commits it to the
+# branch root, where the branch deployer will serve it. `.nojekyll` (emitted
+# by the export, since well-beings/public/.nojekyll exists) turns Jekyll off,
+# which also keeps the underscore-prefixed `_next/` directory from being
+# stripped — Jekyll excludes those by default and the app would load with no
+# CSS or JS.
+#
+# `.pages-manifest` records exactly which root entries this workflow owns, so
+# a later run removes precisely those and can never delete a source directory.
+#
+# If you ever switch Settings -> Pages -> Source to "GitHub Actions", this can
+# go back to configure-pages/upload-pages-artifact/deploy-pages, and every
+# published path plus `.pages-manifest` can be deleted from the branch root in
+# a single commit. That is the tidier setup; this one needs no repo settings.
 
 on:
   push:
@@ -6,17 +29,18 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
+# Serialise publishes so two runs can't interleave commits to the root.
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: publish-pages
+  cancel-in-progress: false
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
+    # The push this job makes would otherwise re-trigger the job forever.
+    if: github.actor != 'github-actions[bot]'
     steps:
       - uses: actions/checkout@v4
 
@@ -34,22 +58,45 @@ jobs:
         working-directory: well-beings
         run: npm run build
         env:
+          # Project-page hosting: the site lives at /Well-beings/, so every
+          # asset URL has to carry that prefix or the app 404s its own JS.
           NEXT_PUBLIC_BASE_PATH: /Well-beings
 
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Publish export to branch root
+        run: |
+          set -euo pipefail
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: well-beings/out
+          # Remove what the previous run published — and nothing else.
+          if [ -f .pages-manifest ]; then
+            while IFS= read -r entry; do
+              [ -n "$entry" ] || continue
+              case "$entry" in
+                ''|.|..|.git|.github|well-beings|project|chats|README.md|.pages-manifest)
+                  echo "refusing to remove protected path: $entry" >&2; exit 1 ;;
+              esac
+              rm -rf -- "./$entry"
+            done < .pages-manifest
+          fi
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          # Record what this run publishes, then copy it into place.
+          find well-beings/out -mindepth 1 -maxdepth 1 -printf '%f\n' | sort > .pages-manifest
+          while IFS= read -r entry; do
+            case "$entry" in
+              .git|.github|well-beings|project|chats|README.md|.pages-manifest)
+                echo "export would overwrite a source path: $entry" >&2; exit 1 ;;
+            esac
+          done < .pages-manifest
+          cp -a well-beings/out/. .
+
+      - name: Commit if the build output changed
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No change in built output — nothing to publish."
+            exit 0
+          fi
+          git commit -m "Publish built site to Pages [skip ci]"
+          git push

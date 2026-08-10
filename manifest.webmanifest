@@ -1,0 +1,16 @@
+{
+  "name": "Well-Beings — evidence-based check-in",
+  "short_name": "Well-Beings",
+  "description": "A 5-minute, privacy-first check-in built on clinical screeners, which builds you a personalised daily system. Works offline. Nothing leaves your device.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#161826",
+  "theme_color": "#161826",
+  "categories": ["health", "medical", "lifestyle", "productivity"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
