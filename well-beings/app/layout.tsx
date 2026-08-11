@@ -61,12 +61,40 @@ export const metadata: Metadata = {
   },
 };
 
-/** themeColor matches --color-bg so mobile browser chrome doesn't seam
-    against the page. Zoom is left enabled deliberately. */
+/** themeColor is per-scheme so mobile browser chrome matches the page it
+    frames instead of seaming against it in light mode. Zoom is left enabled
+    deliberately — never `user-scalable=no`. */
 export const viewport: Viewport = {
-  themeColor: "#161826",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
+    { media: "(prefers-color-scheme: dark)", color: "#161826" },
+  ],
 };
+
+/**
+ * Display preferences, applied before the first paint.
+ *
+ * There was a PrefsLoader component doing this from a `useEffect`, which by
+ * definition runs *after* the browser has already painted — so the flash of
+ * the wrong theme it existed to prevent still happened, and it read a
+ * `well-beings-prefs` key that nothing in the app writes any more. This runs
+ * synchronously in <head>, before <body> exists, from the one store the app
+ * actually uses. Worst case it throws (storage blocked) and the try/catch
+ * leaves the OS default in place.
+ *
+ * Kept as a string so it ships verbatim; `suppressHydrationWarning` on <html>
+ * is required because this mutates the element before React hydrates it.
+ */
+const PREFS_BOOTSTRAP = `
+(function(){try{
+  var s=(JSON.parse(localStorage.getItem("wellbeings-v1")||"{}")||{}).settings||{};
+  var r=document.documentElement;
+  if(s.theme&&s.theme!=="auto")r.setAttribute("data-theme",s.theme);
+  if(s.contrast)r.setAttribute("data-contrast","high");
+  if(s.scale&&s.scale!==1)r.style.setProperty("--scale",String(s.scale));
+  if(s.lang){r.setAttribute("data-lang",s.lang);r.setAttribute("lang",s.lang);}
+}catch(e){}})();
+`;
 
 export default function RootLayout({
   children,
@@ -76,9 +104,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={[inter.variable, anton.variable, teko.variable, notoDevanagari.variable].join(" ")}
-      style={{ colorScheme: "dark" }}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PREFS_BOOTSTRAP }} />
+      </head>
       <body>
         {children}
         <ServiceWorker />

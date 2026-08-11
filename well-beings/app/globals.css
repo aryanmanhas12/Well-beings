@@ -1014,3 +1014,158 @@ a,
   white-space: nowrap;
   border: 0;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Tour invitation
+   ─────────────────────────────────────────────────────────────
+   Recovered from the welcome-screen branch: TourInvite.tsx merged
+   into main without its stylesheet, so the component rendered as
+   unstyled text at the bottom of the document.
+
+   A sheet on phones — thumb-height, edge to edge, above the home
+   indicator. A corner card on desktop, where the same treatment
+   would read as a cookie banner.
+   ───────────────────────────────────────────────────────────── */
+.tour-invite {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 150;
+  padding: 12px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+  /* The sheet's padding must not swallow taps on the page behind it —
+     only the card itself is interactive. */
+  pointer-events: none;
+}
+.tour-invite-card {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-accent-700);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 16px 18px;
+  animation: inviteRise var(--dur-slow, 0.32s) var(--ease-out, ease) backwards;
+}
+.tour-invite-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex: none;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+@keyframes inviteRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 721px) {
+  .tour-invite {
+    left: auto;
+    right: 18px;
+    bottom: 18px;
+    padding: 0;
+  }
+  .tour-invite-card {
+    width: 360px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Header at phone widths
+   ─────────────────────────────────────────────────────────────
+   Logo, privacy tag, language select, settings and Help now do not
+   fit 360px. The tag already hides below 520px; the language select
+   joins it, since Settings carries language as its first row and the
+   gear stays visible. Below 400px "Help now" drops to its shield
+   alone — the button keeps its aria-label either way, so the control
+   never becomes anonymous to a screen reader.
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .nav-lang {
+    display: none;
+  }
+  .nav {
+    padding-inline: 14px;
+  }
+}
+@media (max-width: 400px) {
+  .nav-help-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Full-bleed safe areas. Without these the tab strip and content can sit
+   under a notch or the home indicator on iOS. */
+.nav {
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+@supports (padding: max(0px)) {
+  .nav,
+  .tour-invite,
+  .dialog-backdrop {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+}
+
+/* Taps: kill the 300ms double-tap delay and the grey flash on every
+   control, not just .btn (segmented options and switches were missed). */
+.seg-opt,
+.switch,
+.stmt-btn,
+select,
+a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Deck controls (pause, prev, next).
+   These were `all: unset` inline, which opted them out of the coarse-pointer
+   44px rule that covers .btn and .seg-opt — measured 18-20px tall on a phone.
+   The visual weight stays deliberately quiet; only the hit area grows. */
+.deck-ctl {
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.deck-ctl:hover {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+@media (pointer: coarse) {
+  .deck-ctl {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

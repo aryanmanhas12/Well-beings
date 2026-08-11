@@ -111,6 +111,26 @@ export const PROMPTS: JournalPrompt[] = [
     text: "What are you being harder on yourself about than you'd be on anyone else?",
     why: "Self-distancing — viewing your own situation as you'd view someone else's — is a well-supported reappraisal move.",
   },
+  /* The two-weeks-after-a-screen pair.
+     PHQ-9 and GAD-7 both ask about "the last two weeks", so someone who
+     screened a fortnight ago is standing at the exact boundary the
+     instruments measure — their next score covers precisely the stretch
+     these two prompts ask them to describe. That makes this a real
+     checkpoint rather than a motivational one, and it gives them something
+     concrete to bring to a GP or counsellor, which is the moment the
+     Results screen already tells them matters most. */
+  {
+    id: "s1",
+    kind: "disclosure",
+    text: "It's been about two weeks since you last scored yourself. Write what those two weeks were actually like — not the summary you'd give someone politely asking, the real one.",
+    why: "PHQ-9 and GAD-7 both ask about the last two weeks. Writing the period out before you score it again gives you something to check the number against, instead of guessing from memory.",
+  },
+  {
+    id: "s2",
+    kind: "reappraisal",
+    text: "Compared with the fortnight before it: what's actually different — better or worse — and what changed around you that might explain it?",
+    why: "A score moving tells you that something shifted, not what. Naming what changed alongside it is what turns a number into something you can act on, or take to someone who can help.",
+  },
 ];
 
 /** Milliseconds in a day, used for the cadence maths below. */

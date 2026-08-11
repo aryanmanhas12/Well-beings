@@ -1,4 +1,4 @@
-import { LogoIcon, ShieldIcon } from "./icons";
+import { GearIcon, LogoIcon, ShieldIcon } from "./icons";
 import { Lang, LANGS, Strings } from "@/lib/i18n";
 
 export function Header({
@@ -6,11 +6,13 @@ export function Header({
   lang,
   setLang,
   onHelp,
+  onSettings,
 }: {
   s: Strings;
   lang: Lang;
   setLang: (l: Lang) => void;
   onHelp: () => void;
+  onSettings: () => void;
 }) {
   return (
     <header
@@ -52,32 +54,48 @@ export function Header({
 
       {/* A native select, not a custom menu: it's two options, it needs to
           work before anyone has learned this UI, and the OS picker is
-          already localised and reachable by keyboard and screen reader. */}
+          already localised and reachable by keyboard and screen reader.
+
+          Hidden below 520px via .nav-lang — four controls do not fit a
+          360px header, and Settings carries language as its first row, so
+          nothing becomes unreachable on a phone. Explicit background and
+          color because a transparent native select renders unreadable in
+          Windows dark mode. */}
       <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value as Lang)}
-          aria-label={s.language}
-          style={{
-            font: "inherit",
-            fontSize: 12.5,
-            color: "var(--color-neutral-300)",
-            background: "transparent",
-            border: "1px solid var(--color-divider)",
-            borderRadius: "var(--radius-md)",
-            padding: "5px 7px",
-            cursor: "pointer",
-          }}
-        >
-          {LANGS.map((l) => (
-            <option key={l.value} value={l.value} style={{ color: "initial" }}>
-              {l.native}
-            </option>
-          ))}
-        </select>
+        className="nav-lang"
+        value={lang}
+        onChange={(e) => setLang(e.target.value as Lang)}
+        aria-label={s.language}
+        style={{
+          font: "inherit",
+          fontSize: 12.5,
+          color: "var(--color-neutral-300)",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-divider)",
+          borderRadius: "var(--radius-md)",
+          padding: "5px 7px",
+          cursor: "pointer",
+        }}
+      >
+        {LANGS.map((l) => (
+          <option key={l.value} value={l.value} style={{ color: "initial", backgroundColor: "Canvas" }}>
+            {l.native}
+          </option>
+        ))}
+      </select>
+
+      <button
+        className="btn btn-ghost btn-icon"
+        onClick={onSettings}
+        aria-label="Settings"
+        title="Settings"
+      >
+        <GearIcon style={{ color: "currentColor" }} />
+      </button>
 
       <button className="btn btn-ghost" data-tour="help-now" onClick={onHelp} style={{ fontSize: 12.5 }}>
         <ShieldIcon style={{ color: "currentColor", marginRight: 6, verticalAlign: -2 }} />
-        {s.helpNow}
+        <span className="nav-help-label">{s.helpNow}</span>
       </button>
     </header>
   );

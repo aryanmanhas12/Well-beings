@@ -124,6 +124,7 @@ export function StatementIntro({
       {/* key= restarts the enter animation and the timer bar on every card. */}
       <div
         key={statement.id}
+        data-tour="welcome-hero"
         className="statement-card statement-enter"
         style={{ ["--stmt-hue" as string]: String(hue) }}
       >
@@ -243,23 +244,26 @@ export function StatementIntro({
           {running && <span key={index} />}
         </div>
         <button
+          className="deck-ctl"
           onClick={() => setPaused((v) => !v)}
           aria-pressed={paused}
-          style={{ all: "unset", cursor: "pointer", fontSize: 11.5, color: "var(--color-neutral-500)", flex: "none" }}
+          style={{ fontSize: 11.5, color: "var(--color-neutral-500)", flex: "none" }}
         >
           {paused || reducedMotion ? `▶ ${s.playDeck}` : `❚❚ ${s.pauseDeck}`}
         </button>
         <button
+          className="deck-ctl"
           onClick={() => go(-1)}
           aria-label={s.statementPrev}
-          style={{ all: "unset", cursor: "pointer", fontSize: 13, color: "var(--color-neutral-500)", flex: "none" }}
+          style={{ fontSize: 13, color: "var(--color-neutral-500)", flex: "none" }}
         >
           ←
         </button>
         <button
+          className="deck-ctl"
           onClick={() => go(1)}
           aria-label={s.statementNext}
-          style={{ all: "unset", cursor: "pointer", fontSize: 13, color: "var(--color-neutral-500)", flex: "none" }}
+          style={{ fontSize: 13, color: "var(--color-neutral-500)", flex: "none" }}
         >
           →
         </button>
@@ -267,6 +271,7 @@ export function StatementIntro({
 
       <button
         className="btn btn-primary"
+        data-tour="welcome-start"
         onClick={onStartChat}
         style={{ fontSize: 14, padding: "11px 22px", alignSelf: "flex-start" }}
       >

@@ -25,10 +25,13 @@ export function WelcomeScreen({
 }) {
   const s = t(lang);
 
+  /* `anchor` is what the welcome tour spotlights. Without these the tour's
+     steps find nothing, time out and skip — which is exactly what happened
+     when WELCOME_TOUR landed here without its targets. */
   const features = [
-    { title: s.featPrivateTitle, body: s.featPrivateBody },
-    { title: s.featAdaptiveTitle, body: s.featAdaptiveBody },
-    { title: s.featEvidenceTitle, body: s.featEvidenceBody },
+    { title: s.featPrivateTitle, body: s.featPrivateBody, anchor: "welcome-privacy" },
+    { title: s.featAdaptiveTitle, body: s.featAdaptiveBody, anchor: undefined },
+    { title: s.featEvidenceTitle, body: s.featEvidenceBody, anchor: "welcome-evidence" },
   ];
 
   return (
@@ -73,6 +76,7 @@ export function WelcomeScreen({
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 32 }}>
             <button
               className="btn btn-secondary"
+              data-tour="welcome-preview"
               onClick={onStartDemo}
               style={{ fontSize: 14, padding: "10px 20px" }}
             >
@@ -89,7 +93,11 @@ export function WelcomeScreen({
             }}
           >
             {features.map((f) => (
-              <div key={f.title} style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}>
+              <div
+                key={f.title}
+                data-tour={f.anchor}
+                style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 10 }}
+              >
                 <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 3 }}>{f.title}</div>
                 <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5, textWrap: "pretty" }}>{f.body}</div>
               </div>

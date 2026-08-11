@@ -9,7 +9,7 @@ import { HelplineList } from "./HelplineList";
  * opened it on close, and background scrolling is locked. Someone reaching the
  * crisis dialog may be doing it by keyboard, in a hurry — it has to behave.
  */
-function useDialogBehaviour(onClose: () => void) {
+export function useDialogBehaviour(onClose: () => void) {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
