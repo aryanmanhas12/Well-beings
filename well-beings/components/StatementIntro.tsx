@@ -1,38 +1,14 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { STATEMENTS } from "@/lib/statements";
 import { Lang, t } from "@/lib/i18n";
-
-/**
- * `prefers-reduced-motion`, read as an external store rather than into state.
- *
- * The server has no matchMedia, so computing this during render would make
- * the first client render disagree with the server markup for exactly the
- * people who set the preference. useSyncExternalStore is built for this: it
- * takes a separate server snapshot (false), then subscribes for real.
- */
-const MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribeMotion(onChange: () => void) {
-  const mq = window.matchMedia?.(MOTION_QUERY);
-  if (!mq) return () => {};
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
-}
-
-function useReducedMotion(): boolean {
-  return useSyncExternalStore(
-    subscribeMotion,
-    () => window.matchMedia?.(MOTION_QUERY).matches ?? false,
-    () => false
-  );
-}
+import { TOUR_DWELL_MS } from "@/lib/tour";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /** Enough hue separation that two consecutive cards never read as one card
     whose text changed. Values are hues, not colours — the card mixes its own
     gradient from them so light/dark themes need no second palette. */
 const HUES = [258, 292, 218, 340, 172, 268, 200, 318, 240];
 
-const DWELL_MS = 7000;
 
 /**
  * The landing page's first screen: a claim, two buttons, and — only once
@@ -85,7 +61,7 @@ export function StatementIntro({
 
   useEffect(() => {
     if (!running) return;
-    timerRef.current = setTimeout(() => go(1), DWELL_MS);
+    timerRef.current = setTimeout(() => go(1), TOUR_DWELL_MS);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };

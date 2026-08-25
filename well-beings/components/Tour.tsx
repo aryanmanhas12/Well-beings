@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Tab } from "@/hooks/useWellBeings";
-import { TourStep } from "@/lib/tour";
+import { TourStep, TOUR_DWELL_MS } from "@/lib/tour";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface Rect {
   top: number;
@@ -33,6 +34,8 @@ export function Tour({
   finishLabel?: string;
 }) {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useReducedMotion();
   const [rect, setRect] = useState<Rect | null>(null);
   /* The bubble's own height, measured rather than assumed. The previous
      placement clamped the bubble's TOP to `vh - 40`, which on a phone put
@@ -108,16 +111,34 @@ export function Tour({
     dialogRef.current?.focus();
   }, [index]);
 
+  /* The timer only ever moves BETWEEN cards.
+
+     It used to run on the last step too, where next() takes the isLast branch
+     and fires onComplete — which WellBeingsApp wires to startChat. Leaving the
+     welcome tour open for ~42s therefore began the five-minute check-in on its
+     own, resetting state and switching screen, for someone who had merely
+     looked away. Advancing between explanations is a convenience; starting a
+     questionnaire is an action, and actions need a tap.
+
+     Reduced motion stops it entirely, matching the statement deck. That
+     matters more here than it looks: the progress bar is hidden under
+     reduced motion (the global rule collapses its duration, so it would sit
+     full and lie about the time left), which without this check would mean
+     steps swapping every 7s with no visible warning at all — for exactly the
+     people least able to tolerate that. */
+  const autoAdvancing = !isLast && !paused && !reducedMotion;
+
   useEffect(() => {
     if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    if (!autoAdvancing) return;
     autoAdvanceRef.current = setTimeout(() => {
       next();
-    }, 7000);
+    }, TOUR_DWELL_MS);
     return () => {
       if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+  }, [index, autoAdvancing]);
 
   function next() {
     /* Both sides of this: the auto-advance timer has to be cleared however
@@ -330,13 +351,28 @@ export function Tour({
           </div>
           <p style={{ fontSize: 12.5, color: "var(--color-neutral-300)", margin: "0 0 10px", textWrap: "pretty" }}>{step.body}</p>
         </div>
-        {/* The 7s auto-advance, made visible — a step that moves on its own
-            with no warning reads as a glitch. key= restarts it per step.
-            This already carries the "time is passing" signal, so the step
-            dots that came in on the other side would say it twice. */}
-        <div className="deck-timer" style={{ marginBottom: 12 }} aria-hidden="true">
-          <span key={index} />
+        {/* The auto-advance, made visible — a step that moves on its own with
+            no warning reads as a glitch. key= restarts the bar per step. The
+            bar renders ONLY while the timer is actually running: on the last
+            step, when paused, or under reduced motion there is nothing to
+            count down, and a bar sitting there would be claiming otherwise. */}
+        <div className="deck-timer" style={{ marginBottom: 10 }} aria-hidden="true">
+          {autoAdvancing && <span key={index} />}
         </div>
+        {/* WCAG 2.2.2 wants anything that moves on its own to be stoppable.
+            Skip is a "hide", which technically satisfies it, but leaving is a
+            poor substitute for reading at your own pace. Hidden on the last
+            step, where the timer no longer runs. */}
+        {!isLast && !reducedMotion && (
+          <button
+            className="deck-ctl"
+            onClick={() => setPaused((v) => !v)}
+            aria-pressed={paused}
+            style={{ fontSize: 11, color: "var(--color-neutral-500)", marginBottom: 6 }}
+          >
+            {paused ? "▶ Resume" : "❚❚ Pause"}
+          </button>
+        )}
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {/* Was `all: unset`, which left a ~14px tap target on a control
               people reach for precisely when they're already frustrated. */}

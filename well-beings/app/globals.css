@@ -85,6 +85,11 @@ html {
   --space-6: 16.8px;
   --space-8: 22.4px;
 
+  /* How long the deck/tour progress bar takes to fill. Kept in sync with
+     TOUR_DWELL_MS in lib/tour.ts, which drives the actual advance — the bar
+     lying about the time left is worse than having no bar. */
+  --deck-dwell: 7000ms;
+
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 14px;
@@ -881,7 +886,7 @@ a,
   height: 100%;
   background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-400));
   transform-origin: left center;
-  animation: deckTimer 7s linear forwards;
+  animation: deckTimer var(--deck-dwell, 7000ms) linear forwards;
 }
 @keyframes deckTimer {
   from {

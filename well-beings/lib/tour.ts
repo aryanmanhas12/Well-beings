@@ -1,5 +1,11 @@
 import { Tab } from "@/hooks/useWellBeings";
 
+/** How long a card sits before the tour advances itself, and how long the
+    statement deck holds a statement. One constant so the CSS progress bar,
+    the tour and the deck can never drift apart — the bar's duration is set
+    from this via the --deck-dwell custom property. */
+export const TOUR_DWELL_MS = 7000;
+
 export interface TourStep {
   id: string;
   /** Switch to this tab before hunting for the target, if it isn't already active. */
