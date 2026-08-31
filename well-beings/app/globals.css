@@ -1174,3 +1174,21 @@ a {
     min-width: 44px;
   }
 }
+
+/* ════════ HIGH PERFORMANCE COMPOSITING & FLUID RENDERING ════════ */
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  overscroll-behavior-y: contain;
+}
+button, a, input, select, summary, .btn, .card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.card, .statement-card, .dialog {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
