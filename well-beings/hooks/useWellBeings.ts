@@ -214,9 +214,9 @@ export function useWellBeings() {
     setScreen("chat");
     say(
       [
-        "Hey — I’m your Well-Beings check-in. About five minutes, mostly taps. You can change any answer as you go, and there’s a help button on every screen.",
-        "The important bit first: nothing leaves this device. No account, no server, no third parties — and you can delete all of it with one tap, whenever you want.",
-        "The questions come from screeners clinicians actually use. They signal what’s worth attention — they don’t diagnose you. Any question can tell you why it’s being asked.",
+        "Hey there. I’m your Well-Beings check-in. It takes about five minutes, mostly taps. You can change any answer as you go, and there’s a help button on every screen.",
+        "The important bit first: nothing leaves this device. No account, no server, no third parties. You can delete all of it with one tap, whenever you want.",
+        "The questions come from screeners clinicians actually use. They signal what’s worth attention. They don’t diagnose you. And any question can tell you why it’s being asked.",
       ],
       next
     );
@@ -256,7 +256,7 @@ export function useWellBeings() {
       goal: (A.goal as string) || "",
     };
     const builtProfile = buildProfile(raw);
-    say(["Done — thank you for being straight with me.", "Crunching your read-out…"], () => {
+    say(["Done. Thank you for being straight with me.", "Crunching your read-out…"], () => {
       setTimeout(() => {
         setProfile(builtProfile);
         setScreen("results");

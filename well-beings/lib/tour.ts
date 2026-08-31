@@ -52,21 +52,21 @@ export const APP_TOUR: TourStep[] = [
     tab: "journal",
     selector: '[data-tour="journal-write"]',
     title: "The part with the longest evidence behind it",
-    body: "Guided expressive writing. Prompts alternate between getting something out and looking at it again — that combination beat either one alone in trials.",
+    body: "Guided expressive writing. Prompts alternate between getting something out and looking at it again. That combination beat either one alone in trials.",
   },
   {
     id: "journal-rhythm",
     tab: "journal",
     selector: '[data-tour="journal-cadence"]',
     title: "Every day or two, not every week",
-    body: "Sessions 1–3 days apart did measurably more than spaced-out ones. No streaks, no guilt — just the interval the research actually supports.",
+    body: "Sessions one to three days apart did measurably more than spaced-out ones. No streaks, no guilt, just the interval the research actually supports.",
   },
   {
     id: "interventions",
     tab: "plan",
     selector: '[data-tour="interventions"]',
     title: "Chosen from your answers",
-    body: "Each card exists because something in your check-in flagged it — not a generic list. Tap through to see the actual paper behind each one.",
+    body: "Each card exists because something in your check-in flagged it. This isn’t a generic list. Tap through to see the actual paper behind each one.",
   },
   {
     id: "recovery",
@@ -120,7 +120,7 @@ export const WELCOME_TOUR: TourStep[] = [
     id: "welcome-hero",
     selector: '[data-tour="welcome-hero"]',
     title: "What this actually is",
-    body: "A five-minute check-in about sleep, mood, stress and workload — then a daily system built from your answers, not a generic list.",
+    body: "A five-minute check-in about sleep, mood, stress and workload. Then a daily system built from your answers, not a generic list.",
   },
   {
     id: "welcome-privacy",
@@ -132,7 +132,7 @@ export const WELCOME_TOUR: TourStep[] = [
     id: "welcome-evidence",
     selector: '[data-tour="welcome-evidence"]',
     title: "Every claim shows its paper",
-    body: "Each number here comes from a trial or meta-analysis you can open and read — and it says so plainly when the evidence is still young.",
+    body: "Each number here comes from a trial or meta-analysis you can open and read. And it says so plainly when the evidence is still young.",
   },
   {
     id: "welcome-preview",
