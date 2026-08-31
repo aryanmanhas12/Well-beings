@@ -1,4 +1,4 @@
-/* Well-Beings — ported from the Nocturne design system (styles.css).
+﻿/* Well-Beings — ported from the Nocturne design system (styles.css).
    Tokens, base type and component classes live here; components consume
    only var(--color-*), var(--font-*), var(--space-*), var(--radius-*),
    var(--shadow-*) — never a hard-coded hex or px value the tokens carry. */
@@ -24,8 +24,8 @@ html {
 
 :root {
   color-scheme: dark;
-  --color-bg: #161826;
-  --color-surface: #232532;
+  --color-bg: #0E131D;
+  --color-surface: #151B27;
   --color-text: #e9e9ed;
   --color-accent: #9184d9;
   --color-accent-2: #a7a1db;
@@ -75,7 +75,7 @@ html {
   /* Display: the condensed, heavy voice used only where type IS the design —
      statement cards, the tour bubble's title, big pull figures. Kept separate
      from --font-heading so ordinary headings stay quiet and readable. */
-  --font-display: var(--font-anton), "Anton", "Haettenschweiler", "Arial Narrow", sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", "Noto Sans", Roboto, system-ui, sans-serif;
   --font-display-tracking: 0.005em;
 
   --space-1: 2.8px;
@@ -611,7 +611,7 @@ a,
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --color-bg: #faf8f4;
+    --color-bg: #FAF8F5;
     --color-surface: #ffffff;
     --color-text: #1c2033;
     --color-accent: #584bb0;
@@ -649,7 +649,7 @@ a,
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #faf8f4;
+  --color-bg: #FAF8F5;
   --color-surface: #ffffff;
   --color-text: #1c2033;
   --color-accent: #584bb0;
@@ -1173,4 +1173,22 @@ a {
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* ════════ HIGH PERFORMANCE COMPOSITING & FLUID RENDERING ════════ */
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  overscroll-behavior-y: contain;
+}
+button, a, input, select, summary, .btn, .card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.card, .statement-card, .dialog {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
