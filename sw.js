@@ -1,4 +1,4 @@
-/* Offline-first service worker.
+﻿/* Offline-first service worker.
    The point: someone on a patchy connection — a district town, a train, a
    campus dead spot — should still be able to open their plan and reach the
    helpline numbers. Everything this app serves is static and every score
@@ -6,7 +6,7 @@
 
    Bump CACHE on any release that changes a precached file. A stale name
    means an installed copy serves the version it first saw, forever. */
-const CACHE = "well-beings-v1";
+const CACHE = "well-beings-v2";
 
 /* Resolved against the SW's own scope, so this works identically at the
    root in development and under /Well-beings/ on GitHub Pages. */
