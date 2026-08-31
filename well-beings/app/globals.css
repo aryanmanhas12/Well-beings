@@ -1192,3 +1192,44 @@ button, a, input, select, summary, .btn, .card {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+/* ── Ultra-Refined Slim Translucent Scrollbars ── */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-text, #fff) 18%, transparent);
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-text, #fff) 34%, transparent);
+  background-clip: padding-box;
+}
+
+/* ── Spring micro-interactions & tactile feedback ── */
+button, .btn, .stmt-btn, .card, .statement-card {
+  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.15s ease,
+              border-color 0.15s ease;
+}
+button:active, .btn:active, .stmt-btn:active {
+  transform: scale(0.972);
+}
+.card:hover, .statement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12), 0 12px 28px rgba(0,0,0,0.14);
+}
+
+/* ── Ambient Glassmorphism for Nav & Overlays ── */
+header.nav, .nav {
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  background-color: color-mix(in srgb, var(--color-bg) 86%, transparent) !important;
+}
