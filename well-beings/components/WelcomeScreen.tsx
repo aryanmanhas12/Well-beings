@@ -123,7 +123,7 @@ export function WelcomeScreen({
                 color: "var(--color-accent-300)",
               }}
             >
-              −38%
+              7 hrs
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
               {s.statSleepBody}
@@ -140,7 +140,7 @@ export function WelcomeScreen({
                 color: "var(--color-accent-300)",
               }}
             >
-              7 in 10
+              3 for 3
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
               {s.statPlanBody}

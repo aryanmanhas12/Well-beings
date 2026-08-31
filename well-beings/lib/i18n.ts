@@ -144,9 +144,9 @@ const en: Strings = {
 
   researchKicker: "From the research inside",
   statSleepBody:
-    "depression risk for people with a regular sleep window — independent of hours slept. Cohort of 79,666 (Psychological Medicine, 2025).",
+    "the sleep length linked to the sharpest thinking and steadiest mood in later life. Both shorter and longer sleep tracked with worse outcomes, in a UK Biobank cohort of 498,277 adults aged 38 to 73 (Li et al., 2022, Nature Aging).",
   statPlanBody:
-    "do better at reaching a goal with an “if-then” plan than without one — across 94 tests (Gollwitzer & Sheeran meta-analysis).",
+    "moderate to large improvement on depression, anxiety and psychological distress, all compared with usual care. An umbrella review pooling multiple systematic reviews found physical activity helped across every one, with the biggest gains in people managing depression (Singh et al., 2023, British Journal of Sports Medicine).",
 
   helpTitle: "Help, right now",
   helpSub: "Free, confidential, 24/7 — for any level of “not okay”.",
@@ -231,9 +231,9 @@ const hi: Strings = {
 
   researchKicker: "इसमें शामिल शोध से",
   statSleepBody:
-    "नियमित समय पर सोने वालों में अवसाद का कम ख़तरा — चाहे नींद के घंटे कितने भी हों। 79,666 लोगों का समूह (Psychological Medicine, 2025)।",
+    "वह नींद जो बाद की उम्र में सबसे तेज़ सोच और सबसे स्थिर मनोदशा से जुड़ी पाई गई। कम या ज़्यादा, दोनों तरह की नींद ख़राब नतीजों से जुड़ी थी। यूके बायोबैंक के 38 से 73 वर्ष के 498,277 वयस्कों के समूह में (Li et al., 2022, Nature Aging)।",
   statPlanBody:
-    "लोग “अगर-तो” योजना के साथ अपना लक्ष्य बेहतर ढंग से पाते हैं, बिना योजना के मुक़ाबले — 94 परीक्षणों में (Gollwitzer और Sheeran का मेटा-विश्लेषण)।",
+    "अवसाद, चिंता और मानसिक तनाव तीनों पर मध्यम से बड़ा सुधार, हमेशा सामान्य देखभाल की तुलना में। कई व्यवस्थित समीक्षाओं को जोड़कर की गई एक व्यापक समीक्षा में शारीरिक गतिविधि ने तीनों में मदद की, सबसे ज़्यादा फ़ायदा अवसाद से जूझ रहे लोगों को हुआ (Singh et al., 2023, British Journal of Sports Medicine)।",
 
   helpTitle: "मदद, अभी",
   helpSub: "नि:शुल्क, गोपनीय, चौबीसों घंटे — “ठीक नहीं लग रहा” के हर स्तर के लिए।",
