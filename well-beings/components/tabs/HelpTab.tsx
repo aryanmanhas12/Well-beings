@@ -5,6 +5,7 @@ import { psychScreenerLink } from "@/lib/bridge";
 import { GLOBAL_LINKS } from "@/lib/helplines";
 import { Lang, LANGS } from "@/lib/i18n";
 import { HelplineList } from "../HelplineList";
+import { InstallApp } from "../InstallApp";
 
 const THEMES: { value: Theme; label: string }[] = [
   { value: "auto", label: "Auto" },
@@ -68,6 +69,8 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
           ))}
         </div>
       </div>
+
+      <InstallApp />
 
       <div className="card" data-tour="companion-screener" style={{ padding: 20, marginBottom: 18 }}>
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>

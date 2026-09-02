@@ -97,6 +97,13 @@ export const APP_TOUR: TourStep[] = [
     body: "Light or dark, three text sizes, and a high-contrast mode. Set once and it sticks to this device.",
   },
   {
+    id: "install",
+    tab: "help",
+    selector: '[data-tour="install-app"]',
+    title: "You can install this as an app",
+    body: "It runs from your home screen or dock in its own window, and works with no connection. Chrome shows an install icon in the address bar; Brave keeps it in the ☰ menu, and iPhones use Share then Add to Home Screen. This card gives you the one-tap button wherever the browser offers it.",
+  },
+  {
     id: "companion",
     tab: "help",
     selector: '[data-tour="companion-screener"]',
