@@ -1,4 +1,4 @@
-﻿/* Well-Beings — ported from the Nocturne design system (styles.css).
+/* Well-Beings — ported from the Nocturne design system (styles.css).
    Tokens, base type and component classes live here; components consume
    only var(--color-*), var(--font-*), var(--space-*), var(--radius-*),
    var(--shadow-*) — never a hard-coded hex or px value the tokens carry. */
@@ -1229,7 +1229,7 @@ button:active, .btn:active, .stmt-btn:active {
 
 /* ── Ambient Glassmorphism for Nav & Overlays ── */
 header.nav, .nav {
-  backdrop-filter: blur(18px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
   background-color: color-mix(in srgb, var(--color-bg) 86%, transparent) !important;
 }

@@ -6,7 +6,7 @@
 
    Bump CACHE on any release that changes a precached file. A stale name
    means an installed copy serves the version it first saw, forever. */
-const CACHE = "well-beings-v1";
+const CACHE = "well-beings-v2";
 
 /* Resolved against the SW's own scope, so this works identically at the
    root in development and under /Well-beings/ on GitHub Pages. */
