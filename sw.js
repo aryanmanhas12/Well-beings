@@ -1,4 +1,4 @@
-﻿/* Offline-first service worker.
+/* Offline-first service worker.
    The point: someone on a patchy connection — a district town, a train, a
    campus dead spot — should still be able to open their plan and reach the
    helpline numbers. Everything this app serves is static and every score
