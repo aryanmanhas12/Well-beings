@@ -1,32 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 /**
  * The install affordance.
  *
  * The app used to rely entirely on the browser's own install control, on the
  * reasoning that a "get our app" banner is exactly the wrong instinct for a
- * mental-health tool. That reasoning still holds for *banners* and it is why
- * this is a quiet row in Help rather than anything that interrupts. What
- * didn't hold is the assumption that the browser's affordance is findable:
- * Chrome puts an install icon in the address bar, but Brave hides it behind
- * the ⋮ menu, and on iOS there is no prompt at all — Safari requires Share ▸
- * Add to Home Screen, which nobody discovers by accident.
+ * mental-health tool. That reasoning still holds for *banners*, which is why
+ * this is a quiet card rather than anything that interrupts. What didn't hold
+ * is the assumption that the browser's affordance is findable: Chrome puts an
+ * install icon in the address bar, Brave deliberately doesn't and keeps it in
+ * the ☰ menu, and on iOS there is no prompt at all.
  *
- * So there are three states, and the component never lies about which one
- * you're in:
+ * Two things this file gets right that the first version didn't:
  *
- *   installed  — already running standalone, so there is nothing to do.
- *   ready      — Chromium fired beforeinstallprompt; one tap installs.
- *   manual     — no prompt is coming (Safari, Firefox, or Chromium that has
- *                not yet decided you're engaged enough). Show the real menu
- *                path instead of a button that would do nothing.
+ * 1. The event is captured at MODULE level, not per component.
+ *    `beforeinstallprompt` fires once, early, while someone is still on the
+ *    welcome screen. A component that only mounts later (the Help tab lives
+ *    behind a finished check-in) would never see it and would wrongly claim
+ *    no prompt was available. Capturing on import and holding the event means
+ *    whichever card mounts, whenever, gets the real state.
  *
- * `beforeinstallprompt` is Chromium-only and fires once. It has to be
- * captured and preventDefault()'d the moment it arrives, or the browser may
- * discard it, which is why the listener is registered in an effect on mount
- * rather than lazily when someone opens Help.
+ * 2. It renders in both places — the front door and Help — because the Help
+ *    tab is unreachable until the five-minute check-in is done, so putting it
+ *    there alone hid it from exactly the person who wants to install it.
+ *
+ * Three honest states, and it never lies about which one you're in:
+ *   installed  already running standalone, so there is nothing to offer.
+ *   ready      Chromium handed us a prompt; one tap installs.
+ *   manual     no prompt is coming, so name the real menu path rather than
+ *              show a button that would do nothing.
  */
 
 interface BeforeInstallPromptEvent extends Event {
@@ -36,11 +40,67 @@ interface BeforeInstallPromptEvent extends Event {
 
 type State = "installed" | "ready" | "manual";
 
-function isStandalone(): boolean {
+/* ── module-level capture ─────────────────────────────────────────────── */
+
+let deferred: BeforeInstallPromptEvent | null = null;
+let installedFlag = false;
+const subscribers = new Set<() => void>();
+
+function notify() {
+  subscribers.forEach((f) => f());
+}
+
+function standalone(): boolean {
   if (typeof window === "undefined") return false;
   // iOS Safari predates display-mode and uses a non-standard navigator flag.
-  const iosStandalone = (window.navigator as { standalone?: boolean }).standalone === true;
-  return window.matchMedia?.("(display-mode: standalone)").matches || iosStandalone;
+  const ios = (window.navigator as { standalone?: boolean }).standalone === true;
+  return window.matchMedia?.("(display-mode: standalone)").matches || ios;
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    // Holding it is the whole point: without preventDefault the browser may
+    // discard it, and then the button below would have nothing to replay.
+    e.preventDefault();
+    deferred = e as BeforeInstallPromptEvent;
+    notify();
+  });
+  window.addEventListener("appinstalled", () => {
+    installedFlag = true;
+    deferred = null;
+    notify();
+  });
+}
+
+function subscribe(cb: () => void) {
+  subscribers.add(cb);
+  return () => {
+    subscribers.delete(cb);
+  };
+}
+
+/** Server snapshot is "manual": the safe, non-committal state, and it means
+    the markup never claims a prompt exists before the client knows. */
+function snapshot(): State {
+  if (installedFlag || standalone()) return "installed";
+  return deferred ? "ready" : "manual";
+}
+
+function useInstallState(): State {
+  return useSyncExternalStore(subscribe, snapshot, () => "manual" as State);
+}
+
+/* The hint depends on navigator, which the server doesn't have. Rendering it
+   directly produced a hydration mismatch (React #418): the server emitted an
+   empty string and the client emitted the real instruction. Routing it through
+   the same store gives React an explicit server snapshot to hydrate against
+   and a client value to swap in afterwards, which is exactly what this API is
+   for. `noopSubscribe` is module-level so its identity is stable across
+   renders and React never resubscribes. */
+const noopSubscribe = () => () => {};
+
+function useManualHint(): string {
+  return useSyncExternalStore(noopSubscribe, manualHint, () => "");
 }
 
 /** The menu path differs per browser, and a wrong instruction is worse than
@@ -48,81 +108,76 @@ function isStandalone(): boolean {
 function manualHint(): string {
   if (typeof navigator === "undefined") return "";
   const ua = navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/.test(ua);
-  // Brave ships a navigator.brave probe; it is the only reliable way to tell
-  // it apart from Chrome, whose user-agent it deliberately mimics.
-  const isBrave = "brave" in navigator;
-  if (isIOS) return "On iPhone or iPad: tap Share, then “Add to Home Screen”.";
-  if (isBrave) return "In Brave: open the ☰ menu, then “Install Well-Beings…”. Brave keeps it there rather than in the address bar.";
-  if (/Firefox\//.test(ua)) return "Firefox on desktop doesn’t install web apps. Chrome, Edge or Brave will, and so will Firefox on Android via ⋮ → Install.";
+  if (/iPad|iPhone|iPod/.test(ua)) return "On iPhone or iPad: tap Share, then “Add to Home Screen”.";
+  // Brave copies Chrome's user-agent, so the navigator.brave probe is the only
+  // reliable way to tell them apart and not send you to the wrong menu.
+  if ("brave" in navigator)
+    return "In Brave: open the ☰ menu (top right), then “Install Well-Beings…”. Brave keeps it there instead of in the address bar. On Brave for Android it's ⋮ → “Add to Home screen”.";
+  if (/Firefox\//.test(ua))
+    return "Firefox on desktop doesn’t install web apps. Chrome, Edge or Brave will, and Firefox on Android does it via ⋮ → Install.";
   if (/Edg\//.test(ua)) return "In Edge: ⋯ menu → Apps → “Install this site as an app”.";
-  if (/Chrome\//.test(ua)) return "In Chrome: ⋮ menu → Cast, save and share → “Install page as app”, or use the install icon in the address bar.";
+  if (/Chrome\//.test(ua))
+    return "In Chrome: the install icon in the address bar, or ⋮ menu → Cast, save and share → “Install page as app”.";
   return "Look for “Install” or “Add to Home Screen” in your browser’s menu.";
 }
 
-export function InstallApp() {
-  const [state, setState] = useState<State>("manual");
-  const [hint, setHint] = useState("");
-  const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [result, setResult] = useState<string | null>(null);
+/* ── component ────────────────────────────────────────────────────────── */
 
-  useEffect(() => {
-    if (isStandalone()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setState("installed");
-      return;
-    }
-    setHint(manualHint());
-
-    const onPrompt = (e: Event) => {
-      e.preventDefault(); // keep it, so the button below can replay it later
-      setPrompt(e as BeforeInstallPromptEvent);
-      setState("ready");
-    };
-    const onInstalled = () => {
-      setState("installed");
-      setPrompt(null);
-    };
-
-    window.addEventListener("beforeinstallprompt", onPrompt);
-    window.addEventListener("appinstalled", onInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onPrompt);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
-  }, []);
+export function InstallApp({
+  tourAnchor = "install-app",
+  compact = false,
+}: {
+  /** Distinct anchors so the welcome tour and the app tour can each point at
+      their own copy without the spotlight finding the wrong one. */
+  tourAnchor?: string;
+  /** The welcome screen's right column is 320px, so it gets the short copy. */
+  compact?: boolean;
+}) {
+  const state = useInstallState();
+  const hint = useManualHint();
 
   async function install() {
-    if (!prompt) return;
-    await prompt.prompt();
-    const { outcome } = await prompt.userChoice;
-    // The event is single-use: once shown, it cannot be replayed, so drop it
-    // and fall back to the manual path rather than leaving a dead button.
-    setPrompt(null);
-    if (outcome === "accepted") {
-      setState("installed");
-    } else {
-      setState("manual");
-      setResult("No problem. You can install it later from your browser’s menu.");
-    }
+    if (!deferred) return;
+    const e = deferred;
+    await e.prompt();
+    const { outcome } = await e.userChoice;
+    // Single-use: once shown it cannot be replayed, so drop it and fall back
+    // to the manual path rather than leaving a button that silently no-ops.
+    deferred = null;
+    if (outcome === "accepted") installedFlag = true;
+    notify();
   }
 
   return (
-    <div className="card" data-tour="install-app" style={{ padding: 20, marginBottom: 18 }}>
-      <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>
+    <div className="card" data-tour={tourAnchor} style={{ padding: compact ? 16 : 20, marginBottom: 18 }}>
+      <div
+        style={{
+          fontFamily: "var(--font-heading)",
+          fontWeight: 500,
+          fontSize: compact ? 14 : 15,
+          marginBottom: 8,
+        }}
+      >
         Install it as an app
       </div>
 
       {state === "installed" ? (
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
-          Already installed. You’re running it as an app right now, which is why there’s no browser bar.
+          Already installed. You’re running it as an app right now, which is why there’s no address bar.
         </div>
       ) : (
         <>
-          <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
-            Adds it to your home screen or dock and opens it in its own window, with no address bar. It still
-            runs entirely on this device, still works with no connection, and installing changes nothing about
-            what it stores or sends. Nothing is sent either way.
+          <div
+            style={{
+              fontSize: 12.5,
+              color: "var(--color-neutral-400)",
+              marginBottom: 12,
+              textWrap: "pretty",
+            }}
+          >
+            {compact
+              ? "Runs from your home screen in its own window, works with no connection, and still keeps everything on this device."
+              : "Adds it to your home screen or dock and opens it in its own window, with no address bar. It still runs entirely on this device and still works with no connection. Installing changes nothing about what it stores or sends, which is nothing either way."}
           </div>
 
           {state === "ready" ? (
@@ -141,10 +196,6 @@ export function InstallApp() {
             >
               {hint}
             </div>
-          )}
-
-          {result && (
-            <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginTop: 10 }}>{result}</div>
           )}
         </>
       )}

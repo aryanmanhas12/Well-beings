@@ -154,6 +154,12 @@ export const WELCOME_TOUR: TourStep[] = [
     body: "Crisis lines are one tap from every screen in the app, with no score or flag required to unlock them.",
   },
   {
+    id: "welcome-install",
+    selector: '[data-tour="welcome-install"]',
+    title: "You can install it as an app",
+    body: "It runs from your home screen or dock in its own window, with no address bar, and still works with no connection. Chrome shows an install icon in the address bar; Brave keeps it in the ☰ menu; iPhones use Share then Add to Home Screen. This card gives you the one-tap button wherever the browser offers one.",
+  },
+  {
     id: "welcome-start",
     selector: '[data-tour="welcome-start"]',
     title: "That's it — start here",

@@ -1,6 +1,7 @@
 import { Lang, t } from "@/lib/i18n";
 import { StatementIntro } from "./StatementIntro";
 import { WelcomeAura } from "./WelcomeAura";
+import { InstallApp } from "./InstallApp";
 
 /**
  * The landing page.
@@ -156,6 +157,8 @@ export function WelcomeScreen({
               {s.checkinEnglishOnly}
             </div>
           )}
+
+          <InstallApp tourAnchor="welcome-install" compact />
 
           <div style={{ fontSize: 11, color: "var(--color-neutral-600)", lineHeight: 1.5 }}>
             {s.notMedical}{" "}
