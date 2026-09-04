@@ -107,19 +107,27 @@ html {
      with Inter in the same recommendation — DM Sans, Plus Jakarta,
      Poppins, Outfit — which is half the point.
 
-     Fraunces is the voice with an opinion, and it appears only where
-     type IS the design: statement cards, screen titles, the brand,
-     the big pull figures. It is a variable soft serif with two axes
-     most faces do not have, SOFT and WONK, and both are turned up
-     below. WONK swaps in the canted, slightly off alternates that
-     make it look drawn rather than generated. A serif here is doing
-     real work: serifs read as considered and human, and this app is
-     asking people to trust it with how they are actually doing. */
+     The display slot is the same face, not a second one. It briefly
+     held Fraunces, a soft serif with its SOFT and WONK axes turned up,
+     and that was a step too far: WONK deliberately cants and distorts
+     the letterforms, and at 40px on a statement card it stopped being
+     characterful and started being a costume. Warmth was supposed to
+     come from the palette; the type's job is to get out of the way.
+
+     So display is Karla too, separated by weight and size rather than
+     by family. That is the older and more reliable way to build a
+     hierarchy, and it means the whole app runs on one variable font
+     file instead of two. */
   --font-heading: var(--font-karla), "Karla", system-ui, sans-serif;
   --font-heading-weight: 600;
   --font-body: var(--font-karla), "Karla", system-ui, sans-serif;
-  --font-display: var(--font-fraunces), "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --font-display-tracking: -0.008em;
+  --font-display: var(--font-karla), "Karla", system-ui, sans-serif;
+  --font-display-tracking: -0.02em;
+  /* What separates display from everything else, now that it is no longer
+     a separate family. Every component that reaches for --font-display
+     takes this with it, so the hierarchy is one value rather than a
+     number repeated across nine inline styles. */
+  --font-display-weight: 600;
 
   --space-1: 2.8px;
   --space-2: 5.6px;
@@ -143,17 +151,6 @@ html {
   --shadow-sm: 0 0 0 1px #4A4034;
   --shadow-md: 0 0 0 1px #6E6150, 0 6px 18px rgba(18, 11, 5, 0.55);
   --shadow-lg: 0 0 0 1px #A8967E, 0 16px 40px rgba(18, 11, 5, 0.65);
-}
-
-/* Fraunces' character axes, set once and inherited.
-   SOFT rounds the terminals; WONK turns on the canted alternates. Both are
-   why this looks drawn instead of defaulted. Declared at the root rather
-   than per-element because --font-display is applied from inline styles in
-   a dozen components, which CSS cannot reach to add variation settings to.
-   Karla exposes no SOFT or WONK axis, so it ignores both — an unsupported
-   axis is dropped per-font, not inherited as an error. */
-:root {
-  font-variation-settings: "SOFT" 60, "WONK" 1;
 }
 
 *,
@@ -865,13 +862,11 @@ a,
 :root[data-lang="hi"] {
   --font-heading: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
   --font-body: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
-  /* Tiro Devanagari Hindi, not Teko. Teko was the match for the condensed
-     grotesque the display slot used to hold; now that the Latin display
-     voice is a soft serif, the Devanagari one has to be a serif too, or
-     switching language silently switches personality. Tiro is the closest
-     Devanagari equivalent of what Fraunces is doing in Latin: drawn,
-     unhurried, and warm rather than engineered. */
-  --font-display: var(--font-tiro-devanagari), "Tiro Devanagari Hindi", var(--font-noto-devanagari), serif;
+  /* Devanagari follows the same rule as Latin: one family, hierarchy by
+     weight. Noto Sans Devanagari ships 400/500/600, so the display slot
+     gets its 600 the same way Karla does, and switching language no longer
+     switches typeface as well. */
+  --font-display: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
   --font-display-tracking: 0;
 }
 :root[data-lang="hi"] body {
@@ -943,19 +938,19 @@ a,
 
 .statement-text {
   font-family: var(--font-display);
-  font-weight: 400;
+  /* 400 was right when this was a serif — a serif at 44px carries itself.
+     A grotesque at the same size needs weight to hold the line, which is
+     the whole basis of the display hierarchy now. */
+  font-weight: 600;
   letter-spacing: var(--font-display-tracking);
   line-height: 1.06;
   font-size: clamp(26px, 4.4vw, 44px);
   margin: 0;
   text-wrap: balance;
 }
-/* Weight 600 here was Teko's fix: a condensed grotesque needs the extra
-   weight to hold a big line. Tiro Devanagari Hindi ships one weight, 400,
-   so asking for 600 only gets a synthesised bold that smears the shirorekha
-   and throws away the reason the face was chosen. */
+/* Devanagari needs more leading than Latin at the same size — the matras
+   sit above and below the shirorekha, so 1.06 collides. */
 :root[data-lang="hi"] .statement-text {
-  font-weight: 400;
   line-height: 1.28;
 }
 

@@ -95,8 +95,8 @@ export function StatementIntro({
       <h1
         style={{
           fontFamily: "var(--font-display)",
-          fontWeight: 400,
           letterSpacing: "var(--font-display-tracking)",
+          fontWeight: "var(--font-display-weight)",
           fontSize: "clamp(24px,3.4vw,34px)",
           lineHeight: 1.08,
           margin: 0,
@@ -158,6 +158,7 @@ export function StatementIntro({
               style={{
                 fontFamily: "var(--font-display)",
                 letterSpacing: "var(--font-display-tracking)",
+                fontWeight: "var(--font-display-weight)",
                 fontSize: 18,
                 color: correct ? "var(--color-accent-300)" : "var(--color-neutral-200)",
               }}

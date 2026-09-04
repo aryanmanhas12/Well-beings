@@ -338,6 +338,7 @@ export function Tour({
               style={{
                 fontFamily: "var(--font-display)",
                 letterSpacing: "var(--font-display-tracking)",
+                fontWeight: "var(--font-display-weight)",
                 fontSize: 19,
                 lineHeight: 1.1,
               }}

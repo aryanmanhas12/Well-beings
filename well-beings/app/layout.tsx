@@ -1,45 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Karla, Noto_Sans_Devanagari, Tiro_Devanagari_Hindi } from "next/font/google";
+import { Karla, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/* Karla carries every word you read. Loaded as the variable font — no
-   `weight` array — because the app uses 400 for copy, 500 for a few labels
-   and 600 for headings and buttons, and one variable file is smaller than
-   three static cuts of the same face. */
+/* Karla carries the whole app — copy, headings, buttons and the big display
+   figures alike, separated by weight rather than by family. Loaded as the
+   variable font (no `weight` array) because 400, 500 and 600 are all in use
+   and one variable file is smaller than three static cuts of the same face.
+
+   There was briefly a second face here, Fraunces, for the display slot. It
+   was too much: its WONK axis cants the letterforms on purpose, and a
+   statement card is not the place for type that draws attention to itself.
+   One family, three weights, no second download. */
 const karla = Karla({
   subsets: ["latin"],
   variable: "--font-karla",
   display: "swap",
 });
 
-/* Fraunces, the display voice: statement cards, screen titles, the brand,
-   the big figures. `axes` pulls in SOFT and WONK alongside the weight axis;
-   globals.css turns both up, and they are the whole reason this face looks
-   drawn rather than picked. opsz comes along so the browser's own optical
-   sizing has a range to work with between a 12px kicker and a 44px card. */
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  axes: ["SOFT", "WONK", "opsz"],
-});
-
-/* Devanagari companions. Karla and Fraunces carry no Devanagari glyphs, so
-   Hindi would fall back to whatever the OS supplies and lose the whole
-   typographic voice. Tiro Devanagari Hindi is the serif that answers
-   Fraunces; Noto Sans Devanagari carries body copy. Both are preload:false —
-   they are dead weight for the English default, and only fetch once Hindi is
+/* The Devanagari companion. Karla carries no Devanagari glyphs, so Hindi
+   would otherwise fall back to whatever the OS supplies. Noto Sans
+   Devanagari covers copy and display both, at the same three weights, which
+   keeps Hindi and English on the same typographic rules. preload:false — it
+   is dead weight for the English default and only fetches once Hindi is
    selected. */
-const tiroDevanagari = Tiro_Devanagari_Hindi({
-  subsets: ["devanagari", "latin"],
-  weight: "400",
-  variable: "--font-tiro-devanagari",
-  display: "swap",
-  preload: false,
-});
 
 const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari", "latin"],
@@ -108,9 +94,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={[karla.variable, fraunces.variable, tiroDevanagari.variable, notoDevanagari.variable].join(
-        " ",
-      )}
+      className={[karla.variable, notoDevanagari.variable].join(" ")}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREFS_BOOTSTRAP }} />

@@ -208,8 +208,8 @@ export function ResultsScreen({
       <h1
         style={{
           fontFamily: "var(--font-display)",
-          fontWeight: 400,
           letterSpacing: "var(--font-display-tracking)",
+          fontWeight: "var(--font-display-weight)",
           fontSize: "clamp(28px,4vw,40px)",
           lineHeight: 1.08,
           margin: "0 0 8px",
@@ -235,6 +235,7 @@ export function ResultsScreen({
             style={{
               fontFamily: "var(--font-display)",
               letterSpacing: "var(--font-display-tracking)",
+              fontWeight: "var(--font-display-weight)",
               fontSize: 24,
               lineHeight: 1.1,
               marginBottom: 6,

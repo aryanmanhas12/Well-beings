@@ -60,6 +60,7 @@ function CrisisBubble({ m, s }: { m: ChatMessage; s: Strings }) {
         style={{
           fontFamily: "var(--font-display)",
           letterSpacing: "var(--font-display-tracking)",
+          fontWeight: "var(--font-display-weight)",
           fontSize: 21,
           lineHeight: 1.12,
           marginBottom: 6,

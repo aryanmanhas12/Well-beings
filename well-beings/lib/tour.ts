@@ -121,13 +121,26 @@ export const APP_TOUR: TourStep[] = [
 /** The front-door walkthrough, for someone who has just landed and has no
     profile yet. APP_TOUR explains a dashboard they haven't built; this one
     explains why they'd want to. It deliberately ends on the start button,
-    so finishing the tour leaves the thumb on the thing to press next. */
+    so finishing the tour leaves the thumb on the thing to press next.
+
+    Step order follows the page down: the deck, the preview button beside it,
+    then the two principles that moved into the bottom band when the research
+    figures took the middle one. Before that reshuffle these steps ran
+    privacy, evidence, preview, which now scrolls past the button and back up
+    to it. The last step is the exception and stays deliberate: it returns to
+    the start button, because ending anywhere else ends on nothing to do. */
 export const WELCOME_TOUR: TourStep[] = [
   {
     id: "welcome-hero",
     selector: '[data-tour="welcome-hero"]',
     title: "What this actually is",
     body: "A five-minute check-in about sleep, mood, stress and workload. Then a daily system built from your answers, not a generic list.",
+  },
+  {
+    id: "welcome-preview",
+    selector: '[data-tour="welcome-preview"]',
+    title: "Want to look before you answer?",
+    body: "This opens a sample profile with made-up answers, so you can see exactly what you get before telling it anything about yourself.",
   },
   {
     id: "welcome-privacy",
@@ -140,12 +153,6 @@ export const WELCOME_TOUR: TourStep[] = [
     selector: '[data-tour="welcome-evidence"]',
     title: "Every claim shows its paper",
     body: "Each number here comes from a trial or meta-analysis you can open and read. And it says so plainly when the evidence is still young.",
-  },
-  {
-    id: "welcome-preview",
-    selector: '[data-tour="welcome-preview"]',
-    title: "Want to look before you answer?",
-    body: "This opens a sample profile with made-up answers, so you can see exactly what you get before telling it anything about yourself.",
   },
   {
     id: "welcome-help",

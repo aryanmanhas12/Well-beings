@@ -36,6 +36,7 @@ export function Header({
           style={{
             fontFamily: "var(--font-display)",
             letterSpacing: "var(--font-display-tracking)",
+            fontWeight: "var(--font-display-weight)",
             fontSize: 19,
             whiteSpace: "nowrap",
           }}

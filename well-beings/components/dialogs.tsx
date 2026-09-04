@@ -103,6 +103,7 @@ export function HelpDialog({
           style={{
             fontFamily: "var(--font-display)",
             letterSpacing: "var(--font-display-tracking)",
+            fontWeight: "var(--font-display-weight)",
             fontSize: 24,
             lineHeight: 1.1,
             marginBottom: 4,

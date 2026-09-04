@@ -25,14 +25,29 @@ label.
 
 **Type.** Inter is banned, and so is everything that arrives in the same
 breath as Inter — DM Sans, Plus Jakarta Sans, Poppins, Outfit, Manrope. Pick
-faces with actual character and a reason. This app runs Karla for reading and
-Fraunces (SOFT and WONK axes turned up) for display, which is a real pairing
-a person would choose, not the safe one. Generous line-height. If a face has
-optional character axes, use them; that is the whole reason to pick it.
+a face with actual character and a reason. This app runs Karla, everywhere,
+with hierarchy built from weight and size rather than a second family.
+Generous line-height.
 
-**Layout.** Three equal feature boxes in a row is the shape of a template.
-Asymmetry, a real editorial hierarchy, and one idea that carries the page beat
-a grid of equivalent tiles.
+There is a limit on the other side of this, and this app hit it. The display
+slot briefly held Fraunces with its SOFT and WONK axes turned up; WONK cants
+and distorts the letterforms on purpose, and at 40px on a card the page
+stopped reading as warm and started reading as costumed. Warmth is the
+palette's job. Type that draws attention to itself is its own kind of
+default — the reaction to the generic one, and just as legible as a choice
+someone made to look interesting. Normal letterforms, warm colour.
+
+**Layout.** A hero followed by three equal feature cards is the shape of a
+template. Bands that each carry one idea, in the order a person actually needs
+them, beat a grid of equivalent tiles. The welcome screen is the worked
+example: the claim, then the evidence, then how the thing behaves. A plain
+three-up row of principles at the foot of that is fine — what is not fine is
+three boxes with icons being the whole argument.
+
+Watch what a rearrangement leaves behind. Moving the research figures out of
+the right rail was correct and immediately left two thirds of a desktop
+window empty, which needed a second pass to fix. Check the full-page
+screenshot, not just the part you changed.
 
 **Copy.** No em dashes — see `/root/.claude/plans/purring-seeking-quasar.md`
 for the rewrite rules and the running list of files still to do. Prefer a full
