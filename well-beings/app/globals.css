@@ -22,61 +22,104 @@ html {
   zoom: var(--scale, 1);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Palette: warm, not "tech".
+
+   What was here before was a blue-black page (#0E131D) with an
+   indigo-violet accent (#9184d9) and Inter throughout. That trio —
+   cold near-black, indigo, Inter — is the visual default of every
+   template and every generated landing page of the last two years,
+   and it reads as machine-made no matter how good the writing is.
+   For an app that asks someone how they slept and whether they are
+   coping, reading as machine-made is an actual cost, not a taste
+   quibble.
+
+   So: a warm near-black with brown in it rather than blue, a clay
+   accent instead of violet, and a neutral ramp with warmth all the
+   way through so nothing on the page is a dead grey. Nothing here is
+   pure #000 or #fff — real paper and real ink never are, and the
+   small amount of colour in the extremes is most of what makes a
+   screen feel like a room rather than a display.
+
+   Every value below was measured, not eyeballed. See the ratios in
+   the comments on the tighter pairs; the rule is 4.5:1 for anything
+   that carries words and 3:1 for borders and focus rings.
+   ───────────────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-  --color-bg: #0E131D;
-  --color-surface: #151B27;
-  --color-text: #e9e9ed;
-  --color-accent: #9184d9;
-  --color-accent-2: #a7a1db;
-  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  --color-bg: #17120E;
+  --color-surface: #221A14;
+  --color-text: #F3E9DC;
+  --color-accent: #E9A579;
+  /* A second voice, honey rather than another shade of the first. The
+     old --color-accent-2 was #a7a1db against an accent of #9184d9:
+     two names for the same violet, which is not a palette. */
+  --color-accent-2: #D9B26A;
+  --color-divider: color-mix(in srgb, #F3E9DC 16%, transparent);
 
-  --color-neutral-100: #f3f5fe;
-  --color-neutral-200: #e4e7f5;
-  --color-neutral-300: #cfd3e5;
-  --color-neutral-400: #b2b6ca;
-  --color-neutral-500: #9397ab;
-  /* #75798c measured 4.08:1 on --color-bg — fails WCAG AA (4.5:1) for the
-     small captions and citations this token is actually used for across the
-     app. #7f8294 clears it at 4.63:1 while staying visually between
-     neutral-500 and neutral-700, so the scale's ordering is unchanged. */
-  --color-neutral-600: #7f8294;
-  --color-neutral-700: #595d6c;
-  --color-neutral-800: #3f424d;
-  --color-neutral-900: #292b31;
+  --color-neutral-100: #FDF8F1;
+  --color-neutral-200: #F2E7D8;
+  --color-neutral-300: #E1D2BE;
+  --color-neutral-400: #C7B6A0;
+  --color-neutral-500: #A8967E;
+  /* The captions token, and the one that decides whether the small
+     print is readable. It has to clear 4.5:1 on --color-surface, not
+     just on --color-bg: nearly every use is inside a .card. #8E7C66
+     passed on the page (4.63:1) and failed on a card (4.26:1), which
+     is the trap the old palette's #75798c fell into too. #9A8770
+     clears both, at 5.38:1 and 4.95:1. */
+  --color-neutral-600: #9A8770;
+  --color-neutral-700: #6E6150;
+  --color-neutral-800: #4A4034;
+  --color-neutral-900: #2E251D;
 
-  --color-accent-100: #f5f4ff;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
-  --color-accent-400: #b5abfc;
-  --color-accent-500: #968ae0;
-  --color-accent-600: #796cbf;
-  --color-accent-700: #5d5294;
-  --color-accent-800: #423a6a;
-  --color-accent-900: #2b2741;
+  --color-accent-100: #FEF4EC;
+  --color-accent-200: #FBE0CD;
+  --color-accent-300: #F5C4A3;
+  --color-accent-400: #EDA277;
+  --color-accent-500: #E08A5C;
+  --color-accent-600: #C26C42;
+  --color-accent-700: #985232;
+  --color-accent-800: #6D3B26;
+  --color-accent-900: #43261A;
 
-  --color-accent-2-100: #f5f4ff;
-  --color-accent-2-200: #e7e5fe;
-  --color-accent-2-300: #d2cefd;
-  --color-accent-2-400: #b5afe8;
-  --color-accent-2-500: #9690c9;
-  --color-accent-2-600: #7972a9;
-  --color-accent-2-700: #5c5783;
-  --color-accent-2-800: #423e5d;
-  --color-accent-2-900: #2b293a;
+  --color-accent-2-100: #FEF7EA;
+  --color-accent-2-200: #FAE9C4;
+  --color-accent-2-300: #F2D598;
+  --color-accent-2-400: #E5BE74;
+  --color-accent-2-500: #D2A458;
+  --color-accent-2-600: #B18542;
+  --color-accent-2-700: #8A6733;
+  --color-accent-2-800: #614927;
+  --color-accent-2-900: #3C2E1B;
 
-  --color-section: #262a60;
-  --color-section-glow: #353b80;
-  --color-section-ghost: #4c5397;
+  --color-section: #3A2416;
+  --color-section-glow: #5A3A22;
+  --color-section-ghost: #7A5236;
 
-  --font-heading: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-heading-weight: 500;
-  --font-body: var(--font-inter), "Inter", system-ui, sans-serif;
-  /* Display: the condensed, heavy voice used only where type IS the design —
-     statement cards, the tour bubble's title, big pull figures. Kept separate
-     from --font-heading so ordinary headings stay quiet and readable. */
-  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", "Noto Sans", Roboto, system-ui, sans-serif;
-  --font-display-tracking: 0.005em;
+  /* ── Type ──────────────────────────────────────────────────
+     Two voices, deliberately unalike.
+
+     Karla carries everything you read: a grotesque with humanist
+     bones and a few small irregularities (the leg of the k, the tail
+     of the y) that keep a screen of small text from going flat. It
+     is not Inter, and it is not any of the faces that come bundled
+     with Inter in the same recommendation — DM Sans, Plus Jakarta,
+     Poppins, Outfit — which is half the point.
+
+     Fraunces is the voice with an opinion, and it appears only where
+     type IS the design: statement cards, screen titles, the brand,
+     the big pull figures. It is a variable soft serif with two axes
+     most faces do not have, SOFT and WONK, and both are turned up
+     below. WONK swaps in the canted, slightly off alternates that
+     make it look drawn rather than generated. A serif here is doing
+     real work: serifs read as considered and human, and this app is
+     asking people to trust it with how they are actually doing. */
+  --font-heading: var(--font-karla), "Karla", system-ui, sans-serif;
+  --font-heading-weight: 600;
+  --font-body: var(--font-karla), "Karla", system-ui, sans-serif;
+  --font-display: var(--font-fraunces), "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --font-display-tracking: -0.008em;
 
   --space-1: 2.8px;
   --space-2: 5.6px;
@@ -94,9 +137,23 @@ html {
   --radius-md: 8px;
   --radius-lg: 14px;
 
-  --shadow-sm: 0 0 0 1px #3f424d;
-  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0, 0, 0, 0.65);
+  /* Shadows carry a little brown too. A neutral-black drop shadow over a
+     warm ground is the thing that quietly makes a warm palette look
+     muddy — the shade has to belong to the same light. */
+  --shadow-sm: 0 0 0 1px #4A4034;
+  --shadow-md: 0 0 0 1px #6E6150, 0 6px 18px rgba(18, 11, 5, 0.55);
+  --shadow-lg: 0 0 0 1px #A8967E, 0 16px 40px rgba(18, 11, 5, 0.65);
+}
+
+/* Fraunces' character axes, set once and inherited.
+   SOFT rounds the terminals; WONK turns on the canted alternates. Both are
+   why this looks drawn instead of defaulted. Declared at the root rather
+   than per-element because --font-display is applied from inline styles in
+   a dozen components, which CSS cannot reach to add variation settings to.
+   Karla exposes no SOFT or WONK axis, so it ignores both — an unsupported
+   axis is dropped per-font, not inherited as an error. */
+:root {
+  font-variation-settings: "SOFT" 60, "WONK" 1;
 }
 
 *,
@@ -116,7 +173,10 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 14.5px;
-  line-height: 1.55;
+  /* 1.55 → 1.62. Small, and the single cheapest thing on this page: the
+     one measurable difference between copy that looks typeset and copy
+     that looks dumped is whether the lines have room to breathe. */
+  line-height: 1.62;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -611,77 +671,113 @@ a,
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --color-bg: #FAF8F5;
-    --color-surface: #ffffff;
-    --color-text: #1c2033;
-    --color-accent: #584bb0;
-    --color-accent-2: #6c5fc4;
-    --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+    /* Cream and unbleached paper, never #ffffff. Pure white is the
+       brightest thing a screen can do and it is what a blank document
+       looks like; a page that is 3% warmer reads as something someone
+       chose. --color-surface is a shade lighter than the page so cards
+       still lift off it without a border doing the work. */
+    --color-bg: #FAF4E9;
+    --color-surface: #FFFCF6;
+    --color-text: #2A211A;
+    --color-accent: #8C4626;
+    --color-accent-2: #8A6733;
+    --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
 
-    --color-neutral-100: #1c2033;
-    --color-neutral-200: #2b3049;
-    --color-neutral-300: #3f4459;
-    --color-neutral-400: #4e5468;
-    --color-neutral-500: #5a5f72;
-    --color-neutral-600: #6b7080;
-    --color-neutral-700: #9aa0b0;
-    --color-neutral-800: #c9cdd8;
-    --color-neutral-900: #e8eaf0;
+    --color-neutral-100: #2A211A;
+    --color-neutral-200: #3A2F26;
+    --color-neutral-300: #4C3F34;
+    --color-neutral-400: #5C4E41;
+    --color-neutral-500: #6B5C4D;
+    /* 4.76:1 on the page, 5.08:1 on a card. */
+    --color-neutral-600: #7A6A59;
+    --color-neutral-700: #A2917E;
+    --color-neutral-800: #D6C9B8;
+    --color-neutral-900: #EFE6D8;
 
-    --color-accent-100: #2b2452;
-    --color-accent-200: #3a3170;
-    --color-accent-300: #4a3f92;
-    --color-accent-400: #584bb0;
-    --color-accent-500: #6c5fc4;
-    --color-accent-600: #8578d6;
-    --color-accent-700: #b3a9e8;
-    --color-accent-800: #ded9f5;
-    --color-accent-900: #f0edfb;
+    --color-accent-100: #4A2312;
+    --color-accent-200: #5E2E19;
+    /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
+    --color-accent-300: #743A20;
+    --color-accent-400: #8C4626;
+    --color-accent-500: #A6552F;
+    --color-accent-600: #C06A3F;
+    --color-accent-700: #E0A87F;
+    --color-accent-800: #F5DCC7;
+    --color-accent-900: #FBEEE2;
 
-    --color-section: #ece9f8;
-    --color-section-glow: #ded9f5;
+    --color-accent-2-100: #3C2E1B;
+    --color-accent-2-200: #4E3B22;
+    --color-accent-2-300: #634B2B;
+    --color-accent-2-400: #7A5C34;
+    --color-accent-2-500: #96723F;
+    --color-accent-2-600: #B18542;
+    --color-accent-2-700: #D9B87A;
+    --color-accent-2-800: #F0DFBC;
+    --color-accent-2-900: #F9F0DF;
 
-    --shadow-sm: 0 0 0 1px #d8dae2;
-    --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
-    --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+    --color-section: #F6E7D6;
+    --color-section-glow: #EFD8C0;
+    --color-section-ghost: #DCBE9C;
+
+    --shadow-sm: 0 0 0 1px #E3D6C4;
+    --shadow-md: 0 0 0 1px #D6C9B8, 0 6px 18px rgba(42, 33, 26, 0.08);
+    --shadow-lg: 0 0 0 1px #BFAE97, 0 16px 40px rgba(42, 33, 26, 0.16);
   }
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #FAF8F5;
-  --color-surface: #ffffff;
-  --color-text: #1c2033;
-  --color-accent: #584bb0;
-  --color-accent-2: #6c5fc4;
-  --color-divider: color-mix(in srgb, #1c2033 14%, transparent);
+  /* Cream and unbleached paper, never #ffffff. Pure white is the
+     brightest thing a screen can do and it is what a blank document
+     looks like; a page that is 3% warmer reads as something someone
+     chose. --color-surface is a shade lighter than the page so cards
+     still lift off it without a border doing the work. */
+  --color-bg: #FAF4E9;
+  --color-surface: #FFFCF6;
+  --color-text: #2A211A;
+  --color-accent: #8C4626;
+  --color-accent-2: #8A6733;
+  --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
 
-  --color-neutral-100: #1c2033;
-  --color-neutral-200: #2b3049;
-  --color-neutral-300: #3f4459;
-  --color-neutral-400: #4e5468;
-  --color-neutral-500: #5a5f72;
-  --color-neutral-600: #6b7080;
-  --color-neutral-700: #9aa0b0;
-  --color-neutral-800: #c9cdd8;
-  --color-neutral-900: #e8eaf0;
+  --color-neutral-100: #2A211A;
+  --color-neutral-200: #3A2F26;
+  --color-neutral-300: #4C3F34;
+  --color-neutral-400: #5C4E41;
+  --color-neutral-500: #6B5C4D;
+  /* 4.76:1 on the page, 5.08:1 on a card. */
+  --color-neutral-600: #7A6A59;
+  --color-neutral-700: #A2917E;
+  --color-neutral-800: #D6C9B8;
+  --color-neutral-900: #EFE6D8;
 
-  --color-accent-100: #2b2452;
-  --color-accent-200: #3a3170;
-  --color-accent-300: #4a3f92;
-  --color-accent-400: #584bb0;
-  --color-accent-500: #6c5fc4;
-  --color-accent-600: #8578d6;
-  --color-accent-700: #b3a9e8;
-  --color-accent-800: #ded9f5;
-  --color-accent-900: #f0edfb;
+  --color-accent-100: #4A2312;
+  --color-accent-200: #5E2E19;
+  /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
+  --color-accent-300: #743A20;
+  --color-accent-400: #8C4626;
+  --color-accent-500: #A6552F;
+  --color-accent-600: #C06A3F;
+  --color-accent-700: #E0A87F;
+  --color-accent-800: #F5DCC7;
+  --color-accent-900: #FBEEE2;
 
-  --color-section: #ece9f8;
-  --color-section-glow: #ded9f5;
+  --color-accent-2-100: #3C2E1B;
+  --color-accent-2-200: #4E3B22;
+  --color-accent-2-300: #634B2B;
+  --color-accent-2-400: #7A5C34;
+  --color-accent-2-500: #96723F;
+  --color-accent-2-600: #B18542;
+  --color-accent-2-700: #D9B87A;
+  --color-accent-2-800: #F0DFBC;
+  --color-accent-2-900: #F9F0DF;
 
-  --shadow-sm: 0 0 0 1px #d8dae2;
-  --shadow-md: 0 0 0 1px #c9cdd8, 0 6px 18px rgba(28, 32, 51, 0.08);
-  --shadow-lg: 0 0 0 1px #b6bbc9, 0 16px 40px rgba(28, 32, 51, 0.16);
+  --color-section: #F6E7D6;
+  --color-section-glow: #EFD8C0;
+  --color-section-ghost: #DCBE9C;
+
+  --shadow-sm: 0 0 0 1px #E3D6C4;
+  --shadow-md: 0 0 0 1px #D6C9B8, 0 6px 18px rgba(42, 33, 26, 0.08);
+  --shadow-lg: 0 0 0 1px #BFAE97, 0 16px 40px rgba(42, 33, 26, 0.16);
 }
 
 /* High contrast: layered on top of whichever theme is active, so it works
@@ -691,15 +787,18 @@ a,
   --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-text: #000000;
-  --color-accent: #3b2f8f;
+  /* High contrast is the one place the warm palette gives way: the whole
+     point is maximum separation, so the ground goes to flat white and the
+     accent to the darkest usable clay, 9.09:1 on it. */
+  --color-accent: #7A3311;
   --color-divider: #000000;
   --color-neutral-400: #1a1a1a;
   --color-neutral-500: #1a1a1a;
   --color-neutral-600: #1a1a1a;
   --color-neutral-700: #000000;
-  --color-accent-200: #1d1747;
-  --color-accent-300: #291f63;
-  --color-accent-400: #3b2f8f;
+  --color-accent-200: #4A1F0C;
+  --color-accent-300: #5F2A11;
+  --color-accent-400: #7A3311;
   --color-section: #ffffff;
   --color-section-glow: #ffffff;
   --shadow-sm: 0 0 0 2px #000;
@@ -710,13 +809,14 @@ a,
   --color-bg: #000000;
   --color-surface: #000000;
   --color-text: #ffffff;
-  --color-accent: #c9c0ff;
+  /* 14.49:1 on black. */
+  --color-accent: #F7CFAE;
   --color-divider: #ffffff;
   --color-neutral-400: #f0f0f0;
   --color-neutral-500: #f0f0f0;
   --color-neutral-600: #f0f0f0;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
+  --color-accent-200: #FBE0CD;
+  --color-accent-300: #F5C4A3;
   --shadow-sm: 0 0 0 2px #fff;
   --shadow-md: 0 0 0 2px #fff;
   --shadow-lg: 0 0 0 2px #fff;
@@ -763,10 +863,16 @@ a,
    Devanagari also needs more vertical room than Latin for its
    matras, hence the slightly looser line-height. */
 :root[data-lang="hi"] {
-  --font-heading: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-inter), system-ui, sans-serif;
-  --font-body: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-teko), "Teko", var(--font-noto-devanagari), sans-serif;
-  --font-display-tracking: 0.01em;
+  --font-heading: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
+  --font-body: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
+  /* Tiro Devanagari Hindi, not Teko. Teko was the match for the condensed
+     grotesque the display slot used to hold; now that the Latin display
+     voice is a soft serif, the Devanagari one has to be a serif too, or
+     switching language silently switches personality. Tiro is the closest
+     Devanagari equivalent of what Fraunces is doing in Latin: drawn,
+     unhurried, and warm rather than engineered. */
+  --font-display: var(--font-tiro-devanagari), "Tiro Devanagari Hindi", var(--font-noto-devanagari), serif;
+  --font-display-tracking: 0;
 }
 :root[data-lang="hi"] body {
   line-height: 1.7;
@@ -796,12 +902,23 @@ a,
   padding: clamp(28px, 5vw, 44px) clamp(24px, 4.5vw, 40px);
   overflow: hidden;
   isolation: isolate;
+  /* Saturation came down across the board (72/68/62% → 52/48/44%) at the
+     same time the hues went warm. A fully saturated orange card is
+     shouting, and this one is asking someone whether they sleep enough.
+     Earthy means warm AND muted; only one of those on its own reads as a
+     warning label. The radial highlight sits at 32% lightness rather than
+     34% so white type clears 4.5:1 on the brightest point of every hue in
+     the deck — the ochre card was the one that failed at 34%, at 4.47:1.
+     The far corner's hue shift dropped from +26° to +12° for the same
+     reason: on the old cool hues +26° was a neighbour, but from a rust
+     base it lands in olive, and a card that fades brown-to-green looks
+     muddy rather than deep. */
   background:
-    radial-gradient(120% 140% at 12% 0%, hsl(var(--stmt-hue) 72% 34%) 0%, transparent 58%),
-    linear-gradient(148deg, hsl(var(--stmt-hue) 68% 22%) 0%, hsl(calc(var(--stmt-hue) + 26) 62% 13%) 100%);
+    radial-gradient(120% 140% at 12% 0%, hsl(var(--stmt-hue) 52% 32%) 0%, transparent 58%),
+    linear-gradient(148deg, hsl(var(--stmt-hue) 48% 22%) 0%, hsl(calc(var(--stmt-hue) + 12) 44% 13%) 100%);
   box-shadow:
-    0 0 0 1px hsl(var(--stmt-hue) 70% 62% / 0.34),
-    0 18px 48px -18px hsl(var(--stmt-hue) 80% 8% / 0.9);
+    0 0 0 1px hsl(var(--stmt-hue) 55% 66% / 0.34),
+    0 18px 48px -18px hsl(var(--stmt-hue) 60% 8% / 0.9);
   color: #fff;
 }
 
@@ -812,7 +929,7 @@ a,
   position: absolute;
   inset: -40%;
   z-index: -1;
-  background: radial-gradient(40% 40% at 50% 50%, hsl(var(--stmt-hue) 90% 66% / 0.22), transparent 70%);
+  background: radial-gradient(40% 40% at 50% 50%, hsl(var(--stmt-hue) 62% 70% / 0.22), transparent 70%);
   animation: stmtDrift 14s var(--ease-out) infinite alternate;
 }
 @keyframes stmtDrift {
@@ -833,8 +950,12 @@ a,
   margin: 0;
   text-wrap: balance;
 }
+/* Weight 600 here was Teko's fix: a condensed grotesque needs the extra
+   weight to hold a big line. Tiro Devanagari Hindi ships one weight, 400,
+   so asking for 600 only gets a synthesised bold that smears the shirorekha
+   and throws away the reason the face was chosen. */
 :root[data-lang="hi"] .statement-text {
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.28;
 }
 
@@ -845,7 +966,7 @@ a,
   font-family: var(--font-display);
   font-size: clamp(56px, 9vw, 96px);
   line-height: 0.6;
-  color: hsl(var(--stmt-hue) 90% 74%);
+  color: hsl(var(--stmt-hue) 62% 78%);
   opacity: 0.85;
   user-select: none;
 }
@@ -928,13 +1049,15 @@ a,
    earlier version tinted them per-card and rendered white-on-white in the
    light theme. The one fixed value is the Yes pill's violet, chosen so
    white text clears 5:1 on it in both themes rather than flipping with
-   --color-accent (which is light in dark mode and would fail against white). */
+   --color-accent (which is light in dark mode and would fail against white).
+   That value used to be a violet, #6355e0; it is now the deep clay from the
+   light theme's accent ramp, which carries white at 5.30:1. */
 .stmt-btn-yes {
-  background: #6355e0;
+  background: #A6552F;
   color: #fff;
 }
 .stmt-btn-yes:hover {
-  background: #5647d6;
+  background: #93481f;
 }
 .stmt-btn-no {
   background: color-mix(in srgb, var(--color-text) 9%, transparent);

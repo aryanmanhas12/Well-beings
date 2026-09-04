@@ -6,8 +6,16 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /** Enough hue separation that two consecutive cards never read as one card
     whose text changed. Values are hues, not colours — the card mixes its own
-    gradient from them so light/dark themes need no second palette. */
-const HUES = [258, 292, 218, 340, 172, 268, 200, 318, 240];
+    gradient from them so light/dark themes need no second palette.
+
+    The old set spanned the wheel (indigo, violet, blue, teal), which made the
+    deck look like a chart legend and put it at odds with everything around
+    it. These all sit in the warm arc — rust, amber, red clay, ochre, dusty
+    rose — so the deck reads as one object seen in different light rather than
+    nine unrelated slides. Neighbours stay ≥16° apart, which is what actually
+    stops two consecutive cards from blurring together; the muting that keeps
+    them from shouting is done in the CSS, not here. */
+const HUES = [22, 38, 8, 52, 350, 30, 14, 44, 4];
 
 
 /**
