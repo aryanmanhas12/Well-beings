@@ -3,6 +3,7 @@ import { STATEMENTS } from "@/lib/statements";
 import { Lang, t } from "@/lib/i18n";
 import { TOUR_DWELL_MS } from "@/lib/tour";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { Depth } from "@/lib/lifestyle";
 
 /** Enough hue separation that two consecutive cards never read as one card
     whose text changed. Values are hues, not colours — the card mixes its own
@@ -43,7 +44,7 @@ export function StatementIntro({
   lang: Lang;
   /** The Help-tab preference: when off, the reference folds away until asked for. */
   showCitations: boolean;
-  onStartChat: () => void;
+  onStartChat: (depth: Depth) => void;
 }) {
   const s = t(lang);
   const [index, setIndex] = useState(0);
@@ -254,14 +255,32 @@ export function StatementIntro({
         </button>
       </div>
 
-      <button
-        className="btn btn-primary"
-        data-tour="welcome-start"
-        onClick={onStartChat}
-        style={{ fontSize: 14, padding: "11px 22px", alignSelf: "flex-start" }}
-      >
-        {s.startCheckin}
-      </button>
+      {/* Two depths, offered as a real choice rather than hidden behind an
+          "advanced" link. The times are stated because a version that says
+          "quick" and then asks twenty questions teaches people not to believe
+          the next thing the app tells them. The detailed option names what it
+          adds, so opting into the deeper questions is a decision rather than a
+          surprise three screens later. */}
+      <div data-tour="welcome-start" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => onStartChat("quick")}
+          style={{ fontSize: 14, padding: "11px 22px", flexDirection: "column", alignItems: "flex-start", gap: 1 }}
+        >
+          <span>Quick check</span>
+          <span style={{ fontSize: 11, fontWeight: 400, opacity: 0.85 }}>about 3 minutes</span>
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={() => onStartChat("detailed")}
+          style={{ fontSize: 14, padding: "11px 22px", flexDirection: "column", alignItems: "flex-start", gap: 1 }}
+        >
+          <span>Detailed check</span>
+          <span style={{ fontSize: 11, fontWeight: 400, color: "var(--color-neutral-500)" }}>
+            about 5 minutes, goes deeper
+          </span>
+        </button>
+      </div>
     </section>
   );
 }

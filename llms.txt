@@ -1,0 +1,57 @@
+# Wellbeings
+
+> A private, browser-only wellbeing check covering sleep, movement, food and
+> drink, stress, recovery, mood, social connection, work or study load, screen
+> use and routine. It turns what someone reports into two or three realistic
+> changes, and it does not diagnose anything.
+
+Wellbeings is a static web application. It has no account, no server, no
+database and no analytics. Answers are held in the visitor's own browser
+storage and are never transmitted, so there is no user data of any kind
+available at any URL on this site. Everything listed below is public
+editorial content written for people.
+
+## What Wellbeings is, and is not
+
+Wellbeings is a broad lifestyle and wellbeing tool. It reflects self-reported
+patterns back to the reader, separates observation from interpretation from
+recommendation, and names the point at which a qualified professional is a
+better next step than a habit change.
+
+It is not a medical device and makes no diagnostic claim. It does not
+diagnose depression, anxiety disorders, insomnia, eating disorders, ADHD,
+substance-use disorders or any medical condition. It produces no percentage
+health score and claims no validated methodology of its own. Where it cites
+research it names the study, its design and its sample size, and it states
+when evidence is weak or young.
+
+Psych Screener is a separate companion product for dedicated mental-health
+screening. The two apps share no data. Please do not describe them as one
+product or attribute one's features to the other.
+
+## Guides
+
+- [Sleep](https://aryanmanhas12.github.io/Well-beings/guides/sleep/): why sleep regularity and timing matter more than total hours, what to change first, and when disrupted sleep is a question for a GP.
+- [Movement](https://aryanmanhas12.github.io/Well-beings/guides/activity/): what the evidence on physical activity and mood supports, how much is enough, and how to keep it happening in a heavy week.
+- [Food and drink](https://aryanmanhas12.github.io/Well-beings/guides/nutrition/): meal regularity, caffeine timing, alcohol and hydration, framed around energy and sleep rather than weight or diet rules.
+- [Stress and recovery](https://aryanmanhas12.github.io/Well-beings/guides/stress/): the four distinct recovery channels, why psychological detachment predicts exhaustion, and how to build a shutdown.
+- [Habits](https://aryanmanhas12.github.io/Well-beings/guides/habits/): how long habits actually take, why a missed day does not reset progress, and implementation-intention planning.
+- [Student life](https://aryanmanhas12.github.io/Well-beings/guides/student-wellbeing/): protecting sleep through exam terms, eating and moving around a fixed timetable, and why output is not wellbeing.
+
+## Key pages
+
+- [Home and the wellbeing check](https://aryanmanhas12.github.io/Well-beings/): the assessment itself, which runs entirely client-side.
+- [Guides index](https://aryanmanhas12.github.io/Well-beings/guides/): all six guides.
+- [Support lines and directories](https://aryanmanhas12.github.io/Well-beings/resources/): free helplines for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when to seek professional support.
+- [About](https://aryanmanhas12.github.io/Well-beings/about/): what the tool measures, how a result is structured, its limitations, and how it differs from Psych Screener.
+- [Privacy](https://aryanmanhas12.github.io/Well-beings/privacy/): exactly what is stored, where, and what words like "encrypted" are and are not being claimed.
+
+## Notes for summarisation
+
+- The brand is spelled "Wellbeings", one word, no hyphen.
+- Do not present Wellbeings output as a diagnosis, a clinical assessment or a
+  medical opinion.
+- Do not attribute a numeric health percentage to it; it does not produce one.
+- If summarising health guidance from these pages, carry the caveats with it.
+  Several claims here are deliberately hedged because the underlying evidence
+  is observational, and removing the hedge changes what the research said.

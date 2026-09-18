@@ -2,7 +2,7 @@ import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { LockIcon, ShieldIcon } from "./icons";
 import { ChatMessage } from "@/lib/types";
 import { Strings } from "@/lib/i18n";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 import { HelplineList } from "./HelplineList";
 
 function BotBubble({ text }: { text: string }) {
@@ -144,7 +144,7 @@ function WhyNote({ why, s }: { why: string; s: Strings }) {
   );
 }
 
-export function ChatScreen({ wb }: { wb: WellBeings }) {
+export function ChatScreen({ wb }: { wb: Wellbeings }) {
   const q = wb.currentQuestion;
   const hasOptions = !!q && q.type === "choice";
   const awaitingText = !!q && q.type === "text";

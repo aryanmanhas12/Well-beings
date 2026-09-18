@@ -1,9 +1,11 @@
+import { Depth, LifestyleAnswers } from "./lifestyle";
+
 export type Region = "us" | "uk" | "ca" | "au" | "in" | "nz" | "intl";
 
 export type Age = "u16" | "16-18" | "19-25" | "26+";
 export type Chrono = "morning" | "between" | "owl";
 export type Situation = "School" | "University" | "Working" | "Between things" | "Caregiving" | "A mix";
-export type Section = "Basics" | "Sleep" | "Rhythm" | "Mood" | "Stress" | "Habits";
+export type Section = "Basics" | "Sleep" | "Rhythm" | "Life" | "Mood" | "Stress" | "Habits";
 export type PlanIntensity = "gentle" | "balanced" | "driven";
 
 export interface HelplineEntry {
@@ -62,8 +64,16 @@ export interface FlowCtx {
   triggerCrisis: () => void;
 }
 
-/** Raw answers collected from the chat, before scoring. */
-export interface RawAnswers {
+/** Raw answers collected from the chat, before scoring.
+    Extends LifestyleAnswers, whose fields are all optional: a quick check
+    collects four of them and a detailed check collects all eight, and the
+    read-out reports only what was actually asked rather than assuming the
+    rest. */
+export interface RawAnswers extends LifestyleAnswers {
+  /** Which version of the check-in produced these answers. Carried into the
+      profile so the results screen can say how complete a picture it is
+      working from instead of presenting both depths as equivalent. */
+  depth: Depth;
   name: string;
   age: Age;
   region: Region;

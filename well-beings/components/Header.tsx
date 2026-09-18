@@ -41,7 +41,7 @@ export function Header({
             whiteSpace: "nowrap",
           }}
         >
-          Well-Beings
+          Wellbeings
         </span>
       </div>
       {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped

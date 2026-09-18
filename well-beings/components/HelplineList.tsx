@@ -55,6 +55,7 @@ export function HelplineList({
                     href={h.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="helpline-name"
                     style={{ color: "inherit", textDecoration: "underline", textDecorationColor: metaColor }}
                   >
                     {h.name}
@@ -73,6 +74,7 @@ export function HelplineList({
               <a
                 href={href}
                 {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="helpline-contact"
                 style={{ fontWeight: 500, color: contactColor, whiteSpace: "nowrap", fontSize: 13.5 }}
               >
                 {h.contact}

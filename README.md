@@ -1,25 +1,54 @@
-# Well-Beings
+# Wellbeings
 
-A privacy-first productivity and mental well-being app for teens and young adults — a 5-minute,
-chat-style check-in built on the same short screeners clinicians use (PHQ-2→9, GAD-2→7, sleep,
-burnout), which then generates a personalised daily system: a time-blocked schedule, evidence-cited
-intervention cards, a habit stack, a weekly recovery quota and a burnout radar.
+A private, browser-only wellbeing check for sleep, movement, food and drink, stress, recovery,
+mood, social connection, work or study load, screen use, routine and environment. It turns what
+you report into two or three realistic changes, and it does not diagnose anything.
 
 **Live app:** https://aryanmanhas12.github.io/Well-beings/
 **About the author:** https://aryanmanhas12.github.io/Well-beings/me/ — Aryan Manhas, the
 NeuroBioPsych vision, goals and ways to connect.
-**Companion project:** [Psych Screener](https://aryanmanhas12.github.io/Psych/) — the wider,
-shallower net (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages). Well-Beings is the
-follow-through for someone who has a result and wants a routine built around it; the `/me`
-page shares its design system so the two read as one body of work.
+**Companion project:** [Psych Screener](https://aryanmanhas12.github.io/Psych/) — the dedicated
+mental-health screening experience (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages).
+
+Wellbeings and Psych Screener are deliberately separate products. Wellbeings is the broad
+lifestyle picture and the daily system built from it; Psych Screener is the mental-health screen.
+Wellbeings does not try to be the second one — when what someone describes looks like it needs a
+proper mental-health screen, it says so and points there. The two apps share no data: moving
+between them passes a single URL parameter naming the origin app and nothing else.
+
+### The check-in
+
+Two depths. **Quick** is about three minutes and covers the lifestyle picture. **Detailed** adds
+hydration, evening screens, environment and sense of direction, plus the optional deeper
+instruments. Answers save to `localStorage` on every tap, so a refresh resumes rather than losing
+the form.
+
+The read-out is a snapshot, not a score. There is no percentage, because no validated scale could
+produce one from these questions. It separates four things that are usually run together:
+observation (what you reported), interpretation (what that pattern may suggest, hedged),
+recommendation (something to try, split across 24 hours / 7 days / longer), and medical concern
+(the separate, clearly marked category for "a person, not an app, is the right next step").
+
+### Public pages
+
+`/` the check · `/guides/` six evidence-informed guides · `/resources/` helplines and directories ·
+`/about/` what it is and is not · `/privacy/` exactly what is stored and where.
 
 Everything runs in the browser. Answers, scores and check-ins live in `localStorage` — no account,
-no server, no analytics, no third parties. Region-local crisis helplines are shown instantly if the
-self-harm screener item flags, and are always one tap away under "Help now".
+no server, no analytics, no third parties, no cookies. Region-local crisis helplines appear
+instantly if the self-harm screener item flags, and are always one tap away.
 
-> Well-Beings is a self-guidance tool, not a medical device. Its screeners signal — they don't
+> Wellbeings is a self-guidance tool, not a medical device. Its screeners signal — they don't
 > diagnose. If you're struggling, [findahelpline.com](https://findahelpline.com) lists verified,
 > free, 24/7 support lines for 130+ countries.
+
+### Checks
+
+`npm run verify` runs the typechecker, the linter, a production build and `scripts/audit-site.mjs`,
+which asserts against the real export: unique titles and descriptions, self-referencing canonicals,
+exactly one `<h1>` per page, no skipped heading levels, alt text on every image, valid JSON-LD that
+never claims a medical schema type, no broken internal links, a sitemap that matches the built
+pages, and correct brand spelling in visible copy.
 
 ## Repository layout
 

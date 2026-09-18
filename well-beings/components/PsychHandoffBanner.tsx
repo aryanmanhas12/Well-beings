@@ -1,5 +1,5 @@
 import { InboundHandoff } from "@/lib/bridge";
-import { Screen } from "@/hooks/useWellBeings";
+import { Screen } from "@/hooks/useWellbeings";
 
 const COPY: Record<0 | 1 | 2 | 3, { title: string; body: string }> = {
   0: { title: "Welcome back from the Psych Screener", body: "Nothing flagged there — a good moment to log how today actually feels." },

@@ -1,5 +1,5 @@
 import { buildInterventions, fmt } from "@/lib/scoring";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 
 const WEEKLY_DEFS = [
   {
@@ -20,7 +20,7 @@ const WEEKLY_DEFS = [
   },
 ];
 
-export function PlanTab({ wb }: { wb: WellBeings }) {
+export function PlanTab({ wb }: { wb: Wellbeings }) {
   const p = wb.profile!;
   const interventions = buildInterventions(p);
   const lightsOut = (p.wake - p.need + 24) % 24;

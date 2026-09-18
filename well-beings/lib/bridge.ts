@@ -1,10 +1,10 @@
 /**
- * The Well-Beings ↔ Psych Screener handoff.
+ * The Wellbeings ↔ Psych Screener handoff.
  *
  * Psych Screener does the occasional deep clinical check across five
- * instruments (PHQ-9, GAD-7, WHO-5, AUDIT-C…); Well-Beings does the daily
+ * instruments (PHQ-9, GAD-7, WHO-5, AUDIT-C…); Wellbeings does the daily
  * pulse and the system built around it. Each points at the other when it's
- * the more useful tool for the moment — this file is the Well-Beings half
+ * the more useful tool for the moment — this file is the Wellbeings half
  * of a protocol Psych Screener already ships (see its index.html, "Well-
  * beings companion app").
  *
@@ -13,12 +13,12 @@
  * on its own privacy page that nothing it holds ever leaves the device,
  * and a richer handoff would quietly break that promise.
  *
- *   Outbound (Well-Beings -> Psych Screener):
+ *   Outbound (Wellbeings -> Psych Screener):
  *     ?ref=wellbeings
  *     Psych Screener shows a welcome-back banner. Carries nothing about
  *     what triggered the redirect on this end.
  *
- *   Inbound (Psych Screener -> Well-Beings):
+ *   Inbound (Psych Screener -> Wellbeings):
  *     ?ref=psych-screener&band=<0-3>
  *     band is the severity band just shown there — 0 minimal, 3 high —
  *     nothing finer-grained. Read once, then stripped from the address bar

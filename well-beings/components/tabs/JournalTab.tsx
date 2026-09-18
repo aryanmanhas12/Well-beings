@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 import { psychScreenerLink } from "@/lib/bridge";
 import { KIND_LABEL, PROMPTS, countWords, nextPrompt, readCadence, recentWords } from "@/lib/journal";
 
@@ -7,7 +7,7 @@ function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
 }
 
-export function JournalTab({ wb }: { wb: WellBeings }) {
+export function JournalTab({ wb }: { wb: Wellbeings }) {
   const entries = wb.journal;
   const suggested = useMemo(() => nextPrompt(entries), [entries]);
   const [promptId, setPromptId] = useState(suggested.id);
@@ -37,7 +37,7 @@ export function JournalTab({ wb }: { wb: WellBeings }) {
           Write it down
         </h2>
         <p style={{ color: "var(--color-neutral-500)", fontSize: 13, margin: "0 0 18px", maxWidth: 560, textWrap: "pretty" }}>
-          This is the part of Well-Beings with the longest research history behind it. Nobody reads these entries
+          This is the part of Wellbeings with the longest research history behind it. Nobody reads these entries
           but you — they never leave this device, and you can delete any of them.
         </p>
 

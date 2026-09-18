@@ -1,6 +1,6 @@
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 import { psychScreenerLink } from "@/lib/bridge";
 import { GLOBAL_LINKS } from "@/lib/helplines";
 import { Lang, LANGS } from "@/lib/i18n";
@@ -27,7 +27,7 @@ const INTENSITIES: { value: PlanIntensity; label: string; desc: string }[] = [
   { value: "driven", label: "Driven", desc: "maximum deep work" },
 ];
 
-export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: () => void }) {
+export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: () => void }) {
   const region = wb.region;
   const s = wb.s;
   const links = [...region.links, ...GLOBAL_LINKS];
@@ -77,7 +77,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
           Companion screener
         </div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
-          Well-Beings is the day-to-day journal. The{" "}
+          Wellbeings is the day-to-day journal. The{" "}
           <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
             Psych Screener
           </a>{" "}
@@ -268,7 +268,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: WellBeings; onReplayTour: ()
         <button
           className="btn btn-secondary"
           onClick={() => {
-            if (window.confirm("Delete all Well-Beings data from this browser? This cannot be undone.")) {
+            if (window.confirm("Delete all Wellbeings data from this browser? This cannot be undone.")) {
               wb.deleteData();
             }
           }}

@@ -1,5 +1,5 @@
 import { readProgress, ProgressDirection } from "@/lib/progress";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 
 const TONE: Record<ProgressDirection, string> = {
   up: "var(--color-accent-300)",
@@ -48,7 +48,7 @@ function Sparkline({ series, color }: { series: (number | null)[]; color: string
   );
 }
 
-export function ProgressCard({ wb }: { wb: WellBeings }) {
+export function ProgressCard({ wb }: { wb: Wellbeings }) {
   const p = readProgress(wb.checkins);
   const color = TONE[p.direction];
   const calm = wb.settings.calmMode;

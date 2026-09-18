@@ -6,11 +6,23 @@
 
    Bump CACHE on any release that changes a precached file. A stale name
    means an installed copy serves the version it first saw, forever. */
-const CACHE = "well-beings-v2";
+const CACHE = "wellbeings-v3";
 
 /* Resolved against the SW's own scope, so this works identically at the
    root in development and under /Well-beings/ on GitHub Pages. */
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
+const SHELL = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png",
+  /* The support page is precached deliberately and is the reason this list
+     is not just the app shell. Everything else here degrades gracefully
+     without a connection; a crisis line you cannot reach because you are in
+     a dead spot does not. It is a static page with no scripts of its own, so
+     it costs almost nothing to hold. */
+  "./resources/",
+];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
@@ -52,7 +64,17 @@ self.addEventListener("fetch", (e) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(req).then((hit) => hit || caches.match("./index.html")))
+        .catch(() =>
+          caches.match(req).then((hit) => {
+            if (hit) return hit;
+            /* Offline and never visited. Anything under the support path
+               falls back to the support page rather than the app shell,
+               because a cached list of helplines is the single most useful
+               thing this cache holds. */
+            const wantsSupport = new URL(req.url).pathname.includes("/resources");
+            return caches.match(wantsSupport ? "./resources/" : "./index.html");
+          })
+        )
     );
     return;
   }

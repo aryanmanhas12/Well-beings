@@ -1,7 +1,7 @@
 import { CheckIcon } from "../icons";
 import { ProgressCard } from "../ProgressCard";
 import { buildSchedule } from "@/lib/scoring";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 
 export const HABIT_DEFS = [
   { id: "light", anchor: "After I wake up…", habit: "Daylight + a glass of water, before the phone" },
@@ -16,7 +16,7 @@ const CHECKIN_ROWS: { field: "mood" | "energy" | "sleep"; label: string; hint: s
   { field: "sleep", label: "Last night’s sleep", hint: "rough → restful" },
 ];
 
-export function TodayTab({ wb }: { wb: WellBeings }) {
+export function TodayTab({ wb }: { wb: Wellbeings }) {
   const p = wb.profile!;
   const calm = wb.settings.calmMode;
   const intensity = wb.settings.planIntensity;

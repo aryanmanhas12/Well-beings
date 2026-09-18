@@ -1,5 +1,5 @@
 import { dateKey } from "@/lib/scoring";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 
 const WARN_SIGNS = [
   "Waking tired even after a full-length night",
@@ -17,7 +17,7 @@ const RECOVERY_CARDS = [
   { name: "Control", what: "Time where you decide everything.", eg: "a self-planned Saturday morning" },
 ];
 
-export function BurnoutTab({ wb }: { wb: WellBeings }) {
+export function BurnoutTab({ wb }: { wb: Wellbeings }) {
   const p = wb.profile!;
   const calm = wb.settings.calmMode;
 

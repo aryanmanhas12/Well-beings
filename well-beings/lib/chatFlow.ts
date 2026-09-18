@@ -1,4 +1,5 @@
 import { FREQ, SCALE } from "./scoring";
+import { Depth, lifestyleQuestionsFor } from "./lifestyle";
 import { FlowCtx, Question } from "./types";
 
 const phqSub = "PHQ — the standard clinical screener · answers never leave this device";
@@ -16,8 +17,20 @@ const auditWhy =
 const S = SCALE.map(([label, value]) => ({ label, value }));
 const F = FREQ.map(([label, value]) => ({ label, value }));
 
-/** The full check-in flow — adaptive follow-ups are enqueued by `after` via ctx.insertNext. */
-export function buildFlow(): Question[] {
+/**
+ * The check-in flow. Adaptive follow-ups are enqueued by `after` via
+ * ctx.insertNext; `depth` decides which fixed questions are asked at all.
+ *
+ * What `depth` actually gates, and why. Wellbeings is the broad lifestyle
+ * tool; the companion app is the mental-health screen. The two-item mood and
+ * worry questions stay in both depths because a wellbeing check that never
+ * asks would be negligent — but they are a signal that points somewhere
+ * better, not a screen. The full PHQ-9 and GAD-7 expansions, and the alcohol
+ * items, are offered only in the detailed check, where someone has explicitly
+ * asked for the longer version and is told what they are opting into.
+ */
+export function buildFlow(depth: Depth = "detailed"): Question[] {
+  const detailed = depth === "detailed";
   return [
     {
       id: "entry",
@@ -198,6 +211,7 @@ export function buildFlow(): Question[] {
         { label: "Crushing", value: 3 },
       ],
     },
+    ...lifestyleQuestionsFor(depth),
     {
       id: "phq1",
       section: "Mood",
@@ -216,7 +230,10 @@ export function buildFlow(): Question[] {
       text: "…and how often have you felt down, depressed, or hopeless?",
       opts: S,
       after: (v, ctx: FlowCtx) => {
-        if ((Number(ctx.answers.phq1) || 0) + Number(v) >= 2) {
+        /* The nine-item expansion is a depression screen, which is the
+           companion app's job. In the quick check the flag is carried to the
+           read-out as a signal and the person is pointed there instead. */
+        if (detailed && (Number(ctx.answers.phq1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
             { id: "phq3", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "That’s worth a closer look — the full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?", opts: S },
             { id: "phq4", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling tired or having little energy?", opts: S },
@@ -250,7 +267,7 @@ export function buildFlow(): Question[] {
       text: "…and how often were you not able to stop or control worrying?",
       opts: S,
       after: (v, ctx: FlowCtx) => {
-        if ((Number(ctx.answers.gad1) || 0) + Number(v) >= 2) {
+        if (detailed && (Number(ctx.answers.gad1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
             { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too — 5 more, then we move on.\n\nWorrying too much about different things?", opts: S },
             { id: "gad4", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Trouble relaxing?", opts: S },
@@ -276,10 +293,16 @@ export function buildFlow(): Question[] {
         { label: "Just feel less exhausted", value: "Just feel less exhausted" },
       ],
     },
+    /* AUDIT-C is a validated alcohol screen, so it belongs with the other
+       opt-in depth rather than in a five-minute lifestyle snapshot. Spread
+       conditionally rather than filtered afterwards so the section count and
+       the queue agree from the first question. */
+    ...(detailed
+      ? [
     {
-      id: "audit1",
-      section: "Habits",
-      type: "choice",
+      id: "audit1" as const,
+      section: "Habits" as const,
+      type: "choice" as const,
       why: auditWhy,
       text: "Last stretch — one on drinking, entirely optional territory.\n\nHow often do you have a drink containing alcohol?",
       opts: [
@@ -289,7 +312,7 @@ export function buildFlow(): Question[] {
         { label: "2–3 times a week", value: 3 },
         { label: "4+ times a week", value: 4 },
       ],
-      after: (v, ctx: FlowCtx) => {
+      after: (v: string | number, ctx: FlowCtx) => {
         if (Number(v) >= 1) {
           ctx.insertNext([
             {
@@ -324,8 +347,22 @@ export function buildFlow(): Question[] {
         }
       },
     },
+        ]
+      : []),
   ];
 }
 
-export const SECTION_OF: Record<string, number> = { Basics: 1, Sleep: 2, Rhythm: 3, Mood: 4, Stress: 5, Habits: 6 };
-export const TOTAL_SECTIONS = 6;
+export const SECTION_OF: Record<string, number> = {
+  Basics: 1,
+  Sleep: 2,
+  Rhythm: 3,
+  Life: 4,
+  Mood: 5,
+  Stress: 6,
+  Habits: 7,
+};
+
+/** Habits (the alcohol items) only runs in the detailed check, so the quick
+    version genuinely shows 6 of 6 at the end rather than stalling at 6 of 7
+    and looking like it crashed. */
+export const totalSections = (depth: Depth): number => (depth === "detailed" ? 7 : 6);

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Tab } from "@/hooks/useWellBeings";
+import { Tab } from "@/hooks/useWellbeings";
 import { TourStep, TOUR_DWELL_MS } from "@/lib/tour";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -114,7 +114,7 @@ export function Tour({
   /* The timer only ever moves BETWEEN cards.
 
      It used to run on the last step too, where next() takes the isLast branch
-     and fires onComplete — which WellBeingsApp wires to startChat. Leaving the
+     and fires onComplete — which WellbeingsApp wires to startChat. Leaving the
      welcome tour open for ~42s therefore began the five-minute check-in on its
      own, resetting state and switching screen, for someone who had merely
      looked away. Advancing between explanations is a convenience; starting a

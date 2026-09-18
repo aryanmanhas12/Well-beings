@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Karla, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { PAGE_BY_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -35,12 +36,28 @@ const notoDevanagari = Noto_Sans_Devanagari({
   preload: false,
 });
 
+/**
+ * Site-wide metadata defaults. Per-page title, description, canonical and
+ * social cards are set by each page from the one route table in lib/site.ts —
+ * see lib/seo.ts. What stays here is only what is genuinely global.
+ *
+ * metadataBase is what makes a relative canonical resolve to the real public
+ * address rather than to the deploy path, and it is why every page can
+ * declare `alternates.canonical` as a plain path.
+ */
 export const metadata: Metadata = {
-  title: "Well-Beings — a system for your energy, not just your to-do list",
-  description:
-    "A privacy-first, evidence-based check-in for sleep, mood and burnout that builds you a personalised daily system.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: PAGE_BY_PATH["/"].title,
+    // Pages set their own full title; this only catches anything that sets a
+    // bare segment, so a stray page can never end up untitled.
+    template: `%s — ${SITE_NAME}`,
+  },
+  description: PAGE_BY_PATH["/"].description,
+  applicationName: SITE_NAME,
+  referrer: "strict-origin-when-cross-origin",
   manifest: `${basePath}/manifest.webmanifest`,
-  appleWebApp: { capable: true, title: "Well-Beings", statusBarStyle: "black-translucent" },
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: "black-translucent" },
   icons: {
     icon: [
       { url: `${basePath}/icon-192.png`, sizes: "192x192", type: "image/png" },
@@ -66,7 +83,7 @@ export const viewport: Viewport = {
  * There was a PrefsLoader component doing this from a `useEffect`, which by
  * definition runs *after* the browser has already painted — so the flash of
  * the wrong theme it existed to prevent still happened, and it read a
- * `well-beings-prefs` key that nothing in the app writes any more. This runs
+ * `wellbeings-prefs` key that nothing in the app writes any more. This runs
  * synchronously in <head>, before <body> exists, from the one store the app
  * actually uses. Worst case it throws (storage blocked) and the try/catch
  * leaves the OS default in place.

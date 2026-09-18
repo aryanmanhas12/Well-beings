@@ -1,8 +1,12 @@
 import { RawAnswers } from "./types";
 
-/** Sample profiles for "preview a sample profile" — never real user data. */
+/** Sample profiles for "preview a sample profile" — invented, never real user
+    data, and never derived from anyone's answers. Both are marked as detailed
+    checks because they carry the expanded instruments; a quick-check persona
+    would have to leave half these fields undefined. */
 export const PERSONAS: Record<string, RawAnswers> = {
   "running-hot": {
+    depth: "detailed",
     name: "Sam",
     age: "19-25",
     region: "us",
@@ -21,9 +25,18 @@ export const PERSONAS: Record<string, RawAnswers> = {
     gadExpanded: true,
     bo: [3, 3, 3],
     audit: [2, 2, 1],
+    move: 3,
+    meals: 2,
+    hydrate: 2,
+    social: 2,
+    screenEve: 3,
+    recovery: 3,
+    environment: 1,
+    purpose: 2,
     goal: "Grades / exams",
   },
   steady: {
+    depth: "detailed",
     name: "Alex",
     age: "16-18",
     region: "uk",
@@ -40,6 +53,14 @@ export const PERSONAS: Record<string, RawAnswers> = {
     gadExpanded: false,
     bo: [1, 1, 1],
     audit: [0],
+    move: 1,
+    meals: 0,
+    hydrate: 1,
+    social: 0,
+    screenEve: 1,
+    recovery: 1,
+    environment: 0,
+    purpose: 1,
     goal: "Build consistent routines",
   },
 };

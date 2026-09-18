@@ -2,6 +2,7 @@ import { Lang, t } from "@/lib/i18n";
 import { StatementIntro } from "./StatementIntro";
 import { WelcomeAura } from "./WelcomeAura";
 import { InstallApp } from "./InstallApp";
+import { Depth } from "@/lib/lifestyle";
 
 /**
  * The landing page.
@@ -32,12 +33,19 @@ export function WelcomeScreen({
   onStartChat,
   onStartDemo,
   onOpenHelp,
+  resumable,
+  onResume,
+  onDiscardDraft,
 }: {
   lang?: Lang;
   showCitations?: boolean;
-  onStartChat: () => void;
+  onStartChat: (depth: Depth) => void;
   onStartDemo: () => void;
   onOpenHelp: () => void;
+  /** An unfinished check-in saved on this device, or null. */
+  resumable: { answered: number; depth: Depth } | null;
+  onResume: () => void;
+  onDiscardDraft: () => void;
 }) {
   const s = t(lang);
 
@@ -98,6 +106,31 @@ export function WelcomeScreen({
             the height of this one and left the whole right side of a desktop
             window empty once the research figures moved out. */}
         <div style={{ flex: "0 1 320px", minWidth: 260, display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Offered, never auto-resumed. Dropping someone back into question
+              fourteen of a form they may have walked away from on purpose is
+              its own kind of rude, and the discard option has to be as easy to
+              reach as the resume one. */}
+          {resumable && (
+            <div className="card" style={{ padding: 16, border: "1px solid var(--color-accent-700)" }}>
+              <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>
+                You have a check-in in progress
+              </div>
+              <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
+                {resumable.answered} {resumable.answered === 1 ? "answer" : "answers"} saved on this
+                device from your {resumable.depth === "quick" ? "quick" : "detailed"} check. Nothing
+                was sent anywhere.
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <button className="btn btn-primary" onClick={onResume} style={{ fontSize: 12.5 }}>
+                  Pick up where I left off
+                </button>
+                <button className="btn btn-secondary" onClick={onDiscardDraft} style={{ fontSize: 12.5 }}>
+                  Start over
+                </button>
+              </div>
+            </div>
+          )}
+
           <p
             style={{
               color: "var(--color-neutral-300)",

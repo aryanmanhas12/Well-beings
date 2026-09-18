@@ -1,6 +1,6 @@
-# Well-Beings
+# Wellbeings
 
-A privacy-first productivity and mental-wellbeing web app, implemented in Next.js from the Claude Design handoff in `../project/Well-Beings.dc.html`.
+A privacy-first productivity and mental-wellbeing web app, implemented in Next.js from the Claude Design handoff in `../project/Wellbeings.dc.html`.
 
 - **Check-in chat** — adaptive, evidence-based screeners (PHQ-2→9, GAD-2→7, sleep composite, burnout) in a chat interface; deeper questions only when something flags.
 - **Crisis safety** — region-local helplines surface instantly on the self-harm item, on the results screen, and behind the always-visible "Help now" button.

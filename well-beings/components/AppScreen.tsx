@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tab, WellBeings } from "@/hooks/useWellBeings";
+import { Tab, Wellbeings } from "@/hooks/useWellbeings";
 import { TodayTab } from "./tabs/TodayTab";
 import { JournalTab } from "./tabs/JournalTab";
 import { PlanTab } from "./tabs/PlanTab";
@@ -20,7 +20,7 @@ const TAB_DEFS: [Tab, keyof Strings][] = [
   ["help", "tabHelp"],
 ];
 
-export function AppScreen({ wb }: { wb: WellBeings }) {
+export function AppScreen({ wb }: { wb: Wellbeings }) {
   const [tourOpen, setTourOpen] = useState(false);
 
   // Auto-launch once, ever, per device — never on the demo profile (a

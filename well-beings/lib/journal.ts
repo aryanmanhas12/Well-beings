@@ -1,5 +1,5 @@
 /**
- * The journal — Well-Beings' core, and what separates it from the screener.
+ * The journal — Wellbeings' core, and what separates it from the screener.
  *
  * This is expressive writing, and the research is specific enough to design
  * against rather than guess at:

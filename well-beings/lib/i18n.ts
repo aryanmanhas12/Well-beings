@@ -112,7 +112,7 @@ const en: Strings = {
   helpNow: "Help now",
   language: "Language",
   footerDisclaimer:
-    "Well-Beings — a self-guidance prototype. Not a medical device; screeners signal, they don’t diagnose.",
+    "Wellbeings — a self-guidance prototype. Not a medical device; screeners signal, they don’t diagnose.",
   footerPrivacy: "All data stays on this device.",
 
   heroKicker: "Evidence-based · built on 15+ peer-reviewed studies",
@@ -140,7 +140,7 @@ const en: Strings = {
   featEvidenceBody:
     "Every practice cites its meta-analysis or trial — and says so when evidence is young.",
   notMedical:
-    "Well-Beings is a self-guidance tool, not a medical device. Its screeners signal — they don’t diagnose.",
+    "Wellbeings is a self-guidance tool, not a medical device. Its screeners signal — they don’t diagnose.",
 
   researchKicker: "From the research inside",
   statSleepBody:

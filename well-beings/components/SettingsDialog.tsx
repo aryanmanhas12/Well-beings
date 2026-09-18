@@ -1,7 +1,7 @@
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
 import { Lang, LANGS } from "@/lib/i18n";
-import { WellBeings } from "@/hooks/useWellBeings";
+import { Wellbeings } from "@/hooks/useWellbeings";
 import { useDialogBehaviour } from "./dialogs";
 
 /**
@@ -9,7 +9,7 @@ import { useDialogBehaviour } from "./dialogs";
  *
  * A version of this existed on the welcome-screen branch and was dropped in
  * the merge. It's restored here, but rewired: the original kept its own
- * copy of theme/contrast/scale in a separate `well-beings-prefs` key and
+ * copy of theme/contrast/scale in a separate `wellbeings-prefs` key and
  * wrote it with its own save function, in parallel with the app's real
  * settings in `wellbeings-v1`. Two stores for one set of preferences means
  * whichever screen you changed them on last silently won — so this reads and
@@ -39,7 +39,7 @@ const INTENSITIES: { value: PlanIntensity; label: string }[] = [
   { value: "driven", label: "Driven" },
 ];
 
-export function SettingsDialog({ wb, onClose }: { wb: WellBeings; onClose: () => void }) {
+export function SettingsDialog({ wb, onClose }: { wb: Wellbeings; onClose: () => void }) {
   const ref = useDialogBehaviour(onClose);
   const s = wb.s;
 

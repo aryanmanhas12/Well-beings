@@ -1,6 +1,6 @@
 {
-  "name": "Well-Beings — evidence-based check-in",
-  "short_name": "Well-Beings",
+  "name": "Wellbeings — evidence-based check-in",
+  "short_name": "Wellbeings",
   "description": "A 5-minute, privacy-first check-in built on clinical screeners, which builds you a personalised daily system. Works offline. Nothing leaves your device.",
   "start_url": "./",
   "scope": "./",

@@ -82,7 +82,7 @@ export function LibraryTab() {
         Why each practice is here
       </h2>
       <p style={{ color: "var(--color-neutral-500)", fontSize: 13, margin: "0 0 18px", maxWidth: 620, textWrap: "pretty" }}>
-        Every recommendation in Well-Beings traces to peer-reviewed research — mostly meta-analyses and large
+        Every recommendation in Wellbeings traces to peer-reviewed research — mostly meta-analyses and large
         cohorts, sourced via PubMed &amp; Consensus. Each card leads with the one number worth remembering, in plain
         words. Where the evidence is young or mixed, the card says so.
       </p>
@@ -145,7 +145,7 @@ export function LibraryTab() {
               </div>
             )}
 
-            <div style={{ fontSize: 12, color: "var(--color-neutral-500)" }}>In Well-Beings: {ev.use}</div>
+            <div style={{ fontSize: 12, color: "var(--color-neutral-500)" }}>In Wellbeings: {ev.use}</div>
             <div style={{ fontSize: 11, color: "var(--color-neutral-600)", marginTop: "auto" }}>{ev.design}</div>
             <a href={ev.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11.5 }}>
               {ev.cite} ↗

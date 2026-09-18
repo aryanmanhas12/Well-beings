@@ -5,6 +5,7 @@ import { psychScreenerLink } from "@/lib/bridge";
 import { crisisLines } from "@/lib/helplines";
 import { Lang, t } from "@/lib/i18n";
 import { HelplineList } from "./HelplineList";
+import { WellbeingSnapshot } from "./WellbeingSnapshot";
 
 interface ResultCard {
   domain: string;
@@ -67,7 +68,12 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
   const boBand: [string, number] = p.boHigh ? ["Elevated", 2] : p.boWatch ? ["Watch", 1] : ["Low", 0];
   const auBand: [string, number] = p.auditFlag ? ["Worth a look", 2] : p.auditWatch ? ["Watch", 1] : ["Low", 0];
 
-  return [
+  /* Asked, not assumed. The quick check omits the alcohol items entirely, so
+     a Drinking card reading "0 / 12 — no flag on this one" would be reporting
+     a result for a question that was never put to anyone. Same logic guards
+     every card: the read-out shows what was measured and stays silent about
+     what was not. */
+  const cards: (ResultCard | null)[] = [
     mk(
       "Mood",
       p.phqScore,
@@ -145,6 +151,10 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       "AUDIT-C · WHO, single youth-calibrated cutoff"
     ),
   ];
+
+  // audit is [] when the items were never offered; bo/phq/gad always run.
+  if (p.audit.length === 0) cards[4] = null;
+  return cards.filter((c): c is ResultCard => c !== null);
 }
 
 /** Which instrument produced a score — folded away unless asked for, or
@@ -272,7 +282,7 @@ export function ResultsScreen({
               This looks like more than a quick check-in
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
-              The Psych Screener is Well-Beings&apos; companion app — the full PHQ-9/GAD-7/AUDIT-C picture, in six
+              The Psych Screener is Wellbeings&apos; companion app — the full PHQ-9/GAD-7/AUDIT-C picture, in six
               languages, with score history over time and a guided conversation if you&apos;re not sure where to
               start. It&apos;s free, private, and runs entirely on-device, same as this one.
             </div>
@@ -288,6 +298,29 @@ export function ResultsScreen({
           </a>
         </div>
       )}
+
+      {/* The snapshot leads. This used to open on five instrument dials, which
+          made a lifestyle tool read as a clinical one and put the least
+          actionable thing at the top of the page. The numbers still matter and
+          are still here — they have just stopped being the headline. */}
+      <WellbeingSnapshot profile={profile} />
+
+      <h2
+        style={{
+          fontSize: 12,
+          letterSpacing: ".08em",
+          textTransform: "uppercase",
+          color: "var(--color-neutral-500)",
+          margin: "38px 0 6px",
+        }}
+      >
+        The individual signals
+      </h2>
+      <p style={{ fontSize: 12.5, color: "var(--color-neutral-500)", maxWidth: 620, margin: "0 0 14px", textWrap: "pretty" }}>
+        What each set of questions produced on its own. These are screening
+        signals, not diagnoses, and only the questions you were actually asked
+        appear here.
+      </p>
 
       <div
         style={{
@@ -340,7 +373,11 @@ export function ResultsScreen({
         </div>
       )}
 
-      <button className="btn btn-primary" onClick={onBuildSystem} style={{ fontSize: 14.5, padding: "11px 24px" }}>
+      <button
+        className="btn btn-primary"
+        onClick={onBuildSystem}
+        style={{ fontSize: 14.5, padding: "11px 24px", marginTop: 30 }}
+      >
         {s.buildSystem}
       </button>
     </main>

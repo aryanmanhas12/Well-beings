@@ -1,4 +1,4 @@
-/* Well-Beings — ported from the Nocturne design system (styles.css).
+/* Wellbeings — ported from the Nocturne design system (styles.css).
    Tokens, base type and component classes live here; components consume
    only var(--color-*), var(--font-*), var(--space-*), var(--radius-*),
    var(--shadow-*) — never a hard-coded hex or px value the tokens carry. */
@@ -1350,4 +1350,312 @@ header.nav, .nav {
   -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
   backdrop-filter: blur(18px) saturate(180%) !important;
   background-color: color-mix(in srgb, var(--color-bg) 86%, transparent) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   The content site
+   ─────────────────────────────────────────────────────────────
+   Everything below styles the static pages — guides, support,
+   about, privacy, 404 — which are server-rendered and ship no
+   application JavaScript. They share the app's tokens so the two
+   halves read as one product, but they are set for reading
+   rather than for operating: one column, a measure that caps at
+   68 characters, and no cards unless the content is genuinely a
+   list of separate things.
+   ───────────────────────────────────────────────────────────── */
+
+.site {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Visible only once focused, which is the entire point — a skip link that
+   is permanently hidden helps nobody, and one that is permanently visible
+   gets deleted by the next person to touch the header. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+.skip-link:focus-visible {
+  left: 12px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+}
+
+.site-head {
+  border-bottom: 1px solid var(--color-divider);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.site-head-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 14px max(16px, env(safe-area-inset-left)) 14px max(16px, env(safe-area-inset-right));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+}
+.site-wordmark {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: var(--font-display-tracking);
+  font-size: 19px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-wordmark:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.site-nav,
+.site-foot ul,
+.crumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+.site-nav a {
+  display: inline-block;
+  /* 44px of hit area on touch without 44px of visual weight on desktop —
+     the padding does the work, the line-height keeps it looking normal. */
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: var(--color-neutral-400);
+}
+.site-nav a:hover {
+  color: var(--color-text);
+}
+/* Current page is marked by weight and an underline, never by colour alone. */
+.site-nav a[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.crumbs {
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 14px max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right));
+  font-size: 12.5px;
+  color: var(--color-neutral-500);
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.crumbs-sep {
+  margin-left: 6px;
+  color: var(--color-neutral-700);
+}
+.crumbs [aria-current="page"] {
+  color: var(--color-neutral-300);
+}
+
+.site-main {
+  flex: 1;
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 26px max(16px, env(safe-area-inset-left)) 64px max(16px, env(safe-area-inset-right));
+  box-sizing: border-box;
+}
+
+/* ── Reading column ──────────────────────────────────────────
+   68ch, which is the middle of the range typographers have
+   settled on for continuous prose. Wider looks generous on a
+   desktop mock and costs comprehension on the line return. */
+.prose {
+  max-width: 68ch;
+}
+.prose > * + * {
+  margin-top: 1.05em;
+}
+.prose h1 {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+  letter-spacing: var(--font-display-tracking);
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.1;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+.prose .lede {
+  font-size: clamp(16px, 2.4vw, 18px);
+  color: var(--color-neutral-300);
+  margin-top: 0;
+  text-wrap: pretty;
+}
+.prose h2 {
+  font-size: 20px;
+  line-height: 1.25;
+  margin-top: 2.2em;
+  letter-spacing: -0.01em;
+}
+.prose h3 {
+  font-size: 15.5px;
+  margin-top: 1.7em;
+  letter-spacing: 0;
+}
+.prose p,
+.prose li {
+  color: var(--color-neutral-300);
+  text-wrap: pretty;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.1em;
+}
+.prose li + li {
+  margin-top: 0.5em;
+}
+.prose strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A claim with a citation attached. The citation is part of the sentence's
+   credibility, so it sits with it rather than in a footnote nobody reaches. */
+.cite-note {
+  font-size: 12.5px;
+  color: var(--color-neutral-500);
+}
+
+/* Set apart from the prose because it is a different KIND of statement —
+   the boundary between "here is something to try" and "this is the point
+   where a person, not an app, is what you need". */
+.callout {
+  border-left: 3px solid var(--color-accent-700);
+  padding: 2px 0 2px 16px;
+  margin-top: 1.6em;
+}
+.callout > :first-child {
+  margin-top: 0;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 1.4em;
+  list-style: none;
+  padding: 0;
+}
+.card-link {
+  display: block;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+.card-link:hover {
+  text-decoration: none;
+}
+.card-link-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-accent-300);
+  margin-bottom: 4px;
+}
+.card-link:hover .card-link-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.card-link-body {
+  font-size: 12.5px;
+  color: var(--color-neutral-400);
+  text-wrap: pretty;
+}
+
+.site-foot {
+  border-top: 1px solid var(--color-divider);
+  margin-top: auto;
+}
+.site-foot-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 30px max(16px, env(safe-area-inset-left)) 8px max(16px, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 26px;
+}
+.site-foot-h {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.site-foot a {
+  font-size: 13px;
+  display: inline-block;
+  padding: 5px 0;
+}
+.site-foot-note {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 16px max(16px, env(safe-area-inset-left)) calc(26px + env(safe-area-inset-bottom, 0px));
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--color-neutral-600);
+  text-wrap: pretty;
+}
+
+/* Coarse pointers get the full 44px target the WCAG 2.2 target-size rule
+   asks for. Kept to the touch query so desktop navigation stays compact. */
+@media (pointer: coarse) {
+  .site-nav a,
+  .site-foot a,
+  .crumbs a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ── Target size on touch ────────────────────────────────────────────────
+   WCAG 2.2 SC 2.5.8 asks for 24x24 CSS px, with an explicit exception for
+   links sitting inline inside a sentence — inflating those would break the
+   line box they live in, so the prose links are deliberately left alone.
+   What is NOT exempt is a standalone link in a list or a bar, and the audit
+   found three sets of those below 24px: the app footer's site links, and
+   both the name and the number in every helpline row.
+
+   A helpline number is the one control on this site that someone may be
+   trying to hit while shaking, so it gets the full 44px rather than the 24px
+   minimum. */
+@media (pointer: coarse) {
+  .app-site-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .helpline-name,
+  .helpline-contact {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
 }

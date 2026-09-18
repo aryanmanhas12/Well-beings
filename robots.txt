@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /_next/
+
+Host: https://aryanmanhas12.github.io/Well-beings
+Sitemap: https://aryanmanhas12.github.io/Well-beings/sitemap.xml
