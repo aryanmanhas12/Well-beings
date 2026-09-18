@@ -56,7 +56,7 @@ export function TourInvite({
                 textWrap: "pretty",
               }}
             >
-              Six quick cards — what this is, what it does with your answers, and where your data
+              Six quick cards: what this is, what it does with your answers, and where your data
               goes. About forty seconds.
             </p>
           </div>

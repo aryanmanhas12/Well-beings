@@ -38,7 +38,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
         </h2>
         <p style={{ color: "var(--color-neutral-500)", fontSize: 13, margin: "0 0 18px", maxWidth: 560, textWrap: "pretty" }}>
           This is the part of Wellbeings with the longest research history behind it. Nobody reads these entries
-          but you — they never leave this device, and you can delete any of them.
+          but you. They never leave this device, and you can delete any of them.
         </p>
 
         <div className="card" data-tour="journal-write" style={{ padding: 20, marginBottom: 16 }}>
@@ -80,7 +80,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
               if (saved) setSaved(null);
             }}
             rows={9}
-            placeholder="Start anywhere. Spelling and grammar genuinely don't matter — the trials found no link between writing quality and benefit."
+            placeholder="Start anywhere. Spelling and grammar genuinely don't matter. The trials found no link between writing quality and benefit."
             style={{ resize: "vertical", lineHeight: 1.6, minHeight: 180, padding: 12 }}
           />
 
@@ -118,7 +118,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
             {saved.flagged ? (
               <>
                 <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 14, marginBottom: 4 }}>
-                  That sounded heavy — and it deserves a person, not an app
+                  That sounded heavy, and it deserves a person rather than an app
                 </div>
                 <p style={{ fontSize: 12.5, color: "var(--color-neutral-400)", margin: "0 0 12px", textWrap: "pretty" }}>
                   Your entry is saved and stays private. But some of what you wrote is the kind of thing worth
@@ -142,7 +142,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
             ) : (
               <p style={{ fontSize: 12.5, color: "var(--color-neutral-400)", margin: 0, textWrap: "pretty" }}>
                 Saved. One honest thing to expect: in trials the benefit showed up at follow-up, not the same
-                evening — so if you don&apos;t feel lighter right now, that&apos;s the normal pattern, not a
+                evening, so if you don&apos;t feel lighter right now, that&apos;s the normal pattern, not a
                 failure.
               </p>
             )}

@@ -93,14 +93,14 @@ export default function ActivityGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/sleep/">Sleep</Link> — daylight and movement reinforce each other; a
+            <Link href="/guides/sleep/">Sleep</Link>: daylight and movement reinforce each other; a
             walk outside in the morning does both jobs.
           </li>
           <li>
-            <Link href="/guides/habits/">Habits</Link> — how to make a session survive a bad week.
+            <Link href="/guides/habits/">Habits</Link>: how to make a session survive a bad week.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link> — see where movement sits against everything
+            <Link href="/">The Wellbeings check</Link>: see where movement sits against everything
             else going on.
           </li>
         </ul>

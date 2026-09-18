@@ -6,6 +6,7 @@ import { HelplineList } from "@/components/HelplineList";
 import { metadataFor } from "@/lib/seo";
 import { GLOBAL_LINKS, HELPLINES } from "@/lib/helplines";
 import { Region } from "@/lib/types";
+import { COMPANION_NAME } from "@/lib/site";
 
 const PATH = "/resources/";
 export const metadata: Metadata = metadataFor(PATH);
@@ -38,7 +39,7 @@ export default function ResourcesPage() {
         <p>
           These are listed here as static information, so the page works with no connection and
           nothing you do on it is recorded. Wellbeings does not know which region you are reading,
-          does not log which number you tap, and has no analytics of any kind — see the{" "}
+          does not log which number you tap, and has no analytics of any kind. See the{" "}
           <Link href="/privacy/">privacy page</Link>.
         </p>
 
@@ -55,7 +56,7 @@ export default function ResourcesPage() {
                       <a href={l.url} target="_blank" rel="noopener noreferrer">
                         {l.name}
                       </a>{" "}
-                      — {l.note}
+                      : {l.note}
                     </li>
                   ))}
                 </ul>
@@ -75,14 +76,14 @@ export default function ResourcesPage() {
               <a href={l.url} target="_blank" rel="noopener noreferrer">
                 {l.name}
               </a>{" "}
-              — {l.note}
+              : {l.note}
             </li>
           ))}
         </ul>
 
         <h2>When a professional is the right call</h2>
         <p>
-          Wellbeings is built for patterns in ordinary life — sleep, movement, food, stress,
+          Wellbeings is built for patterns in ordinary life: sleep, movement, food, stress,
           connection, routine. There is a point where that stops being the useful lens, and it is
           worth naming rather than leaving you to guess:
         </p>
@@ -92,7 +93,8 @@ export default function ResourcesPage() {
             shifting.
           </li>
           <li>
-            You are avoiding things you used to manage — lectures, work, people, leaving the house.
+            You are avoiding things you used to manage, such as lectures, work, people or leaving
+            the house.
           </li>
           <li>
             Sleep stays broken even with a steady schedule, or you are exhausted no matter how long
@@ -104,7 +106,7 @@ export default function ResourcesPage() {
         <p>
           A GP, a counsellor, or a school or university wellbeing service will do more with any of
           those than a habit tracker will. If you want a more specific mental-health screening before
-          that conversation, Psych Screener is the companion tool built for it — it covers depression,
+          that conversation, {COMPANION_NAME} is the companion tool built for it. It covers depression,
           anxiety and wellbeing instruments properly, in six languages, and it is a separate app that
           shares no data with this one.
         </p>

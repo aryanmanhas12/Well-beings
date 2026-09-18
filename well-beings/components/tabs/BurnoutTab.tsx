@@ -5,13 +5,13 @@ const WARN_SIGNS = [
   "Waking tired even after a full-length night",
   "Cynicism: \"what’s the point\" showing up about things you used to care about",
   "Working longer but producing less",
-  "Can’t switch off — study/work thoughts colonise evenings",
+  "Can’t switch off, study/work thoughts colonise evenings",
   "Small tasks feel disproportionately heavy",
   "Withdrawing from people you normally like",
 ];
 
 const RECOVERY_CARDS = [
-  { name: "Detachment", what: "Mentally off the clock — not thinking about the work at all.", eg: "sport, gaming with friends, cooking" },
+  { name: "Detachment", what: "Mentally off the clock, not thinking about the work at all.", eg: "sport, gaming with friends, cooking" },
   { name: "Relaxation", what: "Low-effort calm; parasympathetic mode.", eg: "slow walk, music, long shower" },
   { name: "Mastery", what: "Getting better at something unrelated.", eg: "guitar, climbing, a language" },
   { name: "Control", what: "Time where you decide everything.", eg: "a self-planned Saturday morning" },
@@ -41,10 +41,10 @@ export function BurnoutTab({ wb }: { wb: Wellbeings }) {
       " check-in" +
       (logged.length > 1 ? "s" : "") +
       (pct >= 60
-        ? " — drain is outpacing recovery. Shrink one commitment this week and hit the recovery quota hard."
+        ? ". Drain is outpacing recovery. Shrink one commitment this week and hit the recovery quota hard."
         : pct >= 35
-          ? " — trending warm. Protect the shutdown ritual and the sleep window this week."
-          : " — recovery is keeping pace. Keep the rhythm.")
+          ? ". Trending warm. Protect the shutdown ritual and the sleep window this week."
+          : ". Recovery is keeping pace. Keep the rhythm.")
     : "Seeded from your assessment (" + p.boScore + "/12). Log daily check-ins to make this live.";
 
   return (
@@ -115,7 +115,7 @@ export function BurnoutTab({ wb }: { wb: Wellbeings }) {
         <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 16, margin: "0 0 4px" }}>The four recovery channels</h3>
         <p style={{ fontSize: 12.5, color: "var(--color-neutral-500)", margin: "0 0 14px", textWrap: "pretty" }}>
           A meta-analysis of 99,329 people found four distinct experiences that refill you. Cover all four across
-          a week — they&apos;re not interchangeable.
+          a week, and they&apos;re not interchangeable.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(170px,1fr))", gap: 12 }}>
           {RECOVERY_CARDS.map((rc) => (

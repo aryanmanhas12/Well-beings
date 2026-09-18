@@ -56,7 +56,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/",
     nav: "Home",
-    title: "Wellbeings — understand your everyday wellbeing",
+    title: "Wellbeings · understand your everyday wellbeing",
     description:
       "A private, five-minute wellbeing check covering sleep, movement, food, stress, connection and routine. It runs entirely in your browser and turns what you report into two or three changes worth actually making.",
     changeFrequency: "monthly",
@@ -65,7 +65,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/guides/",
     nav: "Guides",
-    title: "Wellbeing guides — sleep, movement, food, stress and habits",
+    title: "Wellbeing guides · sleep, movement, food, stress and habits",
     description:
       "Practical, evidence-informed guides to the parts of daily life that move wellbeing most: sleep timing, movement, eating and drinking, stress and recovery, habit formation, and student life.",
     changeFrequency: "monthly",
@@ -75,7 +75,7 @@ export const PAGES: SitePage[] = [
     path: "/guides/sleep/",
     nav: "Sleep",
     parent: "/guides/",
-    title: "Sleep and wellbeing — why timing beats hours",
+    title: "Sleep and wellbeing · why timing beats hours",
     description:
       "How sleep regularity, timing and light exposure shape mood and energy, why a consistent wake time matters more than a perfect eight hours, and what to change first when sleep is the weak link.",
     changeFrequency: "yearly",
@@ -85,7 +85,7 @@ export const PAGES: SitePage[] = [
     path: "/guides/activity/",
     nav: "Movement",
     parent: "/guides/",
-    title: "Movement and wellbeing — the most reliable lever there is",
+    title: "Movement and wellbeing · the most reliable lever there is",
     description:
       "What the research on physical activity and mood actually supports, how much movement is enough, and how to make it happen on weeks when motivation is not available.",
     changeFrequency: "yearly",
@@ -105,7 +105,7 @@ export const PAGES: SitePage[] = [
     path: "/guides/stress/",
     nav: "Stress and recovery",
     parent: "/guides/",
-    title: "Stress and recovery — switching off is a skill",
+    title: "Stress and recovery · switching off is a skill",
     description:
       "Why psychological detachment after work or study predicts exhaustion better than hours worked, which recovery activities actually restore energy, and how to build a shutdown that works.",
     changeFrequency: "yearly",
@@ -125,7 +125,7 @@ export const PAGES: SitePage[] = [
     path: "/guides/student-wellbeing/",
     nav: "Student life",
     parent: "/guides/",
-    title: "Student wellbeing — coursework, sleep and the exam-term trap",
+    title: "Student wellbeing · coursework, sleep and the exam-term trap",
     description:
       "Wellbeing for school and university life: protecting sleep through exam periods, eating and moving on a timetable you do not control, and why treating output as the only measure backfires.",
     changeFrequency: "yearly",
@@ -134,7 +134,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/resources/",
     nav: "Support",
-    title: "Support lines and directories — Wellbeings",
+    title: "Support lines and directories · Wellbeings",
     description:
       "Free, confidential helplines and directories for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when a conversation with a professional is worth having.",
     changeFrequency: "monthly",
@@ -143,7 +143,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/about/",
     nav: "About",
-    title: "About Wellbeings — what it is and what it is not",
+    title: "About Wellbeings · what it is and what it is not",
     description:
       "What Wellbeings measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Psych Screener.",
     changeFrequency: "monthly",
@@ -157,7 +157,7 @@ export const PAGES: SitePage[] = [
     path: "/me/",
     nav: "About the author",
     hiddenInNav: true,
-    title: "Aryan Manhas — NeuroBioPsych",
+    title: "Aryan Manhas · NeuroBioPsych",
     description:
       "Aryan Manhas builds free, private, evidence-based wellbeing and mental-health tools: Wellbeings and the Psych Screener. The NeuroBioPsych vision treats the neural, biological and psychosocial layers as one problem.",
     changeFrequency: "yearly",
@@ -166,7 +166,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/privacy/",
     nav: "Privacy",
-    title: "Privacy — where your Wellbeings answers live",
+    title: "Privacy · where your Wellbeings answers live",
     description:
       "Wellbeings has no account, no server and no analytics. Everything you enter stays in your own browser storage. This page says exactly what is stored, where, and how to delete it.",
     changeFrequency: "monthly",

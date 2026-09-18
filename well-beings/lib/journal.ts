@@ -66,31 +66,31 @@ export const PROMPTS: JournalPrompt[] = [
   {
     id: "d1",
     kind: "disclosure",
-    text: "What's been sitting heaviest this week? Write about it properly — what happened, and how it actually felt. No one reads this but you.",
+    text: "What's been sitting heaviest this week? Write about it properly: what happened, and how it actually felt. No one reads this but you.",
     why: "Writing about a stressful experience in emotional detail is the original expressive-writing instruction, and the one with the most evidence behind it.",
   },
   {
     id: "r1",
     kind: "reappraisal",
-    text: "Take what you just wrote about, or whatever's loudest right now. What's another way of reading it — one a friend might offer you?",
+    text: "Take what you just wrote about, or whatever's loudest right now. What's another way of reading it, one a friend might offer you?",
     why: "Cognitive reappraisal on top of emotional disclosure beat either one on its own in head-to-head trials.",
   },
   {
     id: "g1",
     kind: "gratitude",
-    text: "Three things that held up this week. They can be small — a person, a meal, a moment the day stopped being awful.",
+    text: "Three things that held up this week. They can be small: a person, a meal, a moment the day stopped being awful.",
     why: "Gratitude writing has the most consistent benefits of any positive-writing technique for wellbeing and mood.",
   },
   {
     id: "d2",
     kind: "disclosure",
     text: "Something you've been carrying and haven't said out loud. Start anywhere. Grammar doesn't matter here.",
-    why: "The benefit comes from the disclosure itself, not the writing quality — trials found no relationship with how well-written the entry was.",
+    why: "The benefit comes from the disclosure itself, not the writing quality. Trials found no relationship with how well-written the entry was.",
   },
   {
     id: "r2",
     kind: "reappraisal",
-    text: "Think of something that went badly recently. What did it actually cost you — and what, if anything, did you learn that you'd keep?",
+    text: "Think of something that went badly recently. What did it actually cost you, and what, if anything, did you learn that you'd keep?",
     why: "Benefit-finding is a reappraisal technique: not pretending it was good, just checking whether anything usable came out of it.",
   },
   {
@@ -109,7 +109,7 @@ export const PROMPTS: JournalPrompt[] = [
     id: "r3",
     kind: "reappraisal",
     text: "What are you being harder on yourself about than you'd be on anyone else?",
-    why: "Self-distancing — viewing your own situation as you'd view someone else's — is a well-supported reappraisal move.",
+    why: "Self-distancing, meaning viewing your own situation as you'd view someone else's, is a well-supported reappraisal move.",
   },
   /* The two-weeks-after-a-screen pair.
      PHQ-9 and GAD-7 both ask about "the last two weeks", so someone who
@@ -122,13 +122,13 @@ export const PROMPTS: JournalPrompt[] = [
   {
     id: "s1",
     kind: "disclosure",
-    text: "It's been about two weeks since you last scored yourself. Write what those two weeks were actually like — not the summary you'd give someone politely asking, the real one.",
+    text: "It's been about two weeks since you last scored yourself. Write what those two weeks were actually like, not the summary you'd give someone politely asking, the real one.",
     why: "PHQ-9 and GAD-7 both ask about the last two weeks. Writing the period out before you score it again gives you something to check the number against, instead of guessing from memory.",
   },
   {
     id: "s2",
     kind: "reappraisal",
-    text: "Compared with the fortnight before it: what's actually different — better or worse — and what changed around you that might explain it?",
+    text: "Compared with the fortnight before it: what's actually different, better or worse, and what changed around you that might explain it?",
     why: "A score moving tells you that something shifted, not what. Naming what changed alongside it is what turns a number into something you can act on, or take to someone who can help.",
   },
 ];
@@ -162,14 +162,14 @@ export function readCadence(entries: JournalEntry[]): JournalCadence {
       daysSince: null,
       dueSoon: false,
       message:
-        "Nothing written yet. Fifteen minutes is the classic dose, but a few honest sentences count — the research found writing quality didn't matter, only that you were honest.",
+        "Nothing written yet. Fifteen minutes is the classic dose, but a few honest sentences count. The research found writing quality didn't matter, only that you were honest.",
     };
   }
   const last = new Date(entries[entries.length - 1].at).getTime();
   const daysSince = Math.floor((Date.now() - last) / DAY);
 
   if (daysSince <= 0)
-    return { daysSince, dueSoon: false, message: "Written today. The effect tends to show up later, not tonight — that's normal." };
+    return { daysSince, dueSoon: false, message: "Written today. The effect tends to show up later, not tonight, and that's normal." };
   if (daysSince <= 3)
     return {
       daysSince,
@@ -179,7 +179,7 @@ export function readCadence(entries: JournalEntry[]): JournalCadence {
   return {
     daysSince,
     dueSoon: true,
-    message: `${daysSince} days since your last entry. No guilt intended — but sessions closer together did measurably more than spaced-out ones.`,
+    message: `${daysSince} days since your last entry. No guilt intended, but sessions closer together did measurably more than spaced-out ones.`,
   };
 }
 

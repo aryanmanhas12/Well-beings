@@ -1,4 +1,5 @@
 import { ChoiceOption, Profile, Question } from "./types";
+import { COMPANION_NAME } from "./site";
 
 /**
  * The lifestyle half of Wellbeings, and the thing that makes it a different
@@ -72,7 +73,7 @@ export const LIFESTYLE_QUESTIONS: (Question & { quick: boolean })[] = [
     quick: true,
     type: "choice",
     text: "How many days in a normal week do you move for half an hour or more? Walking counts, and so does anything that leaves you slightly out of breath.",
-    why: "Movement has the widest evidence base of anything in this check-in, and the biggest single gain in that research is between doing almost nothing and doing something — not between four sessions and five.",
+    why: "Movement has the widest evidence base of anything in this check-in, and the biggest single gain in that research is between doing almost nothing and doing something, not between four sessions and five.",
     opts: [
       { label: "5 or more", value: 0 },
       { label: "3 or 4", value: 1 },
@@ -99,7 +100,7 @@ export const LIFESTYLE_QUESTIONS: (Question & { quick: boolean })[] = [
     section: "Life",
     quick: true,
     type: "choice",
-    text: "How often do you talk properly with someone — a real conversation, not a group chat?",
+    text: "How often do you talk properly with someone, meaning a real conversation rather than a group chat?",
     why: "Connection is usually the first thing a heavy week deletes, and the one people do not notice losing until it has been gone a while. It is asked separately from mood because the two come apart: plenty of people feel fine and are still quite alone.",
     opts: never4,
   },
@@ -108,7 +109,7 @@ export const LIFESTYLE_QUESTIONS: (Question & { quick: boolean })[] = [
     section: "Life",
     quick: true,
     type: "choice",
-    text: "Is there any part of your week that is genuinely yours — not work, not study, not chores, and not unstarted work you are avoiding?",
+    text: "Is there any part of your week that is genuinely yours? Not work, not study, not chores, and not unstarted work you are avoiding.",
     why: "Recovery research separates four kinds of time off, and they do not substitute for each other. “Free time” that is really unstarted work does none of the four jobs.",
     opts: [
       { label: "Yes, most weeks", value: 0 },
@@ -164,7 +165,7 @@ export const LIFESTYLE_QUESTIONS: (Question & { quick: boolean })[] = [
     section: "Life",
     quick: false,
     type: "choice",
-    text: "Setting aside whether the week went well — does what you spend it on feel like it is for something?",
+    text: "Setting aside whether the week went well, does what you spend it on feel like it is for something?",
     why: "A week can be perfectly organised and still feel pointless, and that shows up in wellbeing separately from mood or workload. It is here because a plan that raises your output without touching this tends not to help.",
     opts: [
       { label: "Yes, mostly", value: 0 },
@@ -241,7 +242,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
         ? "Sleep looks like the area most likely to be holding other things down. Timing is the part with the strongest evidence behind it: in a seven-year cohort of 79,666 people, regular sleep timing tracked with substantially lower risk of depression, and hitting the recommended hours did not make up for an irregular schedule."
         : sleepStrain === 1
           ? "Sleep looks broadly workable, with some drift at the edges. That drift is worth noticing because regularity appears to matter more than total hours, but this is not the area to start with."
-          : "Nothing here suggests sleep is the problem, which is worth knowing — it means effort is better spent elsewhere.",
+          : "Nothing here suggests sleep is the problem, which is worth knowing. It means effort is better spent elsewhere.",
     actions: {
       now: "Tonight, put your phone to charge somewhere you cannot reach from the bed.",
       week: "Pick one wake time and keep it within about 30 minutes every day, weekends included. Get daylight within half an hour of waking.",
@@ -330,7 +331,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
       actions: {
         now: "Message one person today and propose something specific, with a day in it.",
         week: "Put one social thing in the week on purpose, the same way you would a deadline.",
-        longer: "Pair it with something else you are already doing — a walk with someone does two of these jobs at once.",
+        longer: "Pair it with something else you are already doing. A walk with someone does two of these jobs at once.",
       },
     });
   }
@@ -354,7 +355,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
         .join(" "),
       interpretation:
         s >= 2
-          ? "Not being able to mentally stop is a stronger predictor of exhaustion in the research than the number of hours worked, which is more hopeful than it sounds: stopping is trainable and hours often are not. The loop is worth naming, because it compounds — a heavy load makes switching off harder, and not switching off makes the same load feel heavier."
+          ? "Not being able to mentally stop is a stronger predictor of exhaustion in the research than the number of hours worked, which is more hopeful than it sounds: stopping is trainable and hours often are not. The loop is worth naming, because it compounds. A heavy load makes switching off harder, and not switching off makes the same load feel heavier."
           : s === 1
             ? "There is some recovery in your week, though not much margin. The thing to watch is whether it is all one kind of rest."
             : "You appear to be getting genuine time off, which is doing more work than it gets credit for.",
@@ -395,7 +396,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
         "This is circumstance rather than habit, and it changes which of the other suggestions are realistic. Advice about wind-down routines and protected deep work assumes a room you control, and it is not useful to repeat it when that is not the situation.",
       actions: {
         now: "Change one small thing you do control: an eye mask, earplugs, moving the charger, a different chair.",
-        week: "Find one place outside the space that works — a library, a quiet room, a café with a long table — and use it once.",
+        week: "Find one place outside the space that works, such as a library, a quiet room or a café with a long table, and use it once.",
         longer: "If it is shared, a direct conversation about quiet hours is worth more than any trick here. If it is housing, your school, university or local council may have routes you have not been told about.",
       },
     });
@@ -460,7 +461,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
         longer: "Keep the lifestyle changes going alongside. They help, and they are not a substitute.",
       },
       medical:
-        "Some of what you have described may be worth exploring more specifically than a lifestyle check can. Psych Screener is the companion tool built for exactly that, and speaking with a GP or a counsellor is the step this app cannot replace. Wellbeings does not diagnose anything and nothing here is a diagnosis.",
+        `Some of what you have described may be worth exploring more specifically than a lifestyle check can. ${COMPANION_NAME} is the companion tool built for exactly that, and speaking with a GP or a counsellor is the step this app cannot replace. Wellbeings does not diagnose anything and nothing here is a diagnosis.`,
     });
   }
 
@@ -473,12 +474,12 @@ export function buildSnapshot(p: Profile): DomainRead[] {
       interpretation:
         "This is a habits question here, not a verdict on anyone. The reason it appears in a wellbeing check at all is that alcohol lands on sleep before it lands anywhere else: it makes people fall asleep faster and sleep worse.",
       actions: {
-        now: "Notice what the drink is doing — winding down, sleeping, or getting through the evening.",
+        now: "Notice what the drink is doing: winding down, sleeping, or getting through the evening.",
         week: "Pick two evenings with none and see what the next mornings are like.",
         longer: "If it is the thing that ends the day, that is the part worth looking at rather than the units.",
       },
       medical: p.auditFlag
-        ? "Your answers landed in the range where a GP or a counsellor can help you look at this properly. That is not a diagnosis and no number here has decided anything — it is the range this short screen is designed to catch early, when it is far easier to change."
+        ? "Your answers landed in the range where a GP or a counsellor can help you look at this properly. That is not a diagnosis and no number here has decided anything. It is the range this short screen is designed to catch early, when it is far easier to change."
         : undefined,
     });
   }

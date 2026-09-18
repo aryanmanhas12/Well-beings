@@ -29,7 +29,7 @@ export const EFFECT_SCALE = {
     },
   ],
   note:
-    "A minus sign means the thing went down — for symptoms, down is good. And an effect size is an average across many people, not a promise about you.",
+    "A minus sign means the thing went down, and for symptoms down is good. And an effect size is an average across many people, not a promise about you.",
 } as const;
 
 export const EVIDENCE: EvidenceItem[] = [
@@ -40,7 +40,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Fewer questions asked, with no loss of accuracy",
     strength: "large",
     finding:
-      "Starting with the 2-item PHQ-2 and opening the full PHQ-9 only when something flags catches just as many people as asking everyone everything — while cutting the number of questions by more than half.",
+      "Starting with the 2-item PHQ-2 and opening the full PHQ-9 only when something flags catches just as many people as asking everyone everything, while cutting the number of questions by more than half.",
     use: "why the chat starts short and goes deeper only if something flags.",
     cite: "Levis et al., 2020, JAMA",
     url: "https://consensus.app/papers/details/6ceb082f92f259f59c2fa9d8fa960712/",
@@ -64,8 +64,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Do better on depression after fixing sleep than those who don't",
     strength: "moderate",
     finding:
-      "Fixing sleep doesn’t just make you less tired — it measurably lifts depression, anxiety and rumination. And it’s dose-response: the more sleep improved, the more the mind improved. Because these were randomised trials, this is one of the few places research can say sleep causes the change rather than just travelling with it.",
-    technical: "Hedges’ g −0.63 for depression, −0.51 for anxiety — a moderate effect, meaning most people notice it.",
+      "Fixing sleep doesn’t just make you less tired. It measurably lifts depression, anxiety and rumination. And it’s dose-response: the more sleep improved, the more the mind improved. Because these were randomised trials, this is one of the few places research can say sleep causes the change rather than just travelling with it.",
+    technical: "Hedges’ g −0.63 for depression, −0.51 for anxiety. A moderate effect, meaning most people notice it.",
     use: "sleep is pillar #1 of every plan, before any productivity tactic.",
     cite: "Scott et al., 2021, Sleep Medicine Reviews",
     url: "https://consensus.app/papers/details/14ed5f49d1765b1ebef825aa4216a8f3/",
@@ -77,7 +77,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Lower risk of developing depression among regular sleepers",
     strength: "large",
     finding:
-      "People with regular sleep timing were 38% less likely to develop depression and 33% less likely to develop anxiety over seven years. Hitting the recommended hours did not rescue an all-over-the-place schedule — regularity mattered on its own.",
+      "People with regular sleep timing were 38% less likely to develop depression and 33% less likely to develop anxiety over seven years. Hitting the recommended hours did not rescue an all-over-the-place schedule. Regularity mattered on its own.",
     use: "your plan fixes the window first, the hours second.",
     cite: "Li et al., 2025, Psychological Medicine",
     url: "https://consensus.app/papers/details/7ab87f554d8854c4bb416480de802a17/",
@@ -86,7 +86,7 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Sleep",
     design: "Wearable cohort · N≈100,000",
     figure: "1 in 4",
-    caption: "People break their sleep routine at weekends — and pay about 10% more risk",
+    caption: "People break their sleep routine at weekends, and pay about 10% more risk",
     strength: "moderate",
     finding:
       "A consistent nightly window beat raw hours for preventing mental-health problems. More than a quarter of people abandon their routine on weekends, and that alone raised risk by roughly 10%.",
@@ -101,7 +101,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Gains were still there at follow-up, not just straight after",
     strength: "moderate",
     finding:
-      "Sleep programmes built for university students improved sleep — and improved anxiety and depression alongside it. The gains were still measurable when researchers checked back later, which is where a lot of wellbeing interventions quietly fail.",
+      "Sleep programmes built for university students improved sleep, and improved anxiety and depression alongside it. The gains were still measurable when researchers checked back later, which is where a lot of wellbeing interventions quietly fail.",
     use: "evidence the sleep-first approach works for this app’s core audience.",
     cite: "Chandler et al., 2022, Sleep Medicine",
     url: "https://consensus.app/papers/details/c754d2b6e8925e2a954b02f32d937a51/",
@@ -110,10 +110,10 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Burnout",
     design: "Meta-analysis · 316 samples · N=99,329",
     figure: "4",
-    caption: "Distinct kinds of recovery — and they don't substitute for each other",
+    caption: "Distinct kinds of recovery, and they don't substitute for each other",
     strength: "large",
     finding:
-      "Mentally switching off after work reduces exhaustion; relaxation and mastery raise engagement and wellbeing. Crucially, the four recovery channels are not interchangeable — a weekend of doing nothing does not deliver what learning something does. You need each kind.",
+      "Mentally switching off after work reduces exhaustion; relaxation and mastery raise engagement and wellbeing. Crucially, the four recovery channels are not interchangeable. A weekend of doing nothing does not deliver what learning something does. You need each kind.",
     use: "the shutdown ritual and the four-channel weekly recovery quota.",
     cite: "Headrick et al., 2022, J. Business & Psychology",
     url: "https://consensus.app/papers/details/b4b32af90fcd550d93e987eff3b59f43/",
@@ -125,7 +125,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Heavy workload → can't switch off → strain → heavier workload",
     strength: "moderate",
     finding:
-      "High workload makes it harder to switch off, and not switching off predicts strain, burnout and lower life satisfaction — which makes the workload feel heavier still. It compounds until something breaks the circuit.",
+      "High workload makes it harder to switch off, and not switching off predicts strain, burnout and lower life satisfaction, which makes the workload feel heavier still. It compounds until something breaks the circuit.",
     use: "the burnout radar watches your drain trend so you can break the loop early.",
     cite: "Sonnentag & Fritz, 2015, J. Organizational Behavior",
     url: "https://consensus.app/papers/details/a7fcb2608dea5efb8b589f690f2c76f5/",
@@ -137,8 +137,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Break length that reliably restores energy and cuts fatigue",
     strength: "small",
     finding:
-      "Short breaks of two to ten minutes reliably lifted energy and reduced fatigue. The effect is modest but dependable. One honest caveat from the same work: after genuinely heavy cognitive effort, ten minutes isn’t enough — that needs a real break.",
-    technical: "d = 0.36 for vigour, 0.35 for fatigue — small effects, but consistent across studies.",
+      "Short breaks of two to ten minutes reliably lifted energy and reduced fatigue. The effect is modest but dependable. One honest caveat from the same work: after genuinely heavy cognitive effort, ten minutes isn’t enough. That needs a real break.",
+    technical: "d = 0.36 for vigour, 0.35 for fatigue. Small effects, but consistent across studies.",
     use: "the 50-on / 10-off rhythm inside your deep blocks.",
     cite: "Albulescu et al., 2022, PLoS ONE",
     url: "https://consensus.app/papers/details/ad9eb8a31f8e5a589ac6eecae765a6bb/",
@@ -150,8 +150,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Do better at reaching a goal with an if-then plan than without one",
     strength: "moderate",
     finding:
-      "Writing “if it’s 9am, then I open the document” beats deciding in the moment. Naming the when and where in advance automates the start, so beginning costs no willpower — and starting is where most plans die.",
-    technical: "d = 0.65 — a moderate-to-large effect across 94 separate tests.",
+      "Writing “if it’s 9am, then I open the document” beats deciding in the moment. Naming the when and where in advance automates the start, so beginning costs no willpower, and starting is where most plans die.",
+    technical: "d = 0.65, a moderate-to-large effect across 94 separate tests.",
     use: "the one-line if-then you write at shutdown for tomorrow’s first block.",
     cite: "Gollwitzer & Sheeran, 2006, Adv. Exp. Soc. Psych.",
     url: "https://consensus.app/papers/details/5f23556f39a35b74957933d9aac4c90f/",
@@ -164,7 +164,7 @@ export const EVIDENCE: EvidenceItem[] = [
     strength: "large",
     finding:
       "If-then planning worked even better for people with mental-health difficulties than for everyone else. When self-regulation is depleted, external structure does the work your brain is too tired to do. This is the opposite of the “try harder” advice usually aimed at struggling people.",
-    technical: "d ≈ 0.99 — a large effect, bigger than in the general population.",
+    technical: "d ≈ 0.99, a large effect, bigger than in the general population.",
     use: "plans get more specific, not more ambitious, when your scores are elevated.",
     cite: "Toli et al., 2016, Brit. J. Clinical Psychology",
     url: "https://consensus.app/papers/details/d8ccca83d3525ab09af97d4c7f3a3830/",
@@ -173,7 +173,7 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Habits",
     design: "Daily-tracking field studies · N=96 & 192",
     figure: "~2 months",
-    caption: "Typical time for a habit to feel automatic — not 21 days",
+    caption: "Typical time for a habit to feel automatic, and it is not 21 days",
     strength: "moderate",
     finding:
       "Habits took between 18 and 254 days to become automatic, with a median around two months. The famous “21 days” is a myth. Best finding for anyone who’s broken a streak: missing a single day made no measurable difference to whether the habit formed.",
@@ -188,7 +188,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Of problem drinking in teens caught by a 3-question screen",
     strength: "large",
     finding:
-      "The AUDIT-C — three questions from the WHO — caught 95% of adolescents who turned out to have a real drinking problem, at a single cutoff that doesn't require asking anyone's sex. That single-cutoff version is what this app uses, since it never collects sex as a data point.",
+      "The AUDIT-C, three questions from the WHO, caught 95% of adolescents who turned out to have a real drinking problem, at a single cutoff that doesn't require asking anyone's sex. That single-cutoff version is what this app uses, since it never collects sex as a data point.",
     technical: "Optimal cutoff ≥3 in this sample; sensitivity 0.952, specificity 0.663.",
     use: "the one-item drinking question, expanded to the full 3 only if you don't say “never.”",
     cite: "Liskola et al., 2018, Drug & Alcohol Dependence",
@@ -198,10 +198,10 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Drinking",
     design: "Systematic review · 135 validation studies, ages under 25",
     figure: "0.91",
-    caption: "AUC for brief alcohol screens in young people — strong discrimination",
+    caption: "AUC for brief alcohol screens in young people, which is strong discrimination",
     strength: "large",
     finding:
-      "Across every validation study on youth alcohol screening the reviewers could find, brief instruments — led by the AUDIT-C — discriminated real problem drinking from the rest with an AUC of 0.91, on par with much longer instruments. Honest caveat: the sex-specific cutoffs clinicians use (≥4 men, ≥3 women) are more precise than this app's single cutoff — a deliberate tradeoff for not asking.",
+      "Across every validation study on youth alcohol screening the reviewers could find, brief instruments, led by the AUDIT-C, discriminated real problem drinking from the rest with an AUC of 0.91, on par with much longer instruments. Honest caveat: the sex-specific cutoffs clinicians use (≥4 men, ≥3 women) are more precise than this app's single cutoff, which is a deliberate tradeoff for not asking.",
     use: "why AUDIT-C, not a longer instrument, sits inside a 5-minute check-in.",
     cite: "Toner et al., 2019, Drug & Alcohol Dependence",
     url: "https://consensus.app/papers/details/197d93fc28b151c2a57c84b1c7e148b8/",
@@ -213,8 +213,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Young people exercising do better on mood than those who don't",
     strength: "large",
     finding:
-      "For 12–25 year olds, physical activity had a large effect on depressive symptoms — large enough that head-to-head reviews put it in the same conversation as front-line treatments. An umbrella review across 375 trials finds the same for anxiety.",
-    technical: "SMD −0.82 — a large effect. The minus sign means symptoms went down.",
+      "For 12–25 year olds, physical activity had a large effect on depressive symptoms, large enough that head-to-head reviews put it in the same conversation as front-line treatments. An umbrella review across 375 trials finds the same for anxiety.",
+    technical: "SMD −0.82, a large effect. The minus sign means symptoms went down.",
     use: "the 30-min movement block, 3× a week, in mood-flagged plans.",
     cite: "Bailey et al., 2017, Psych. Medicine · Singh et al., 2025, JAACAP",
     url: "https://consensus.app/papers/details/3ee0b6c765075a05b08fbf5f9938dfcc/",
@@ -226,8 +226,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Lower odds of ever developing depression, in active people",
     strength: "moderate",
     finding:
-      "Across a quarter of a million people, those who were physically active had 17% lower odds of developing depression in the years that followed — protection that held across ages and regions. Movement isn’t only a treatment; it lowers the odds of getting ill in the first place.",
-    use: "movement is prevention, not just treatment — it stays in every plan.",
+      "Across a quarter of a million people, those who were physically active had 17% lower odds of developing depression in the years that followed, protection that held across ages and regions. Movement isn’t only a treatment; it lowers the odds of getting ill in the first place.",
+    use: "movement is prevention, not just treatment, so it stays in every plan.",
     cite: "Schuch et al., 2018, Am. J. Psychiatry",
     url: "https://consensus.app/papers/details/ae4cd4ca223353a6a231e0fe11dd44f8/",
   },
@@ -238,8 +238,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Trials without gamification had lower dropout, not higher",
     strength: "moderate",
     finding:
-      "Across 79 trials of depression and anxiety apps, people left sooner when the app used gamification. Reminders and human contact went the other way — they kept people in. It's the clearest argument against the badges-and-streaks playbook that most wellbeing apps run on.",
-    use: "why there are no points, levels or rewards anywhere in this app — and why streaks here forgive missed days instead of punishing them.",
+      "Across 79 trials of depression and anxiety apps, people left sooner when the app used gamification. Reminders and human contact went the other way. They kept people in. It's the clearest argument against the badges-and-streaks playbook that most wellbeing apps run on.",
+    use: "why there are no points, levels or rewards anywhere in this app, and why streaks here forgive missed days instead of punishing them.",
     cite: "Liu et al., 2025, JAMA Psychiatry",
     url: "https://consensus.app/papers/details/3493cacd60695a7a8a9109ba87fb7825/",
   },
@@ -250,8 +250,8 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "People who perceived their own improvement kept going",
     strength: "moderate",
     finding:
-      "In a large remote depression study, the people who stuck with it were the ones whose symptoms improved — and, separately, the ones who could perceive that improvement. Feeling the change mattered on top of the change itself. Notably, people who were struggling most at the start were the likeliest to drop out before logging anything.",
-    use: "the trend card on Today, which shows your own direction of travel in plain words — and admits when there isn't enough data yet.",
+      "In a large remote depression study, the people who stuck with it were the ones whose symptoms improved, and, separately, the ones who could perceive that improvement. Feeling the change mattered on top of the change itself. Notably, people who were struggling most at the start were the likeliest to drop out before logging anything.",
+    use: "the trend card on Today, which shows your own direction of travel in plain words, and admits when there isn't enough data yet.",
     cite: "Hamitouche et al., 2024, JMIR Human Factors",
     url: "https://consensus.app/papers/details/c1653d69babc5396b24c4f53ea401bf8/",
   },
@@ -259,7 +259,7 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Design",
     design: "Meta-analysis · 18 randomised trials · N=3,336",
     figure: "26%",
-    caption: "Typical dropout from depression apps — lower with in-app mood tracking",
+    caption: "Typical dropout from depression apps, lower with in-app mood tracking",
     strength: "moderate",
     finding:
       "Around a quarter of people leave a depression app before a trial ends, and adjusting for publication bias pushes that closer to half. Two things reduced it: human feedback, and letting people track their mood inside the app.",
@@ -274,7 +274,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Dropout with deep cultural adaptation versus translation alone",
     strength: "large",
     finding:
-      "Mental-health tools are mostly built in wealthy Western countries. When they were adapted deeply for other populations — language plus genuinely resonant content and local input — dropout fell below 11%. Translation on its own left it as high as 56%. Adaptation is not a nice-to-have; it decides whether people stay.",
+      "Mental-health tools are mostly built in wealthy Western countries. When they were adapted deeply for other populations, meaning language plus genuinely resonant content and local input, dropout fell below 11%. Translation on its own left it as high as 56%. Adaptation is not a nice-to-have; it decides whether people stay.",
     use: "why the companion Psych Screener ships in six languages rather than English with a translate button.",
     cite: "Tandon et al., 2025, JMIR Mental Health",
     url: "https://consensus.app/papers/details/0ae37e9270f05c45a01c25fc635e7f9b/",
@@ -286,7 +286,7 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "Of Indians with a common mental disorder receive no treatment at all",
     strength: "large",
     finding:
-      "India's National Mental Health Survey found that roughly 1 in 20 adults currently has a depressive or anxiety disorder — and four in five of them get no treatment. Nearly 60% reported disability of some severity. The gap isn't at the edges; it is the normal case.",
+      "India's National Mental Health Survey found that roughly 1 in 20 adults currently has a depressive or anxiety disorder, and four in five of them get no treatment. Nearly 60% reported disability of some severity. The gap isn't at the edges; it is the normal case.",
     technical: "Weighted current prevalence of common mental disorders 5.1% (95% CI 5.06–5.13); treatment gap 80.4%.",
     use: "why this app defaults to India, and why it is free, private and needs no referral to start.",
     cite: "Jayasankar et al., 2022, Indian J. Psychiatry",
@@ -299,9 +299,9 @@ export const EVIDENCE: EvidenceItem[] = [
     caption: "People knew the services existed and still didn't want them",
     strength: "moderate",
     finding:
-      "The usual explanation for India's treatment gap is that people lack awareness or access. When researchers actually asked, women knew the psychiatric services in their city and recommended them to others — then refused them for their own distress, citing stigma and a sense that clinical care didn't address social causes. Building more clinics doesn't fix that on its own.",
-    use: "why this is private by design, needs no account, and never asks you to be “ill enough” — the barrier being designed around is stigma, not availability.",
-    cite: "Weaver et al., 2022, SSM — Mental Health",
+      "The usual explanation for India's treatment gap is that people lack awareness or access. When researchers actually asked, women knew the psychiatric services in their city and recommended them to others, then refused them for their own distress, citing stigma and a sense that clinical care didn't address social causes. Building more clinics doesn't fix that on its own.",
+    use: "why this is private by design, needs no account, and never asks you to be “ill enough”. The barrier being designed around is stigma, not availability.",
+    cite: "Weaver et al., 2022, SSM - Mental Health",
     url: "https://consensus.app/papers/details/ed357c10914554708e054fc0362692a0/",
   },
   {
@@ -312,7 +312,7 @@ export const EVIDENCE: EvidenceItem[] = [
     strength: "mixed",
     finding:
       "Five minutes a day of exhale-weighted “cyclic sighing” improved mood and lowered resting breathing rate more than mindfulness meditation did. Being honest about the other side: a placebo-controlled trial of a related technique found no benefit over placebo. So we treat breathwork as a way to shift your state in a minute, not a treatment.",
-    use: "the 1-minute breathing tool — offered for acute stress, with expectations set honestly.",
+    use: "the 1-minute breathing tool, offered for acute stress, with expectations set honestly.",
     cite: "Balban et al., 2023, Cell Reports Medicine",
     url: "https://consensus.app/papers/details/252fb4e9655a544f84d9b7d7bef57bdc/",
   },
@@ -320,11 +320,11 @@ export const EVIDENCE: EvidenceItem[] = [
     tag: "Stress",
     design: "Meta-analysis · 12 randomised trials · N=785",
     figure: "6 in 10",
-    caption: "Do better on stress with breathwork — a small but real edge",
+    caption: "Do better on stress with breathwork, a small but real edge",
     strength: "small",
     finding:
-      "Pooling twelve trials, breathwork produced small-to-moderate reductions in stress, anxiety and low mood compared with control groups. Real, but modest — which is exactly why it sits in this app as a one-minute tool rather than a centrepiece.",
-    technical: "Hedges’ g −0.35 — a small effect.",
+      "Pooling twelve trials, breathwork produced small-to-moderate reductions in stress, anxiety and low mood compared with control groups. Real, but modest, which is exactly why it sits in this app as a one-minute tool rather than a centrepiece.",
+    technical: "Hedges’ g −0.35, a small effect.",
     use: "why the breathing tool is offered for acute stress, with expectations set honestly.",
     cite: "Fincham et al., 2023, Scientific Reports",
     url: "https://consensus.app/papers/details/47b3b407e9505d2298d4ed70da367884/",

@@ -76,8 +76,8 @@ export default function HabitsGuide() {
         <p>
           A habit is a tool for consistency, not a treatment. If you have been trying for weeks and
           cannot start anything at all, that is usually a signal about capacity rather than
-          discipline — exhaustion, low mood, or a load that genuinely does not fit — and the answer
-          is to look at that, not to design a better system. The{" "}
+          discipline. Exhaustion, low mood, or a load that genuinely does not fit are the usual
+          reasons, and the answer is to look at that rather than to design a better system. The{" "}
           <Link href="/guides/stress/">stress and recovery guide</Link> covers the load side, and
           the <Link href="/">Wellbeings check</Link> will tell you which of those is most likely.
         </p>
@@ -85,10 +85,10 @@ export default function HabitsGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/activity/">Movement</Link> — usually the first habit worth building.
+            <Link href="/guides/activity/">Movement</Link>: usually the first habit worth building.
           </li>
           <li>
-            <Link href="/guides/sleep/">Sleep</Link> — a fixed wake time is a habit like any other.
+            <Link href="/guides/sleep/">Sleep</Link>: a fixed wake time is a habit like any other.
           </li>
         </ul>
       </article>

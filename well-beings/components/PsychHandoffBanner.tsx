@@ -1,16 +1,17 @@
 import { InboundHandoff } from "@/lib/bridge";
 import { Screen } from "@/hooks/useWellbeings";
+import { COMPANION_NAME } from "@/lib/site";
 
 const COPY: Record<0 | 1 | 2 | 3, { title: string; body: string }> = {
-  0: { title: "Welcome back from the Psych Screener", body: "Nothing flagged there — a good moment to log how today actually feels." },
-  1: { title: "Welcome back from the Psych Screener", body: "A little worth watching. Logging today here is a good next step." },
+  0: { title: `Welcome back from ${COMPANION_NAME}`, body: "Nothing flagged there, so this is a good moment to log how today actually feels." },
+  1: { title: `Welcome back from ${COMPANION_NAME}`, body: "A little worth watching. Logging today here is a good next step." },
   2: {
-    title: "Welcome back from the Psych Screener",
+    title: `Welcome back from ${COMPANION_NAME}`,
     body: "That screen showed something worth paying attention to. No pressure to do anything with it right now beyond today's check-in.",
   },
   3: {
-    title: "Welcome back from the Psych Screener",
-    body: "That result is worth taking seriously. Today's check-in still helps — and Help & privacy has real support one tap away, whenever you want it.",
+    title: `Welcome back from ${COMPANION_NAME}`,
+    body: "That result is worth taking seriously. Today's check-in still helps, and Help & privacy has real support one tap away, whenever you want it.",
   },
 };
 

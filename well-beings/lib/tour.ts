@@ -1,4 +1,5 @@
 import { Tab } from "@/hooks/useWellbeings";
+import { COMPANION_NAME } from "./site";
 
 /** How long a card sits before the tour advances itself, and how long the
     statement deck holds a statement. One constant so the CSS progress bar,
@@ -24,28 +25,28 @@ export const APP_TOUR: TourStep[] = [
     id: "tabs",
     selector: '[data-tour="tabs"]',
     title: "Five places to look",
-    body: "Today's plan, your bigger system, the burnout radar, the evidence behind all of it, and help — always one tap away.",
+    body: "Today's plan, your bigger system, the burnout radar, the evidence behind all of it, and help, always one tap away.",
   },
   {
     id: "checkin",
     tab: "today",
     selector: '[data-tour="daily-checkin"]',
     title: "Ten seconds a day",
-    body: "Mood, energy, last night's sleep. This is what feeds the trend below and the burnout radar — the more you log, the more the app actually knows.",
+    body: "Mood, energy, last night's sleep. This is what feeds the trend below and the burnout radar. The more you log, the more the app actually knows.",
   },
   {
     id: "trend",
     tab: "today",
     selector: '[data-tour="trend"]',
     title: "Your own trend, not a leaderboard",
-    body: "No points or streak-shaming — just whether this week is better than last. That's deliberate: research on these apps found gamification predicts people leaving sooner, not staying.",
+    body: "No points or streak-shaming, just whether this week is better than last. That's deliberate: research on these apps found gamification predicts people leaving sooner, not staying.",
   },
   {
     id: "habits",
     tab: "today",
     selector: '[data-tour="habits"]',
     title: "Habits that forgive a missed day",
-    body: "Anchored to routines you already have. Missing one day doesn't reset anything — the research on habit formation says it genuinely doesn't matter.",
+    body: "Anchored to routines you already have. Missing one day doesn't reset anything. The research on habit formation says it genuinely doesn't matter.",
   },
   {
     id: "journal",
@@ -73,14 +74,14 @@ export const APP_TOUR: TourStep[] = [
     tab: "plan",
     selector: '[data-tour="recovery-quota"]',
     title: "Recovery is scheduled, not leftover",
-    body: "Four distinct kinds of recovery — detach, relax, master, control. They don't substitute for each other, so the quota covers all four.",
+    body: "Four distinct kinds of recovery: detach, relax, master, control. They don't substitute for each other, so the quota covers all four.",
   },
   {
     id: "radar",
     tab: "burnout",
     selector: '[data-tour="radar"]',
     title: "Where your drain is heading",
-    body: "This reads your last check-ins as a trend, not a single score — so a rough Tuesday doesn't look like a crisis.",
+    body: "This reads your last check-ins as a trend rather than a single score, so a rough Tuesday doesn't look like a crisis.",
   },
   {
     id: "evidence",
@@ -108,13 +109,13 @@ export const APP_TOUR: TourStep[] = [
     tab: "help",
     selector: '[data-tour="companion-screener"]',
     title: "This app has a companion",
-    body: "Wellbeings is the day-to-day journal. If something looks more serious, the Psych Screener next to it runs the fuller clinical picture and can point you to real help.",
+    body: `Wellbeings is the day-to-day journal. If something looks more serious, ${COMPANION_NAME} next to it runs the fuller clinical picture and can point you to real help.`,
   },
   {
     id: "help-now",
     selector: '[data-tour="help-now"]',
     title: "Never buried, ever",
-    body: "This button reaches crisis lines from anywhere in the app, in one tap, with no score or flag required to unlock it. That's the whole tour — go take your check-in.",
+    body: "This button reaches crisis lines from anywhere in the app, in one tap, with no score or flag required to unlock it. That's the whole tour. Go take your check-in.",
   },
 ];
 
@@ -169,7 +170,7 @@ export const WELCOME_TOUR: TourStep[] = [
   {
     id: "welcome-start",
     selector: '[data-tour="welcome-start"]',
-    title: "That's it — start here",
+    title: "That's it. Start here",
     body: "Mostly taps, about five minutes, and you can change any answer as you go. Your read-out comes at the end.",
   },
 ];

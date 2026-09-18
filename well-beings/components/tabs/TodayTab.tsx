@@ -27,7 +27,7 @@ export function TodayTab({ wb }: { wb: Wellbeings }) {
   const todayLine =
     (p.chrono === "owl" ? "Built for a late peak" : p.chrono === "morning" ? "Built around your morning peak" : "Built for a steady middle") +
     " · " +
-    (intensity === "gentle" ? "gentle pace — recovery first" : intensity === "driven" ? "driven pace — watch the radar" : "balanced pace") +
+    (intensity === "gentle" ? "gentle pace, recovery first" : intensity === "driven" ? "driven pace, watch the radar" : "balanced pace") +
     " · aim: " +
     (p.goal || "consistency");
 
@@ -52,7 +52,7 @@ export function TodayTab({ wb }: { wb: Wellbeings }) {
           ))}
         </div>
         <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", marginTop: 10 }}>
-          Blocks flex around classes and shifts — the anchors that matter most are the wake time, the shutdown,
+          Blocks flex around classes and shifts. The anchors that matter most are the wake time, the shutdown,
           and lights-out.
         </div>
       </div>
@@ -109,13 +109,13 @@ export function TodayTab({ wb }: { wb: Wellbeings }) {
         <div className="card" data-tour="habits" style={{ padding: 18 }}>
           <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 4 }}>Habit stack</div>
           <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)", marginBottom: 12 }}>
-            Anchored to things you already do. Missing a day doesn&apos;t reset progress — the research says it
+            Anchored to things you already do. Missing a day doesn&apos;t reset progress. The research says it
             doesn&apos;t matter.
           </div>
           {HABIT_DEFS.map((h) => {
             const done = wb.doneToday(h.id);
             const n = wb.streakFor(h.id);
-            const streakLabel = calm ? (done ? "✓ today" : "") : n > 0 ? n + "-day streak" : "—";
+            const streakLabel = calm ? (done ? "✓ today" : "") : n > 0 ? n + "-day streak" : "·";
             return (
               <div key={h.id} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "8px 0", borderTop: "1px solid var(--color-divider)" }}>
                 <button

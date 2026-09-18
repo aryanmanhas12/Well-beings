@@ -166,8 +166,8 @@ export function StatementIntro({
             >
               {correct
                 ? lang === "hi"
-                  ? "सही — शोध भी यही कहता है।"
-                  : "Right — the research agrees."
+                  ? "सही। शोध भी यही कहता है।"
+                  : "Right. The research agrees."
                 : lang === "hi"
                   ? "यहाँ ज़्यादातर लोग चूक जाते हैं।"
                   : "This is the one most people get wrong."}

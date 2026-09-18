@@ -106,15 +106,15 @@ export default function SleepGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/stress/">Stress and recovery</Link> — why an unfinished workday
+            <Link href="/guides/stress/">Stress and recovery</Link>: why an unfinished workday
             follows you to bed.
           </li>
           <li>
-            <Link href="/guides/nutrition/">Food and drink</Link> — caffeine timing and alcohol, both
+            <Link href="/guides/nutrition/">Food and drink</Link>: caffeine timing and alcohol, both
             of which land on sleep before they land anywhere else.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link> — five minutes, and it tells you whether sleep
+            <Link href="/">The Wellbeings check</Link>: five minutes, and it tells you whether sleep
             is actually your weak link or whether something else is.
           </li>
         </ul>

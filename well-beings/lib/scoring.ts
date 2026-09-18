@@ -83,44 +83,44 @@ export function buildSchedule(p: Profile, intensity: PlanIntensity): ScheduleBlo
   const blocks: ScheduleBlock[] = [];
   const add = (t: number, label: string, note = "") => blocks.push({ t: fmt(t), label, note });
 
-  add(wake, "Wake — daylight + water, before the phone", "Light within 30 min anchors your body clock");
+  add(wake, "Wake: daylight + water, before the phone", "Light within 30 min anchors your body clock");
   if (!owl) {
-    add(wake + 0.75, "Deep block 1 — the hardest thing", "50 on / 10 off; your if-then starts it");
-    add(wake + 2.75, "Micro-break — move, water, window", "3 min is enough to reset");
+    add(wake + 0.75, "Deep block 1: the hardest thing", "50 on / 10 off; your if-then starts it");
+    add(wake + 2.75, "Micro-break: move, water, window", "3 min is enough to reset");
     add(wake + 3, "Deep block 2", "Protect it: notifications off");
   } else {
-    add(wake + 0.75, "Shallow start — admin, notes, small tasks", "Your peak comes later; don’t fight it");
-    add(wake + 2.5, "Deep block 1 — the hardest thing", "50 on / 10 off; your if-then starts it");
+    add(wake + 0.75, "Shallow start: admin, notes, small tasks", "Your peak comes later; don’t fight it");
+    add(wake + 2.5, "Deep block 1: the hardest thing", "50 on / 10 off; your if-then starts it");
   }
   add(wake + 5, "Lunch + 10-min walk outside", "Daylight + movement: a two-for-one");
   if (intensity !== "gentle") {
     add(
       wake + 6,
-      owl ? "Deep block 2 — your real peak" : "Deep block 3 — or admin if tank is low",
+      owl ? "Deep block 2: your real peak" : "Deep block 3, or admin if tank is low",
       "50 on / 10 off"
     );
   }
   if (intensity === "driven") {
     add(
       wake + 7.5,
-      "Deep block " + (owl ? "3" : "4") + " — optional overdrive",
-      "Skip it the moment quality drops — hours ≠ output"
+      "Deep block " + (owl ? "3" : "4") + ": optional overdrive",
+      "Skip it the moment quality drops. Hours ≠ output"
     );
   }
   if (intensity === "gentle") {
-    add(wake + 7, "Recovery slot — pick any channel", "Detach, relax, mastery or control — your choice");
+    add(wake + 7, "Recovery slot: pick any channel", "Detach, relax, mastery or control, your choice");
   }
   add(
     wake + 9,
-    p.moodWatch || p.moodFlag ? "Movement — 30 min, moderate, any kind" : "Movement / sport — 30 min",
+    p.moodWatch || p.moodFlag ? "Movement: 30 min, moderate, any kind" : "Movement / sport: 30 min",
     p.moodWatch || p.moodFlag
       ? "Your mood scores make this the highest-leverage block"
       : "Protects mood and focus"
   );
-  add(lightsOut - 1.25, "Hard shutdown — write tomorrow’s one-line if-then", "Closes the mental tabs so your brain can detach");
+  add(lightsOut - 1.25, "Hard shutdown: write tomorrow’s one-line if-then", "Closes the mental tabs so your brain can detach");
   add(
     lightsOut - 0.75,
-    "Wind-down — screens dim, lights low",
+    "Wind-down: screens dim, lights low",
     (p.sleepScreens ?? 0) >= 3 ? "Your phone-in-bed habit flagged: charge it out of reach" : "Same ritual nightly = faster sleep onset"
   );
   add(lightsOut, "Lights out", "Window: " + fmt(lightsOut) + " – " + fmt(wake) + ", all 7 days");
@@ -133,11 +133,11 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Fix the window, not the hours",
       tag: "Sleep",
-      why: "Your sleep flagged mostly on regularity. In 79,666 adults, a regular sleep window cut depression risk 38% — even when total hours were fine.",
+      why: "Your sleep flagged mostly on regularity. In 79,666 adults, a regular sleep window cut depression risk 38%, even when total hours were fine.",
       steps: [
         "Pick one wake time; keep it within ±30 min, weekends too",
         "Anchor it: daylight within 30 min of waking",
-        "Let bedtime drift earlier naturally — never force it",
+        "Let bedtime drift earlier naturally, and never force it",
       ],
       src: "Li et al. 2025 · Moebus et al. 2025",
       tryBreath: false,
@@ -147,11 +147,11 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Stimulus control basics",
       tag: "Sleep",
-      why: "Bed stays for sleep only — the strongest-evidence behavioural insomnia tool, and the core of what worked in the student sleep trials.",
+      why: "Bed stays for sleep only. It is the strongest-evidence behavioural insomnia tool, and the core of what worked in the student sleep trials.",
       steps: [
         "In bed >20 min and wide awake? Get up, low light, boring task",
         "Phone charges out of arm’s reach",
-        "Same wind-down ritual nightly — it becomes the cue",
+        "Same wind-down ritual nightly, so it becomes the cue",
       ],
       src: "Chandler et al. 2022 · Kodsi et al. 2021",
       tryBreath: false,
@@ -163,9 +163,9 @@ export function buildInterventions(p: Profile): Intervention[] {
       tag: "Mood",
       why: "In trials with 12–25 year olds, exercise lifted low mood by about as much as front-line treatments do. Roughly 8 in 10 young people who moved regularly did better than those who didn't.",
       steps: [
-        "30 min, moderate — brisk walk, cycle, gym, sport, dance",
+        "30 min, moderate: brisk walk, cycle, gym, sport, dance",
         "3× a week minimum; scheduled, not \"when I feel like it\"",
-        "Pair it with people when you can — double benefit",
+        "Pair it with people when you can, for a double benefit",
       ],
       src: "Bailey et al. 2017 · Singh et al. 2025",
       tryBreath: false,
@@ -173,13 +173,13 @@ export function buildInterventions(p: Profile): Intervention[] {
   }
   if (p.anxWatch || p.anxFlag) {
     iv.push({
-      title: "Cyclic sighing — 5 min/day",
+      title: "Cyclic sighing, 5 min a day",
       tag: "Stress",
-      why: "Exhale-weighted breathing beat mindfulness meditation for daily mood in a month-long RCT. Evidence is young — treat it as a state-shifter, not a cure.",
+      why: "Exhale-weighted breathing beat mindfulness meditation for daily mood in a month-long RCT. Evidence is young, so treat it as a state-shifter rather than a cure.",
       steps: [
         "Two nose inhales (second one short), long mouth exhale",
         "5 minutes daily, or ~6 breaths before stressful moments",
-        "Stack it onto an anchor — after sitting down to study",
+        "Stack it onto an anchor, such as after sitting down to study",
       ],
       src: "Balban et al. 2023 · Fincham et al. 2023",
       tryBreath: true,
@@ -189,10 +189,10 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "The hard shutdown ritual",
       tag: "Burnout",
-      why: "Psychological detachment — actually stopping work thoughts after hours — is the recovery channel that most strongly predicts lower exhaustion across 99,329 people.",
+      why: "Psychological detachment, meaning actually stopping work thoughts after hours, is the recovery channel that most strongly predicts lower exhaustion across 99,329 people.",
       steps: [
         "Fixed end time; write tomorrow’s one-line if-then",
-        "Say it out loud: \"done for today\" — corny, effective",
+        "Say it out loud: \"done for today\". Corny, and effective",
         "No study/work apps after shutdown; separate spaces if you can",
       ],
       src: "Headrick et al. 2022 · Sonnentag & Fritz 2015",
@@ -203,9 +203,9 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Worth a straight conversation",
       tag: "Habits",
-      why: "Your drinking answers landed in the range where a GP or counsellor can help you look at it properly — not because a number decided anything, but because that's exactly what this screen is designed to catch early.",
+      why: "Your drinking answers landed in the range where a GP or counsellor can help you look at it properly. Not because a number decided anything, but because that's exactly what this screen is designed to catch early.",
       steps: [
-        "No judgement, no diagnosis here — just a number worth a second look",
+        "No judgement, no diagnosis here, just a number worth a second look",
         "A GP, campus health service or the lines under Help & privacy can talk it through confidentially",
         "Cutting back before it's a crisis is far easier than after",
       ],
@@ -217,7 +217,7 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Subtract before you add",
       tag: "Load",
-      why: "Workload is the #1 predictor of failed detachment — no tactic outruns a crushing load. Recovery starts with the calendar, not willpower.",
+      why: "Workload is the #1 predictor of failed detachment, and no tactic outruns a crushing load. Recovery starts with the calendar, not willpower.",
       steps: [
         "List commitments; mark the two lowest-value ones",
         "Drop, shrink or defer one this week",
@@ -230,11 +230,11 @@ export function buildInterventions(p: Profile): Intervention[] {
   iv.push({
     title: "If-then your first block",
     tag: "Focus",
-    why: "Deciding the exact when and where in advance beats deciding in the moment — across 94 studies, about 7 in 10 people did better with a plan than without. It works even better when mood is low, because the plan removes the decision.",
+    why: "Deciding the exact when and where in advance beats deciding in the moment. Across 94 studies, about 7 in 10 people did better with a plan than without. It works even better when mood is low, because the plan removes the decision.",
     steps: [
       "Tonight: \"If it’s [time] and I’m at [place], then I open [exact task]\"",
       "One line, absurdly specific, rehearse it once",
-      "The morning follows the sentence — not the mood",
+      "The morning follows the sentence, not the mood",
     ],
     src: "Gollwitzer & Sheeran 2006 · Toli et al. 2016",
     tryBreath: false,
@@ -245,7 +245,7 @@ export function buildInterventions(p: Profile): Intervention[] {
     why: "Micro-breaks reliably restore vigor and cut fatigue; heavy cognitive work needs the longer 10-min kind between blocks.",
     steps: [
       "50 min single-task, notifications off",
-      "10 min genuinely off — move, window, water; not another feed",
+      "10 min genuinely off: move, window, water, not another feed",
       "After 2–3 cycles, take a real 30-min break",
     ],
     src: "Albulescu et al. 2022",

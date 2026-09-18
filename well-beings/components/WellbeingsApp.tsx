@@ -153,18 +153,14 @@ export function WellbeingsApp() {
       >
         <nav aria-label="Wellbeings site" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           {SITE_LINKS.map((l) => (
-            /* prefetch={false}: these four sit in the footer of an app
-               someone is using, not browsing. Prefetching all of them on
-               every screen spends bandwidth on routes most people never
-               open, which on a patchy connection is bandwidth the check-in
-               itself needs. */
-            <Link
-              key={l.href}
-              href={l.href}
-              prefetch={false}
-              className="app-site-link"
-              style={{ fontSize: 12 }}
-            >
+            /* No prefetch={false} here, deliberately. It was tried, on the
+               reasoning that prefetching four routes from a working app
+               wastes bandwidth on a patchy connection. An A/B measurement of
+               a content page said otherwise: identical request counts with
+               and without it, and no separate prefetch payloads at all in
+               this static export. An optimisation that cannot be measured is
+               just a slower navigation for nothing. */
+            <Link key={l.href} href={l.href} className="app-site-link" style={{ fontSize: 12 }}>
               {l.label}
             </Link>
           ))}

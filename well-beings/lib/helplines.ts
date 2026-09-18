@@ -49,7 +49,7 @@ export const GLOBAL_LINKS: DirectoryLink[] = [
     note: "The International Association for Suicide Prevention's directory, by country.",
   },
   {
-    name: "WHO — mental health",
+    name: "WHO mental health",
     url: "https://www.who.int/health-topics/mental-health",
     note: "Plain-language explainers on conditions, treatment and where care comes from.",
   },
@@ -94,7 +94,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
         contact: "1-800-662-4357",
         tel: "+18006624357",
         url: "https://www.samhsa.gov/find-help/helplines/national-helpline",
-        who: "Free treatment referrals — mental health and substance use",
+        who: "Free treatment referrals for mental health and substance use",
       },
       { name: "Emergency", contact: "911", tel: "911", primary: true },
     ],
@@ -102,7 +102,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
       {
         name: "NAMI HelpLine",
         url: "https://www.nami.org/help",
-        note: "Information, referrals and peer support — Mon–Fri, 10am–10pm ET.",
+        note: "Information, referrals and peer support. Mon–Fri, 10am–10pm ET.",
       },
     ],
   },
@@ -127,7 +127,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
       },
       {
         name: "NHS 111",
-        contact: "111 — option 2 for mental health",
+        contact: "111, option 2 for mental health",
         tel: "111",
         url: "https://111.nhs.uk",
         who: "Urgent NHS mental-health advice and local crisis teams",
@@ -158,7 +158,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
     ],
     links: [
       {
-        name: "NHS — find an NHS talking therapies service",
+        name: "NHS: find a talking therapies service",
         url: "https://www.nhs.uk/service-search/mental-health/find-an-NHS-talking-therapies-service",
         note: "Self-refer for CBT and counselling in England without going through a GP.",
       },
@@ -237,7 +237,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
         contact: "13 92 76",
         tel: "139276",
         url: "https://www.13yarn.org.au",
-        who: "Aboriginal and Torres Strait Islander people — yarn with a Lifeline-trained mob",
+        who: "Aboriginal and Torres Strait Islander people, yarn with a Lifeline-trained mob",
       },
       { name: "Emergency", contact: "000", tel: "000", primary: true },
     ],
@@ -306,7 +306,7 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
       {
         name: "NIMHANS",
         url: "https://nimhans.ac.in",
-        note: "India's national mental-health institute — services and public resources.",
+        note: "India's national mental-health institute: services and public resources.",
       },
     ],
   },

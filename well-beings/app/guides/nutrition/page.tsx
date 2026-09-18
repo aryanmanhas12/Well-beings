@@ -96,10 +96,10 @@ export default function NutritionGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/sleep/">Sleep</Link> — where caffeine and alcohol both actually land.
+            <Link href="/guides/sleep/">Sleep</Link>: where caffeine and alcohol both actually land.
           </li>
           <li>
-            <Link href="/guides/student-wellbeing/">Student life</Link> — eating around a timetable
+            <Link href="/guides/student-wellbeing/">Student life</Link>: eating around a timetable
             you do not control.
           </li>
         </ul>

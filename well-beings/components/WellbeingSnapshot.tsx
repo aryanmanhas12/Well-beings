@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buildSnapshot, medicalNotes, topPriorities } from "@/lib/lifestyle";
 import { psychScreenerLink } from "@/lib/bridge";
 import { Profile } from "@/lib/types";
+import { COMPANION_NAME } from "@/lib/site";
 
 /**
  * The read-out.
@@ -50,8 +51,7 @@ export function WellbeingSnapshot({ profile }: { profile: Profile }) {
       </h2>
       <p style={{ fontSize: 13, color: "var(--color-neutral-500)", maxWidth: 640, textWrap: "pretty" }}>
         This is your own answers, sorted. It is not a score, not a percentage and not a measurement
-        of your health — there is no validated scale that could produce one from questions like
-        these. {quick ? "You took the quick check, so this covers fewer areas than the detailed one would. " : ""}
+        of your health. No validated scale could produce one from questions like these. {quick ? "You took the quick check, so this covers fewer areas than the detailed one would. " : ""}
         Nothing here is a diagnosis.
       </p>
 
@@ -150,7 +150,7 @@ export function WellbeingSnapshot({ profile }: { profile: Profile }) {
           </h3>
           <p style={{ fontSize: 12.5, color: "var(--color-neutral-400)", margin: "0 0 12px", textWrap: "pretty" }}>
             Separate from the suggestions above on purpose. These are not tasks and they are not
-            diagnoses — they are the points where something outside this tool is the better next
+            diagnoses. They are the points where something outside this tool is the better next
             step.
           </p>
           <ul style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 10 }}>
@@ -171,7 +171,7 @@ export function WellbeingSnapshot({ profile }: { profile: Profile }) {
               className="btn btn-secondary"
               style={{ fontSize: 12.5 }}
             >
-              Open Psych Screener ↗
+              Open {COMPANION_NAME} ↗
             </a>
           </div>
         </section>

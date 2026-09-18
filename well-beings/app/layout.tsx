@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     default: PAGE_BY_PATH["/"].title,
     // Pages set their own full title; this only catches anything that sets a
     // bare segment, so a stray page can never end up untitled.
-    template: `%s — ${SITE_NAME}`,
+    template: `%s · ${SITE_NAME}`,
   },
   description: PAGE_BY_PATH["/"].description,
   applicationName: SITE_NAME,

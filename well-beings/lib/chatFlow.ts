@@ -2,17 +2,17 @@ import { FREQ, SCALE } from "./scoring";
 import { Depth, lifestyleQuestionsFor } from "./lifestyle";
 import { FlowCtx, Question } from "./types";
 
-const phqSub = "PHQ — the standard clinical screener · answers never leave this device";
-const gadSub = "GAD — the standard anxiety screener · answers never leave this device";
+const phqSub = "PHQ · the standard clinical screener · answers never leave this device";
+const gadSub = "GAD · the standard anxiety screener · answers never leave this device";
 
 const phqWhy =
-  "These are the first two items of the PHQ-9, the most-validated depression questionnaire there is — the same wording a GP would use. Asking two first and the other seven only if something flags catches just as many people while cutting the questions by more than half.";
+  "These are the first two items of the PHQ-9, the most-validated depression questionnaire there is, and the same wording a GP would use. Asking two first and the other seven only if something flags catches just as many people while cutting the questions by more than half.";
 const phqDeepWhy =
-  "You're seeing the remaining PHQ-9 items because the first two flagged. Nine questions map onto the clinical criteria for depression; a score of 10 or more is the line where clinicians usually look closer. This app signals — it does not diagnose.";
+  "You're seeing the remaining PHQ-9 items because the first two flagged. Nine questions map onto the clinical criteria for depression; a score of 10 or more is the line where clinicians usually look closer. This app signals. It does not diagnose.";
 const gadWhy =
   "These two open the GAD-7, the standard anxiety screener, developed across 2,740 patients and since tested in 24 languages. Same adaptive rule: two now, five more only if these flag.";
 const auditWhy =
-  "This is the AUDIT-C, the WHO's own 3-question alcohol screen — one of the two instruments actually validated for people under 25. Answer honestly or skip it entirely; it only goes deeper if the first answer isn't \"never.\" One thing worth knowing: this app never asks your sex, so it can't use the sex-specific cutoff some guidelines recommend — it uses one calibrated for this app's age group instead. Less precise for some people, on purpose, for asking less.";
+  "This is the AUDIT-C, the WHO's own 3-question alcohol screen, and one of only two instruments actually validated for people under 25. Answer honestly or skip it entirely; it only goes deeper if the first answer isn't \"never.\" One thing worth knowing: this app never asks your sex, so it can't use the sex-specific cutoff some guidelines recommend. It uses one calibrated for this app's age group instead. Less precise for some people, on purpose, for asking less.";
 
 const S = SCALE.map(([label, value]) => ({ label, value }));
 const F = FREQ.map(([label, value]) => ({ label, value }));
@@ -36,7 +36,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       id: "entry",
       section: "Basics",
       type: "choice",
-      text: "Before we start — what brings you here today?",
+      text: "Before we start, what brings you here today?",
       opts: [
         { label: "I'm ready for my check-in", value: "ready" },
         { label: "I'm not sure where to start", value: "unsure" },
@@ -69,19 +69,19 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
               id: "entryAck",
               section: "Basics",
               type: "choice",
-              text: "Good on you for looking. The most useful thing you can do is ask directly — \"are you doing okay?\" doesn't plant ideas, it opens a door. Listen without rushing to fix it. If you want, run this check-in yourself first so you know what you'd actually be suggesting.",
+              text: "Good on you for looking. The most useful thing you can do is ask directly. \"Are you doing okay?\" doesn't plant ideas, it opens a door. Listen without rushing to fix it. If you want, run this check-in yourself first so you know what you'd actually be suggesting.",
               opts: [{ label: "Continue", value: "ok" }],
             },
           ]);
         }
       },
     },
-    { id: "name", section: "Basics", type: "text", text: "What should I call you? (First name, nickname — or hit send to skip.)" },
+    { id: "name", section: "Basics", type: "text", text: "What should I call you? (First name, nickname, or hit send to skip.)" },
     {
       id: "age",
       section: "Basics",
       type: "choice",
-      text: "How old are you? This sets your sleep target — teens genuinely need more.",
+      text: "How old are you? This sets your sleep target, and teens genuinely need more.",
       opts: [
         { label: "Under 16", value: "u16" },
         { label: "16–18", value: "16-18" },
@@ -93,7 +93,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       id: "region",
       section: "Basics",
       type: "choice",
-      text: "Where are you based? Only used to show the right local support lines — never sent anywhere.",
+      text: "Where are you based? Only used to show the right local support lines. It is never sent anywhere.",
       // India first: it's this app's default region and its largest audience,
       // and the first option in a list is the one people scan for.
       opts: [
@@ -137,7 +137,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       id: "sleepReg",
       section: "Sleep",
       type: "choice",
-      text: "Do you fall asleep and wake at roughly the same times every day — weekends included?",
+      text: "Do you fall asleep and wake at roughly the same times every day, weekends included?",
       opts: [
         { label: "Yes, within ~30 min", value: 0 },
         { label: "Weekdays yes, weekends drift", value: 1 },
@@ -148,7 +148,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       id: "sleepQual",
       section: "Sleep",
       type: "choice",
-      text: "And the quality — do you wake up feeling actually restored?",
+      text: "And the quality. Do you wake up feeling actually restored?",
       opts: [
         { label: "Most mornings", value: 0 },
         { label: "Some mornings", value: 1 },
@@ -203,7 +203,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       id: "workload",
       section: "Rhythm",
       type: "choice",
-      text: "Be honest — a typical week feels…",
+      text: "Be honest. A typical week feels…",
       opts: [
         { label: "Comfortable", value: 0 },
         { label: "Full, but doable", value: 1 },
@@ -218,7 +218,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       type: "choice",
       sub: phqSub,
       why: phqWhy,
-      text: "Now two standard mood questions — same ones clinicians use.\n\nOver the last 2 weeks, how often have you had little interest or pleasure in doing things?",
+      text: "Now two standard mood questions, the same ones clinicians use.\n\nOver the last 2 weeks, how often have you had little interest or pleasure in doing things?",
       opts: S,
     },
     {
@@ -235,12 +235,12 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
            read-out as a signal and the person is pointed there instead. */
         if (detailed && (Number(ctx.answers.phq1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
-            { id: "phq3", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "That’s worth a closer look — the full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?", opts: S },
+            { id: "phq3", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "That’s worth a closer look. The full set of 7 more, then we move on. Same 2-week window.\n\nTrouble falling or staying asleep, or sleeping too much?", opts: S },
             { id: "phq4", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling tired or having little energy?", opts: S },
-            { id: "phq5", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Poor appetite — or overeating?", opts: S },
-            { id: "phq6", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling bad about yourself — that you’re a failure, or have let yourself or your family down?", opts: S },
+            { id: "phq5", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Poor appetite, or overeating?", opts: S },
+            { id: "phq6", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Feeling bad about yourself, that you’re a failure, or have let yourself or your family down?", opts: S },
             { id: "phq7", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Trouble concentrating on things like reading or watching a video?", opts: S },
-            { id: "phq8", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Moving or speaking noticeably slowly — or the opposite, being fidgety and restless?", opts: S },
+            { id: "phq8", section: "Mood", type: "choice", sub: phqSub, why: phqDeepWhy, text: "Moving or speaking noticeably slowly, or the opposite, being fidgety and restless?", opts: S },
             {
               id: "phq9",
               section: "Mood",
@@ -269,7 +269,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       after: (v, ctx: FlowCtx) => {
         if (detailed && (Number(ctx.answers.gad1) || 0) + Number(v) >= 2) {
           ctx.insertNext([
-            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too — 5 more, then we move on.\n\nWorrying too much about different things?", opts: S },
+            { id: "gad3", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Going deeper here too. Five more, then we move on.\n\nWorrying too much about different things?", opts: S },
             { id: "gad4", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Trouble relaxing?", opts: S },
             { id: "gad5", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Being so restless that it’s hard to sit still?", opts: S },
             { id: "gad6", section: "Stress", type: "choice", sub: gadSub, why: gadWhy, text: "Becoming easily annoyed or irritable?", opts: S },
@@ -279,8 +279,8 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       },
     },
     { id: "bo1", section: "Stress", type: "choice", text: "Three on energy and burnout.\n\nHow often do you feel drained before the day has even started?", opts: F },
-    { id: "bo2", section: "Stress", type: "choice", text: "How often do you feel cynical or detached about your study or work — a \"what’s the point\" feeling?", opts: F },
-    { id: "bo3", section: "Stress", type: "choice", text: "After you stop for the day, how often does your mind keep grinding on it — unable to switch off?", opts: F },
+    { id: "bo2", section: "Stress", type: "choice", text: "How often do you feel cynical or detached about your study or work, a \"what’s the point\" feeling?", opts: F },
+    { id: "bo3", section: "Stress", type: "choice", text: "After you stop for the day, how often does your mind keep grinding on it, unable to switch off?", opts: F },
     {
       id: "goal",
       section: "Stress",
@@ -304,7 +304,7 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
       section: "Habits" as const,
       type: "choice" as const,
       why: auditWhy,
-      text: "Last stretch — one on drinking, entirely optional territory.\n\nHow often do you have a drink containing alcohol?",
+      text: "Last stretch. One on drinking, and entirely optional territory.\n\nHow often do you have a drink containing alcohol?",
       opts: [
         { label: "Never", value: 0 },
         { label: "Monthly or less", value: 1 },

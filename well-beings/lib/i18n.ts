@@ -112,7 +112,7 @@ const en: Strings = {
   helpNow: "Help now",
   language: "Language",
   footerDisclaimer:
-    "Wellbeings — a self-guidance prototype. Not a medical device; screeners signal, they don’t diagnose.",
+    "Wellbeings is a self-guidance prototype. Not a medical device; screeners signal, they don’t diagnose.",
   footerPrivacy: "All data stays on this device.",
 
   heroKicker: "Evidence-based · built on 15+ peer-reviewed studies",
@@ -128,19 +128,19 @@ const en: Strings = {
   pauseDeck: "Pause",
   playDeck: "Play",
   heroLead:
-    "A 5-minute check-in about your sleep, mood, stress and goals — using the same short screeners clinicians use — then a personalised daily system designed to raise output and keep you clear of burnout.",
+    "A 5-minute check-in about your sleep, mood, stress and goals, using the same short screeners clinicians use, then a personalised daily system designed to raise output and keep you clear of burnout.",
 
   featPrivateTitle: "Private by design",
   featPrivateBody:
     "Everything stays in your browser. Nothing is uploaded, shared or sold. Delete it anytime.",
   featAdaptiveTitle: "Adaptive, not exhausting",
   featAdaptiveBody:
-    "Short screeners first; deeper questions only if something flags — the approach validated in JAMA.",
+    "Short screeners first; deeper questions only if something flags. That is the approach validated in JAMA.",
   featEvidenceTitle: "Research-backed only",
   featEvidenceBody:
-    "Every practice cites its meta-analysis or trial — and says so when evidence is young.",
+    "Every practice cites its meta-analysis or trial, and says so when evidence is young.",
   notMedical:
-    "Wellbeings is a self-guidance tool, not a medical device. Its screeners signal — they don’t diagnose.",
+    "Wellbeings is a self-guidance tool, not a medical device. Its screeners signal. They don’t diagnose.",
 
   researchKicker: "From the research inside",
   statSleepBody:
@@ -149,7 +149,7 @@ const en: Strings = {
     "moderate to large improvement on depression, anxiety and psychological distress, all compared with usual care. An umbrella review pooling multiple systematic reviews found physical activity helped across every one, with the biggest gains in people managing depression (Singh et al., 2023, British Journal of Sports Medicine).",
 
   helpTitle: "Help, right now",
-  helpSub: "Free, confidential, 24/7 — for any level of “not okay”.",
+  helpSub: "Free, confidential, 24/7, for any level of “not okay”.",
   helpClose: "Close",
   helpElsewhere: "Somewhere else in the world?",
   emergencyNote: "In immediate danger → your local emergency number.",
@@ -159,9 +159,9 @@ const en: Strings = {
   textAction: "Text",
   visitAction: "Visit",
 
-  crisisTitle: "You matter — and support exists right now.",
+  crisisTitle: "You matter, and support exists right now.",
   crisisBody:
-    "Thanks for being honest. That answer isn’t stored anywhere but this device — and it deserves a human, not an app. If these thoughts get heavy, please reach out:",
+    "Thanks for being honest. That answer isn’t stored anywhere but this device, and it deserves a human rather than an app. If these thoughts get heavy, please reach out:",
   crisisFooter: "Free · confidential · 24/7. If you’re in immediate danger, call your local emergency number.",
 
   tabToday: "Today",
@@ -189,9 +189,9 @@ const en: Strings = {
   checkinEnglishOnly:
     "The check-in itself stays in English: PHQ-9 and GAD-7 are validated word-for-word, and a loose translation would quietly break the scores. For properly localised instruments, use the Psych Screener.",
   screenerItemsEnglish:
-    "The buttons and headings around the questions follow your language. The screener questions themselves stay in English — they're validated word-for-word.",
+    "The buttons and headings around the questions follow your language. The screener questions themselves stay in English, because they're validated word-for-word.",
   appContentEnglish:
-    "Navigation and your read-out are in Hindi. The daily plan text inside these tabs is still English — it's being translated properly rather than machine-translated, which the research says is the difference between people staying and leaving.",
+    "Navigation and your read-out are in Hindi. The daily plan text inside these tabs is still English, and it's being translated properly rather than machine-translated, which the research says is the difference between people staying and leaving.",
 };
 
 const hi: Strings = {
@@ -199,7 +199,7 @@ const hi: Strings = {
   helpNow: "अभी मदद",
   language: "भाषा",
   footerDisclaimer:
-    "वेल-बीइंग्स — एक स्व-मार्गदर्शन प्रोटोटाइप। यह कोई चिकित्सा उपकरण नहीं है; स्क्रीनर संकेत देते हैं, निदान नहीं करते।",
+    "वेल-बीइंग्स एक स्व-मार्गदर्शन प्रोटोटाइप है। यह कोई चिकित्सा उपकरण नहीं है; स्क्रीनर संकेत देते हैं, निदान नहीं करते।",
   footerPrivacy: "सारा डेटा इसी डिवाइस पर रहता है।",
 
   heroKicker: "प्रमाण-आधारित · 15+ सहकर्मी-समीक्षित अध्ययनों पर आधारित",
@@ -215,19 +215,19 @@ const hi: Strings = {
   pauseDeck: "रोकें",
   playDeck: "चलाएँ",
   heroLead:
-    "आपकी नींद, मनोदशा, तनाव और लक्ष्यों पर 5 मिनट की जाँच — उन्हीं छोटे स्क्रीनरों से जो चिकित्सक इस्तेमाल करते हैं — और फिर एक निजी दैनिक व्यवस्था, जो आपका काम बढ़ाए और बर्नआउट से बचाए।",
+    "आपकी नींद, मनोदशा, तनाव और लक्ष्यों पर 5 मिनट की जाँच, उन्हीं छोटे स्क्रीनरों से जो चिकित्सक इस्तेमाल करते हैं, और फिर एक निजी दैनिक व्यवस्था, जो आपका काम बढ़ाए और बर्नआउट से बचाए।",
 
   featPrivateTitle: "निजता, बनावट से ही",
   featPrivateBody:
     "सब कुछ आपके ब्राउज़र में रहता है। कुछ भी अपलोड, साझा या बेचा नहीं जाता। जब चाहें मिटा दें।",
   featAdaptiveTitle: "अनुकूल, थकाऊ नहीं",
   featAdaptiveBody:
-    "पहले छोटे स्क्रीनर; गहरे सवाल तभी जब कुछ संकेत मिले — यही तरीका JAMA में प्रमाणित हुआ है।",
+    "पहले छोटे स्क्रीनर; गहरे सवाल तभी जब कुछ संकेत मिले। यही तरीका JAMA में प्रमाणित हुआ है।",
   featEvidenceTitle: "केवल शोध-समर्थित",
   featEvidenceBody:
-    "हर अभ्यास अपने मेटा-विश्लेषण या परीक्षण का हवाला देता है — और जहाँ प्रमाण नए हैं, वहाँ यह साफ़ कहता है।",
+    "हर अभ्यास अपने मेटा-विश्लेषण या परीक्षण का हवाला देता है, और जहाँ प्रमाण नए हैं, वहाँ यह साफ़ कहता है।",
   notMedical:
-    "वेल-बीइंग्स एक स्व-मार्गदर्शन साधन है, चिकित्सा उपकरण नहीं। इसके स्क्रीनर संकेत देते हैं — निदान नहीं करते।",
+    "वेल-बीइंग्स एक स्व-मार्गदर्शन साधन है, चिकित्सा उपकरण नहीं। इसके स्क्रीनर संकेत देते हैं, निदान नहीं करते।",
 
   researchKicker: "इसमें शामिल शोध से",
   statSleepBody:
@@ -236,7 +236,7 @@ const hi: Strings = {
     "अवसाद, चिंता और मानसिक तनाव तीनों पर मध्यम से बड़ा सुधार, हमेशा सामान्य देखभाल की तुलना में। कई व्यवस्थित समीक्षाओं को जोड़कर की गई एक व्यापक समीक्षा में शारीरिक गतिविधि ने तीनों में मदद की, सबसे ज़्यादा फ़ायदा अवसाद से जूझ रहे लोगों को हुआ (Singh et al., 2023, British Journal of Sports Medicine)।",
 
   helpTitle: "मदद, अभी",
-  helpSub: "नि:शुल्क, गोपनीय, चौबीसों घंटे — “ठीक नहीं लग रहा” के हर स्तर के लिए।",
+  helpSub: "नि:शुल्क, गोपनीय, चौबीसों घंटे, “ठीक नहीं लग रहा” के हर स्तर के लिए।",
   helpClose: "बंद करें",
   helpElsewhere: "दुनिया में कहीं और हैं?",
   emergencyNote: "तत्काल ख़तरे में हों → अपने स्थानीय आपातकालीन नंबर पर कॉल करें।",
@@ -246,9 +246,9 @@ const hi: Strings = {
   textAction: "संदेश",
   visitAction: "वेबसाइट",
 
-  crisisTitle: "आप मायने रखते हैं — और मदद अभी मौजूद है।",
+  crisisTitle: "आप मायने रखते हैं, और मदद अभी मौजूद है।",
   crisisBody:
-    "सच बताने के लिए धन्यवाद। वह उत्तर इस डिवाइस के अलावा कहीं संग्रहीत नहीं होता — और उसके लिए एक ऐप नहीं, एक इंसान चाहिए। अगर ये विचार भारी पड़ने लगें, तो कृपया संपर्क करें:",
+    "सच बताने के लिए धन्यवाद। वह उत्तर इस डिवाइस के अलावा कहीं संग्रहीत नहीं होता, और उसके लिए एक ऐप नहीं, एक इंसान चाहिए। अगर ये विचार भारी पड़ने लगें, तो कृपया संपर्क करें:",
   crisisFooter:
     "नि:शुल्क · गोपनीय · चौबीसों घंटे। अगर आप तत्काल ख़तरे में हैं, तो अपने स्थानीय आपातकालीन नंबर पर कॉल करें।",
 
@@ -277,9 +277,9 @@ const hi: Strings = {
   checkinEnglishOnly:
     "जाँच स्वयं अंग्रेज़ी में ही रहती है: PHQ-9 और GAD-7 शब्द-दर-शब्द प्रमाणित हैं, और ढीला अनुवाद चुपचाप उनके स्कोर बिगाड़ देगा। सही ढंग से अनूदित प्रश्नावली के लिए Psych Screener इस्तेमाल करें।",
   screenerItemsEnglish:
-    "सवालों के आस-पास के बटन और शीर्षक आपकी भाषा में हैं। स्क्रीनर के सवाल स्वयं अंग्रेज़ी में रहते हैं — वे शब्द-दर-शब्द प्रमाणित हैं।",
+    "सवालों के आस-पास के बटन और शीर्षक आपकी भाषा में हैं। स्क्रीनर के सवाल स्वयं अंग्रेज़ी में रहते हैं, क्योंकि वे शब्द-दर-शब्द प्रमाणित हैं।",
   appContentEnglish:
-    "नेविगेशन और आपका ब्यौरा हिन्दी में हैं। इन टैब के अंदर की दैनिक योजना अभी अंग्रेज़ी में है — उसका ठीक से अनुवाद किया जा रहा है, मशीनी अनुवाद नहीं, क्योंकि शोध के मुताबिक़ यही फ़र्क़ तय करता है कि लोग टिकते हैं या छोड़ देते हैं।",
+    "नेविगेशन और आपका ब्यौरा हिन्दी में हैं। इन टैब के अंदर की दैनिक योजना अभी अंग्रेज़ी में है, और उसका ठीक से अनुवाद किया जा रहा है, मशीनी अनुवाद नहीं, क्योंकि शोध के मुताबिक़ यही फ़र्क़ तय करता है कि लोग टिकते हैं या छोड़ देते हैं।",
 };
 
 export const STRINGS: Record<Lang, Strings> = { en, hi };

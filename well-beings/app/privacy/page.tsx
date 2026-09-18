@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/site/PageShell";
 import { JsonLd } from "@/components/site/JsonLd";
 import { metadataFor } from "@/lib/seo";
+import { COMPANION_NAME } from "@/lib/site";
 
 const PATH = "/privacy/";
 export const metadata: Metadata = metadataFor(PATH);
@@ -36,7 +37,7 @@ export default function PrivacyPage() {
         <p>
           All of it. The app is a static site: once the page has loaded, it makes no network requests
           of its own. There is no endpoint to send answers to, because there is no server. You can
-          verify this yourself — open your browser&apos;s developer tools, go to the Network tab, and
+          verify this yourself. Open your browser&apos;s developer tools, go to the Network tab, and
           complete a check-in. Nothing goes out.
         </p>
         <p>
@@ -53,21 +54,21 @@ export default function PrivacyPage() {
         </p>
         <ul>
           <li>
-            <strong>Anonymous</strong> — accurate in the sense that the app never asks for or derives
+            <strong>Anonymous</strong>: accurate in the sense that the app never asks for or derives
             any identifier. It does ask for a first name if you want to give one, and that is stored
             in your browser with everything else.
           </li>
           <li>
-            <strong>Encrypted</strong> — <em>not</em> claimed. Browser local storage is not
+            <strong>Encrypted</strong>: <em>not</em> claimed. Browser local storage is not
             encrypted by the app. It is protected by your device and your browser profile, which
             means anyone who can unlock your device and open your browser could read it.
           </li>
           <li>
-            <strong>Confidential</strong> — used on this site only to describe the helplines, which
+            <strong>Confidential</strong>: used on this site only to describe the helplines, which
             are genuinely confidential services. It is not a claim about the app.
           </li>
           <li>
-            <strong>Deleted</strong> — accurate. Deleting removes the key from this browser, and
+            <strong>Deleted</strong>: accurate. Deleting removes the key from this browser, and
             because no copy was ever made anywhere else, there is nothing left to delete.
           </li>
         </ul>
@@ -109,7 +110,7 @@ export default function PrivacyPage() {
           </li>
         </ul>
 
-        <h2>Moving between Wellbeings and Psych Screener</h2>
+        <h2>Moving between Wellbeings and {COMPANION_NAME}</h2>
         <p>
           The two apps link to each other. That handoff passes one URL parameter naming which app you
           came from, and at most a single coarse severity band in the other direction. No answers, no

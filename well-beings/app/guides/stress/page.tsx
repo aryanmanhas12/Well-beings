@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/site/PageShell";
 import { JsonLd } from "@/components/site/JsonLd";
 import { metadataFor } from "@/lib/seo";
+import { COMPANION_NAME } from "@/lib/site";
 
 const PATH = "/guides/stress/";
 export const metadata: Metadata = metadataFor(PATH);
@@ -22,8 +23,8 @@ export default function StressGuide() {
         <h2>Four kinds of recovery, and they do not substitute</h2>
         <p>
           A meta-analysis pooling 316 samples and 99,329 people found four distinct recovery
-          channels, each doing a different job. Psychological detachment — genuinely not thinking
-          about the work — reduces exhaustion. Relaxation, mastery (learning something unrelated) and
+          channels, each doing a different job. Psychological detachment, meaning genuinely not
+          thinking about the work, reduces exhaustion. Relaxation, mastery (learning something unrelated) and
           control over your own time raise engagement and wellbeing.{" "}
           <span className="cite-note">(Headrick et al., 2022, Journal of Business &amp; Psychology)</span>
         </p>
@@ -66,7 +67,7 @@ export default function StressGuide() {
           </li>
           <li>
             <strong>Take real breaks during the day too.</strong> Breaks of two to ten minutes
-            reliably lift energy and cut fatigue — a modest but dependable effect. The same work is
+            reliably lift energy and cut fatigue. The effect is modest but dependable. The same work is
             honest that after genuinely heavy cognitive effort, ten minutes is not enough.{" "}
             <span className="cite-note">(Albulescu et al., 2022, PLoS ONE)</span>
           </li>
@@ -77,7 +78,7 @@ export default function StressGuide() {
           Stress is a response to a load, and it resolves when the load does. If worry is
           free-floating, present most days, hard to control, and does not lift when the deadline
           passes, that is a different pattern and this guide is not the right tool for it. Wellbeings
-          deliberately does not screen for anxiety disorders. Psych Screener, the companion tool, is
+          deliberately does not screen for anxiety disorders. {COMPANION_NAME}, the companion tool, is
           built for exactly that and takes a few minutes.
         </p>
 
@@ -94,10 +95,10 @@ export default function StressGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/sleep/">Sleep</Link> — the first thing an unfinished day takes.
+            <Link href="/guides/sleep/">Sleep</Link>: the first thing an unfinished day takes.
           </li>
           <li>
-            <Link href="/guides/habits/">Habits</Link> — making the shutdown stick past week one.
+            <Link href="/guides/habits/">Habits</Link>: making the shutdown stick past week one.
           </li>
         </ul>
       </article>

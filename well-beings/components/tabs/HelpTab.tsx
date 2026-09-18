@@ -6,6 +6,7 @@ import { GLOBAL_LINKS } from "@/lib/helplines";
 import { Lang, LANGS } from "@/lib/i18n";
 import { HelplineList } from "../HelplineList";
 import { InstallApp } from "../InstallApp";
+import { COMPANION_NAME } from "@/lib/site";
 
 const THEMES: { value: Theme; label: string }[] = [
   { value: "auto", label: "Auto" },
@@ -38,13 +39,13 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         Support, whenever you need it
       </h2>
       <p style={{ color: "var(--color-neutral-500)", fontSize: 13, margin: "0 0 20px", textWrap: "pretty" }}>
-        If things feel heavy — or you just need someone to talk to — these services are free, confidential and
+        If things feel heavy, or you just need someone to talk to, these services are free, confidential and
         open 24/7. You never need to be &quot;in crisis enough&quot; to call.
       </p>
 
       <div className="card" style={{ padding: 20, marginBottom: 18 }}>
         <div style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "var(--color-neutral-500)", marginBottom: 10 }}>
-          {"Helplines — " + region.label}
+          {"Helplines · " + region.label}
         </div>
         <HelplineList lines={region.lines} />
         <div style={{ fontSize: 11.5, color: "var(--color-neutral-600)", marginTop: 10 }}>{s.emergencyNote}</div>
@@ -55,7 +56,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
           {s.moreResources}
         </div>
         <div style={{ fontSize: 12, color: "var(--color-neutral-500)", marginBottom: 12, textWrap: "pretty" }}>
-          Directories and services worth a look when you want to read rather than ring — including the ones that
+          Directories and services worth a look when you want to read rather than ring, including the ones that
           cover countries this app doesn&apos;t list.
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
@@ -79,9 +80,9 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
           Wellbeings is the day-to-day journal. The{" "}
           <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
-            Psych Screener
+            {COMPANION_NAME}
           </a>{" "}
-          is its companion app — the full clinical picture in six languages, with your score history kept over
+          is its companion app: the full clinical picture in six languages, with your score history kept over
           time and a guided conversation if you&apos;re not sure where to start. Free, private, on-device, same
           as this one. Go back and forth between them whenever it&apos;s useful.
         </div>
@@ -92,7 +93,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
           className="btn btn-secondary"
           style={{ fontSize: 12.5 }}
         >
-          Open Psych Screener →
+          Open {COMPANION_NAME} →
         </a>
       </div>
 
@@ -102,7 +103,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         </div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
           If low mood or anxiety scores sit in the moderate+ range for two weeks, if sleep stays broken despite a
-          steady window, or if you&apos;re using more and more effort to do less and less — that&apos;s the point
+          steady window, or if you&apos;re using more and more effort to do less and less, that&apos;s the point
           where a GP, counsellor or school/uni mental-health service genuinely changes the curve. Taking your
           Results screen to that conversation is a strong start.
         </div>
@@ -216,7 +217,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>Your system</div>
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 8 }}>
-            Plan intensity — reshapes your daily schedule: recovery-first, balanced, or maximum deep-work blocks.
+            Plan intensity. Reshapes your daily schedule: recovery-first, balanced, or maximum deep-work blocks.
           </div>
           <div className="seg" role="radiogroup" aria-label="Plan intensity">
             {INTENSITIES.map((it) => (
@@ -248,7 +249,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
           <div>
             <div style={{ fontSize: 13, fontWeight: 500 }}>Calm mode</div>
             <div style={{ fontSize: 11.5, color: "var(--color-neutral-500)" }}>
-              Low-stimulation mode: scores and streak numbers become words — for anxiety-sensitive users.
+              Low-stimulation mode: scores and streak numbers become words, for anxiety-sensitive users.
             </div>
           </div>
         </div>
@@ -262,7 +263,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
       <div className="card" style={{ padding: 20 }}>
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>Your data</div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 14 }}>
-          Everything — answers, scores, check-ins — lives in this browser&apos;s local storage. No account, no
+          Everything you enter, including answers, scores and check-ins, lives in this browser&apos;s local storage. No account, no
           server, no analytics, no third parties. Deleting it is instant and irreversible.
         </div>
         <button

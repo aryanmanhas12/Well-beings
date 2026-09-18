@@ -95,11 +95,11 @@ export default function StudentGuide() {
         <h2>Related</h2>
         <ul>
           <li>
-            <Link href="/guides/habits/">Habits</Link> — why a broken streak in exam term is not a
+            <Link href="/guides/habits/">Habits</Link>: why a broken streak in exam term is not a
             failure.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link> — tell it you are studying and it adapts the
+            <Link href="/">The Wellbeings check</Link>: tell it you are studying and it adapts the
             questions and the plan.
           </li>
         </ul>

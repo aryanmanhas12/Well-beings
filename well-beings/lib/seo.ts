@@ -22,7 +22,7 @@ export const OG_IMAGE = {
   url: `${SITE_URL}/og.png`,
   width: 1200,
   height: 630,
-  alt: "Wellbeings — a private wellbeing check that runs entirely in your browser",
+  alt: "Wellbeings: a private wellbeing check that runs entirely in your browser",
 };
 
 export function metadataFor(path: string): Metadata {

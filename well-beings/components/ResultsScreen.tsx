@@ -6,6 +6,7 @@ import { crisisLines } from "@/lib/helplines";
 import { Lang, t } from "@/lib/i18n";
 import { HelplineList } from "./HelplineList";
 import { WellbeingSnapshot } from "./WellbeingSnapshot";
+import { COMPANION_NAME } from "@/lib/site";
 
 interface ResultCard {
   domain: string;
@@ -83,11 +84,11 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       phqBand[1],
       p.phqExpanded
         ? p.phqScore >= 10
-          ? "In the range where extra support genuinely helps — your plan leans on movement, sleep and structure."
+          ? "In the range where extra support genuinely helps. Your plan leans on movement, sleep and structure."
           : "Some signal; your plan leans on the strongest mood levers: movement and sleep."
         : p.phqScore >= 2
-          ? "Low signal, worth watching — the daily check-in will track it."
-          : "No flag. The short screener was enough — no need for the long form.",
+          ? "Low signal, worth watching. The daily check-in will track it."
+          : "No flag. The short screener was enough, so there is no need for the long form.",
       p.phqExpanded ? "PHQ-9 · Kroenke et al." : "PHQ-2 · cutoff ≥2 (youth-calibrated)"
     ),
     mk(
@@ -100,10 +101,10 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       p.gadExpanded
         ? p.gadScore >= 10
           ? "Worry is taking real energy. Breathing tools + a worry-boundary go into your plan."
-          : "Mild but present — quick state-shifters and structure will help."
+          : "Mild but present. Quick state-shifters and structure will help."
         : p.gadScore >= 2
           ? "Low signal, worth watching."
-          : "No flag — short screener was enough.",
+          : "No flag. The short screener was enough.",
       p.gadExpanded ? "GAD-7 · Spitzer et al." : "GAD-2 · cutoff ≥2"
     ),
     mk(
@@ -116,10 +117,10 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       p.sleepBad
         ? "Your biggest lever. Irregular window + " +
           (p.sleepHours <= 6.5 ? "short hours" : "poor restoration") +
-          " — the plan starts here."
+          ". The plan starts here."
         : p.sleepWatch
           ? "Mostly fine; the weekend drift is the thing to fix first."
-          : "Solid foundation — protect the window you already have.",
+          : "Solid foundation. Protect the window you already have.",
       "Duration + regularity + quality"
     ),
     mk(
@@ -132,7 +133,7 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       p.boHigh
         ? "Drained + cynical + can’t switch off: the classic pattern. Recovery becomes non-negotiable, scheduled like classes."
         : p.boWatch
-          ? "Early signs. Cheap to fix now — the radar will watch your trend."
+          ? "Early signs. Cheap to fix now, and the radar will watch your trend."
           : "Low risk. Keep the recovery channels topped up.",
       "Adapted OLBI/MBI signals"
     ),
@@ -144,7 +145,7 @@ export function buildResultCards(p: Profile, calm: boolean): ResultCard[] {
       auBand[0],
       auBand[1],
       p.auditFlag
-        ? "Worth a straight conversation with a GP or counsellor — no judgement, just a number worth a second look."
+        ? "Worth a straight conversation with a GP or counsellor. No judgement, just a number worth a second look."
         : p.auditWatch
           ? "Nothing alarming, just worth keeping an eye on."
           : "No flag on this one.",
@@ -251,10 +252,10 @@ export function ResultsScreen({
               marginBottom: 6,
             }}
           >
-            Before anything else — real support
+            Before anything else, real support
           </div>
           <div style={{ fontSize: 13, color: "var(--color-accent-200)", marginBottom: 4, maxWidth: 640, textWrap: "pretty" }}>
-            You mentioned thoughts of self-harm. An app is the wrong tool for that moment — a person is the
+            You mentioned thoughts of self-harm. An app is the wrong tool for that moment. A person is the
             right one. These lines are free, confidential and open 24/7:
           </div>
           <div style={{ maxWidth: 560 }}>
@@ -282,7 +283,7 @@ export function ResultsScreen({
               This looks like more than a quick check-in
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
-              The Psych Screener is Wellbeings&apos; companion app — the full PHQ-9/GAD-7/AUDIT-C picture, in six
+              {COMPANION_NAME} is Wellbeings&apos; companion app: the full PHQ-9/GAD-7/AUDIT-C picture, in six
               languages, with score history over time and a guided conversation if you&apos;re not sure where to
               start. It&apos;s free, private, and runs entirely on-device, same as this one.
             </div>
@@ -357,7 +358,7 @@ export function ResultsScreen({
         <div className="card" style={{ padding: "16px 18px", marginBottom: 26, display: "flex", flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
           <InfoIcon style={{ color: "var(--color-accent-400)", flex: "none", marginTop: 2 }} />
           <div style={{ fontSize: 13, color: "var(--color-neutral-300)", textWrap: "pretty" }}>
-            Some scores are in a range where talking to a professional genuinely helps — screeners at this level
+            Some scores are in a range where talking to a professional genuinely helps. Screeners at this level
             are exactly what clinicians use to start that conversation. Your plan below still applies; it works
             alongside support, not instead of it.{" "}
             <a

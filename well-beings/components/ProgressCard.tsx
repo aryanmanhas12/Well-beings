@@ -1,4 +1,10 @@
-import { readProgress, ProgressDirection } from "@/lib/progress";
+import {
+  readProgress,
+  readDimensionTrends,
+  coincidenceNote,
+  ProgressDirection,
+  TrendKind,
+} from "@/lib/progress";
 import { Wellbeings } from "@/hooks/useWellbeings";
 
 const TONE: Record<ProgressDirection, string> = {
@@ -48,6 +54,85 @@ function Sparkline({ series, color }: { series: (number | null)[]; color: string
   );
 }
 
+/* Direction is never carried by colour alone: each row prints an arrow AND
+   a word. Someone who cannot distinguish the two accent tones, or who has
+   calm mode on, still reads the same thing. */
+const KIND_MARK: Record<TrendKind, { glyph: string; word: string; tone: string }> = {
+  "trend-up": { glyph: "\u2191", word: "rising", tone: "var(--color-accent-300)" },
+  "trend-down": { glyph: "\u2193", word: "declining", tone: "var(--color-accent-400)" },
+  steady: { glyph: "\u2192", word: "steady", tone: "var(--color-neutral-400)" },
+  "one-off": { glyph: "\u2022", word: "one-off dip", tone: "var(--color-neutral-500)" },
+  repeated: { glyph: "\u223c", word: "up and down", tone: "var(--color-neutral-500)" },
+  insufficient: { glyph: "\u00b7", word: "not enough data", tone: "var(--color-neutral-600)" },
+};
+
+/**
+ * Per-dimension trends, under the combined one.
+ *
+ * The combined score answers "am I going up". It cannot answer "what moved",
+ * and those come apart constantly: sleep sliding while mood holds is a
+ * different situation from the reverse, and it wants different advice.
+ *
+ * Everything shown here has already been through the guards in lib/progress:
+ * a minimum number of logged days, a wider noise floor than the combined
+ * score uses, and an outlier test that demotes a single bad day from
+ * "declining" to "one-off". A tool that calls three noisy points a trend
+ * teaches people to stop believing it.
+ */
+function DimensionTrends({ checkins }: { checkins: Wellbeings["checkins"] }) {
+  const trends = readDimensionTrends(checkins);
+  if (trends.every((t) => t.kind === "insufficient")) return null;
+  const note = coincidenceNote(trends);
+
+  return (
+    <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--color-divider)" }}>
+      <div
+        style={{
+          fontSize: 10.5,
+          letterSpacing: ".07em",
+          textTransform: "uppercase",
+          color: "var(--color-neutral-600)",
+          marginBottom: 8,
+        }}
+      >
+        What moved
+      </div>
+      <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
+        {trends.map((t) => {
+          const m = KIND_MARK[t.kind];
+          return (
+            <li key={t.key} style={{ fontSize: 12 }}>
+              <span style={{ display: "flex", alignItems: "baseline", gap: 7 }}>
+                <span aria-hidden="true" style={{ color: m.tone, width: 10, flex: "none" }}>
+                  {m.glyph}
+                </span>
+                <span style={{ fontWeight: 600, minWidth: 54 }}>{t.label}</span>
+                <span style={{ color: m.tone }}>{m.word}</span>
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  paddingLeft: 17,
+                  color: "var(--color-neutral-500)",
+                  fontSize: 11.5,
+                  textWrap: "pretty",
+                }}
+              >
+                {t.note}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      {note && (
+        <p style={{ fontSize: 11.5, color: "var(--color-neutral-400)", margin: "12px 0 0", textWrap: "pretty" }}>
+          {note}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export function ProgressCard({ wb }: { wb: Wellbeings }) {
   const p = readProgress(wb.checkins);
   const color = TONE[p.direction];
@@ -72,9 +157,11 @@ export function ProgressCard({ wb }: { wb: Wellbeings }) {
         {p.detail}
       </p>
 
+      <DimensionTrends checkins={wb.checkins} />
+
       <p style={{ fontSize: 10.5, color: "var(--color-neutral-600)", margin: "8px 0 0", textWrap: "pretty" }}>
-        No points, badges or rewards here — in 79 app trials, the ones without gamification had lower dropout. Seeing a
-        real trend is what helps people keep going.
+        No points, badges or rewards here. In 79 app trials, the ones without gamification had lower
+        dropout, and seeing a real trend is what helps people keep going.
       </p>
     </div>
   );

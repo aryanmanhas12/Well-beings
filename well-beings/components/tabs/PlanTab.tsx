@@ -5,9 +5,9 @@ const WEEKLY_DEFS = [
   {
     id: "detach",
     title: "Detach ×3 evenings",
-    desc: "Three evenings fully off study/work — no tabs open in the head. The channel that cuts exhaustion most.",
+    desc: "Three evenings fully off study/work, with no tabs open in the head. The channel that cuts exhaustion most.",
   },
-  { id: "relax", title: "Relax ×2", desc: "Two deliberately calm sessions — music, bath, slow walk, nothing productive." },
+  { id: "relax", title: "Relax ×2", desc: "Two deliberately calm sessions: music, bath, slow walk, nothing productive." },
   {
     id: "mastery",
     title: "One mastery hour",
@@ -27,7 +27,7 @@ export function PlanTab({ wb }: { wb: Wellbeings }) {
   const sleepWindow = fmt(lightsOut) + " – " + fmt(p.wake);
   const sleepWindowWhy =
     (p.need === 9 ? "Teen target: 8–10h. " : "Adult target: 7–9h. ") +
-    "Held within ±30 min all 7 days — regularity beats duration for mental health risk.";
+    "Held within ±30 min all 7 days. Regularity beats duration for mental health risk.";
   const weekFocus = p.sleepBad
     ? "Stabilise the sleep window"
     : p.boHigh || p.boWatch
@@ -40,7 +40,7 @@ export function PlanTab({ wb }: { wb: Wellbeings }) {
     : p.boHigh || p.boWatch
       ? "Your drain pattern says the tank refills slower than it empties. This week recovery is scheduled, not leftover."
       : p.moodWatch || p.anxWatch
-        ? "Three movement sessions and a hard shutdown — the two highest-evidence moves for your flags."
+        ? "Three movement sessions and a hard shutdown: the two highest-evidence moves for your flags."
         : "Nothing is broken. The win is repetition: same window, same blocks, same shutdown.";
 
   return (
@@ -72,7 +72,7 @@ export function PlanTab({ wb }: { wb: Wellbeings }) {
 
       <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 18, margin: "0 0 4px" }}>Your interventions</h3>
       <p style={{ color: "var(--color-neutral-500)", fontSize: 12.5, margin: "0 0 16px" }}>
-        Chosen from your flags. Each one names its evidence — tap through to the paper in the Library.
+        Chosen from your flags. Each one names its evidence. Tap through to the paper in the Library.
       </p>
       <div data-tour="interventions" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginBottom: 34 }}>
         {interventions.map((iv) => (
@@ -104,7 +104,7 @@ export function PlanTab({ wb }: { wb: Wellbeings }) {
 
       <h3 style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 18, margin: "0 0 4px" }}>Weekly recovery quota</h3>
       <p style={{ color: "var(--color-neutral-500)", fontSize: 12.5, margin: "0 0 16px" }}>
-        Recovery isn&apos;t a reward for finishing — it&apos;s what keeps the engine running. Tick them off
+        Recovery isn&apos;t a reward for finishing. It&apos;s what keeps the engine running. Tick them off
         through the week.
       </p>
       <div data-tour="recovery-quota" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 12 }}>

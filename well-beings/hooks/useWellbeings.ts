@@ -271,7 +271,7 @@ export function useWellbeings() {
         : [
             "Hey there. I’m your Wellbeings check-in. It takes about five minutes, mostly taps. You can change any answer as you go, your answers save as you go, and there’s a help button on every screen.",
             "The important bit first: nothing leaves this device. No account, no server, no third parties. You can delete all of it with one tap, whenever you want.",
-            "It covers sleep, movement, food, stress, time to yourself and how your week is shaped. A few questions borrow wording from screeners clinicians use — those signal what is worth attention, they do not diagnose you.",
+            "It covers sleep, movement, food, stress, time to yourself and how your week is shaped. A few questions borrow wording from screeners clinicians use. Those signal what is worth attention, they do not diagnose you.",
           ],
       next
     );

@@ -18,7 +18,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
  * search box that would find nothing.
  */
 export const metadata: Metadata = {
-  title: `Page not found — ${SITE_NAME}`,
+  title: `Page not found · ${SITE_NAME}`,
   description: "That page does not exist. Here is everything on the site instead.",
   robots: { index: false, follow: true },
 };
@@ -58,18 +58,18 @@ export default function NotFound() {
           <h2>Where you probably meant to go</h2>
           <ul>
             <li>
-              <Link href="/">The Wellbeings check</Link> — five minutes, entirely private, and it
+              <Link href="/">The Wellbeings check</Link>: five minutes, entirely private, and it
               tells you which one thing is worth changing first.
             </li>
             <li>
-              <Link href="/resources/">Support lines</Link> — free and open 24/7, if you need
+              <Link href="/resources/">Support lines</Link>: free and open 24/7, if you need
               someone now.
             </li>
             <li>
-              <Link href="/about/">About Wellbeings</Link> — what it measures and what it does not.
+              <Link href="/about/">About Wellbeings</Link>: what it measures and what it does not.
             </li>
             <li>
-              <Link href="/privacy/">Privacy</Link> — where your answers live.
+              <Link href="/privacy/">Privacy</Link>: where your answers live.
             </li>
           </ul>
 
@@ -77,7 +77,7 @@ export default function NotFound() {
           <ul>
             {GUIDE_PAGES.map((p) => (
               <li key={p.path}>
-                <Link href={p.path}>{p.nav}</Link> — {p.description}
+                <Link href={p.path}>{p.nav}</Link>: {p.description}
               </li>
             ))}
           </ul>

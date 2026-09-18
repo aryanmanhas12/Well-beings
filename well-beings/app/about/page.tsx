@@ -4,6 +4,7 @@ import { PageShell } from "@/components/site/PageShell";
 import { JsonLd } from "@/components/site/JsonLd";
 import { metadataFor } from "@/lib/seo";
 import { psychScreenerLink } from "@/lib/bridge";
+import { COMPANION_NAME } from "@/lib/site";
 
 const PATH = "/about/";
 export const metadata: Metadata = metadataFor(PATH);
@@ -51,7 +52,7 @@ export default function AboutPage() {
           Sleep and its timing, energy, physical activity, eating and drinking, stress and recovery,
           mood, social connection, work or study load, concentration, screen use, routine and
           environment. The point of that breadth is that the thing making your weeks hard is often
-          not the thing you would have named — a schedule problem gets blamed on motivation, and a
+          not the thing you would have named. A schedule problem gets blamed on motivation, and a
           recovery problem gets blamed on discipline.
         </p>
 
@@ -62,19 +63,19 @@ export default function AboutPage() {
         </p>
         <ul>
           <li>
-            <strong>Observation</strong> — what you reported. &quot;You said you sleep about six
+            <strong>Observation</strong>: what you reported. &quot;You said you sleep about six
             hours and your timing shifts at weekends.&quot; No interpretation in it at all.
           </li>
           <li>
-            <strong>Interpretation</strong> — what that pattern may suggest, in hedged language,
+            <strong>Interpretation</strong>: what that pattern may suggest, in hedged language,
             because a questionnaire cannot know your life.
           </li>
           <li>
-            <strong>Recommendation</strong> — something specific you could try, sized to what you
+            <strong>Recommendation</strong>: something specific you could try, sized to what you
             told it about your time and situation.
           </li>
           <li>
-            <strong>Medical concern</strong> — the separate, clearly-marked category for &quot;this
+            <strong>Medical concern</strong>: the separate, clearly-marked category for &quot;this
             is a point where a professional is worth talking to&quot;. It is never mixed in with a
             tip.
           </li>
@@ -94,20 +95,20 @@ export default function AboutPage() {
           <Link href="/resources/">support page</Link> lists free lines you can reach today.
         </p>
 
-        <h2>Wellbeings and Psych Screener</h2>
+        <h2>Wellbeings and {COMPANION_NAME}</h2>
         <p>
           These are two tools with two jobs. Wellbeings is the broad lifestyle picture and the daily
-          system built from it. Psych Screener is the dedicated mental-health screening experience.
+          system built from it. {COMPANION_NAME} is the dedicated mental-health screening experience.
           Wellbeings deliberately does not try to be the second one: if what you describe looks like
           it needs a proper mental-health screen, it says so and points you there rather than
           pretending to do it itself.
         </p>
         <p>
           They share no data. Moving between them passes a single URL parameter saying which app you
-          came from, and nothing else — no answers, no scores, no identifier. Each app keeps its own
+          came from, and nothing else. No answers, no scores, no identifier. Each app keeps its own
           data on your own device.{" "}
           <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
-            Open Psych Screener
+            Open {COMPANION_NAME}
           </a>
           .
         </p>
@@ -124,7 +125,7 @@ export default function AboutPage() {
         <p>
           Wellbeings is built by Aryan Manhas as part of the NeuroBioPsych project. It is not a
           clinical product, it has no institutional backing, and it carries no professional
-          accreditation — saying so plainly seems more useful than implying otherwise. More about the
+          accreditation. Saying so plainly seems more useful than implying otherwise. More about the
           project is on the <a href="../me/">author page</a>.
         </p>
       </div>
