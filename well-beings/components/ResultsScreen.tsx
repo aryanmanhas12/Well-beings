@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from "react";
 import { InfoIcon } from "./icons";
 import { Profile, HelplineRegion } from "@/lib/types";
-import { psychScreenerLink } from "@/lib/bridge";
+import { ronakLink } from "@/lib/bridge";
 import { crisisLines } from "@/lib/helplines";
 import { Lang, t } from "@/lib/i18n";
 import { HelplineList } from "./HelplineList";
@@ -289,7 +289,7 @@ export function ResultsScreen({
             </div>
           </div>
           <a
-            href={psychScreenerLink({ crisis })}
+            href={ronakLink({ crisis })}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/site/PageShell";
 import { JsonLd } from "@/components/site/JsonLd";
 import { metadataFor } from "@/lib/seo";
-import { psychScreenerLink } from "@/lib/bridge";
+import { ronakLink } from "@/lib/bridge";
 import { COMPANION_NAME } from "@/lib/site";
 
 const PATH = "/about/";
@@ -26,8 +26,8 @@ const FAQ = [
     a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit and nothing for anyone else to read. Clearing the data deletes it from that browser permanently.",
   },
   {
-    q: "How is Wellbeings different from Psych Screener?",
-    a: "Wellbeings looks at the breadth of daily life: sleep, movement, food and drink, stress, recovery, connection, screen use and routine. Psych Screener is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps, they share no data, and each links to the other when the other is the more useful one.",
+    q: "How is Wellbeings different from Ronak?",
+    a: "Wellbeings looks at the breadth of daily life: sleep, movement, food and drink, stress, recovery, connection, screen use and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps, they share no data, and each links to the other when the other is the more useful one.",
   },
   {
     q: "Is the advice evidence-based?",
@@ -107,7 +107,7 @@ export default function AboutPage() {
           They share no data. Moving between them passes a single URL parameter saying which app you
           came from, and nothing else. No answers, no scores, no identifier. Each app keeps its own
           data on your own device.{" "}
-          <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
+          <a href={ronakLink()} target="_blank" rel="noopener noreferrer">
             Open {COMPANION_NAME}
           </a>
           .

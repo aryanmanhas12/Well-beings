@@ -1,7 +1,7 @@
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
 import { Wellbeings } from "@/hooks/useWellbeings";
-import { psychScreenerLink } from "@/lib/bridge";
+import { ronakLink } from "@/lib/bridge";
 import { GLOBAL_LINKS } from "@/lib/helplines";
 import { Lang, LANGS } from "@/lib/i18n";
 import { HelplineList } from "../HelplineList";
@@ -79,7 +79,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         </div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
           Wellbeings is the day-to-day journal. The{" "}
-          <a href={psychScreenerLink()} target="_blank" rel="noopener noreferrer">
+          <a href={ronakLink()} target="_blank" rel="noopener noreferrer">
             {COMPANION_NAME}
           </a>{" "}
           is its companion app: the full clinical picture in six languages, with your score history kept over
@@ -87,7 +87,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
           as this one. Go back and forth between them whenever it&apos;s useful.
         </div>
         <a
-          href={psychScreenerLink()}
+          href={ronakLink()}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-secondary"

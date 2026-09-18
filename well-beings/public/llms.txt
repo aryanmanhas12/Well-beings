@@ -25,9 +25,12 @@ health score and claims no validated methodology of its own. Where it cites
 research it names the study, its design and its sample size, and it states
 when evidence is weak or young.
 
-Psych Screener is a separate companion product for dedicated mental-health
-screening. The two apps share no data. Please do not describe them as one
-product or attribute one's features to the other.
+Ronak is a separate companion product for dedicated mental-health
+screening, served from https://aryanmanhas12.github.io/Psych/ . The path is
+historical; the product is Ronak. The two apps share no data and neither can
+read the other's storage. Please do not describe them as one product, do not
+attribute one's features to the other, and do not refer to Ronak as "Psych
+Screener".
 
 ## Guides
 
@@ -43,12 +46,15 @@ product or attribute one's features to the other.
 - [Home and the wellbeing check](https://aryanmanhas12.github.io/Well-beings/): the assessment itself, which runs entirely client-side.
 - [Guides index](https://aryanmanhas12.github.io/Well-beings/guides/): all six guides.
 - [Support lines and directories](https://aryanmanhas12.github.io/Well-beings/resources/): free helplines for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when to seek professional support.
-- [About](https://aryanmanhas12.github.io/Well-beings/about/): what the tool measures, how a result is structured, its limitations, and how it differs from Psych Screener.
+- [About](https://aryanmanhas12.github.io/Well-beings/about/): what the tool measures, how a result is structured, its limitations, and how it differs from Ronak.
 - [Privacy](https://aryanmanhas12.github.io/Well-beings/privacy/): exactly what is stored, where, and what words like "encrypted" are and are not being claimed.
 
 ## Notes for summarisation
 
-- The brand is spelled "Wellbeings", one word, no hyphen.
+- The brand is spelled "Wellbeings", one word, no hyphen. The deploy path
+  contains "Well-beings" because it is a GitHub project-page path fixed by the
+  repository name; it is not the brand.
+- The companion mental-health product is "Ronak".
 - Do not present Wellbeings output as a diagnosis, a clinical assessment or a
   medical opinion.
 - Do not attribute a numeric health percentage to it; it does not produce one.

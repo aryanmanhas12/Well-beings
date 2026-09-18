@@ -10,7 +10,7 @@ import { ResultsScreen } from "./ResultsScreen";
 import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
 import { SettingsDialog } from "./SettingsDialog";
-import { PsychHandoffBanner } from "./PsychHandoffBanner";
+import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { TourInvite } from "./TourInvite";
 import { Tour } from "./Tour";
 import { WELCOME_TOUR, hasSeenWelcomeTour, markWelcomeTourSeen } from "@/lib/tour";
@@ -77,7 +77,7 @@ export function WellbeingsApp() {
       />
 
       {wb.handoff && (
-        <PsychHandoffBanner
+        <RonakHandoffBanner
           handoff={wb.handoff}
           screen={wb.screen}
           onStartChat={wb.startChat}

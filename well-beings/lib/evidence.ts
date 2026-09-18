@@ -275,7 +275,7 @@ export const EVIDENCE: EvidenceItem[] = [
     strength: "large",
     finding:
       "Mental-health tools are mostly built in wealthy Western countries. When they were adapted deeply for other populations, meaning language plus genuinely resonant content and local input, dropout fell below 11%. Translation on its own left it as high as 56%. Adaptation is not a nice-to-have; it decides whether people stay.",
-    use: "why the companion Psych Screener ships in six languages rather than English with a translate button.",
+    use: "why the companion Ronak ships in six languages rather than English with a translate button.",
     cite: "Tandon et al., 2025, JMIR Mental Health",
     url: "https://consensus.app/papers/details/0ae37e9270f05c45a01c25fc635e7f9b/",
   },

@@ -3,7 +3,7 @@ import { COMPANION_NAME } from "./site";
 
 /**
  * The lifestyle half of Wellbeings, and the thing that makes it a different
- * product from Psych Screener rather than a smaller copy of it.
+ * product from Ronak rather than a smaller copy of it.
  *
  * Before this file existed, the check-in was built almost entirely out of
  * clinical mental-health instruments — PHQ-9, GAD-7, AUDIT-C — plus sleep.

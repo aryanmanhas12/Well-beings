@@ -15,7 +15,7 @@ const COPY: Record<0 | 1 | 2 | 3, { title: string; body: string }> = {
   },
 };
 
-export function PsychHandoffBanner({
+export function RonakHandoffBanner({
   handoff,
   screen,
   onStartChat,

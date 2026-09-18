@@ -125,7 +125,7 @@ export function useWellbeings() {
     setResumable({ answered: Object.keys(d.answers).length, depth: d.depth });
   }, []);
 
-  // Arriving from the Psych Screener's results view: read the severity band
+  // Arriving from the Ronak's results view: read the severity band
   // it passed once, then let the URL go back to plain — a refresh or a
   // shared link should never re-show the banner this drives.
   useEffect(() => {

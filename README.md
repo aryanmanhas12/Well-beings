@@ -7,11 +7,11 @@ you report into two or three realistic changes, and it does not diagnose anythin
 **Live app:** https://aryanmanhas12.github.io/Well-beings/
 **About the author:** https://aryanmanhas12.github.io/Well-beings/me/ — Aryan Manhas, the
 NeuroBioPsych vision, goals and ways to connect.
-**Companion project:** [Psych Screener](https://aryanmanhas12.github.io/Psych/) — the dedicated
+**Companion project:** [Ronak](https://aryanmanhas12.github.io/Psych/) — the dedicated
 mental-health screening experience (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages).
 
-Wellbeings and Psych Screener are deliberately separate products. Wellbeings is the broad
-lifestyle picture and the daily system built from it; Psych Screener is the mental-health screen.
+Wellbeings and Ronak are deliberately separate products. Wellbeings is the broad
+lifestyle picture and the daily system built from it; Ronak is the mental-health screen.
 Wellbeings does not try to be the second one — when what someone describes looks like it needs a
 proper mental-health screen, it says so and points there. The two apps share no data: moving
 between them passes a single URL parameter naming the origin app and nothing else.

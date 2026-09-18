@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Wellbeings } from "@/hooks/useWellbeings";
-import { psychScreenerLink } from "@/lib/bridge";
+import { ronakLink } from "@/lib/bridge";
 import { KIND_LABEL, PROMPTS, countWords, nextPrompt, readCadence, recentWords } from "@/lib/journal";
 
 function fmtDate(iso: string) {
@@ -130,7 +130,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
                   </button>
                   <a
                     className="btn btn-secondary"
-                    href={psychScreenerLink({ crisis: true })}
+                    href={ronakLink({ crisis: true })}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ fontSize: 12 }}

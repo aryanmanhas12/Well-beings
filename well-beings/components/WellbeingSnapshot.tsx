@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { buildSnapshot, medicalNotes, topPriorities } from "@/lib/lifestyle";
-import { psychScreenerLink } from "@/lib/bridge";
+import { ronakLink } from "@/lib/bridge";
 import { Profile } from "@/lib/types";
 import { COMPANION_NAME } from "@/lib/site";
 
@@ -165,7 +165,7 @@ export function WellbeingSnapshot({ profile }: { profile: Profile }) {
               Support lines
             </Link>
             <a
-              href={psychScreenerLink()}
+              href={ronakLink()}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-secondary"

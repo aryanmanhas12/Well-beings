@@ -1,11 +1,11 @@
 /**
- * The Wellbeings ↔ Psych Screener handoff.
+ * The Wellbeings ↔ Ronak handoff.
  *
- * Psych Screener does the occasional deep clinical check across five
+ * Ronak does the occasional deep clinical check across five
  * instruments (PHQ-9, GAD-7, WHO-5, AUDIT-C…); Wellbeings does the daily
  * pulse and the system built around it. Each points at the other when it's
  * the more useful tool for the moment — this file is the Wellbeings half
- * of a protocol Psych Screener already ships (see its index.html, "Well-
+ * of a protocol Ronak already ships (see its index.html, "Well-
  * beings companion app").
  *
  * The contract is a URL parameter only, in both directions. No scores, no
@@ -13,22 +13,23 @@
  * on its own privacy page that nothing it holds ever leaves the device,
  * and a richer handoff would quietly break that promise.
  *
- *   Outbound (Wellbeings -> Psych Screener):
+ *   Outbound (Wellbeings -> Ronak):
  *     ?ref=wellbeings
- *     Psych Screener shows a welcome-back banner. Carries nothing about
+ *     Ronak shows a welcome-back banner. Carries nothing about
  *     what triggered the redirect on this end.
  *
- *   Inbound (Psych Screener -> Wellbeings):
+ *   Inbound (Ronak -> Wellbeings):
  *     ?ref=psych-screener&band=<0-3>
  *     band is the severity band just shown there — 0 minimal, 3 high —
  *     nothing finer-grained. Read once, then stripped from the address bar
  *     so a refresh or a shared link doesn't keep re-showing the banner.
  */
 
-export const PSYCH_SCREENER_URL = "https://aryanmanhas12.github.io/Psych/";
+/* The deploy path is /Psych/ for historical reasons; the product is Ronak. */
+export const RONAK_URL = "https://aryanmanhas12.github.io/Psych/";
 
-export function psychScreenerLink(opts: { crisis?: boolean } = {}): string {
-  const url = new URL(PSYCH_SCREENER_URL);
+export function ronakLink(opts: { crisis?: boolean } = {}): string {
+  const url = new URL(RONAK_URL);
   url.searchParams.set("ref", "wellbeings");
   url.hash = opts.crisis ? "resources" : "guide";
   return url.toString();
@@ -39,7 +40,7 @@ export interface InboundHandoff {
 }
 
 /** Reads the inbound handoff once and strips it from the URL immediately —
-    same pattern Psych Screener uses on its side, so a page refresh never
+    same pattern Ronak uses on its side, so a page refresh never
     re-triggers the banner. Safe to call from a client-only effect; returns
     null during SSR and when there's nothing to read. */
 export function readInboundHandoff(): InboundHandoff | null {

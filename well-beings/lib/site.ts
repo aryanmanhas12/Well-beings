@@ -28,10 +28,24 @@ export const SITE_URL = `${SITE_ORIGIN}${SITE_PATH}`;
 export const SITE_NAME = "Wellbeings";
 export const SITE_TAGLINE = "Understand your everyday wellbeing, then change one thing that sticks";
 
-/** The companion product. Wellbeings is the broad lifestyle picture; this is
-    the dedicated mental-health screening experience. They are separate tools
-    on purpose and share no data — see lib/bridge.ts for the whole contract. */
-export const COMPANION_NAME = "Psych Screener";
+/**
+ * The companion product. Wellbeings is the broad lifestyle picture; Ronak is
+ * the dedicated mental-health screening experience. They are separate tools on
+ * purpose and share no data. See lib/bridge.ts for the whole contract.
+ *
+ * The name is "Ronak", taken from the product itself rather than assumed:
+ * its repository titles the page "Ronak — Free, Private Mental Health
+ * Screening" and its README opens "Ronak — Screen Early. Act Early." The app
+ * was called Ronak here for a long time because it is served from a
+ * path named /Psych/, which is the deploy location, not the brand.
+ *
+ * The URL parameters in lib/bridge.ts deliberately did NOT follow this
+ * rename: Ronak ships code that reads `ref=wellbeings` and emits
+ * `ref=psych-screener`, so those two strings are a wire format agreed between
+ * two applications. Changing them to match the display name would silently
+ * break the handoff in both directions.
+ */
+export const COMPANION_NAME = "Ronak";
 
 export interface SitePage {
   /** Route path, always with a trailing slash to match next.config's
@@ -145,7 +159,7 @@ export const PAGES: SitePage[] = [
     nav: "About",
     title: "About Wellbeings · what it is and what it is not",
     description:
-      "What Wellbeings measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Psych Screener.",
+      "What Wellbeings measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Ronak.",
     changeFrequency: "monthly",
     priority: 0.6,
   },
@@ -159,7 +173,7 @@ export const PAGES: SitePage[] = [
     hiddenInNav: true,
     title: "Aryan Manhas · NeuroBioPsych",
     description:
-      "Aryan Manhas builds free, private, evidence-based wellbeing and mental-health tools: Wellbeings and the Psych Screener. The NeuroBioPsych vision treats the neural, biological and psychosocial layers as one problem.",
+      "Aryan Manhas builds free, private, evidence-based wellbeing and mental-health tools: Wellbeings and the Ronak. The NeuroBioPsych vision treats the neural, biological and psychosocial layers as one problem.",
     changeFrequency: "yearly",
     priority: 0.3,
   },

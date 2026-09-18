@@ -194,10 +194,42 @@ h6 {
 p {
   margin: 0 0 var(--space-3);
 }
+/* Links are underlined by default, and that is an accessibility decision
+   rather than a stylistic one. WCAG 1.4.1 says colour cannot be the only
+   thing distinguishing a link from the text around it, and axe-core flagged
+   exactly that on the one inline link in the app's disclaimer: <a>Help now</a>
+   sitting inside a sentence with nothing but a colour change to mark it.
+
+   Rather than underline that one link, the default flipped and the standalone
+   links opt out below. A standalone link — a nav item, a card, a button, a
+   row in a helpline list — is not inside a block of text, so nothing is
+   relying on colour to separate it from prose, and 1.4.1 does not apply. An
+   inline link always is, and there is no way to know from CSS which is which
+   except by naming them, so they are named. */
 a {
   color: var(--color-accent-300);
   text-underline-offset: 3px;
+  text-decoration: underline;
+}
+
+/* Standalone links: their own element, with no surrounding sentence to be
+   confused with. */
+.btn,
+.site-wordmark,
+.site-nav a,
+.site-foot a,
+.crumbs a,
+.card-link,
+.app-site-link,
+.tag,
+.helpline-name,
+.helpline-contact,
+a.seg-opt,
+a[class*="btn-"] {
   text-decoration: none;
+}
+.site-nav a[aria-current="page"] {
+  text-decoration: underline;
 }
 a:hover {
   color: var(--color-accent-200);

@@ -127,13 +127,18 @@ for (const p of pages) {
   }
 
   /* Brand spelling. Only in visible text and metadata — code identifiers and
-     the deploy path legitimately keep the old form. */
+     the deploy path legitimately keep the old form. The companion product is
+     Ronak; "Psych Screener" was this repo's own misnaming of it and must not
+     come back into visible copy. */
   const visible = p.html
     .replace(/<script[\s\S]*?<\/script>/g, "")
     .replace(/<style[\s\S]*?<\/style>/g, "")
     .replace(/<[^>]+>/g, " ");
   for (const bad of ["Well-Beings", "Well Beings", "WellBeing ", "Wellbeingss"]) {
     if (visible.includes(bad)) fail(p.route, `wrong brand spelling in visible text: "${bad}"`);
+  }
+  for (const bad of ["Psych Screener", "PsychScreener"]) {
+    if (visible.includes(bad)) fail(p.route, `companion named "${bad}"; it is Ronak`);
   }
 
   /* Nothing should leak the framework on a page a stranger might land on. */
@@ -172,7 +177,7 @@ else {
 
 for (const [f, required] of [
   ["robots.txt", ["Sitemap:", "Allow: /"]],
-  ["llms.txt", ["# Wellbeings", "Psych Screener"]],
+  ["llms.txt", ["# Wellbeings", "Ronak"]],
   ["og.png", []],
   ["404.html", []],
 ]) {

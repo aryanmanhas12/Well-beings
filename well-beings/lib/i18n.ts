@@ -10,7 +10,7 @@
  *
  * So `checkinEnglishOnly` exists and is shown, rather than letting someone
  * switch to Hindi and discover the mismatch three questions in. The companion
- * Psych Screener ships properly localised instruments; we link to it.
+ * Ronak ships properly localised instruments; we link to it.
  *
  * Adding a language is a data change: extend `Lang`, add one object to
  * `STRINGS`, and the type checker names every string still missing.
@@ -187,7 +187,7 @@ const en: Strings = {
   partOf: (n, total) => `part ${n} of ${total}`,
 
   checkinEnglishOnly:
-    "The check-in itself stays in English: PHQ-9 and GAD-7 are validated word-for-word, and a loose translation would quietly break the scores. For properly localised instruments, use the Psych Screener.",
+    "The check-in itself stays in English: PHQ-9 and GAD-7 are validated word-for-word, and a loose translation would quietly break the scores. For properly localised instruments, use the Ronak.",
   screenerItemsEnglish:
     "The buttons and headings around the questions follow your language. The screener questions themselves stay in English, because they're validated word-for-word.",
   appContentEnglish:
@@ -275,7 +275,7 @@ const hi: Strings = {
   partOf: (n, total) => `भाग ${n} / ${total}`,
 
   checkinEnglishOnly:
-    "जाँच स्वयं अंग्रेज़ी में ही रहती है: PHQ-9 और GAD-7 शब्द-दर-शब्द प्रमाणित हैं, और ढीला अनुवाद चुपचाप उनके स्कोर बिगाड़ देगा। सही ढंग से अनूदित प्रश्नावली के लिए Psych Screener इस्तेमाल करें।",
+    "जाँच स्वयं अंग्रेज़ी में ही रहती है: PHQ-9 और GAD-7 शब्द-दर-शब्द प्रमाणित हैं, और ढीला अनुवाद चुपचाप उनके स्कोर बिगाड़ देगा। सही ढंग से अनूदित प्रश्नावली के लिए Ronak इस्तेमाल करें।",
   screenerItemsEnglish:
     "सवालों के आस-पास के बटन और शीर्षक आपकी भाषा में हैं। स्क्रीनर के सवाल स्वयं अंग्रेज़ी में रहते हैं, क्योंकि वे शब्द-दर-शब्द प्रमाणित हैं।",
   appContentEnglish:
