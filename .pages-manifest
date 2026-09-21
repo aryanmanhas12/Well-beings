@@ -9,11 +9,13 @@ __next._tree.txt
 _next
 _not-found
 about
+apple-touch-icon.png
 favicon.ico
 guides
 icon-192.png
 icon-512.png
 icon-maskable.png
+icon.svg
 index.html
 index.txt
 llms.txt
@@ -25,3 +27,4 @@ resources
 robots.txt
 sitemap.xml
 sw.js
+terms

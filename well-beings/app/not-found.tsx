@@ -71,6 +71,9 @@ export default function NotFound() {
             <li>
               <Link href="/privacy/">Privacy</Link>: where your answers live.
             </li>
+            <li>
+              <Link href="/terms/">Terms of use</Link>: what this tool is and is not.
+            </li>
           </ul>
 
           <h2>All the guides</h2>

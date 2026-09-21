@@ -5,18 +5,12 @@ import { TOUR_DWELL_MS } from "@/lib/tour";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Depth } from "@/lib/lifestyle";
 
-/** Enough hue separation that two consecutive cards never read as one card
-    whose text changed. Values are hues, not colours — the card mixes its own
-    gradient from them so light/dark themes need no second palette.
-
-    The old set spanned the wheel (indigo, violet, blue, teal), which made the
-    deck look like a chart legend and put it at odds with everything around
-    it. These all sit in the warm arc — rust, amber, red clay, ochre, dusty
-    rose — so the deck reads as one object seen in different light rather than
-    nine unrelated slides. Neighbours stay ≥16° apart, which is what actually
-    stops two consecutive cards from blurring together; the muting that keeps
-    them from shouting is done in the CSS, not here. */
-const HUES = [22, 38, 8, 52, 350, 30, 14, 44, 4];
+/* The deck used to give every card its own hue, nine of them, cycling. The
+   stated reason was that two consecutive cards should not read as one card
+   whose text changed — a real problem with a real solution already on screen:
+   the counter says "2 / 11" and the new card animates in. Colour was a
+   second, louder copy of a signal that already existed, and nine arbitrary
+   hues is a rainbow rather than a palette. One ground now, set in CSS. */
 
 
 /**
@@ -54,7 +48,6 @@ export function StatementIntro({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const statement = STATEMENTS[index];
-  const hue = HUES[index % HUES.length];
   const answered = picked !== null;
   const correct = picked === statement.researchAgrees;
 
@@ -111,7 +104,6 @@ export function StatementIntro({
         key={statement.id}
         data-tour="welcome-hero"
         className="statement-card statement-enter"
-        style={{ ["--stmt-hue" as string]: String(hue) }}
       >
         <span className="statement-quote statement-quote-open" aria-hidden="true">
           &ldquo;
@@ -125,7 +117,6 @@ export function StatementIntro({
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         <button
           className="stmt-btn stmt-btn-no"
-          style={{ ["--stmt-hue" as string]: String(hue) }}
           data-picked={picked === false}
           aria-pressed={picked === false}
           onClick={() => pick(false)}
@@ -134,7 +125,6 @@ export function StatementIntro({
         </button>
         <button
           className="stmt-btn stmt-btn-yes"
-          style={{ ["--stmt-hue" as string]: String(hue) }}
           data-picked={picked === true}
           aria-pressed={picked === true}
           onClick={() => pick(true)}

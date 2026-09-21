@@ -141,16 +141,19 @@ html {
      lying about the time left is worse than having no bar. */
   --deck-dwell: 7000ms;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+  /* Tightened from 4/8/14. A 14px radius on a 44px control is most of the
+     control, which is the soft, pillowy look this design avoids; these read
+     as deliberate corners rather than as rounding applied for its own sake. */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 
   /* Shadows carry a little brown too. A neutral-black drop shadow over a
      warm ground is the thing that quietly makes a warm palette look
      muddy — the shade has to belong to the same light. */
   --shadow-sm: 0 0 0 1px #4A4034;
-  --shadow-md: 0 0 0 1px #6E6150, 0 6px 18px rgba(18, 11, 5, 0.55);
-  --shadow-lg: 0 0 0 1px #A8967E, 0 16px 40px rgba(18, 11, 5, 0.65);
+  --shadow-md: 0 0 0 1px #6E6150, 0 3px 10px rgba(18, 11, 5, 0.4);
+  --shadow-lg: 0 0 0 1px #A8967E, 0 6px 20px rgba(18, 11, 5, 0.45);
 }
 
 *,
@@ -622,18 +625,12 @@ a,
   transform: scale(0.97);
 }
 
-/* — cards lift slightly on hover, only where hovering is real — */
-@media (hover: hover) and (pointer: fine) {
-  .card-interactive {
-    transition:
-      transform var(--dur-base) var(--ease-out),
-      box-shadow var(--dur-base) var(--ease-out);
-  }
-  .card-interactive:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-}
+/* The .card-interactive hover lift is gone. It raised a card two pixels and
+   dropped a shadow under it, which told nobody anything: a card is not a
+   physical object, and on the phones this app is mostly used on, hover does
+   not exist at all. Interactive cards are still marked as interactive by
+   being links or buttons, which is what actually communicates it. */
+
 
 /* — reduced motion —
    Honoured globally, with one deliberate exception. The breathing pacer
@@ -805,8 +802,8 @@ a,
   --color-section-ghost: #DCBE9C;
 
   --shadow-sm: 0 0 0 1px #E3D6C4;
-  --shadow-md: 0 0 0 1px #D6C9B8, 0 6px 18px rgba(42, 33, 26, 0.08);
-  --shadow-lg: 0 0 0 1px #BFAE97, 0 16px 40px rgba(42, 33, 26, 0.16);
+  --shadow-md: 0 0 0 1px #D6C9B8, 0 3px 10px rgba(42, 33, 26, 0.07);
+  --shadow-lg: 0 0 0 1px #BFAE97, 0 6px 20px rgba(42, 33, 26, 0.1);
 }
 
 /* High contrast: layered on top of whichever theme is active, so it works
@@ -915,57 +912,31 @@ a,
    Statement cards
    ─────────────────────────────────────────────────────────────
    The landing page opens on a claim rather than a sales pitch, set
-   in display type on a saturated card. The palette here is
-   deliberately NOT the app's surface tokens: this is the one place
-   that should feel like a poster, and a card that quietly turned
-   white in the light theme would lose the whole effect. Each card
-   picks its own hue from --stmt-hue so consecutive statements read
-   as different objects rather than one card changing its text.
+   large on the section tokens: deep umber in the dark theme, warm
+   sand in the light one. It carries its theme's own text colour, so
+   it reads as a poster in both rather than as a dark rectangle
+   stranded on a cream page.
+
+   It used to rotate through nine hues, one per card, with a radial
+   highlight, a diagonal gradient and a slowly drifting sheen behind
+   the type. Three separate problems with that. Nine arbitrary hues
+   is a rainbow, not a palette. The sheen was decoration that moved,
+   which is the thing that most reliably makes a page feel generated.
+   And the hue rotation existed to solve a problem the deck already
+   solves honestly: telling you the card changed. It shows "2 / 11"
+   and animates the new card in. That is the signal; colour was a
+   second, noisier copy of it.
+
+   One flat ground now, from the section tokens, with a hairline.
+   Cream on deep umber measures 12.9:1.
    ───────────────────────────────────────────────────────────── */
 .statement-card {
-  --stmt-hue: 258;
   position: relative;
   border-radius: var(--radius-lg);
-  padding: clamp(28px, 5vw, 44px) clamp(24px, 4.5vw, 40px);
-  overflow: hidden;
-  isolation: isolate;
-  /* Saturation came down across the board (72/68/62% → 52/48/44%) at the
-     same time the hues went warm. A fully saturated orange card is
-     shouting, and this one is asking someone whether they sleep enough.
-     Earthy means warm AND muted; only one of those on its own reads as a
-     warning label. The radial highlight sits at 32% lightness rather than
-     34% so white type clears 4.5:1 on the brightest point of every hue in
-     the deck — the ochre card was the one that failed at 34%, at 4.47:1.
-     The far corner's hue shift dropped from +26° to +12° for the same
-     reason: on the old cool hues +26° was a neighbour, but from a rust
-     base it lands in olive, and a card that fades brown-to-green looks
-     muddy rather than deep. */
-  background:
-    radial-gradient(120% 140% at 12% 0%, hsl(var(--stmt-hue) 52% 32%) 0%, transparent 58%),
-    linear-gradient(148deg, hsl(var(--stmt-hue) 48% 22%) 0%, hsl(calc(var(--stmt-hue) + 12) 44% 13%) 100%);
-  box-shadow:
-    0 0 0 1px hsl(var(--stmt-hue) 55% 66% / 0.34),
-    0 18px 48px -18px hsl(var(--stmt-hue) 60% 8% / 0.9);
-  color: #fff;
-}
-
-/* A soft moving sheen. Purely decorative, so it is the first thing
-   reduced-motion switches off (via the global rule above). */
-.statement-card::after {
-  content: "";
-  position: absolute;
-  inset: -40%;
-  z-index: -1;
-  background: radial-gradient(40% 40% at 50% 50%, hsl(var(--stmt-hue) 62% 70% / 0.22), transparent 70%);
-  animation: stmtDrift 14s var(--ease-out) infinite alternate;
-}
-@keyframes stmtDrift {
-  from {
-    transform: translate3d(-6%, -4%, 0) scale(1);
-  }
-  to {
-    transform: translate3d(8%, 6%, 0) scale(1.15);
-  }
+  padding: clamp(26px, 5vw, 40px) clamp(22px, 4.5vw, 36px);
+  background: var(--color-section);
+  box-shadow: inset 0 0 0 1px var(--color-section-ghost);
+  color: var(--color-neutral-100);
 }
 
 .statement-text {
@@ -993,7 +964,7 @@ a,
   font-family: var(--font-display);
   font-size: clamp(56px, 9vw, 96px);
   line-height: 0.6;
-  color: hsl(var(--stmt-hue) 62% 78%);
+  color: var(--color-section-ghost);
   opacity: 0.85;
   user-select: none;
 }
@@ -1059,8 +1030,8 @@ a,
   font-weight: 600;
   font-size: 14px;
   min-height: 44px;
-  padding: 10px 30px;
-  border-radius: 999px;
+  padding: 10px 26px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   border: 1px solid transparent;
   transition:
@@ -1122,42 +1093,6 @@ a,
   color: var(--color-text);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Welcome orbit
-   ─────────────────────────────────────────────────────────────
-   Three rotations at unrelated periods so the composition never
-   visibly repeats, all slow enough to read as ambient rather than
-   as something loading. transform only — no layout, no paint of
-   anything but the compositor layer. The global reduced-motion
-   rule freezes these, and the rings are already offset from each
-   other at rest so the still frame is a composition, not a
-   collapsed one.
-   ───────────────────────────────────────────────────────────── */
-.aura {
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-.aura-orbit {
-  transform-origin: 110px 110px;
-  transform-box: view-box;
-}
-.aura-orbit-1 { animation: auraSpin 34s linear infinite; }
-.aura-orbit-2 { animation: auraSpin 52s linear infinite reverse; }
-.aura-orbit-3 { animation: auraSpin 43s linear infinite; }
-.aura-glow,
-.aura-core {
-  transform-origin: 110px 110px;
-  transform-box: view-box;
-  animation: auraBreathe 10s ease-in-out infinite;
-}
-@keyframes auraSpin { to { transform: rotate(360deg); } }
-@keyframes auraBreathe {
-  0%, 100% { transform: scale(0.94); opacity: 0.75; }
-  45%      { transform: scale(1.06); opacity: 1; }
-}
-
-/* Visually hidden, still announced — used by the tour's step counter. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1362,26 +1297,41 @@ button, a, input, select, summary, .btn, .card {
   background-clip: padding-box;
 }
 
-/* ── Spring micro-interactions & tactile feedback ── */
-button, .btn, .stmt-btn, .card, .statement-card {
-  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 0.15s ease,
-              border-color 0.15s ease;
+/* ── Interaction feedback ────────────────────────────────────────────────
+   What is here is confirmation that a tap landed, and nothing else.
+
+   What used to be here: a spring curve with overshoot on every button, and
+   a hover state that lifted every card two pixels and dropped two stacked
+   shadows under it. Neither told anyone anything. A card is not a physical
+   object, lifting it on hover communicates no state, and on a phone — where
+   most of this app is used — hover does not exist at all, so the whole
+   effect was cost with no audience.
+
+   The press state stays. That one is functional: it is the only confirmation
+   that a tap registered before the next screen paints. */
+button,
+.btn,
+.stmt-btn {
+  transition:
+    background-color 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease;
 }
-button:active, .btn:active, .stmt-btn:active {
-  transform: scale(0.972);
-}
-.card:hover, .statement-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.12), 0 12px 28px rgba(0,0,0,0.14);
+button:active,
+.btn:active,
+.stmt-btn:active {
+  transform: scale(0.98);
 }
 
-/* ── Ambient Glassmorphism for Nav & Overlays ── */
-header.nav, .nav {
-  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
-  backdrop-filter: blur(18px) saturate(180%) !important;
-  background-color: color-mix(in srgb, var(--color-bg) 86%, transparent) !important;
+/* The header sits above scrolling content, so it needs to be opaque.
+   It was doing that with blur(18px) saturate(180%) — glassmorphism, which
+   costs a compositor layer on every scroll frame, washes out the text
+   behind it, and looks like every other product of 2024. A solid surface
+   with a hairline does the same job for nothing. */
+header.nav,
+.nav {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-divider);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1575,10 +1525,15 @@ header.nav, .nav {
 /* Set apart from the prose because it is a different KIND of statement —
    the boundary between "here is something to try" and "this is the point
    where a person, not an app, is what you need". */
+/* Set apart by rules above and below rather than by a coloured stripe down
+   the left edge. The stripe is the house style of every generated page; a
+   pair of hairlines is the older editorial device for "this is a different
+   kind of statement", and it does not spend a colour to say so. */
 .callout {
-  border-left: 3px solid var(--color-accent-700);
-  padding: 2px 0 2px 16px;
-  margin-top: 1.6em;
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+  padding: 18px 0;
+  margin-top: 2em;
 }
 .callout > :first-child {
   margin-top: 0;
@@ -1689,5 +1644,191 @@ header.nav, .nav {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+  }
+}
+
+/* A parenthetical: the "why are you asking this", the browser-specific
+   install hint, the prompt behind a journal entry. Previously each drew a
+   2px accent stripe down its left edge. A slightly inset surface says the
+   same thing without spending the accent colour on decoration, and it works
+   identically in both themes and in high contrast. */
+.aside-note {
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+:root[data-contrast="high"] .aside-note {
+  background: transparent;
+  border: 1px solid var(--color-divider);
+}
+
+/* ── Specification list ──────────────────────────────────────────────────
+   Term and definition, not three tiles in a row. At 560px and up the term
+   takes a fixed column so the definitions align into a readable block; below
+   that it stacks, which is the only thing that actually works at 390px. The
+   rule sits above each row rather than around it: a full border would turn
+   these back into cards. */
+.spec-list {
+  margin: 0;
+  border-top: 1px solid var(--color-divider);
+}
+.spec-row {
+  border-bottom: 1px solid var(--color-divider);
+  padding: 14px 0;
+}
+.spec-row dt {
+  font-weight: 600;
+  font-size: 13.5px;
+  margin-bottom: 3px;
+}
+.spec-row dd {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--color-neutral-400);
+  text-wrap: pretty;
+}
+@media (min-width: 560px) {
+  .spec-row {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 20px;
+    align-items: baseline;
+  }
+  .spec-row dt {
+    margin-bottom: 0;
+  }
+}
+
+/* ── Welcome screen layout ───────────────────────────────────────────────
+   This was inline styles, which cannot carry a media query, so the phone got
+   the desktop's spacing: 48px of padding above the fold and 24px down each
+   side of a 360px screen. That is 13% of the width spent on margin and most
+   of a thumb's reach spent on emptiness before the first word.
+
+   The numbers below are per-breakpoint on purpose rather than clamped: a
+   phone wants the content to start immediately, and a desktop wants the air.
+   Those are different intentions, not two ends of one scale. */
+.wel-band {
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  box-sizing: border-box;
+}
+.wel-hero {
+  padding-top: 20px;
+  padding-bottom: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+}
+.wel-hero-main {
+  flex: 1 1 520px;
+  min-width: 0; /* lets a long word wrap instead of forcing the flex item wide */
+}
+.wel-rail {
+  flex: 0 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wel-research {
+  padding-bottom: 30px;
+}
+.wel-how {
+  padding-bottom: 34px;
+}
+.wel-stats {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 720px) {
+  .wel-band {
+    padding-inline: 24px;
+  }
+  .wel-hero {
+    padding-top: 44px;
+    padding-bottom: 40px;
+    gap: 48px;
+  }
+  .wel-hero-main {
+    min-width: 300px;
+  }
+  .wel-rail {
+    min-width: 260px;
+    gap: 16px;
+  }
+  .wel-research {
+    padding-bottom: 44px;
+  }
+  .wel-how {
+    padding-bottom: 48px;
+  }
+  .wel-stats {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+}
+
+/* ── Phone-first trims ───────────────────────────────────────────────────
+   Everything here is a measurement, not a preference: each rule exists
+   because something was measurably too big, too cramped or too far down the
+   page on a 360px screen. */
+@media (max-width: 719px) {
+  /* The app's own chrome. 24px of side padding on a 360px screen spends 13%
+     of the width on nothing. */
+  .nav {
+    padding-inline: 14px;
+  }
+
+  /* The poster can afford less inset on a narrow screen; the type is the
+     point and the frame was taking a fifth of the line length. */
+  .statement-card {
+    padding: 22px 18px;
+  }
+
+  /* Deck controls: position, timer, pause, prev, next. Five items in a row
+     at 360px is 55px each. The timer bar gives up its width first because
+     it is the only one that is not a control. */
+  .deck-timer {
+    min-width: 40px;
+  }
+
+  /* Results and app screens share this measure with the welcome bands. */
+  .site-main {
+    padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right));
+  }
+}
+
+/* One measure, shared by the results and the built app, matching the welcome
+   bands so the three screens do not each invent their own gutter. Was two
+   inline styles with a hard 24px, which a media query could not reach. */
+.app-measure {
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+}
+.app-measure-results {
+  flex: 1;
+  padding-block: 24px 44px;
+}
+.app-measure-app {
+  /* The bottom pad clears the fixed tab bar plus the home indicator. */
+  padding-block: 20px calc(64px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 720px) {
+  .app-measure {
+    padding-inline: 24px;
+  }
+  .app-measure-results {
+    padding-block: 44px 60px;
+  }
+  .app-measure-app {
+    padding-block: 30px 70px;
   }
 }

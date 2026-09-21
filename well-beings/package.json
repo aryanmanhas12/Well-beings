@@ -9,7 +9,8 @@
     "lint": "eslint",
     "audit": "node scripts/audit-site.mjs",
     "verify": "tsc --noEmit && eslint . && NEXT_PUBLIC_BASE_PATH=/Well-beings next build && node scripts/audit-site.mjs",
-    "og": "node scripts/make-og-image.mjs"
+    "og": "node scripts/make-og-image.mjs",
+    "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
     "next": "16.2.11",

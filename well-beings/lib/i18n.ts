@@ -57,6 +57,7 @@ export interface Strings {
 
   /* landing pull-figures */
   researchKicker: string;
+  howItBehaves: string;
   statSleepBody: string;
   statPlanBody: string;
 
@@ -143,6 +144,7 @@ const en: Strings = {
     "Wellbeings is a self-guidance tool, not a medical device. Its screeners signal. They don’t diagnose.",
 
   researchKicker: "From the research inside",
+  howItBehaves: "How this one behaves",
   statSleepBody:
     "the sleep length linked to the sharpest thinking and steadiest mood in later life. Both shorter and longer sleep tracked with worse outcomes, in a UK Biobank cohort of 498,277 adults aged 38 to 73 (Li et al., 2022, Nature Aging).",
   statPlanBody:
@@ -230,6 +232,7 @@ const hi: Strings = {
     "वेल-बीइंग्स एक स्व-मार्गदर्शन साधन है, चिकित्सा उपकरण नहीं। इसके स्क्रीनर संकेत देते हैं, निदान नहीं करते।",
 
   researchKicker: "इसमें शामिल शोध से",
+  howItBehaves: "यह ऐप कैसे काम करता है",
   statSleepBody:
     "वह नींद जो बाद की उम्र में सबसे तेज़ सोच और सबसे स्थिर मनोदशा से जुड़ी पाई गई। कम या ज़्यादा, दोनों तरह की नींद ख़राब नतीजों से जुड़ी थी। यूके बायोबैंक के 38 से 73 वर्ष के 498,277 वयस्कों के समूह में (Li et al., 2022, Nature Aging)।",
   statPlanBody:

@@ -27,39 +27,44 @@ import { dirname, resolve } from "node:path";
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), "../public/og.png");
 const EXECUTABLE = process.env.CHROMIUM_PATH || "/opt/pw-browsers/chromium";
 
+/* The card used to carry the same orbiting rings and radial glow the welcome
+   screen had. Both are gone from the product for the same reason: a glowing
+   orb is decoration that says nothing. What replaces it is the mark itself —
+   four bars, descending, the first in clay — which is the actual shape of
+   what the app produces and now the shape of its icon. */
 const html = `<!doctype html><meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0}
   body{width:1200px;height:630px;background:#17120E;color:#F3E9DC;
-       font-family:Karla,system-ui,sans-serif;display:flex;flex-direction:column;
-       justify-content:space-between;padding:72px 80px;overflow:hidden;position:relative}
-  /* The same warm orbit the welcome screen opens on, flattened to a still. */
-  .glow{position:absolute;width:760px;height:760px;right:-240px;top:-190px;border-radius:50%;
-        background:radial-gradient(circle,rgba(233,165,121,.20) 0%,rgba(233,165,121,.05) 45%,transparent 70%)}
-  .ring{position:absolute;border:1.5px solid rgba(233,165,121,.30);border-radius:50%}
-  .r1{width:430px;height:170px;right:-40px;top:130px;transform:rotate(-24deg)}
-  .r2{width:170px;height:430px;right:95px;top:0;transform:rotate(-24deg)}
-  .dot{position:absolute;width:44px;height:44px;border-radius:50%;right:158px;top:193px;
-       background:radial-gradient(circle at 35% 30%,#F5C4A3,#C26C42)}
-  .mark{font-size:30px;font-weight:600;letter-spacing:-.02em;position:relative}
-  h1{font-size:72px;line-height:1.04;font-weight:600;letter-spacing:-.025em;max-width:790px;position:relative}
-  p{font-size:26px;line-height:1.45;color:#C7B6A0;max-width:720px;margin-top:22px;position:relative}
-  .foot{display:flex;gap:14px;align-items:center;font-size:19px;color:#A8967E;position:relative}
-  .pill{border:1px solid rgba(243,233,220,.20);border-radius:999px;padding:7px 18px}
+       font-family:Karla,system-ui,sans-serif;display:flex;
+       padding:72px 80px;gap:64px;align-items:center;overflow:hidden}
+  .copy{flex:1;min-width:0}
+  .mark{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
+  h1{font-size:66px;line-height:1.05;font-weight:600;letter-spacing:-.025em;max-width:660px}
+  p{font-size:24px;line-height:1.45;color:#C7B6A0;max-width:620px;margin-top:20px}
+  .foot{display:flex;gap:12px;margin-top:38px;font-size:18px;color:#A8967E}
+  .pill{border:1px solid rgba(243,233,220,.20);border-radius:6px;padding:6px 16px}
+  /* The mark, at poster scale. Same geometry as scripts/make-icons.mjs. */
+  .bars{flex:none;width:250px;display:flex;flex-direction:column;gap:22px}
+  .bars i{display:block;height:34px;border-radius:9px;background:#8C7B66}
+  .bars i:nth-child(1){width:100%;background:#E9A579}
+  .bars i:nth-child(2){width:74%}
+  .bars i:nth-child(3){width:50%}
+  .bars i:nth-child(4){width:29%}
 </style>
-<div class="glow"></div><div class="ring r1"></div><div class="ring r2"></div><div class="dot"></div>
-<div class="mark">Wellbeings</div>
-<div>
+<div class="copy">
+  <div class="mark">Wellbeings</div>
   <h1>Understand your everyday wellbeing</h1>
-  <p>Sleep, movement, food, stress, connection and routine — five minutes, then two or three changes worth actually making.</p>
+  <p>Sleep, movement, food, stress, connection and routine. Five minutes, then two or three changes worth actually making.</p>
+  <div class="foot">
+    <span class="pill">Runs in your browser</span>
+    <span class="pill">Nothing is sent anywhere</span>
+    <span class="pill">Not a diagnosis</span>
+  </div>
 </div>
-<div class="foot">
-  <span class="pill">Runs in your browser</span>
-  <span class="pill">Nothing is sent anywhere</span>
-  <span class="pill">Not a diagnosis</span>
-</div>`;
+<div class="bars"><i></i><i></i><i></i><i></i></div>`;
 
 const browser = await chromium.launch({ executablePath: EXECUTABLE, args: ["--no-sandbox"] });
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

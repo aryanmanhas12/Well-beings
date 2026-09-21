@@ -23,6 +23,7 @@ const SITE_LINKS = [
   { href: "/resources/", label: "Support lines" },
   { href: "/about/", label: "About" },
   { href: "/privacy/", label: "Privacy" },
+  { href: "/terms/", label: "Terms" },
 ];
 
 export function WellbeingsApp() {

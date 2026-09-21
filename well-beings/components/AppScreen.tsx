@@ -70,8 +70,7 @@ export function AppScreen({ wb }: { wb: Wellbeings }) {
           as new content arriving rather than the old one being overwritten. */}
       <div
         key={wb.tab}
-        className="anim-in"
-        style={{ maxWidth: 1060, width: "100%", margin: "0 auto", padding: "30px 24px 70px", boxSizing: "border-box" }}
+        className="anim-in app-measure app-measure-app"
       >
         {/* Honest about where the translation currently stops, rather than
             letting a Hindi reader hit an English plan with no explanation. */}

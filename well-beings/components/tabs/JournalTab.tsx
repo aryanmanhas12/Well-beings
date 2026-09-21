@@ -59,12 +59,11 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
 
           {showWhy && (
             <p
+              className="aside-note"
               style={{
                 fontSize: 12,
                 color: "var(--color-neutral-400)",
                 margin: "0 0 12px",
-                paddingLeft: 10,
-                borderLeft: "2px solid var(--color-accent-800)",
                 textWrap: "pretty",
               }}
             >

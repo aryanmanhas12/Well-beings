@@ -178,6 +178,16 @@ export const PAGES: SitePage[] = [
     priority: 0.3,
   },
   {
+    path: "/terms/",
+    nav: "Terms",
+    hiddenInNav: true,
+    title: "Terms of use · Wellbeings",
+    description:
+      "Wellbeings is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a diagnosis, and not a substitute for professional advice.",
+    changeFrequency: "yearly",
+    priority: 0.4,
+  },
+  {
     path: "/privacy/",
     nav: "Privacy",
     title: "Privacy · where your Wellbeings answers live",

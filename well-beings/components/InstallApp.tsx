@@ -186,11 +186,10 @@ export function InstallApp({
             </button>
           ) : (
             <div
+              className="aside-note"
               style={{
                 fontSize: 12,
                 color: "var(--color-neutral-500)",
-                borderLeft: "2px solid var(--color-accent-800)",
-                paddingLeft: 10,
                 textWrap: "pretty",
               }}
             >

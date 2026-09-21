@@ -1,6 +1,5 @@
 import { Lang, t } from "@/lib/i18n";
 import { StatementIntro } from "./StatementIntro";
-import { WelcomeAura } from "./WelcomeAura";
 import { InstallApp } from "./InstallApp";
 import { Depth } from "@/lib/lifestyle";
 
@@ -65,37 +64,20 @@ export function WelcomeScreen({
     { figure: "3 for 3", body: s.statPlanBody },
   ];
 
-  /* One measure for all three bands, so their edges line up down the page. */
-  const band: React.CSSProperties = {
-    maxWidth: 1060,
-    width: "100%",
-    margin: "0 auto",
-    padding: "0 24px",
-    boxSizing: "border-box",
-  };
-
+  /* Layout lives in CSS now, not in inline styles. It had to: the page
+     needed different spacing on a phone than on a desktop, and an inline
+     style cannot carry a media query. See `.wel-*` in globals.css. */
   return (
     <main data-screen-label="Welcome" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-      <div
-        style={{
-          ...band,
-          padding: "48px 24px 40px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 48,
-          alignItems: "flex-start",
-        }}
-      >
-        <div style={{ flex: "1 1 520px", minWidth: 300 }}>
-          {/* The screen opened on text alone. This resolves before a word is
-              read and gives the page somewhere to start — deliberately an
-              orbit rather than a character, since the app's first question
-              is about sleep, mood and burnout and something cheerful sets
-              the wrong expectation for that. Decorative, aria-hidden, and
-              composed to still read when reduced motion freezes it. */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 26 }}>
-            <WelcomeAura size={180} />
-          </div>
+      <div className="wel-band wel-hero">
+        <div className="wel-hero-main">
+          {/* A decorative orbit used to sit here: three rotating rings and a
+              radial glow that breathed on a ten-second cycle. It was the
+              single clearest "generated page" tell left in the app — a
+              glowing orb is decoration that communicates nothing, animates
+              for its own sake, and cost a compositor layer on the first
+              screen a phone renders. The claim below is the thing worth
+              looking at, and it is now the first thing on the page. */}
           <StatementIntro lang={lang} showCitations={showCitations} onStartChat={onStartChat} />
         </div>
 
@@ -105,7 +87,7 @@ export function WelcomeScreen({
             used to sit under the deck, which made the left column about twice
             the height of this one and left the whole right side of a desktop
             window empty once the research figures moved out. */}
-        <div style={{ flex: "0 1 320px", minWidth: 260, display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="wel-rail">
           {/* Offered, never auto-resumed. Dropping someone back into question
               fourteen of a form they may have walked away from on purpose is
               its own kind of rude, and the discard option has to be as easy to
@@ -183,7 +165,7 @@ export function WelcomeScreen({
       {/* Band 2: the evidence. Full width and side by side, because these two
           figures are the argument the rest of the page rests on, and stacked
           in a 320px rail they read as sidebar trivia. */}
-      <section style={{ ...band, paddingBottom: 44 }} aria-label={s.researchKicker}>
+      <section className="wel-band wel-research" aria-label={s.researchKicker}>
         <div
           style={{
             fontSize: 10.5,
@@ -195,7 +177,7 @@ export function WelcomeScreen({
         >
           {s.researchKicker}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 14 }}>
+        <div className="wel-stats">
           {stats.map((st) => (
             <div key={st.figure} className="card" style={{ padding: 20, gap: 0 }}>
               <div
@@ -217,27 +199,39 @@ export function WelcomeScreen({
         </div>
       </section>
 
-      {/* Band 3: how the thing behaves. */}
-      <section
-        style={{
-          ...band,
-          paddingBottom: 48,
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))",
-          gap: 18,
-        }}
-      >
-        {features.map((f) => (
-          <div
-            key={f.title}
-            data-tour={f.anchor}
-            style={{ borderTop: "1px solid var(--color-accent-700)", paddingTop: 12 }}
-          >
-            <div style={{ fontWeight: 600, fontSize: 13.5, marginBottom: 4 }}>{f.title}</div>
-            <div style={{ color: "var(--color-neutral-500)", fontSize: 12.5, textWrap: "pretty" }}>{f.body}</div>
-          </div>
-        ))}
+      {/* Band 3: how the thing behaves.
+          This was three equal tiles in a row, which is the shape of a
+          template rather than a thought — the grid was doing the talking and
+          the three items had nothing in common except being three. They are
+          properties of the tool, so they are a definition list: term, then
+          what it means. It is the correct semantics, it collapses to a
+          readable single column on a phone instead of squeezing three tiles
+          into 390px, and it stops implying the three are equally weighted
+          selling points. */}
+      <section className="wel-band wel-how" aria-labelledby="how-h">
+        <h2
+          id="how-h"
+          style={{
+            fontSize: 10.5,
+            color: "var(--color-neutral-500)",
+            letterSpacing: ".08em",
+            textTransform: "uppercase",
+            margin: "0 0 14px",
+            fontWeight: 600,
+          }}
+        >
+          {s.howItBehaves}
+        </h2>
+        <dl className="spec-list">
+          {features.map((f) => (
+            <div key={f.title} data-tour={f.anchor} className="spec-row">
+              <dt>{f.title}</dt>
+              <dd>{f.body}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
+
     </main>
   );
 }

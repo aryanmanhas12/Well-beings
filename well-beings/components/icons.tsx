@@ -5,11 +5,26 @@ interface IconProps {
   style?: CSSProperties;
 }
 
+/**
+ * The wordmark's glyph, and the same mark as the app icon: four bars,
+ * descending, the first one picked out.
+ *
+ * It used to be a heart with an ECG trace through it — the stock icon of
+ * every health app, and a medical signifier on a product that is explicitly
+ * not medical. This is the shape of what the app actually produces: your
+ * areas, sorted, with one named as the place to start.
+ *
+ * Drawn with currentColor for the three quiet bars so it inherits whatever
+ * the header text is, and the accent token for the first one, so the mark
+ * stays legible in both themes and in high contrast without a second asset.
+ */
 export function LogoIcon({ size = 18, style }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style}>
-      <path d="M12 21c-4.5-2.9-8-6.1-8-10a5 5 0 0 1 9-3 5 5 0 0 1 7 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M13 17h2.2l1.3-3 2 5 1.3-2H22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} aria-hidden="true">
+      <rect x="3" y="4" width="18" height="3.6" rx="1" fill="var(--color-accent)" />
+      <rect x="3" y="9.4" width="13.3" height="3.6" rx="1" fill="currentColor" opacity="0.75" />
+      <rect x="3" y="14.8" width="9" height="3.6" rx="1" fill="currentColor" opacity="0.55" />
+      <rect x="3" y="20.2" width="5.2" height="3.6" rx="1" fill="currentColor" opacity="0.4" />
     </svg>
   );
 }

@@ -43,6 +43,9 @@ export function SiteFooter() {
             <li>
               <Link href={PAGE_BY_PATH["/privacy/"].path}>Privacy and your data</Link>
             </li>
+            <li>
+              <Link href={PAGE_BY_PATH["/terms/"].path}>Terms of use</Link>
+            </li>
           </ul>
         </nav>
       </div>

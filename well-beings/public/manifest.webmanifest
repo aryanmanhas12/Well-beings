@@ -1,16 +1,42 @@
 {
-  "name": "Wellbeings — evidence-based check-in",
+  "name": "Wellbeings: your everyday wellbeing check",
   "short_name": "Wellbeings",
-  "description": "A 5-minute, privacy-first check-in built on clinical screeners, which builds you a personalised daily system. Works offline. Nothing leaves your device.",
+  "description": "A private wellbeing check covering sleep, movement, food, stress, connection and routine. Runs entirely in your browser. Not a diagnosis.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#17120E",
   "theme_color": "#17120E",
-  "categories": ["health", "medical", "lifestyle", "productivity"],
+  "categories": [
+    "health",
+    "medical",
+    "lifestyle",
+    "productivity"
+  ],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

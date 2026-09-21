@@ -58,12 +58,20 @@ export const metadata: Metadata = {
   referrer: "strict-origin-when-cross-origin",
   manifest: `${basePath}/manifest.webmanifest`,
   appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: "black-translucent" },
+  /* apple is its own 180px file, not the 192 reused. iOS composites a
+     home-screen icon on an opaque background and applies its own corner
+     radius, so it needs one square, opaque, un-rounded source at the size it
+     actually asks for. Handing it the 192 with pre-rounded corners is what
+     made the old icon land smaller and mis-shapen next to everything else on
+     the home screen. See scripts/make-icons.mjs. */
   icons: {
     icon: [
+      { url: `${basePath}/favicon.ico`, sizes: "16x16 32x32 48x48", type: "image/x-icon" },
+      { url: `${basePath}/icon.svg`, type: "image/svg+xml" },
       { url: `${basePath}/icon-192.png`, sizes: "192x192", type: "image/png" },
       { url: `${basePath}/icon-512.png`, sizes: "512x512", type: "image/png" },
     ],
-    apple: `${basePath}/icon-192.png`,
+    apple: [{ url: `${basePath}/apple-touch-icon.png`, sizes: "180x180", type: "image/png" }],
   },
 };
 

@@ -211,7 +211,7 @@ export function ResultsScreen({
   return (
     <main
       data-screen-label="Results"
-      style={{ flex: 1, maxWidth: 1060, width: "100%", margin: "0 auto", padding: "44px 24px 60px", boxSizing: "border-box" }}
+      className="app-measure app-measure-results"
     >
       <div className="tag tag-accent" style={{ marginBottom: 14 }}>
         {s.resultsKicker}

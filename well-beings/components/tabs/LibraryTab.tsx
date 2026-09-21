@@ -91,7 +91,7 @@ export function LibraryTab() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(310px,1fr))", gap: 14 }}>
         {EVIDENCE.map((ev) => (
-          <div key={ev.cite} className="card card-interactive" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 10 }}>
+          <div key={ev.cite} className="card" style={{ padding: 18, display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               <span className="tag tag-accent" style={{ fontSize: 10 }}>
                 {ev.tag}
@@ -133,11 +133,10 @@ export function LibraryTab() {
 
             {ev.technical && (
               <div
+                className="aside-note"
                 style={{
                   fontSize: 11.5,
                   color: "var(--color-neutral-500)",
-                  borderLeft: "2px solid var(--color-divider)",
-                  paddingLeft: 9,
                   textWrap: "pretty",
                 }}
               >

@@ -128,12 +128,11 @@ function WhyNote({ why, s }: { why: string; s: Strings }) {
       </button>
       {open && (
         <p
+          className="aside-note"
           style={{
             fontSize: 12,
             color: "var(--color-neutral-400)",
             margin: "8px 0 0",
-            paddingLeft: 10,
-            borderLeft: "2px solid var(--color-accent-800)",
             textWrap: "pretty",
           }}
         >
