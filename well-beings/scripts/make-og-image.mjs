@@ -62,7 +62,7 @@ const html = `<!doctype html><meta charset="utf-8">
 <style>
   @font-face{font-family:Karla;font-weight:200 800;src:url(${KARLA}) format("woff2")}
   *{box-sizing:border-box;margin:0}
-  body{width:1200px;height:630px;background:#150F26;color:#FBF1E6;
+  body{width:1200px;height:630px;background:#110921;color:#FFF4E8;
        font-family:Karla,system-ui,sans-serif;display:flex;
        padding:64px 64px 64px 80px;gap:56px;align-items:center;overflow:hidden}
   .copy{flex:1;min-width:0}

@@ -25,11 +25,10 @@ export function Header({
         alignItems: "center",
         gap: 14,
         padding: "10px 22px",
-        borderBottom: "1px solid var(--color-divider)",
-        position: "sticky",
-        top: 0,
-        background: "color-mix(in srgb, var(--color-bg) 94%, transparent)",
-        zIndex: 40,
+        /* Not sticky any more: the crisis strip above is the pinned thing,
+           and two pinned bars would take a sixth of a phone screen. */
+        position: "relative",
+        zIndex: 2,
       }}
     >
       {/* The wordmark doubles as the way home from the wellbeing check,
@@ -39,7 +38,7 @@ export function Header({
         className="nav-brand"
         onClick={onHome}
         aria-label="Wellbeings, go to your safe place"
-        style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", padding: 0, minHeight: 44, color: "inherit", cursor: "pointer" }}
+        style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", padding: 0, minHeight: 44, minWidth: 44, color: "inherit", cursor: "pointer" }}
       >
         <BloomSun size={30} />
         <span
@@ -47,8 +46,8 @@ export function Header({
           style={{
             fontFamily: "var(--font-display)",
             letterSpacing: "var(--font-display-tracking)",
-            fontWeight: 650,
-            fontSize: 19,
+            fontWeight: 600,
+            fontSize: 22,
             whiteSpace: "nowrap",
           }}
         >

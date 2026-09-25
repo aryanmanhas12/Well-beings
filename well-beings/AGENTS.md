@@ -15,10 +15,11 @@ checkable".
 ## The tells, and what to do instead
 
 **Colour.** The palette is night to dawn, at the owner's explicit request:
-a warm plum midnight (`#150F26`, red in it, not blue), cream text, and the
+a warm plum midnight (`#110921`, red in it, not blue), cream text, and the
 colours of an actual sunrise as accents: sun yellow for anything you press,
 dawn pink and lilac for the things that belong to the person (hope box,
-people, good things), peach where the sky meets the horizon. Light mode is
+people, good things), peach where the sky meets the horizon, and one leaf
+green (`#62D6A5`) kept for things that grow. Light mode is
 dawn paper (`#FFF5EC`) with plum ink and berry for links, because sun yellow
 on paper is 1.49:1 and unreadable as text.
 
@@ -28,6 +29,11 @@ one indigo accent doing everything. Here purple lives in the sky and the
 petals, never on a button; the buttons are sun. If a change makes the page
 read as "indigo gradient startup", it is wrong even if every token is from
 this file. No pure `#000` and no pure `#ffffff` outside high-contrast mode.
+
+**Type (v2).** Headlines, the sky and the numbers on the crisis screen are
+set in Fredoka, a rounded display face, to sit beside Ronak's Baloo 2
+without copying it. Everything read slowly stays in Karla. Fredoka never
+sets anything longer than a heading.
 
 **Type.** Inter is banned, and so is everything that arrives in the same
 breath as Inter — DM Sans, Plus Jakarta Sans, Poppins, Outfit, Manrope. Pick

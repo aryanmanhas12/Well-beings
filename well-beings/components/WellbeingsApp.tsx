@@ -13,6 +13,7 @@ import { HelpDialog, BreathDialog } from "./dialogs";
 import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { HavenShell } from "./haven/HavenShell";
+import { CrisisStrip } from "./CrisisStrip";
 
 /** Kept short on purpose. The footer of a working app is not the place for a
     sitemap; these are the destinations someone in the middle of the app
@@ -59,6 +60,8 @@ export function WellbeingsApp() {
         lineHeight: 1.55,
       }}
     >
+      <CrisisStrip region={region} />
+      {onHome && <div className="haven-atmos" aria-hidden="true" />}
       <Header
         s={wb.s}
         lang={wb.settings.lang}
@@ -77,7 +80,15 @@ export function WellbeingsApp() {
         />
       )}
 
-      {onHome && <HavenShell wb={wb} haven={haven} region={region} replayIntro={replayIntro} />}
+      {onHome && (
+        <HavenShell
+          wb={wb}
+          haven={haven}
+          region={region}
+          replayIntro={replayIntro}
+          onReplayIntro={() => setReplayIntro((n) => n + 1)}
+        />
+      )}
       {wb.screen === "chat" && <ChatScreen wb={wb} />}
       {wb.screen === "results" && wb.profile && (
         <ResultsScreen

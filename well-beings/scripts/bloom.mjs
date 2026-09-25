@@ -8,11 +8,11 @@
  * r 6.5. If one changes, change the other; there is a comment on each
  * pointing here.
  */
-export const PINK = "#FF8DBA";
-export const LILAC = "#C4A8FF";
+export const PINK = "#FF7AB0";
+export const LILAC = "#B794FF";
 export const SUN = "#FFC857";
 export const CORE = "#FFE3A1";
-export const NIGHT_TOP = "#150F26";
+export const NIGHT_TOP = "#110921";
 export const NIGHT_BOTTOM = "#2E1956";
 
 /** The mark alone, as SVG elements in a 64×64 coordinate space. */

@@ -111,7 +111,7 @@ export default function PrivacyPage() {
 
         <h2>Videos are the one thing that loads from elsewhere</h2>
         <p>
-          The Calm screen lists a few videos. None of them loads until you tap it and agree, and the
+          The Watch screen lists a few videos. None of them loads until you tap it and agree, and the
           thumbnails are drawn by the app rather than fetched. When you do choose to play one, it is
           played from YouTube&apos;s privacy-enhanced domain (<code>youtube-nocookie.com</code>). That
           request goes to Google, which will see your IP address and may set cookies once you press
@@ -119,8 +119,9 @@ export default function PrivacyPage() {
           <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
             Google&apos;s privacy policy
           </a>
-          . Nothing you have written in the app goes with it. Breathing and grounding work without any
-          connection at all.
+          . Nothing you have written in the app goes with it. If videos from Instagram are added later,
+          they will follow the same rule: nothing loads until you tap and agree, and the prompt will name
+          Meta. Breathing and grounding work without any connection at all.
         </p>
 
         <h2>Words this page is careful with</h2>

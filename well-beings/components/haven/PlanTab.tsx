@@ -428,7 +428,7 @@ function UsePlan({ plan, region, onEdit, goTo }: { plan: SafetyPlan; region: Hel
         <button type="button" className="btn btn-quiet" onClick={copyPlan}>
           Share or copy it
         </button>
-        <button type="button" className="btn btn-quiet" onClick={() => goTo("calm", "breathe")}>
+        <button type="button" className="btn btn-quiet" onClick={() => goTo("watch", "breathe")}>
           Breathe first
         </button>
       </div>

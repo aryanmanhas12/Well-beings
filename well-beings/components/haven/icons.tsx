@@ -41,6 +41,16 @@ export function CalmIcon(p: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Watch: a screen with a play mark. */
+export function WatchIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <rect x="3" y="5" width="18" height="14" rx="4" />
+      <path d="M10.5 9.5v5l4.5-2.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** Hope: a small bloom. */
 export function HopeIcon(p: SVGProps<SVGSVGElement>) {
   return (

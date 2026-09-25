@@ -142,68 +142,128 @@ export const HOPE_KINDS: { kind: HopeKind; title: string; prompt: string; placeh
 
 /* ── videos ───────────────────────────────────────────────────── */
 
+export type VideoSource = "youtube" | "instagram";
+
+/** The drawn picture on a featured card. See components/haven/SceneArt.tsx. */
+export type SceneKind = "light" | "ripple" | "window" | "circles";
+
 export interface Video {
+  source: VideoSource;
+  /** YouTube video ID, or an Instagram reel's shortcode. */
   id: string;
   title: string;
   by: string;
   length: string;
-  /** When to reach for it. One line, in the app's voice. */
+  /** When to reach for it. One line, in the app's voice, and only saying
+      what could be checked about the video without watching it. */
   when: string;
-  group: "comfort" | "understand" | "gratitude";
+  group: "lift" | "heavy" | "understand" | "room" | "maker";
   lang?: "en" | "hi";
   /** Two stops from the dawn palette for the thumbnail. We draw our own
       thumbnails rather than load YouTube's, because loading theirs is a
       Google request before anyone has chosen to watch anything. */
   tint: [string, string];
+  /** Set on the few that lead the Watch screen as full scenes. */
+  scene?: { kind: SceneKind; headline: string };
 }
 
 /**
  * Chosen for someone who is struggling, not for someone browsing.
  *
- * The first group leans on what the research calls the Papageno effect:
- * stories of getting through a hard time were associated with a small
- * reduction in suicidal ideation among vulnerable viewers, across six
- * randomised trials (Niederkrotenthaler et al. 2022, Lancet Public Health,
- * doi:10.1016/S2468-2667(21)00274-7). Those are stories of coping and
- * recovery, never of crisis, and none of these describes a method.
+ * The strongest thread in the research on media and suicide is the
+ * Papageno effect: stories of getting through a hard time were associated
+ * with a small reduction in suicidal ideation among vulnerable viewers,
+ * across six randomised trials (Niederkrotenthaler et al. 2022, Lancet
+ * Public Health, doi:10.1016/S2468-2667(21)00274-7). So the list leans on
+ * hope, being seen, and connection, never on crisis. None describes a
+ * method.
  *
- * Talks that tell a survival story in detail were considered and left out:
- * this list was checked by title and channel, not watched frame by frame
- * from here, and a survival story is exactly the kind of video where one
- * minute can carry method detail the rest of it does not.
+ * Every entry here was checked by ID and title against YouTube's own
+ * listing. Talks that tell a survival story in detail were left out: this
+ * list was checked by title and source, not watched frame by frame from
+ * here, and a survival story is exactly where one minute can carry method
+ * detail the rest of it does not. The "when" lines say only what the
+ * title and a public description support.
  *
  * Lengths are approximate on purpose.
  */
 export const VIDEOS: Video[] = [
   {
+    source: "youtube",
+    id: "bbz2boNSeL0",
+    title: "I See Something",
+    by: "Dananjaya Hettiarachchi, 2014 World Champion of Public Speaking",
+    length: "Under 10 min",
+    when: "The speech that won the 2014 World Championship of Public Speaking. Its title is its message.",
+    group: "lift",
+    tint: ["#FFC857", "#FF7AB0"],
+    scene: { kind: "light", headline: "Someone sees something in you" },
+  },
+  {
+    source: "youtube",
+    id: "hVCBrkrFrBE",
+    title: "Leading with lollipops",
+    by: "Drew Dudley, TEDxToronto",
+    length: "About 6 min",
+    when: "About how nearly all of us have changed someone's life, usually without ever knowing it.",
+    group: "lift",
+    tint: ["#FF9F80", "#B794FF"],
+    scene: { kind: "ripple", headline: "You've changed someone's life" },
+  },
+  {
+    source: "youtube",
     id: "Upm9LnuCBUM",
     title: "Fred Rogers' acceptance speech, 1997",
     by: "Fred Rogers, Daytime Emmys",
     length: "A few minutes",
-    when: "When you feel alone. He asks a room full of people to spend ten seconds thinking of someone who loved them into being.",
-    group: "comfort",
-    tint: ["#FFC857", "#FF8DBA"],
+    when: "He asks a room full of people to spend ten seconds thinking of someone who loved them into being.",
+    group: "lift",
+    tint: ["#B794FF", "#FF7AB0"],
+    scene: { kind: "window", headline: "Ten seconds for the people who loved you" },
   },
   {
+    source: "youtube",
+    id: "l-gQLqv9f4o",
+    title: "A pep talk from Kid President to you",
+    by: "Kid President, SoulPancake",
+    length: "A few minutes",
+    when: "Short, loud and kind. Made to be played first thing in the morning.",
+    group: "lift",
+    tint: ["#FFD36E", "#62D6A5"],
+  },
+  {
+    source: "youtube",
     id: "XiCrniLQGYc",
     title: "I had a black dog, his name was depression",
     by: "World Health Organization",
     length: "About 4 min",
     when: "When it's hard to explain what this feels like. A drawn story of living with depression and getting it to heel.",
-    group: "comfort",
+    group: "heavy",
     tint: ["#2E1956", "#7A4AA8"],
   },
   {
+    source: "youtube",
     id: "Ify95C3_Hs8",
     title: "I had a black dog, his name was depression (Hindi)",
     by: "Hindi version of the WHO film",
     length: "About 4 min",
     when: "वही कहानी, हिन्दी में।",
-    group: "comfort",
-    tint: ["#3B1D63", "#C4A8FF"],
+    group: "heavy",
     lang: "hi",
+    tint: ["#3B1D63", "#B794FF"],
   },
   {
+    source: "youtube",
+    id: "1Evwgu369Jw",
+    title: "Brené Brown on empathy",
+    by: "RSA Shorts",
+    length: "About 3 min",
+    when: "A drawn short on what it feels like to be really heard, and why a reply that starts with \"at least\" rarely helps.",
+    group: "heavy",
+    tint: ["#62D6A5", "#3B1D63"],
+  },
+  {
+    source: "youtube",
     id: "n3Xv_g3g-mA",
     title: "Loneliness",
     by: "Kurzgesagt – In a Nutshell",
@@ -213,6 +273,7 @@ export const VIDEOS: Video[] = [
     tint: ["#1D1142", "#9A6BC6"],
   },
   {
+    source: "youtube",
     id: "z-IR48Mb3W0",
     title: "What is depression?",
     by: "Helen M. Farrell, TED-Ed",
@@ -222,6 +283,7 @@ export const VIDEOS: Video[] = [
     tint: ["#7A2E7E", "#FF9F80"],
   },
   {
+    source: "youtube",
     id: "aKIqn719DGE",
     title: "#DobaraPoocho",
     by: "The Live Love Laugh Foundation",
@@ -231,30 +293,76 @@ export const VIDEOS: Video[] = [
     tint: ["#E8677E", "#FFC857"],
   },
   {
+    source: "youtube",
+    id: "8KkKuTCFvzI",
+    title: "What makes a good life?",
+    by: "Robert Waldinger, TED",
+    length: "About 13 min",
+    when: "What a study of people's whole lives found mattered most: the people in them.",
+    group: "room",
+    tint: ["#62D6A5", "#B794FF"],
+    scene: { kind: "circles", headline: "What actually makes a good life" },
+  },
+  {
+    source: "youtube",
     id: "UtBsl3j0YRQ",
     title: "Want to be happy? Be grateful",
     by: "David Steindl-Rast, TED",
     length: "About 15 min",
-    when: "When you want something slow and gentle. It ends in a quiet few minutes of looking at the world.",
-    group: "gratitude",
+    when: "Slow and gentle. It ends in a quiet few minutes of looking at the world.",
+    group: "room",
     tint: ["#FF9F80", "#FFE3A1"],
   },
   {
+    source: "youtube",
     id: "fLJsdqxnZb0",
     title: "The happy secret to better work",
     by: "Shawn Achor, TED",
     length: "About 12 min",
-    when: "When you've got a bit of room. Funny, and it's where the three-good-things habit comes from.",
-    group: "gratitude",
-    tint: ["#C4A8FF", "#FF8DBA"],
+    when: "Funny, and it's where the three-good-things habit comes from.",
+    group: "room",
+    tint: ["#C4A8FF", "#FF7AB0"],
   },
 ];
 
+/**
+ * Videos from the person who made Wellbeings, Aryan Manhas, planned for
+ * Instagram. Empty until real reels exist; the "From Aryan" shelf appears
+ * on its own once this has entries. To add one:
+ *
+ *   { source: "instagram", id: "<reel shortcode from instagram.com/reel/…>",
+ *     title: "…", by: "Aryan Manhas", length: "Under a minute",
+ *     when: "…", group: "maker", tint: ["#FF7AB0", "#FFC857"] }
+ *
+ * Instagram embeds follow the same rule as YouTube: nothing loads until the
+ * person taps and agrees, and the consent line names Meta. Keep the same
+ * standard as the list above: hope and getting through, never methods.
+ */
+export const MAKER_VIDEOS: Video[] = [];
+
 export const VIDEO_GROUPS: { id: Video["group"]; title: string }[] = [
-  { id: "comfort", title: "For when it's heavy" },
+  { id: "lift", title: "You matter more than you know" },
+  { id: "heavy", title: "For when it's heavy" },
   { id: "understand", title: "Making sense of it" },
-  { id: "gratitude", title: "When there's a bit of room" },
+  { id: "room", title: "When there's a bit of room" },
+  { id: "maker", title: "From Aryan" },
 ];
+
+export function embedUrl(v: Video): string {
+  return v.source === "instagram"
+    ? `https://www.instagram.com/reel/${encodeURIComponent(v.id)}/embed/`
+    : `https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.id)}?autoplay=1&rel=0`;
+}
+
+export function watchUrl(v: Video): string {
+  return v.source === "instagram"
+    ? `https://www.instagram.com/reel/${encodeURIComponent(v.id)}/`
+    : `https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}`;
+}
+
+export function sourceName(v: Video): { app: string; company: string } {
+  return v.source === "instagram" ? { app: "Instagram", company: "Meta" } : { app: "YouTube", company: "Google" };
+}
 
 /* ── asking someone for help ──────────────────────────────────── */
 
@@ -276,7 +384,9 @@ export const REACH_OUT_MESSAGES: string[] = [
 
 /* ── why each part is here ────────────────────────────────────── */
 
-export const WHY: Record<"hopebox" | "plan" | "gratitude" | "breathe" | "watch" | "reach", string> = {
+export const WHY: Record<"hopebox" | "plan" | "gratitude" | "breathe" | "watch" | "reach" | "hopepath", string> = {
+  hopepath:
+    "Psychologists describe hope as three things together: something you want, a way to get there, and a sense that you can. Exercises built on that idea have small effects in studies (Weis & Speridakos 2011, 27 studies), largest for short ones, and the \"I can\" part is the one most closely tied to low mood (Corrigan et al. 2023). Small is the honest word, and small is also the point.",
   hopebox:
     "A hope box is a tool clinicians use with people who are struggling: reminders of reasons to keep going, kept somewhere you can reach in a bad moment. In a trial with 118 veterans who had recently had suicidal thoughts, a phone version helped people feel more able to cope with painful thoughts and feelings (Bush et al. 2017, Psychiatric Services).",
   plan:

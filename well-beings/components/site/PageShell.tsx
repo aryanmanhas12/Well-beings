@@ -2,6 +2,8 @@ import Link from "next/link";
 import { NAV_PAGES, PAGE_BY_PATH, SITE_NAME, breadcrumbsFor } from "@/lib/site";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { SiteFooter } from "./SiteFooter";
+import { CrisisStrip } from "../CrisisStrip";
+import { BloomSun } from "../haven/BloomSun";
 
 /**
  * The frame every content page sits in.
@@ -13,6 +15,12 @@ import { SiteFooter } from "./SiteFooter";
  * engine is most likely to sample. Navigation is plain links, the theme comes
  * from CSS media queries plus the pre-paint script in the root layout, and
  * nothing here needs to hydrate.
+ *
+ * One exception, on purpose: the crisis strip at the top is a small client
+ * island. It reads the region someone chose in the app, so a reader in the
+ * UK sees Samaritans rather than India's lines. A few kilobytes of script
+ * is a fair price for the right phone number; everything else here stays
+ * static.
  *
  * Landmarks are explicit rather than implied: a skip link, then <header>,
  * <nav aria-label>, <main id="main">, <footer>. Screen-reader users get the
@@ -35,10 +43,12 @@ export function PageShell({
       <a className="skip-link" href="#main">
         Skip to main content
       </a>
+      <CrisisStrip />
 
       <header className="site-head">
         <div className="site-head-inner">
-          <Link href="/" className="site-wordmark">
+          <Link href="/" className="site-wordmark" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <BloomSun size={26} />
             {SITE_NAME}
           </Link>
           <nav aria-label="Main">

@@ -6,13 +6,15 @@ import { mentionsCrisis } from "@/lib/journal";
 import { HOPE_KINDS, WHY } from "@/lib/havenContent";
 import type { HopeKind } from "@/lib/haven";
 import { formatDay, GoTo, Why } from "./shared";
+import { BloomSun } from "./BloomSun";
 
-type View = "good" | "box" | "note";
+type View = "path" | "good" | "box" | "note";
 
 /**
  * The things worth holding onto, kept where a bad minute can reach them.
  *
- * Three parts. Good things are the daily practice. The hope box is the
+ * Four parts. The hope path is one small goal, one way to it, and one
+ * reason to believe you can. Good things are the daily practice. The hope box is the
  * collection: people, plans, memories, proof of hard times survived, songs,
  * photos. The note is a letter from a steadier day to a heavier one, and
  * the app puts it in front of the person on a low check-in.
@@ -22,7 +24,7 @@ type View = "good" | "box" | "note";
  * app offers help instead of silently filing the words away.
  */
 export function HopeTab({ haven, view, goTo }: { haven: Haven; view?: string; goTo: GoTo }) {
-  const [tab, setTab] = useState<View>(view === "box" || view === "note" ? view : "good");
+  const [tab, setTab] = useState<View>(view === "box" || view === "note" || view === "good" ? view : "path");
   const [flagged, setFlagged] = useState(false);
 
   const check = (text: string) => {
@@ -31,10 +33,11 @@ export function HopeTab({ haven, view, goTo }: { haven: Haven; view?: string; go
 
   return (
     <div className="haven-stack">
-      <h1 style={{ fontSize: 28, margin: "6px 0 0" }}>Hope</h1>
+      <HopeHero />
       <div className="subnav" role="group" aria-label="Hope sections">
         {(
           [
+            ["path", "Hope path"],
             ["good", "Good things"],
             ["box", "Hope box"],
             ["note", "A note for later"],
@@ -67,6 +70,7 @@ export function HopeTab({ haven, view, goTo }: { haven: Haven; view?: string; go
         </section>
       )}
 
+      {tab === "path" && <HopePathForm haven={haven} check={check} />}
       {tab === "good" && <GoodThings haven={haven} check={check} />}
       {tab === "box" && <HopeBox haven={haven} check={check} />}
       {tab === "note" && <Letter haven={haven} check={check} />}
@@ -422,6 +426,131 @@ function Letter({ haven, check }: { haven: Haven; check: (t: string) => void }) 
           </div>
         </>
       ) : null}
+    </section>
+  );
+}
+
+/**
+ * The Hope tab's picture: the bloom-sun grown into a flower, on a stem,
+ * with two leaves in the one green of the palette. Hope drawn as something
+ * that grows from the ground up rather than arrives from the sky.
+ */
+function HopeHero() {
+  return (
+    <section className="hope-hero" aria-labelledby="hope-title">
+      <svg className="hope-hero-art" viewBox="0 0 358 250" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient id="hh-halo" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stopColor="#FFC857" stopOpacity="0.6" />
+            <stop offset="1" stopColor="#FFC857" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="250" cy="90" r="96" fill="url(#hh-halo)" />
+        <path d="M250 250 C 247 208, 255 178, 250 138" stroke="#3FAF7F" strokeWidth="5" fill="none" strokeLinecap="round" />
+        <path d="M251 204 C 222 204, 204 186, 200 166 C 226 166, 245 180, 251 204 Z" fill="#62D6A5" />
+        <path d="M250 182 C 277 180, 295 162, 299 142 C 273 142, 255 156, 250 182 Z" fill="#62D6A5" />
+        <path d="M0 226 C 90 204, 250 212, 358 222 L 358 250 L 0 250 Z" fill="#3A1B4F" />
+      </svg>
+      <div className="hope-hero-bloom" aria-hidden="true">
+        <BloomSun size={112} />
+      </div>
+      <div className="hope-hero-text">
+        <h1 id="hope-title" className="tab-title" style={{ margin: 0 }}>
+          Hope
+        </h1>
+        <p>It grows from small things you can see.</p>
+      </div>
+    </section>
+  );
+}
+
+function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => void }) {
+  const existing = haven.state.hopePath;
+  const [want, setWant] = useState(existing?.want ?? "");
+  const [way, setWay] = useState(existing?.way ?? "");
+  const [can, setCan] = useState(existing?.can ?? "");
+  const [saved, setSaved] = useState("");
+
+  const fields: { id: string; label: string; hint: string; value: string; set: (v: string) => void; placeholder: string; dot: string }[] = [
+    {
+      id: "path-want",
+      label: "Something I'd like this week",
+      hint: "Small enough to actually happen. Not \"be happy\"; more like \"call my cousin\".",
+      value: want,
+      set: setWant,
+      placeholder: "e.g. Go for one walk with Didi",
+      dot: "var(--color-sun)",
+    },
+    {
+      id: "path-way",
+      label: "One way to get there",
+      hint: "The first step, and when.",
+      value: way,
+      set: setWay,
+      placeholder: "e.g. Message her on Saturday morning",
+      dot: "var(--color-pink)",
+    },
+    {
+      id: "path-can",
+      label: "One reason I can",
+      hint: "Something you've done before, or someone who'd help.",
+      value: can,
+      set: setCan,
+      placeholder: "e.g. I did it last month, even on a bad week",
+      dot: "var(--color-leaf)",
+    },
+  ];
+
+  return (
+    <section className="panel" aria-labelledby="path-title">
+      <h2 id="path-title">A small hope path</h2>
+      <p className="panel-lede">Three short lines. Small is the point. You&apos;ll see it on the home screen until you change it.</p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          [want, way, can].forEach(check);
+          haven.setHopePath({ want, way, can });
+          setSaved(want.trim() || way.trim() || can.trim() ? "Kept. It's on your home screen now." : "Cleared.");
+        }}
+        style={{ display: "grid", gap: 4 }}
+      >
+        {fields.map((f, i) => (
+          <div key={f.id}>
+            <label className="field-label" htmlFor={f.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span className="path-dot" style={{ background: f.dot }} aria-hidden="true">
+                {i + 1}
+              </span>
+              {f.label}
+            </label>
+            <span className="field-hint" id={`${f.id}-hint`}>
+              {f.hint}
+            </span>
+            <input
+              id={f.id}
+              aria-describedby={`${f.id}-hint`}
+              className="input"
+              value={f.value}
+              onChange={(e) => {
+                f.set(e.target.value);
+                setSaved("");
+              }}
+              placeholder={f.placeholder}
+              maxLength={160}
+              autoComplete="off"
+            />
+          </div>
+        ))}
+        <div className="btn-row" style={{ marginTop: 10 }}>
+          <button type="submit" className="btn btn-sun">
+            Keep my path
+          </button>
+          <span className="saved-note" role="status">
+            {saved}
+          </span>
+        </div>
+      </form>
+      {existing && <p className="eyebrow" style={{ marginTop: 10 }}>Last set {formatDay(existing.at)}</p>}
+      <Why>{WHY.hopepath}</Why>
     </section>
   );
 }

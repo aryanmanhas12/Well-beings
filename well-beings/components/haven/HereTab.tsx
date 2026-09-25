@@ -6,13 +6,14 @@ import type { Haven } from "@/hooks/useHaven";
 import { crisisLines } from "@/lib/helplines";
 import type { HelplineRegion } from "@/lib/types";
 import { DAWN_STEPS, hopeTrend, type CareLevel } from "@/lib/care";
-import { GETTING_THROUGH, RESPONSES, TINY_STEPS, WORDS } from "@/lib/havenContent";
+import { GETTING_THROUGH, RESPONSES, TINY_STEPS, VIDEOS, WORDS, type Video } from "@/lib/havenContent";
 import { ronakLink } from "@/lib/bridge";
 import { COMPANION_NAME } from "@/lib/site";
 import { HelplineList } from "../HelplineList";
 import { CheckIn } from "./CheckIn";
 import { DawnSky } from "./DawnSky";
 import { CalmIcon, HereIcon, PlayIcon } from "./icons";
+import { SCENE_BG, SceneArt } from "./SceneArt";
 import { dailyPick, formatDay, GoTo, partOfDay, useNow } from "./shared";
 
 /** How long a check-in stands before the app asks again. */
@@ -24,12 +25,16 @@ export function HereTab({
   region,
   goTo,
   openUrgent,
+  openVideo,
+  onReplayIntro,
 }: {
   wb: Wellbeings;
   haven: Haven;
   region: HelplineRegion;
   goTo: GoTo;
   openUrgent: () => void;
+  openVideo: (v: Video) => void;
+  onReplayIntro: () => void;
 }) {
   const now = useNow();
   const [checkingAgain, setCheckingAgain] = useState(false);
@@ -80,6 +85,14 @@ export function HereTab({
 
   const tonight = now ? now.getHours() >= 17 || now.getHours() < 5 : true;
 
+  /* A video for right now. On a heavy day it is one of the talks about
+     being seen and mattering; on a steadier one, something for when there
+     is a bit of room. The same pick all day, so it does not flicker. */
+  const liftVideos = VIDEOS.filter((v) => v.group === "lift" && v.scene);
+  const roomVideos = VIDEOS.filter((v) => v.group === "room" && v.scene);
+  const video = dailyPick(recent && level === "steady" && latest && latest.mood >= 4 ? roomVideos : liftVideos, "video", 0, now);
+  const [lead, glow] = splitTitle(title);
+
   return (
     <div className="haven-stack">
       <DawnSky dawn={haven.dawn} label={`Your sky today: ${haven.stepsToday} of ${DAWN_STEPS} steps toward sunrise`}>
@@ -87,7 +100,10 @@ export function HereTab({
           {partOfDay(now)}
           {name ? `, ${name}` : ""}
         </p>
-        <h1 className="sky-title">{title}</h1>
+        <h1 className="sky-title">
+          {lead}
+          {glow && <span className="glow-text">{glow}</span>}
+        </h1>
         <p className="sky-sub">{sub}</p>
         <div className="dawn-meter">
           <span className="dawn-dots" aria-hidden="true">
@@ -103,6 +119,12 @@ export function HereTab({
                 : `${haven.stepsToday} small thing${haven.stepsToday === 1 ? "" : "s"} today`}
           </span>
         </div>
+        <button type="button" className="opening-pill" onClick={onReplayIntro}>
+          <span className="play-dot" aria-hidden="true">
+            <PlayIcon width={11} height={11} />
+          </span>
+          Watch the opening
+        </button>
       </DawnSky>
 
       <div className="here-cols">
@@ -201,27 +223,81 @@ export function HereTab({
             </section>
           )}
 
+          {/* The video for right now. Videos are the part of this app most
+              people will actually reach for, so one is always one tap from
+              the top, matched to how they arrived. */}
+          <article className="scene scene-wide" style={{ order: 5, background: SCENE_BG[video.scene?.kind ?? "light"] }} aria-labelledby="now-video">
+            {video.scene && <SceneArt kind={video.scene.kind} className="scene-art" />}
+            <div className="scene-body">
+              <p className="scene-kicker">A video for right now</p>
+              <h2 id="now-video" className="scene-title">
+                {video.scene?.headline ?? video.title}
+              </h2>
+              <p className="scene-by">
+                {video.title} · {video.by}
+              </p>
+              <div className="btn-row">
+                <button type="button" className="btn btn-sun scene-play" onClick={() => openVideo(video)} aria-label={`Watch: ${video.title}`}>
+                  <span className="play-dot" aria-hidden="true">
+                    <PlayIcon width={12} height={12} />
+                  </span>
+                  Watch
+                </button>
+                <button type="button" className="btn btn-quiet scene-more" onClick={() => goTo("watch")}>
+                  More to watch
+                </button>
+              </div>
+            </div>
+          </article>
+
           {haven.state.arrivals.length >= 2 && (
-            <div style={{ order: 9 }}>
+            <div style={{ order: 11 }}>
               <Pattern haven={haven} />
             </div>
           )}
 
           {recent && !checkingAgain && (
-            <button type="button" className="btn btn-quiet" onClick={() => setCheckingAgain(true)} style={{ alignSelf: "start", order: 11 }}>
+            <button type="button" className="btn btn-quiet" onClick={() => setCheckingAgain(true)} style={{ alignSelf: "start", order: 13 }}>
               Check in again
             </button>
           )}
           {skipped && !recent && (
-            <button type="button" className="btn btn-quiet" onClick={() => setSkipped(false)} style={{ alignSelf: "start", order: 11 }}>
+            <button type="button" className="btn btn-quiet" onClick={() => setSkipped(false)} style={{ alignSelf: "start", order: 13 }}>
               Tell me how you&apos;re arriving
             </button>
           )}
         </div>
 
         <div className="here-side">
+          {haven.state.hopePath && (
+            <section className="panel" aria-labelledby="path-here" style={{ order: 6 }}>
+              <p className="eyebrow" id="path-here">
+                Your hope path this week
+              </p>
+              <ol className="path-list">
+                {[
+                  { t: haven.state.hopePath.want, c: "var(--color-sun)" },
+                  { t: haven.state.hopePath.way, c: "var(--color-pink)" },
+                  { t: haven.state.hopePath.can, c: "var(--color-leaf)" },
+                ]
+                  .filter((x) => x.t)
+                  .map((x, i) => (
+                    <li key={i}>
+                      <span className="path-dot" style={{ background: x.c }} aria-hidden="true">
+                        {i + 1}
+                      </span>
+                      <span>{x.t}</span>
+                    </li>
+                  ))}
+              </ol>
+              <button type="button" className="btn btn-quiet" onClick={() => goTo("hope", "path")}>
+                Change it
+              </button>
+            </section>
+          )}
+
           {/* One small thing. Never in place of the crisis panel, only under it. */}
-          <section className="panel panel-sun" aria-labelledby="tiny-title" style={{ order: 5 }}>
+          <section className="panel panel-sun" aria-labelledby="tiny-title" style={{ order: 7 }}>
             <p className="eyebrow" id="tiny-title">
               One small thing
             </p>
@@ -256,10 +332,10 @@ export function HereTab({
             </div>
           </section>
 
-          <section className="panel" aria-labelledby="calm-now" style={{ order: 6 }}>
+          <section className="panel" aria-labelledby="calm-now" style={{ order: 8 }}>
             <h2 id="calm-now">If you need a minute</h2>
             <div className="tools">
-              <button type="button" className="tool-row" onClick={() => goTo("calm", "breathe")}>
+              <button type="button" className="tool-row" onClick={() => goTo("watch", "breathe")}>
                 <span className="tool-glyph glyph-lilac" aria-hidden="true">
                   <CalmIcon />
                 </span>
@@ -268,7 +344,7 @@ export function HereTab({
                   <small>One minute. In for four, out for six.</small>
                 </span>
               </button>
-              <button type="button" className="tool-row" onClick={() => goTo("calm", "ground")}>
+              <button type="button" className="tool-row" onClick={() => goTo("watch", "ground")}>
                 <span className="tool-glyph glyph-sun" aria-hidden="true">
                   <HereIcon />
                 </span>
@@ -277,20 +353,20 @@ export function HereTab({
                   <small>Five things you can see, then four you can feel.</small>
                 </span>
               </button>
-              <button type="button" className="tool-row" onClick={() => goTo("calm", "watch")}>
+              <button type="button" className="tool-row" onClick={() => goTo("watch")}>
                 <span className="tool-glyph glyph-pink" aria-hidden="true">
                   <PlayIcon />
                 </span>
                 <span>
                   <strong>Watch something kind</strong>
-                  <small>Short films chosen for hard days.</small>
+                  <small>Talks and stories chosen for hard days.</small>
                 </span>
               </button>
             </div>
           </section>
 
           {!serious && (haven.goodToday.length === 0 || goodSaved) && (
-            <section className="panel panel-pink" aria-labelledby="good-title" style={{ order: 7 }}>
+            <section className="panel panel-pink" aria-labelledby="good-title" style={{ order: 9 }}>
               <h2 id="good-title">One good thing today</h2>
               {goodSaved ? (
                 <p className="saved-note" role="status" style={{ fontSize: 14 }}>
@@ -331,7 +407,7 @@ export function HereTab({
             </section>
           )}
 
-          <section className="panel panel-lilac" aria-label="Words for right now" style={{ order: 8 }}>
+          <section className="panel panel-lilac" aria-label="Words for right now" style={{ order: 10 }}>
             <p className="eyebrow">Words for right now</p>
             <p className="quote-line">{word}</p>
             <button type="button" className="btn btn-quiet" onClick={() => setWordOffset((n) => n + 1)}>
@@ -339,7 +415,7 @@ export function HereTab({
             </button>
           </section>
 
-          <div style={{ order: 10 }}>
+          <div style={{ order: 12 }}>
             <WellbeingCheckCard wb={wb} goTo={goTo} />
           </div>
         </div>
@@ -428,4 +504,19 @@ function WellbeingCheckCard({ wb, goTo }: { wb: Wellbeings; goTo: GoTo }) {
       </div>
     </section>
   );
+}
+
+/**
+ * Which part of the sky's headline is set in the sunrise gradient.
+ *
+ * Two sentences: the second glows ("This is a quiet place." / "Take your
+ * time."). One sentence: its last two words do. Purely presentational; a
+ * screen reader hears one continuous heading either way.
+ */
+function splitTitle(title: string): [string, string] {
+  const i = title.indexOf(". ");
+  if (i > 0 && i < title.length - 2) return [title.slice(0, i + 2), title.slice(i + 2)];
+  const words = title.split(" ");
+  if (words.length < 4) return [title, ""];
+  return [words.slice(0, -2).join(" ") + " ", words.slice(-2).join(" ")];
 }

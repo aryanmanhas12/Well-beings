@@ -53,7 +53,7 @@ export function BloomSun({
             cy="15.5"
             rx="6.6"
             ry="11.5"
-            fill={i % 2 ? "var(--bloom-b, #C4A8FF)" : "var(--bloom-a, #FF8DBA)"}
+            fill={i % 2 ? "var(--bloom-b, #B794FF)" : "var(--bloom-a, #FF7AB0)"}
             style={{
               transformOrigin: "32px 32px",
               transform: `scale(${0.35 + 0.65 * s})`,

@@ -10,6 +10,7 @@ import {
   guessRegion,
   HavenState,
   HopeItem,
+  HopePath,
   loadHaven,
   loadPhotos,
   newId,
@@ -133,6 +134,17 @@ export function useHaven() {
     [update, markStep]
   );
 
+  const setHopePath = useCallback(
+    (path: Omit<HopePath, "at"> | null) => {
+      const clean = path && (path.want.trim() || path.way.trim() || path.can.trim())
+        ? { want: path.want.trim(), way: path.way.trim(), can: path.can.trim(), at: new Date().toISOString() }
+        : null;
+      update((s) => ({ ...s, hopePath: clean }));
+      if (clean) markStep("hope");
+    },
+    [update, markStep]
+  );
+
   const savePlan = useCallback(
     (plan: SafetyPlan) => {
       update((s) => ({ ...s, plan: { ...plan, updatedAt: new Date().toISOString() } }));
@@ -209,6 +221,7 @@ export function useHaven() {
     addHope,
     removeHope,
     setLetter,
+    setHopePath,
     savePlan,
     setCare,
     setRegion,

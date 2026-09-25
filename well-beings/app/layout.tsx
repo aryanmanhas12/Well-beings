@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Karla, Noto_Sans_Devanagari } from "next/font/google";
+import { Fredoka, Karla, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { PAGE_BY_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -18,6 +18,19 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const karla = Karla({
   subsets: ["latin"],
   variable: "--font-karla",
+  display: "swap",
+});
+
+/* The display face, added in v2 to sit beside Ronak's redesign. Ronak sets
+   its headlines in Baloo 2, a heavy rounded face; Wellbeings uses Fredoka,
+   rounder and lighter, so the two read as family without reading as one
+   product. It is only for things said out loud: the sky, headings, the
+   numbers on the crisis screen. Everything read slowly stays in Karla.
+   Latin only; Hindi headings fall back to Noto Sans Devanagari through the
+   data-lang rules in globals.css. */
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  variable: "--font-fredoka",
   display: "swap",
 });
 
@@ -81,7 +94,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#FFF5EC" },
-    { media: "(prefers-color-scheme: dark)", color: "#150F26" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B0617" },
   ],
 };
 
@@ -119,7 +132,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={[karla.variable, notoDevanagari.variable].join(" ")}
+      className={[karla.variable, fredoka.variable, notoDevanagari.variable].join(" ")}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREFS_BOOTSTRAP }} />

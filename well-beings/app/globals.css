@@ -46,43 +46,51 @@ html {
    ───────────────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-  /* Midnight plum. Cream text on it is 16.69:1. */
-  --color-bg: #150F26;
-  /* 15.03:1 for body text. */
-  --color-surface: #211838;
-  /* Cards inside cards, the selected check-in option. 13.27:1. */
-  --color-raised: #2C2148;
-  --color-text: #FBF1E6;
+  /* Midnight plum, a shade deeper than v1 so the glows read as light:
+     cream text on it is 17.84:1. */
+  --color-bg: #110921;
+  /* 16.65:1 for body text. */
+  --color-surface: #1B0F33;
+  /* Cards inside cards, the selected check-in option. 14.94:1. */
+  --color-raised: #26164A;
+  --color-text: #FFF4E8;
   /* Sun yellow: 12.10:1 on the page, 10.90:1 on a card. */
   --color-accent: #FFC857;
-  /* Dawn pink as the second voice: 7.80:1 on a card. */
-  --color-accent-2: #FF8DBA;
-  --color-divider: color-mix(in srgb, #FBF1E6 14%, transparent);
+  /* Dawn pink as the second voice: 7.45:1 on a card. */
+  --color-accent-2: #FF7AB0;
+  --color-divider: color-mix(in srgb, #FFF4E8 13%, transparent);
 
-  /* The sunrise itself. Used as fills and in the sky; where they carry
-     text they are measured on --color-surface: pink 7.80, lilac 9.21,
-     peach 8.40, sun 10.90. */
+  /* The sunrise itself. Pink and lilac were pushed a step brighter in v2
+     to sit beside Ronak's glowing night (Ronak runs hot pink #FF3D8B and
+     violet #7C3AED; these stay softer on purpose). Measured on
+     --color-surface where they carry text: pink 7.45, lilac 7.48,
+     peach 9.05, sun 11.74, leaf 10.05. */
   --color-sun: #FFC857;
-  --color-pink: #FF8DBA;
-  --color-lilac: #C4A8FF;
+  --color-pink: #FF7AB0;
+  --color-lilac: #B794FF;
   --color-peach: #FF9F80;
-  /* Text on any bright fill: 10.78:1 on sun, 8.31 on peach, 7.72 on pink. */
+  /* Growth. The one green in the palette, used only for things that
+     grow: the hope path, the stem of the flower, a kept good thing. */
+  --color-leaf: #62D6A5;
+  /* Text on any bright fill: 10.78:1 on sun, 8.31 on peach, 6.84 on
+     pink, 6.86 on lilac, 9.22 on leaf. */
   --color-ink: #2A1636;
   /* The sun as text colour. Yellow reads fine on the night; on paper it
-     needs the amber in the light theme below. */
+     needs the amber in the light theme below. Same for leaf. */
   --color-sun-text: #FFD98A;
+  --color-leaf-text: #62D6A5;
 
   --color-neutral-100: #FFF8F1;
-  --color-neutral-200: #F1E8F3;
-  --color-neutral-300: #DDD2E8;
-  --color-neutral-400: #CFC3DE;
-  --color-neutral-500: #BDB0D0;
-  /* Captions. 7.35:1 on a card, 6.49:1 on a raised card: the old trap
+  --color-neutral-200: #F3EAF4;
+  --color-neutral-300: #E2D8EC;
+  --color-neutral-400: #D6CBE5;
+  --color-neutral-500: #CCBFE0;
+  /* Captions. 9.43:1 on a card, 8.46:1 on a raised card: the old trap
      was a caption token that passed on the page and failed on a card. */
-  --color-neutral-600: #B3A6C8;
+  --color-neutral-600: #C4B5DA;
   --color-neutral-700: #6F6388;
-  --color-neutral-800: #4A3F63;
-  --color-neutral-900: #2E2544;
+  --color-neutral-800: #463A60;
+  --color-neutral-900: #291D45;
 
   --color-accent-100: #FFF8E6;
   --color-accent-200: #FFEBB8;
@@ -97,17 +105,17 @@ html {
 
   --color-accent-2-100: #FFF0F6;
   --color-accent-2-200: #FFD6E7;
-  --color-accent-2-300: #FFB3D1;
-  --color-accent-2-400: #FF8DBA;
-  --color-accent-2-500: #F26BA3;
+  --color-accent-2-300: #FFA8CB;
+  --color-accent-2-400: #FF7AB0;
+  --color-accent-2-500: #F25E9C;
   --color-accent-2-600: #D14E86;
   --color-accent-2-700: #A33A68;
   --color-accent-2-800: #6E2848;
   --color-accent-2-900: #3F1A2B;
 
-  --color-section: #2A1D45;
-  --color-section-glow: #3A2760;
-  --color-section-ghost: #5B4390;
+  --color-section: #241341;
+  --color-section-glow: #34205C;
+  --color-section-ghost: #56408C;
 
   /* ── Type ──────────────────────────────────────────────────
      Two voices, deliberately unalike.
@@ -130,10 +138,14 @@ html {
      by family. That is the older and more reliable way to build a
      hierarchy, and it means the whole app runs on one variable font
      file instead of two. */
-  --font-heading: var(--font-karla), "Karla", system-ui, sans-serif;
+  /* v2: headings and display moved to Fredoka (see app/layout.tsx for
+     why), body stays Karla. The old note above about one family is kept
+     because its lesson still holds: the display face is rounded, not
+     costumed, and it never sets anything longer than a heading. */
+  --font-heading: var(--font-fredoka), "Fredoka", var(--font-karla), system-ui, sans-serif;
   --font-heading-weight: 600;
   --font-body: var(--font-karla), "Karla", system-ui, sans-serif;
-  --font-display: var(--font-karla), "Karla", system-ui, sans-serif;
+  --font-display: var(--font-fredoka), "Fredoka", var(--font-karla), system-ui, sans-serif;
   --font-display-tracking: -0.02em;
   /* What separates display from everything else, now that it is no longer
      a separate family. Every component that reaches for --font-display
@@ -161,14 +173,14 @@ html {
   --radius-lg: 14px;
   /* Only for the sky. A painted window deserves a softer corner than a
      control does; nothing you press uses this. */
-  --radius-xl: 22px;
+  --radius-xl: 28px;
 
   /* Shadows carry the night's own plum. A neutral-black drop shadow on
      a coloured ground is the thing that quietly makes a palette look
      muddy; the shade has to belong to the same light. */
-  --shadow-sm: 0 0 0 1px #3A2E57;
-  --shadow-md: 0 0 0 1px #4A3F63, 0 3px 10px rgba(8, 4, 20, 0.45);
-  --shadow-lg: 0 0 0 1px #6F6388, 0 6px 20px rgba(8, 4, 20, 0.5);
+  --shadow-sm: 0 0 0 1px #2E1F4E;
+  --shadow-md: 0 0 0 1px #463A60, 0 3px 10px rgba(6, 2, 16, 0.5);
+  --shadow-lg: 0 0 0 1px #6F6388, 0 6px 20px rgba(6, 2, 16, 0.55);
 }
 
 *,
@@ -613,8 +625,8 @@ a,
    symptoms the way looming movement does. */
 @media (prefers-reduced-motion: reduce) {
   *,
-*::before,
-*::after {
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -683,9 +695,12 @@ a,
     --color-divider: color-mix(in srgb, #2A1B3D 13%, transparent);
 
     --color-sun: #FFC857;
-    --color-pink: #FF8DBA;
-    --color-lilac: #C4A8FF;
+    --color-pink: #FF7AB0;
+    --color-lilac: #B794FF;
     --color-peach: #FF9F80;
+    --color-leaf: #62D6A5;
+    /* Leaf as text on paper: 5.47:1 on the page, 5.71:1 on a card. */
+    --color-leaf-text: #1C7250;
     --color-ink: #2A1636;
     /* Amber for "sun" as text on paper: 6.15:1 on a card. */
     --color-sun-text: #8A5300;
@@ -749,9 +764,12 @@ a,
   --color-divider: color-mix(in srgb, #2A1B3D 13%, transparent);
 
   --color-sun: #FFC857;
-  --color-pink: #FF8DBA;
-  --color-lilac: #C4A8FF;
+  --color-pink: #FF7AB0;
+  --color-lilac: #B794FF;
   --color-peach: #FF9F80;
+  --color-leaf: #62D6A5;
+  /* Leaf as text on paper: 5.47:1 on the page, 5.71:1 on a card. */
+  --color-leaf-text: #1C7250;
   --color-ink: #2A1636;
   /* Amber for "sun" as text on paper: 6.15:1 on a card. */
   --color-sun-text: #8A5300;
@@ -856,7 +874,7 @@ a,
    nothing reflows. */
 @media (pointer: coarse) {
   .btn,
-.seg-opt {
+  .seg-opt {
     min-height: 44px;
   }
   .switch {
@@ -875,25 +893,22 @@ a,
 /* ─────────────────────────────────────────────────────────────
    Devanagari
    ─────────────────────────────────────────────────────────────
-   Anton and Inter carry no Devanagari glyphs. Left alone, Hindi
-   silently falls back to whatever the OS supplies — usually a
-   default serif at the wrong optical size, which reads as broken
-   rather than as a language choice. Swapping the whole stack at
+   Karla and Fredoka carry no Devanagari glyphs. Left alone, Hindi
+   silently falls back to whatever the OS supplies, usually a default
+   serif at the wrong optical size, which reads as broken rather than
+   as a language choice. Swapping the whole stack at
    the root means every component that consumes --font-* gets the
    right face without knowing the language exists.
 
-   Teko is condensed and heavy like Anton, so the display voice
-   survives translation; Noto Sans Devanagari carries body copy.
-   Devanagari also needs more vertical room than Latin for its
-   matras, hence the slightly looser line-height. */
+   Headings keep Fredoka first: it has no Devanagari glyphs, so the
+   browser takes each Devanagari character from Noto Sans Devanagari and
+   leaves Latin words (names, numbers, "Tele-MANAS") in the display face.
+   Body copy puts Noto first, because Devanagari also needs more vertical
+   room than Latin for its matras, hence the looser line-height. */
 :root[data-lang="hi"] {
-  --font-heading: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
+  --font-heading: var(--font-fredoka), "Fredoka", var(--font-noto-devanagari), "Noto Sans Devanagari", system-ui, sans-serif;
   --font-body: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
-  /* Devanagari follows the same rule as Latin: one family, hierarchy by
-     weight. Noto Sans Devanagari ships 400/500/600, so the display slot
-     gets its 600 the same way Karla does, and switching language no longer
-     switches typeface as well. */
-  --font-display: var(--font-noto-devanagari), "Noto Sans Devanagari", var(--font-karla), system-ui, sans-serif;
+  --font-display: var(--font-fredoka), "Fredoka", var(--font-noto-devanagari), "Noto Sans Devanagari", system-ui, sans-serif;
   --font-display-tracking: 0;
 }
 :root[data-lang="hi"] body {
@@ -1051,7 +1066,7 @@ a,
 }
 @supports (padding: max(0px)) {
   .nav,
-.dialog-backdrop {
+  .dialog-backdrop {
     padding-left: max(14px, env(safe-area-inset-left));
     padding-right: max(14px, env(safe-area-inset-right));
   }
@@ -1216,7 +1231,6 @@ header.nav,
 
 .site-head {
   border-bottom: 1px solid var(--color-divider);
-  padding-top: env(safe-area-inset-top, 0px);
 }
 .site-head-inner {
   max-width: 1060px;
@@ -1457,8 +1471,8 @@ header.nav,
    asks for. Kept to the touch query so desktop navigation stays compact. */
 @media (pointer: coarse) {
   .site-nav a,
-.site-foot a,
-.crumbs a {
+  .site-foot a,
+  .crumbs a {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1483,7 +1497,7 @@ header.nav,
     align-items: center;
   }
   .helpline-name,
-.helpline-contact {
+  .helpline-contact {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1615,7 +1629,7 @@ header.nav,
    last thing on the page, so it is the one that has to clear it. */
 @media (max-width: 719px) {
   .app-foot-tabbed {
-    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 .haven-stack {
@@ -1799,10 +1813,11 @@ header.nav,
   margin: 0 0 6px;
 }
 .sky-title {
-  font-size: clamp(26px, 7.4vw, 36px);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 8vw, 40px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  font-weight: 600;
   margin: 0;
   color: #FFF8F1;
   text-wrap: balance;
@@ -1840,7 +1855,7 @@ header.nav,
 /* ── surfaces ────────────────────────────────────────────────────────── */
 .panel {
   background: var(--color-surface);
-  border-radius: var(--radius-lg);
+  border-radius: 22px;
   padding: 18px;
   box-shadow: var(--shadow-sm);
 }
@@ -2127,55 +2142,48 @@ header.nav,
 
 /* ── video ───────────────────────────────────────────────────────────── */
 
-.video-frame {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: #0F0A1F;
-}
-
 /* ── tab bar ─────────────────────────────────────────────────────────── */
+/* A floating pill, as in Ronak's redesign: it sits above the content
+   rather than welding itself to the bottom edge, which reads as a thing
+   you hold rather than a frame around you. 66px tall plus a 12px lift,
+   plus the home indicator. */
 .tabbar {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-divider);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+  box-shadow: 0 18px 40px -12px rgba(6, 2, 16, 0.7);
 }
 .tabbar button {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  min-height: 58px;
-  padding: 6px 2px;
+  gap: 2px;
+  min-height: 56px;
+  padding: 4px 2px;
+  border-radius: 999px;
   background: none;
   border: none;
   color: var(--color-neutral-500);
   font: inherit;
   font-size: 11.5px;
+  font-weight: 600;
   cursor: pointer;
-  position: relative;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 .tabbar button[aria-current="page"] {
   color: var(--color-text);
-}
-.tabbar button[aria-current="page"]::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 28%;
-  right: 28%;
-  height: 3px;
-  border-radius: 0 0 3px 3px;
-  background: linear-gradient(90deg, var(--color-pink), var(--color-sun));
+  font-weight: 700;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-pink) 30%, transparent), color-mix(in srgb, var(--color-sun) 22%, transparent));
 }
 .tabbar svg {
   width: 22px;
@@ -2184,27 +2192,20 @@ header.nav,
 @media (min-width: 720px) {
   .tabbar {
     position: sticky;
-    top: 57px;
+    top: 50px;
+    left: auto;
+    right: auto;
     bottom: auto;
     max-width: 700px;
-    margin: 12px auto 0;
-    border: 1px solid var(--color-divider);
-    border-radius: 999px;
-    padding: 4px;
+    margin: 14px auto 0;
     gap: 4px;
+    padding: 4px;
   }
   .tabbar button {
     flex-direction: row;
-    min-height: 40px;
-    border-radius: 999px;
-    font-size: 13.5px;
-    gap: 7px;
-  }
-  .tabbar button[aria-current="page"] {
-    background: var(--color-raised);
-  }
-  .tabbar button[aria-current="page"]::before {
-    display: none;
+    min-height: 42px;
+    font-size: 14px;
+    gap: 8px;
   }
   .tabbar svg {
     width: 18px;
@@ -2213,6 +2214,106 @@ header.nav,
   .haven {
     padding-bottom: 60px;
   }
+}
+
+/* ── the crisis strip ────────────────────────────────────────────────── */
+/* Pinned on every screen of the app, as Ronak pins its own. Night, not
+   alarm red: a person in trouble does not need the page to shout, they
+   need the number to be where their eye already is. The dot beats about
+   once a second; under reduced motion it holds still. */
+.crisis-strip {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  /* The strip is the first thing on every page now, so it is what has to
+     clear the notch. */
+  padding: max(4px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right)) 4px max(16px, env(safe-area-inset-left));
+  background: #0B0617;
+  color: #FFF4E8;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 244, 232, 0.08);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.crisis-strip a {
+  color: #FFD98A;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 0;
+}
+.crisis-strip a:hover {
+  text-decoration: underline;
+}
+.crisis-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FF7AB0;
+  box-shadow: 0 0 0 4px rgba(255, 122, 176, 0.18);
+  animation: heartbeat 1.1s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.35); }
+  28% { transform: scale(1); }
+}
+.crisis-sep {
+  color: #C4B5DA;
+}
+@media (max-width: 379px) {
+  .crisis-lead {
+    display: none;
+  }
+}
+
+/* ── atmosphere ──────────────────────────────────────────────────────── */
+/* Soft light behind everything on the night theme: violet high on the
+   left, pink on the right, the sunrise low in the middle. Fixed, so it
+   stays put while the page moves over it, and painted once. */
+.haven-atmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(183, 148, 255, 0.2), transparent 40%),
+    radial-gradient(circle at 96% 16%, rgba(255, 122, 176, 0.14), transparent 38%),
+    radial-gradient(circle at 50% 112%, rgba(255, 178, 107, 0.18), transparent 50%);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .haven-atmos {
+    opacity: 0.55;
+  }
+}
+:root[data-theme="light"] .haven-atmos {
+  opacity: 0.55;
+}
+:root[data-contrast="high"] .haven-atmos {
+  display: none;
+}
+.haven {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── words in the light ──────────────────────────────────────────────── */
+/* The second half of a headline, set in the sunrise gradient. Used on the
+   dark sky only, where every stop of it clears 7:1 against the night. */
+.glow-text {
+  background: linear-gradient(100deg, #FFD36E, #FF9F80 55%, #FF7AB0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+:root[data-contrast="high"] .glow-text {
+  background: none;
+  color: inherit;
 }
 
 .switch-row {
@@ -2539,24 +2640,27 @@ header.nav,
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .crisis-dot {
+    animation: none;
+  }
   .sky,
-.sky-sun,
-.dawn-dots i {
+  .sky-sun,
+  .dawn-dots i {
     transition: none;
   }
   .sky-stars span,
-.sky-glow,
-.sky-sun svg,
-.intro-stars span,
-.intro-sun::before {
+  .sky-glow,
+  .sky-sun svg,
+  .intro-stars span,
+  .intro-sun::before {
     animation: none;
   }
   .intro::before,
-.intro-sun,
-.intro-sun .bloom-petal,
-.intro-line,
-.intro-small,
-.intro-go {
+  .intro-sun,
+  .intro-sun .bloom-petal,
+  .intro-line,
+  .intro-small,
+  .intro-go {
     animation: none;
     opacity: 1;
     transform: none;
@@ -2565,7 +2669,7 @@ header.nav,
     display: none;
   }
   .breath-sun::before,
-.breath-sun svg {
+  .breath-sun svg {
     transition: none;
   }
   .checkin-step {
@@ -2619,7 +2723,7 @@ header.nav,
     gap: 18px;
   }
   .here-main,
-.here-side {
+  .here-side {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -2680,74 +2784,429 @@ header.nav,
 .glyph-sun { background: linear-gradient(140deg, #FFE08A, #FFB26B); }
 .glyph-pink { background: linear-gradient(140deg, #FFB3D1, #FF8DBA); }
 
-/* ── compact video rows ──────────────────────────────────────────────── */
-.video-row {
-  display: grid;
-  grid-template-columns: 116px 1fr;
-  gap: 12px;
-  align-items: start;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  background: var(--color-raised);
+/* ═════════════════════════════════════════════════════════════════════
+   v2: videos first
+   ═════════════════════════════════════════════════════════════════════ */
+
+.tab-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(30px, 8vw, 38px);
+  line-height: 1.05;
+  margin: 6px 0 0;
 }
-.video-row > .video-wide {
-  grid-column: 1 / -1;
+
+/* "Watch the opening", on the sky. */
+.opening-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 0 16px 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 244, 232, 0.24);
+  background: rgba(11, 6, 23, 0.42);
+  color: #FFF4E8;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
 }
-.video-thumb {
+.opening-pill:hover {
+  background: rgba(11, 6, 23, 0.6);
+}
+.play-dot {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #FFC857;
+  color: #2A1636;
+  flex: none;
+}
+.btn-sun .play-dot {
+  background: #2A1636;
+  color: #FFD36E;
+}
+
+/* ── scenes: the featured cards ──────────────────────────────────────── */
+.scene {
   position: relative;
-  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 26px;
+  color: #FFF4E8;
+  box-shadow: 0 22px 44px -22px rgba(122, 46, 126, 0.75);
+  display: flex;
+  flex-direction: column;
+}
+.scene-art {
+  display: block;
   width: 100%;
+  height: 150px;
+}
+.scene-body {
+  padding: 4px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.scene-kicker {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FFE3A1;
+}
+.scene-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.1;
+  color: #FFF4E8;
+  text-wrap: balance;
+}
+.scene-by {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  color: #F1E4F4;
+}
+.scene-play {
+  align-self: flex-start;
+  gap: 8px;
+  padding-left: 8px;
+}
+.scene .btn-row .scene-play {
+  align-self: center;
+}
+.scene-more {
+  color: #FFE3A1;
+}
+
+/* The deck: scenes side by side, one and a bit visible on a phone so the
+   next card says "there is more" without a word. Native horizontal
+   scroll with snapping: swipe on touch, shift-wheel or keyboard on
+   desktop, and every card is a normal list item to a screen reader. */
+.deck {
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 86%;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  margin: 0 -16px;
+  padding: 4px 16px 18px;
+  scroll-padding-inline: 16px;
+}
+.deck::-webkit-scrollbar {
+  display: none;
+}
+.deck > .scene {
+  scroll-snap-align: start;
+}
+.deck-hint {
+  margin: -16px 0 0;
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+}
+@media (min-width: 720px) {
+  .deck {
+    grid-auto-columns: calc(50% - 6px);
+  }
+  .deck-hint {
+    display: none;
+  }
+}
+
+/* ── shelves ─────────────────────────────────────────────────────────── */
+.shelf-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  margin: 4px 0 10px;
+}
+.shelf-row {
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 158px;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  margin: 0 -16px;
+  padding: 0 16px 4px;
+  scroll-padding-inline: 16px;
+}
+.shelf-row::-webkit-scrollbar {
+  display: none;
+}
+.shelf-row > li {
+  scroll-snap-align: start;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  background: none;
   border: none;
-  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tile-thumb {
+  position: relative;
   display: grid;
   place-items: center;
-  color: #FFF8F1;
-  cursor: pointer;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
   overflow: hidden;
-  padding: 0;
-  font: inherit;
 }
-.video-thumb::after {
+.tile-thumb::after {
   content: "";
   position: absolute;
-  right: -18px;
-  bottom: -22px;
-  width: 64px;
-  height: 64px;
+  right: -20px;
+  bottom: -26px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 248, 241, 0.45), transparent);
+  background: radial-gradient(closest-side, rgba(255, 244, 232, 0.45), transparent);
 }
-.video-thumb .play {
+.tile-play {
   position: relative;
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(15, 10, 31, 0.55);
+  background: rgba(17, 9, 33, 0.58);
+  color: #FFF4E8;
 }
-.video-thumb:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
+.tile:hover .tile-play {
+  background: rgba(17, 9, 33, 0.78);
 }
-.video-meta h4 {
-  margin: 0;
-  font-size: 15px;
+.tile-title {
+  font-size: 14px;
+  font-weight: 600;
   line-height: 1.3;
 }
-.video-meta p {
-  margin: 2px 0 0;
+.tile-by {
   font-size: 12.5px;
   color: var(--color-neutral-600);
+  line-height: 1.35;
 }
-.video-meta .video-when {
-  font-size: 13.5px;
-  color: var(--color-neutral-400);
-  margin-top: 6px;
-}
-@media (min-width: 560px) {
-  .video-row {
-    grid-template-columns: 160px 1fr;
+@media (min-width: 720px) {
+  .shelf-row {
+    grid-auto-columns: 190px;
   }
+}
+
+.ground-n {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  margin: 4px 0 6px;
+  color: var(--color-sun-text);
+}
+
+/* ── the video sheet ─────────────────────────────────────────────────── */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(8, 4, 18, 0.7);
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+.sheet {
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -20px 50px -20px rgba(0, 0, 0, 0.6);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  animation: sheetUp 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes sheetUp {
+  from { transform: translateY(40px); opacity: 0; }
+}
+@media (min-width: 720px) {
+  .sheet-backdrop {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: 28px;
+  }
+}
+.sheet-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+}
+.sheet-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sheet-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0B0617;
+}
+.sheet-body {
+  padding: 18px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sheet-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.12;
+}
+.sheet-by {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--color-neutral-600);
+}
+.sheet-when {
+  margin: 0 0 6px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.sheet-consent {
+  margin: 0 0 6px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--color-raised);
+  color: var(--color-neutral-400);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .sheet-backdrop {
+    animation: none;
+  }
+}
+
+/* ── the Hope tab's growing flower ───────────────────────────────────── */
+.hope-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 230px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, #2A1650 0%, #6A2A78 62%, #B94E78 100%);
+  color: #FFF4E8;
+}
+.hope-hero-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hope-hero-bloom {
+  position: absolute;
+  top: 24px;
+  right: calc(30% - 56px);
+}
+.hope-hero-bloom svg {
+  animation: sunTurn 120s linear infinite;
+}
+.hope-hero-text {
+  position: relative;
+  z-index: 1;
+  padding: 22px 22px 90px;
+  max-width: 56%;
+}
+.hope-hero-text p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #FFF1E6;
+}
+.path-dot {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: var(--color-ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  flex: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hope-hero-bloom svg {
+    animation: none;
+  }
+}
+.path-list {
+  list-style: none;
+  margin: 4px 0 4px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.path-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 15.5px;
+  line-height: 1.4;
+}
+.path-list .path-dot {
+  margin-top: 1px;
+}
+
+/* Link-shaped buttons keep their own colours on hover. The global a:hover
+   above turns link text pale gold, which is right for a link in a sentence
+   and was 1.3:1 on a sun-yellow button: hovering a phone number on the
+   crisis screen made it unreadable. Found by axe with a pointer resting on
+   the card, which is exactly how a mouse user meets it. */
+a.btn-sun:hover,
+.call-btn:hover {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+.call-btn:hover {
+  color: #2A1636;
+  filter: brightness(1.04);
+}
+.call-btn-soft:hover {
+  color: #FFF8F1;
+}
+a.btn-soft:hover,
+a.btn-secondary:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+a.btn-quiet:hover {
+  color: var(--color-accent-200);
 }

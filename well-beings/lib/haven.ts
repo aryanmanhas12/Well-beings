@@ -92,6 +92,23 @@ export interface Photo {
   at: string;
 }
 
+/**
+ * A small hope path, after Snyder's hope theory: a goal, a way to it, and
+ * a reason to believe you can (agency). Deliberately one of each and
+ * deliberately small. In a meta-analysis of 27 studies, hope-building
+ * exercises had small effects on hope, larger for brief ones (Weis &
+ * Speridakos 2011, Psychology of Well-Being), and of the two thinking
+ * styles in the theory it is agency ("I can") that tracks depression most
+ * closely (Corrigan et al. 2023). So the third line is the one that
+ * matters, and the first is the one that has to stay small enough to do.
+ */
+export interface HopePath {
+  want: string;
+  way: string;
+  can: string;
+  at: string;
+}
+
 export interface HavenState {
   v: 1;
   arrivals: Arrival[];
@@ -99,6 +116,7 @@ export interface HavenState {
   hope: HopeItem[];
   /** Written on a steadier day, for a heavier one. */
   letter: { text: string; at: string } | null;
+  hopePath: HopePath | null;
   plan: SafetyPlan;
   care: CareTeam | null;
   /** Today's small acts, for the dawn. Reset when the date changes. */
@@ -124,6 +142,7 @@ export const EMPTY_HAVEN: HavenState = {
   goodThings: [],
   hope: [],
   letter: null,
+  hopePath: null,
   plan: EMPTY_PLAN,
   care: null,
   dawn: { date: "", steps: [] },
@@ -152,6 +171,7 @@ export function loadHaven(): HavenState {
       goodThings: Array.isArray(raw.goodThings) ? raw.goodThings : [],
       hope: Array.isArray(raw.hope) ? raw.hope : [],
       letter: raw.letter && typeof raw.letter.text === "string" ? raw.letter : null,
+      hopePath: raw.hopePath && typeof raw.hopePath.want === "string" ? raw.hopePath : null,
       plan: { ...EMPTY_PLAN, ...(raw.plan || {}) },
       care: raw.care && typeof raw.care.name === "string" ? raw.care : null,
       dawn: raw.dawn && Array.isArray(raw.dawn.steps) ? raw.dawn : { date: "", steps: [] },

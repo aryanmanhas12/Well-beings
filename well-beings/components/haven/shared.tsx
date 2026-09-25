@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { localDateKey } from "@/lib/care";
 
-export type HavenTab = "here" | "calm" | "hope" | "plan" | "reach";
+export type HavenTab = "here" | "watch" | "hope" | "plan" | "reach";
 
 /** Where a button elsewhere in the app can send someone. */
 export type GoTo = (tab: HavenTab, view?: string) => void;
