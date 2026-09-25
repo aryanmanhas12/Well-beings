@@ -80,8 +80,8 @@ export const metadata: Metadata = {
     deliberately — never `user-scalable=no`. */
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FAF4E9" },
-    { media: "(prefers-color-scheme: dark)", color: "#17120E" },
+    { media: "(prefers-color-scheme: light)", color: "#FFF5EC" },
+    { media: "(prefers-color-scheme: dark)", color: "#150F26" },
   ],
 };
 

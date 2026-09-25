@@ -1,28 +1,41 @@
-# Wellbeings
+# Wellbeings (app)
 
-A privacy-first productivity and mental-wellbeing web app, implemented in Next.js from the Claude Design handoff in `../project/Wellbeings.dc.html`.
-
-- **Check-in chat** — adaptive, evidence-based screeners (PHQ-2→9, GAD-2→7, sleep composite, burnout) in a chat interface; deeper questions only when something flags.
-- **Crisis safety** — region-local helplines surface instantly on the self-harm item, on the results screen, and behind the always-visible "Help now" button.
-- **Results read-out** — scored domains with bands, sources, and a "seek support" nudge when scores warrant it.
-- **Personalised system** — time-blocked daily schedule, evidence-cited intervention cards, habit stack with miss-forgiving streaks, weekly recovery quota, burnout radar fed by daily check-ins, and a 16-study evidence library.
-- **Settings** — plan intensity (gentle / balanced / driven) and calm mode (numbers become words), both on the Help & privacy tab.
-- **Privacy** — entirely client-side. All state lives in `localStorage` (`wellbeings-v1`); no server, no accounts, no third parties. One-tap delete.
+The Next.js app behind https://aryanmanhas12.github.io/Well-beings/. See the repository
+[README](../README.md) for what it is; this file is for working on it.
 
 ## Run
 
 ```bash
 npm install
-npm run dev    # http://localhost:3000
-npm run build  # production build
-npm run lint
+npm run dev        # http://localhost:3000
+npm run verify     # care tests, types, lint, production build, static audit
+npm run test:care  # just the rules that decide what the safe place shows
 ```
 
-## Structure
+`npm run icons` and `npm run og` regenerate the app icons and the social card. Both need
+`playwright-core` and a Chromium binary, which are not dependencies; install them ad hoc
+(`npm i --no-save playwright-core`). `og` also needs a build first, because it takes Karla from
+the export.
 
-- `app/` — Next.js App Router entry; `globals.css` carries the Nocturne design-system tokens and component classes.
-- `lib/` — pure logic: chat flow, scoring, schedule/intervention builders, helplines, evidence data, localStorage persistence.
-- `hooks/useWellBeings.ts` — all app state: chat engine, screens/tabs, check-ins, habits, settings.
-- `components/` — screens (Welcome, Chat, Results, App shell + 5 tabs) and dialogs (help, breathing).
+## Where things are
 
-Not a medical device — screeners signal, they don't diagnose. Helpline numbers current as of mid-2026; re-verify before any real release.
+| Path | What it holds |
+| --- | --- |
+| `lib/care.ts` | The care levels, the direct question, the 14-day pattern and the care-team summary. No imports, no React, tested with Node alone. |
+| `lib/haven.ts` | Safe-place storage (`wellbeings-safe-v1`, `wellbeings-photos-v1`), region guess, photo downscaling. |
+| `lib/havenContent.ts` | Every line the safe place says, the verified video list, and the evidence behind each tool. |
+| `hooks/useHaven.ts` | Safe-place state and the dawn. |
+| `components/haven/` | The shell, the five tabs, the check-in, the urgent screen, the intro, the sky and the bloom-sun. |
+| `hooks/useWellbeings.ts` | The wellbeing check, its results and the daily plan (`wellbeings-v1`). |
+| `app/globals.css` | Tokens (night-to-dawn palette, every pair contrast-measured) and all styles. |
+| `docs/CARE-INTEGRATION.md` | The consent rules and data contract for any future professional integration. |
+| `scripts/` | Static audit, care tests, icon and social-card generators. |
+
+## Rules worth knowing before changing anything
+
+- Never rename a storage key. A rename is a silent delete of someone's hope box.
+- Never change the `ref=wellbeings` / `ref=psych-screener&band=` URL parameters; Ronak reads them.
+- Nothing may be sent off the device except by the person's own action. See the integration doc.
+- House style is in `AGENTS.md`.
+
+Not a medical device, not a crisis service, not monitored.

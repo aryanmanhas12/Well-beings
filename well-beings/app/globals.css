@@ -23,79 +23,91 @@ html {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Palette: warm, not "tech".
+   Palette: night to dawn.
 
-   What was here before was a blue-black page (#0E131D) with an
-   indigo-violet accent (#9184d9) and Inter throughout. That trio —
-   cold near-black, indigo, Inter — is the visual default of every
-   template and every generated landing page of the last two years,
-   and it reads as machine-made no matter how good the writing is.
-   For an app that asks someone how they slept and whether they are
-   coping, reading as machine-made is an actual cost, not a taste
-   quibble.
+   The app used to be clay on a brown near-black, a deliberate retreat
+   from the violet-on-blue-black look every generated interface has.
+   The owner has since asked for something more hopeful: a night sky
+   that turns into a sunrise, with bright yellow, pink and purple, to
+   sit beside Ronak's own night-to-dawn direction.
 
-   So: a warm near-black with brown in it rather than blue, a clay
-   accent instead of violet, and a neutral ramp with warmth all the
-   way through so nothing on the page is a dead grey. Nothing here is
-   pure #000 or #fff — real paper and real ink never are, and the
-   small amount of colour in the extremes is most of what makes a
-   screen feel like a room rather than a display.
+   That brief and the old rule are compatible if the difference is
+   kept on purpose. The generated look is a cold blue-black with one
+   indigo accent doing everything. This is a warm plum night (red in
+   it, not blue), and the accents are the colours of an actual sunrise:
+   sun yellow for anything you press, dawn pink and lilac for the
+   things that are yours (hope box, people, good things), peach where
+   the sky meets the horizon. Purple lives in the sky, not in the
+   buttons.
 
-   Every value below was measured, not eyeballed. See the ratios in
-   the comments on the tighter pairs; the rule is 4.5:1 for anything
-   that carries words and 3:1 for borders and focus rings.
+   Nothing is pure #000 or #fff. Every pair below was measured with a
+   WCAG checker before use; ratios are in the comments. Rule: 4.5:1
+   for anything that carries words, 3:1 for borders and focus rings.
    ───────────────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-  --color-bg: #17120E;
-  --color-surface: #221A14;
-  --color-text: #F3E9DC;
-  --color-accent: #E9A579;
-  /* A second voice, honey rather than another shade of the first. The
-     old --color-accent-2 was #a7a1db against an accent of #9184d9:
-     two names for the same violet, which is not a palette. */
-  --color-accent-2: #D9B26A;
-  --color-divider: color-mix(in srgb, #F3E9DC 16%, transparent);
+  /* Midnight plum. Cream text on it is 16.69:1. */
+  --color-bg: #150F26;
+  /* 15.03:1 for body text. */
+  --color-surface: #211838;
+  /* Cards inside cards, the selected check-in option. 13.27:1. */
+  --color-raised: #2C2148;
+  --color-text: #FBF1E6;
+  /* Sun yellow: 12.10:1 on the page, 10.90:1 on a card. */
+  --color-accent: #FFC857;
+  /* Dawn pink as the second voice: 7.80:1 on a card. */
+  --color-accent-2: #FF8DBA;
+  --color-divider: color-mix(in srgb, #FBF1E6 14%, transparent);
 
-  --color-neutral-100: #FDF8F1;
-  --color-neutral-200: #F2E7D8;
-  --color-neutral-300: #E1D2BE;
-  --color-neutral-400: #C7B6A0;
-  --color-neutral-500: #A8967E;
-  /* The captions token, and the one that decides whether the small
-     print is readable. It has to clear 4.5:1 on --color-surface, not
-     just on --color-bg: nearly every use is inside a .card. #8E7C66
-     passed on the page (4.63:1) and failed on a card (4.26:1), which
-     is the trap the old palette's #75798c fell into too. #9A8770
-     clears both, at 5.38:1 and 4.95:1. */
-  --color-neutral-600: #9A8770;
-  --color-neutral-700: #6E6150;
-  --color-neutral-800: #4A4034;
-  --color-neutral-900: #2E251D;
+  /* The sunrise itself. Used as fills and in the sky; where they carry
+     text they are measured on --color-surface: pink 7.80, lilac 9.21,
+     peach 8.40, sun 10.90. */
+  --color-sun: #FFC857;
+  --color-pink: #FF8DBA;
+  --color-lilac: #C4A8FF;
+  --color-peach: #FF9F80;
+  /* Text on any bright fill: 10.78:1 on sun, 8.31 on peach, 7.72 on pink. */
+  --color-ink: #2A1636;
+  /* The sun as text colour. Yellow reads fine on the night; on paper it
+     needs the amber in the light theme below. */
+  --color-sun-text: #FFD98A;
 
-  --color-accent-100: #FEF4EC;
-  --color-accent-200: #FBE0CD;
-  --color-accent-300: #F5C4A3;
-  --color-accent-400: #EDA277;
-  --color-accent-500: #E08A5C;
-  --color-accent-600: #C26C42;
-  --color-accent-700: #985232;
-  --color-accent-800: #6D3B26;
-  --color-accent-900: #43261A;
+  --color-neutral-100: #FFF8F1;
+  --color-neutral-200: #F1E8F3;
+  --color-neutral-300: #DDD2E8;
+  --color-neutral-400: #CFC3DE;
+  --color-neutral-500: #BDB0D0;
+  /* Captions. 7.35:1 on a card, 6.49:1 on a raised card: the old trap
+     was a caption token that passed on the page and failed on a card. */
+  --color-neutral-600: #B3A6C8;
+  --color-neutral-700: #6F6388;
+  --color-neutral-800: #4A3F63;
+  --color-neutral-900: #2E2544;
 
-  --color-accent-2-100: #FEF7EA;
-  --color-accent-2-200: #FAE9C4;
-  --color-accent-2-300: #F2D598;
-  --color-accent-2-400: #E5BE74;
-  --color-accent-2-500: #D2A458;
-  --color-accent-2-600: #B18542;
-  --color-accent-2-700: #8A6733;
-  --color-accent-2-800: #614927;
-  --color-accent-2-900: #3C2E1B;
+  --color-accent-100: #FFF8E6;
+  --color-accent-200: #FFEBB8;
+  /* Link colour: 12.41:1 on a card. */
+  --color-accent-300: #FFD98A;
+  --color-accent-400: #FFCD6A;
+  --color-accent-500: #F4B642;
+  --color-accent-600: #D9952A;
+  --color-accent-700: #A8701C;
+  --color-accent-800: #6E4A18;
+  --color-accent-900: #3D2A14;
 
-  --color-section: #3A2416;
-  --color-section-glow: #5A3A22;
-  --color-section-ghost: #7A5236;
+  --color-accent-2-100: #FFF0F6;
+  --color-accent-2-200: #FFD6E7;
+  --color-accent-2-300: #FFB3D1;
+  --color-accent-2-400: #FF8DBA;
+  --color-accent-2-500: #F26BA3;
+  --color-accent-2-600: #D14E86;
+  --color-accent-2-700: #A33A68;
+  --color-accent-2-800: #6E2848;
+  --color-accent-2-900: #3F1A2B;
+
+  --color-section: #2A1D45;
+  --color-section-glow: #3A2760;
+  --color-section-ghost: #5B4390;
 
   /* ── Type ──────────────────────────────────────────────────
      Two voices, deliberately unalike.
@@ -144,16 +156,19 @@ html {
   /* Tightened from 4/8/14. A 14px radius on a 44px control is most of the
      control, which is the soft, pillowy look this design avoids; these read
      as deliberate corners rather than as rounding applied for its own sake. */
-  --radius-sm: 3px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  /* Only for the sky. A painted window deserves a softer corner than a
+     control does; nothing you press uses this. */
+  --radius-xl: 22px;
 
-  /* Shadows carry a little brown too. A neutral-black drop shadow over a
-     warm ground is the thing that quietly makes a warm palette look
-     muddy — the shade has to belong to the same light. */
-  --shadow-sm: 0 0 0 1px #4A4034;
-  --shadow-md: 0 0 0 1px #6E6150, 0 3px 10px rgba(18, 11, 5, 0.4);
-  --shadow-lg: 0 0 0 1px #A8967E, 0 6px 20px rgba(18, 11, 5, 0.45);
+  /* Shadows carry the night's own plum. A neutral-black drop shadow on
+     a coloured ground is the thing that quietly makes a palette look
+     muddy; the shade has to belong to the same light. */
+  --shadow-sm: 0 0 0 1px #3A2E57;
+  --shadow-md: 0 0 0 1px #4A3F63, 0 3px 10px rgba(8, 4, 20, 0.45);
+  --shadow-lg: 0 0 0 1px #6F6388, 0 6px 20px rgba(8, 4, 20, 0.5);
 }
 
 *,
@@ -315,10 +330,6 @@ button {
   height: 36px;
   padding: 0;
 }
-.btn-block {
-  width: 100%;
-  margin-top: var(--space-2);
-}
 
 /* — forms — */
 .field > label {
@@ -473,43 +484,6 @@ button {
 }
 
 /* — animations — */
-@keyframes msgIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes dotPulse {
-  0%,
-  80%,
-  100% {
-    opacity: 0.25;
-  }
-  40% {
-    opacity: 1;
-  }
-}
-@keyframes breatheRing {
-  0% {
-    transform: scale(0.72);
-  }
-  30% {
-    transform: scale(0.94);
-  }
-  38% {
-    transform: scale(1);
-  }
-  55% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0.72);
-  }
-}
 
 /* ─────────────────────────────────────────────────────────────
    Motion system
@@ -631,7 +605,6 @@ a,
    not exist at all. Interactive cards are still marked as interactive by
    being links or buttons, which is what actually communicates it. */
 
-
 /* — reduced motion —
    Honoured globally, with one deliberate exception. The breathing pacer
    is not decoration: its rhythm IS the instruction, so removing it would
@@ -640,8 +613,8 @@ a,
    symptoms the way looming movement does. */
 @media (prefers-reduced-motion: reduce) {
   *,
-  *::before,
-  *::after {
+*::before,
+*::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -697,113 +670,133 @@ a,
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    /* Cream and unbleached paper, never #ffffff. Pure white is the
-       brightest thing a screen can do and it is what a blank document
-       looks like; a page that is 3% warmer reads as something someone
-       chose. --color-surface is a shade lighter than the page so cards
-       still lift off it without a border doing the work. */
-    --color-bg: #FAF4E9;
-    --color-surface: #FFFCF6;
-    --color-text: #2A211A;
-    --color-accent: #8C4626;
-    --color-accent-2: #8A6733;
-    --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
+    --color-bg: #FFF5EC;
+    --color-surface: #FFFBF7;
+    --color-raised: #FFFDFA;
+    /* Deep plum ink: 14.76:1 on the page, 15.42:1 on a card. */
+    --color-text: #2A1B3D;
+    /* Berry, because sun yellow on paper is 1.49:1 and unreadable as text.
+       6.44:1 on the page, 6.73:1 on a card. The sun stays as a fill. */
+    --color-accent: #9C2F6B;
+    /* Plum: 7.20:1 on a card. */
+    --color-accent-2: #6A3FA0;
+    --color-divider: color-mix(in srgb, #2A1B3D 13%, transparent);
 
-    --color-neutral-100: #2A211A;
-    --color-neutral-200: #3A2F26;
-    --color-neutral-300: #4C3F34;
-    --color-neutral-400: #5C4E41;
-    --color-neutral-500: #6B5C4D;
-    /* 4.76:1 on the page, 5.08:1 on a card. */
-    --color-neutral-600: #7A6A59;
-    --color-neutral-700: #A2917E;
-    --color-neutral-800: #D6C9B8;
-    --color-neutral-900: #EFE6D8;
+    --color-sun: #FFC857;
+    --color-pink: #FF8DBA;
+    --color-lilac: #C4A8FF;
+    --color-peach: #FF9F80;
+    --color-ink: #2A1636;
+    /* Amber for "sun" as text on paper: 6.15:1 on a card. */
+    --color-sun-text: #8A5300;
 
-    --color-accent-100: #4A2312;
-    --color-accent-200: #5E2E19;
-    /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
-    --color-accent-300: #743A20;
-    --color-accent-400: #8C4626;
-    --color-accent-500: #A6552F;
-    --color-accent-600: #C06A3F;
-    --color-accent-700: #E0A87F;
-    --color-accent-800: #F5DCC7;
-    --color-accent-900: #FBEEE2;
+    --color-neutral-100: #2A1B3D;
+    --color-neutral-200: #3A2A50;
+    --color-neutral-300: #4B3A62;
+    --color-neutral-400: #56446D;
+    --color-neutral-500: #604E77;
+    /* Captions: 5.76:1 on the page, 6.02:1 on a card, 5.22:1 on the blush
+       section colour. */
+    --color-neutral-600: #6B5A7E;
+    --color-neutral-700: #A596B6;
+    --color-neutral-800: #DCD2E6;
+    --color-neutral-900: #F3ECF5;
 
-    --color-accent-2-100: #3C2E1B;
-    --color-accent-2-200: #4E3B22;
-    --color-accent-2-300: #634B2B;
-    --color-accent-2-400: #7A5C34;
-    --color-accent-2-500: #96723F;
-    --color-accent-2-600: #B18542;
-    --color-accent-2-700: #D9B87A;
-    --color-accent-2-800: #F0DFBC;
-    --color-accent-2-900: #F9F0DF;
+    --color-accent-100: #4A0F2E;
+    --color-accent-200: #6A1A43;
+    /* The link colour. 8.18:1 on the page. */
+    --color-accent-300: #842558;
+    --color-accent-400: #9C2F6B;
+    --color-accent-500: #B8447F;
+    --color-accent-600: #D0679A;
+    --color-accent-700: #E9A3C3;
+    --color-accent-800: #F8D9E7;
+    --color-accent-900: #FDEFF5;
 
-    --color-section: #F6E7D6;
-    --color-section-glow: #EFD8C0;
-    --color-section-ghost: #DCBE9C;
+    --color-accent-2-100: #2B1648;
+    --color-accent-2-200: #3D2163;
+    --color-accent-2-300: #52307F;
+    --color-accent-2-400: #6A3FA0;
+    --color-accent-2-500: #8458BA;
+    --color-accent-2-600: #A07CD0;
+    --color-accent-2-700: #C6B0E6;
+    --color-accent-2-800: #E7DDF5;
+    --color-accent-2-900: #F5F0FB;
 
-    --shadow-sm: 0 0 0 1px #E3D6C4;
-    --shadow-md: 0 0 0 1px #D6C9B8, 0 6px 18px rgba(42, 33, 26, 0.08);
-    --shadow-lg: 0 0 0 1px #BFAE97, 0 16px 40px rgba(42, 33, 26, 0.16);
+    /* Blush: body text is 13.39:1 on it. */
+    --color-section: #FCE6EF;
+    --color-section-glow: #F8D3E3;
+    --color-section-ghost: #EDB3CD;
+
+    --shadow-sm: 0 0 0 1px #EBDDE6;
+    --shadow-md: 0 0 0 1px #E0D0DC, 0 6px 18px rgba(42, 27, 61, 0.08);
+    --shadow-lg: 0 0 0 1px #CDB9CB, 0 16px 40px rgba(42, 27, 61, 0.14);
   }
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  /* Cream and unbleached paper, never #ffffff. Pure white is the
-     brightest thing a screen can do and it is what a blank document
-     looks like; a page that is 3% warmer reads as something someone
-     chose. --color-surface is a shade lighter than the page so cards
-     still lift off it without a border doing the work. */
-  --color-bg: #FAF4E9;
-  --color-surface: #FFFCF6;
-  --color-text: #2A211A;
-  --color-accent: #8C4626;
-  --color-accent-2: #8A6733;
-  --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
+  --color-bg: #FFF5EC;
+  --color-surface: #FFFBF7;
+  --color-raised: #FFFDFA;
+  /* Deep plum ink: 14.76:1 on the page, 15.42:1 on a card. */
+  --color-text: #2A1B3D;
+  /* Berry, because sun yellow on paper is 1.49:1 and unreadable as text.
+     6.44:1 on the page, 6.73:1 on a card. The sun stays as a fill. */
+  --color-accent: #9C2F6B;
+  /* Plum: 7.20:1 on a card. */
+  --color-accent-2: #6A3FA0;
+  --color-divider: color-mix(in srgb, #2A1B3D 13%, transparent);
 
-  --color-neutral-100: #2A211A;
-  --color-neutral-200: #3A2F26;
-  --color-neutral-300: #4C3F34;
-  --color-neutral-400: #5C4E41;
-  --color-neutral-500: #6B5C4D;
-  /* 4.76:1 on the page, 5.08:1 on a card. */
-  --color-neutral-600: #7A6A59;
-  --color-neutral-700: #A2917E;
-  --color-neutral-800: #D6C9B8;
-  --color-neutral-900: #EFE6D8;
+  --color-sun: #FFC857;
+  --color-pink: #FF8DBA;
+  --color-lilac: #C4A8FF;
+  --color-peach: #FF9F80;
+  --color-ink: #2A1636;
+  /* Amber for "sun" as text on paper: 6.15:1 on a card. */
+  --color-sun-text: #8A5300;
 
-  --color-accent-100: #4A2312;
-  --color-accent-200: #5E2E19;
-  /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
-  --color-accent-300: #743A20;
-  --color-accent-400: #8C4626;
-  --color-accent-500: #A6552F;
-  --color-accent-600: #C06A3F;
-  --color-accent-700: #E0A87F;
-  --color-accent-800: #F5DCC7;
-  --color-accent-900: #FBEEE2;
+  --color-neutral-100: #2A1B3D;
+  --color-neutral-200: #3A2A50;
+  --color-neutral-300: #4B3A62;
+  --color-neutral-400: #56446D;
+  --color-neutral-500: #604E77;
+  /* Captions: 5.76:1 on the page, 6.02:1 on a card, 5.22:1 on the blush
+     section colour. */
+  --color-neutral-600: #6B5A7E;
+  --color-neutral-700: #A596B6;
+  --color-neutral-800: #DCD2E6;
+  --color-neutral-900: #F3ECF5;
 
-  --color-accent-2-100: #3C2E1B;
-  --color-accent-2-200: #4E3B22;
-  --color-accent-2-300: #634B2B;
-  --color-accent-2-400: #7A5C34;
-  --color-accent-2-500: #96723F;
-  --color-accent-2-600: #B18542;
-  --color-accent-2-700: #D9B87A;
-  --color-accent-2-800: #F0DFBC;
-  --color-accent-2-900: #F9F0DF;
+  --color-accent-100: #4A0F2E;
+  --color-accent-200: #6A1A43;
+  /* The link colour. 8.18:1 on the page. */
+  --color-accent-300: #842558;
+  --color-accent-400: #9C2F6B;
+  --color-accent-500: #B8447F;
+  --color-accent-600: #D0679A;
+  --color-accent-700: #E9A3C3;
+  --color-accent-800: #F8D9E7;
+  --color-accent-900: #FDEFF5;
 
-  --color-section: #F6E7D6;
-  --color-section-glow: #EFD8C0;
-  --color-section-ghost: #DCBE9C;
+  --color-accent-2-100: #2B1648;
+  --color-accent-2-200: #3D2163;
+  --color-accent-2-300: #52307F;
+  --color-accent-2-400: #6A3FA0;
+  --color-accent-2-500: #8458BA;
+  --color-accent-2-600: #A07CD0;
+  --color-accent-2-700: #C6B0E6;
+  --color-accent-2-800: #E7DDF5;
+  --color-accent-2-900: #F5F0FB;
 
-  --shadow-sm: 0 0 0 1px #E3D6C4;
-  --shadow-md: 0 0 0 1px #D6C9B8, 0 3px 10px rgba(42, 33, 26, 0.07);
-  --shadow-lg: 0 0 0 1px #BFAE97, 0 6px 20px rgba(42, 33, 26, 0.1);
+  /* Blush: body text is 13.39:1 on it. */
+  --color-section: #FCE6EF;
+  --color-section-glow: #F8D3E3;
+  --color-section-ghost: #EDB3CD;
+
+  --shadow-sm: 0 0 0 1px #EBDDE6;
+  --shadow-md: 0 0 0 1px #E0D0DC, 0 6px 18px rgba(42, 27, 61, 0.08);
+  --shadow-lg: 0 0 0 1px #CDB9CB, 0 16px 40px rgba(42, 27, 61, 0.14);
 }
 
 /* High contrast: layered on top of whichever theme is active, so it works
@@ -812,19 +805,22 @@ a,
 :root[data-contrast="high"] {
   --color-bg: #ffffff;
   --color-surface: #ffffff;
+  --color-raised: #ffffff;
+  --color-ink: #000000;
   --color-text: #000000;
-  /* High contrast is the one place the warm palette gives way: the whole
+  /* High contrast is the one place the dawn palette gives way: the whole
      point is maximum separation, so the ground goes to flat white and the
-     accent to the darkest usable clay, 9.09:1 on it. */
-  --color-accent: #7A3311;
+     accent to the darkest usable berry, 9.88:1 on it. */
+  --color-accent: #7A1E4F;
   --color-divider: #000000;
   --color-neutral-400: #1a1a1a;
   --color-neutral-500: #1a1a1a;
   --color-neutral-600: #1a1a1a;
   --color-neutral-700: #000000;
-  --color-accent-200: #4A1F0C;
-  --color-accent-300: #5F2A11;
-  --color-accent-400: #7A3311;
+  --color-accent-200: #4A0F2E;
+  --color-accent-300: #5E1640;
+  --color-accent-400: #7A1E4F;
+  --color-sun-text: #5C3700;
   --color-section: #ffffff;
   --color-section-glow: #ffffff;
   --shadow-sm: 0 0 0 2px #000;
@@ -834,15 +830,17 @@ a,
 :root[data-contrast="high"][data-theme="dark"] {
   --color-bg: #000000;
   --color-surface: #000000;
+  --color-raised: #000000;
   --color-text: #ffffff;
-  /* 14.49:1 on black. */
-  --color-accent: #F7CFAE;
+  /* 15.54:1 on black. */
+  --color-accent: #FFD98A;
   --color-divider: #ffffff;
   --color-neutral-400: #f0f0f0;
   --color-neutral-500: #f0f0f0;
   --color-neutral-600: #f0f0f0;
-  --color-accent-200: #FBE0CD;
-  --color-accent-300: #F5C4A3;
+  --color-accent-200: #FFEBB8;
+  --color-accent-300: #FFD98A;
+  --color-sun-text: #FFD98A;
   --shadow-sm: 0 0 0 2px #fff;
   --shadow-md: 0 0 0 2px #fff;
   --shadow-lg: 0 0 0 2px #fff;
@@ -858,7 +856,7 @@ a,
    nothing reflows. */
 @media (pointer: coarse) {
   .btn,
-  .seg-opt {
+.seg-opt {
     min-height: 44px;
   }
   .switch {
@@ -930,67 +928,14 @@ a,
    One flat ground now, from the section tokens, with a hairline.
    Cream on deep umber measures 12.9:1.
    ───────────────────────────────────────────────────────────── */
-.statement-card {
-  position: relative;
-  border-radius: var(--radius-lg);
-  padding: clamp(26px, 5vw, 40px) clamp(22px, 4.5vw, 36px);
-  background: var(--color-section);
-  box-shadow: inset 0 0 0 1px var(--color-section-ghost);
-  color: var(--color-neutral-100);
-}
 
-.statement-text {
-  font-family: var(--font-display);
-  /* 400 was right when this was a serif — a serif at 44px carries itself.
-     A grotesque at the same size needs weight to hold the line, which is
-     the whole basis of the display hierarchy now. */
-  font-weight: 600;
-  letter-spacing: var(--font-display-tracking);
-  line-height: 1.06;
-  font-size: clamp(26px, 4.4vw, 44px);
-  margin: 0;
-  text-wrap: balance;
-}
 /* Devanagari needs more leading than Latin at the same size — the matras
    sit above and below the shirorekha, so 1.06 collides. */
-:root[data-lang="hi"] .statement-text {
-  line-height: 1.28;
-}
 
 /* The quote marks from the screener's card, redrawn as type. Decorative
    only — aria-hidden in the markup, so they never reach a screen reader. */
-.statement-quote {
-  position: absolute;
-  font-family: var(--font-display);
-  font-size: clamp(56px, 9vw, 96px);
-  line-height: 0.6;
-  color: var(--color-section-ghost);
-  opacity: 0.85;
-  user-select: none;
-}
-.statement-quote-open {
-  top: 14px;
-  left: 16px;
-}
-.statement-quote-close {
-  bottom: 6px;
-  right: 18px;
-}
 
 /* Enter/exit for a card swap. Direction is set by the component. */
-.statement-enter {
-  animation: stmtIn var(--dur-slow) var(--ease-out) backwards;
-}
-@keyframes stmtIn {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 14px, 0) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 
 /* The 7s auto-advance, made visible. An invisible timer that moves the
    page under someone is disorienting; a bar that shows it coming is not. */
@@ -1025,23 +970,7 @@ a,
 
 /* Answer buttons — the No/Yes pair. Sized for a thumb, high contrast on
    the card's own dark ground rather than the page's. */
-.stmt-btn {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 14px;
-  min-height: 44px;
-  padding: 10px 26px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition:
-    transform var(--dur-fast) var(--ease-out),
-    background-color var(--dur-base) var(--ease-out),
-    border-color var(--dur-base) var(--ease-out);
-}
-.stmt-btn:active {
-  transform: translateY(1px);
-}
+
 /* These sit on the PAGE, below the card — not on the card's dark ground —
    so they take their colours from the theme, not from --stmt-hue. An
    earlier version tinted them per-card and rendered white-on-white in the
@@ -1050,48 +979,9 @@ a,
    --color-accent (which is light in dark mode and would fail against white).
    That value used to be a violet, #6355e0; it is now the deep clay from the
    light theme's accent ramp, which carries white at 5.30:1. */
-.stmt-btn-yes {
-  background: #A6552F;
-  color: #fff;
-}
-.stmt-btn-yes:hover {
-  background: #93481f;
-}
-.stmt-btn-no {
-  background: color-mix(in srgb, var(--color-text) 9%, transparent);
-  border-color: color-mix(in srgb, var(--color-text) 12%, transparent);
-  color: var(--color-text);
-}
-.stmt-btn-no:hover {
-  background: color-mix(in srgb, var(--color-text) 16%, transparent);
-}
-.stmt-btn[data-picked="true"] {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
+
 /* High contrast has one job — maximum separation — and a saturated
    gradient poster is the opposite of that. Flatten it. */
-:root[data-contrast="high"] .statement-card {
-  background: var(--color-surface);
-  color: var(--color-text);
-  box-shadow: none;
-  border: 2px solid var(--color-divider);
-}
-:root[data-contrast="high"] .statement-card::after {
-  display: none;
-}
-:root[data-contrast="high"] .statement-quote {
-  color: var(--color-accent-400);
-}
-:root[data-contrast="high"] .stmt-btn-yes {
-  background: var(--color-text);
-  color: var(--color-bg);
-}
-:root[data-contrast="high"] .stmt-btn-no {
-  background: transparent;
-  border-color: var(--color-divider);
-  color: var(--color-text);
-}
 
 .sr-only {
   position: absolute;
@@ -1116,61 +1006,6 @@ a,
    indicator. A corner card on desktop, where the same treatment
    would read as a cookie banner.
    ───────────────────────────────────────────────────────────── */
-.tour-invite {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 150;
-  padding: 12px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  justify-content: center;
-  /* The sheet's padding must not swallow taps on the page behind it —
-     only the card itself is interactive. */
-  pointer-events: none;
-}
-.tour-invite-card {
-  pointer-events: auto;
-  width: 100%;
-  max-width: 420px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-accent-700);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 16px 18px;
-  animation: inviteRise var(--dur-slow, 0.32s) var(--ease-out, ease) backwards;
-}
-.tour-invite-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  margin-top: 5px;
-  flex: none;
-  background: var(--color-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 22%, transparent);
-}
-@keyframes inviteRise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (min-width: 721px) {
-  .tour-invite {
-    left: auto;
-    right: 18px;
-    bottom: 18px;
-    padding: 0;
-  }
-  .tour-invite-card {
-    width: 360px;
-  }
-}
 
 /* ─────────────────────────────────────────────────────────────
    Header at phone widths
@@ -1178,9 +1013,13 @@ a,
    Logo, privacy tag, language select, settings and Help now do not
    fit 360px. The tag already hides below 520px; the language select
    joins it, since Settings carries language as its first row and the
-   gear stays visible. Below 400px "Help now" drops to its shield
-   alone — the button keeps its aria-label either way, so the control
-   never becomes anonymous to a screen reader.
+   gear stays visible.
+
+   "Help now" keeps its words at every width. It used to drop to a
+   shield below 400px, which meant the one control a person in crisis
+   most needs to recognise became an unlabelled icon on exactly the
+   screens most people in crisis are holding. The wordmark gives way
+   instead, below 350px, and the bloom-sun stays as the way home.
    ───────────────────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .nav-lang {
@@ -1188,10 +1027,11 @@ a,
   }
   .nav {
     padding-inline: 14px;
+    gap: 10px !important;
   }
 }
-@media (max-width: 400px) {
-  .nav-help-label {
+@media (max-width: 350px) {
+  .nav-wordmark {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1211,8 +1051,7 @@ a,
 }
 @supports (padding: max(0px)) {
   .nav,
-  .tour-invite,
-  .dialog-backdrop {
+.dialog-backdrop {
     padding-left: max(14px, env(safe-area-inset-left));
     padding-right: max(14px, env(safe-area-inset-right));
   }
@@ -1222,7 +1061,6 @@ a,
    control, not just .btn (segmented options and switches were missed). */
 .seg-opt,
 .switch,
-.stmt-btn,
 select,
 a {
   touch-action: manipulation;
@@ -1269,11 +1107,18 @@ html {
 body {
   overscroll-behavior-y: contain;
 }
-button, a, input, select, summary, .btn, .card {
+button,
+a,
+input,
+select,
+summary,
+.btn,
+.card {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-.card, .statement-card, .dialog {
+.card,
+.dialog {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -1310,16 +1155,14 @@ button, a, input, select, summary, .btn, .card {
    The press state stays. That one is functional: it is the only confirmation
    that a tap registered before the next screen paints. */
 button,
-.btn,
-.stmt-btn {
+.btn {
   transition:
     background-color 0.14s ease,
     border-color 0.14s ease,
     color 0.14s ease;
 }
 button:active,
-.btn:active,
-.stmt-btn:active {
+.btn:active {
   transform: scale(0.98);
 }
 
@@ -1614,8 +1457,8 @@ header.nav,
    asks for. Kept to the touch query so desktop navigation stays compact. */
 @media (pointer: coarse) {
   .site-nav a,
-  .site-foot a,
-  .crumbs a {
+.site-foot a,
+.crumbs a {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1640,7 +1483,7 @@ header.nav,
     align-items: center;
   }
   .helpline-name,
-  .helpline-contact {
+.helpline-contact {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -1668,36 +1511,6 @@ header.nav,
    that it stacks, which is the only thing that actually works at 390px. The
    rule sits above each row rather than around it: a full border would turn
    these back into cards. */
-.spec-list {
-  margin: 0;
-  border-top: 1px solid var(--color-divider);
-}
-.spec-row {
-  border-bottom: 1px solid var(--color-divider);
-  padding: 14px 0;
-}
-.spec-row dt {
-  font-weight: 600;
-  font-size: 13.5px;
-  margin-bottom: 3px;
-}
-.spec-row dd {
-  margin: 0;
-  font-size: 12.5px;
-  color: var(--color-neutral-400);
-  text-wrap: pretty;
-}
-@media (min-width: 560px) {
-  .spec-row {
-    display: grid;
-    grid-template-columns: 190px 1fr;
-    gap: 20px;
-    align-items: baseline;
-  }
-  .spec-row dt {
-    margin-bottom: 0;
-  }
-}
 
 /* ── Welcome screen layout ───────────────────────────────────────────────
    This was inline styles, which cannot carry a media query, so the phone got
@@ -1708,70 +1521,6 @@ header.nav,
    The numbers below are per-breakpoint on purpose rather than clamped: a
    phone wants the content to start immediately, and a desktop wants the air.
    Those are different intentions, not two ends of one scale. */
-.wel-band {
-  max-width: 1060px;
-  width: 100%;
-  margin: 0 auto;
-  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
-  box-sizing: border-box;
-}
-.wel-hero {
-  padding-top: 20px;
-  padding-bottom: 28px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
-  align-items: flex-start;
-}
-.wel-hero-main {
-  flex: 1 1 520px;
-  min-width: 0; /* lets a long word wrap instead of forcing the flex item wide */
-}
-.wel-rail {
-  flex: 0 1 320px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.wel-research {
-  padding-bottom: 30px;
-}
-.wel-how {
-  padding-bottom: 34px;
-}
-.wel-stats {
-  display: grid;
-  gap: 12px;
-}
-
-@media (min-width: 720px) {
-  .wel-band {
-    padding-inline: 24px;
-  }
-  .wel-hero {
-    padding-top: 44px;
-    padding-bottom: 40px;
-    gap: 48px;
-  }
-  .wel-hero-main {
-    min-width: 300px;
-  }
-  .wel-rail {
-    min-width: 260px;
-    gap: 16px;
-  }
-  .wel-research {
-    padding-bottom: 44px;
-  }
-  .wel-how {
-    padding-bottom: 48px;
-  }
-  .wel-stats {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 14px;
-  }
-}
 
 /* ── Phone-first trims ───────────────────────────────────────────────────
    Everything here is a measurement, not a preference: each rule exists
@@ -1786,9 +1535,7 @@ header.nav,
 
   /* The poster can afford less inset on a narrow screen; the type is the
      point and the frame was taking a fifth of the line length. */
-  .statement-card {
-    padding: 22px 18px;
-  }
+  
 
   /* Deck controls: position, timer, pause, prev, next. Five items in a row
      at 360px is 55px each. The timer bar gives up its width first because
@@ -1830,5 +1577,1177 @@ header.nav,
   }
   .app-measure-app {
     padding-block: 30px 70px;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   THE SAFE PLACE
+
+   Everything below styles the home of the app: the sky, the check-in,
+   the hope box, the safety plan and the screens around them.
+
+   Motion here is allowed to be slower and more atmospheric than the
+   320ms rule above, because it is not interface feedback, it is the
+   room. The sky breathes, the glow pulses once every six seconds, the
+   sun rises over a second and a half. None of it moves when someone
+   has asked their system for reduced motion; the sky then simply is
+   the colour it should be.
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* Registering --dawn is what lets one number transition the whole sky:
+   an unregistered custom property flips instantly because the browser
+   cannot interpolate a value it does not know is a number. */
+@property --dawn {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.haven {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 14px max(16px, env(safe-area-inset-right)) 36px max(16px, env(safe-area-inset-left));
+  flex: 1;
+}
+/* The fixed tab bar is 58px plus the home indicator. The footer is the
+   last thing on the page, so it is the one that has to clear it. */
+@media (max-width: 719px) {
+  .app-foot-tabbed {
+    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+.haven-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Used from inline styles in ChatScreen and the breathing dialog, which is
+   why a CSS-only search calls them unused. */
+@keyframes msgIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dotPulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+@keyframes breatheRing {
+  0% {
+    transform: scale(0.72);
+  }
+  30% {
+    transform: scale(0.94);
+  }
+  38% {
+    transform: scale(1);
+  }
+  55% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.72);
+  }
+}
+
+/* ── the sky ─────────────────────────────────────────────────────────── */
+/* The sky is two zones. Text lives in the top one. The sun, its glow and
+   the bright end of the gradient live in the bottom one, --band tall, and
+   the text's bottom padding is the same --band, so the two can never meet
+   however many lines the reply runs to.
+
+   This was learned the hard way. The first version placed the stops in
+   percentages and let the sun rise freely; at a full sunrise on a phone the
+   petals and the yellow glow came up behind the last line of text, and a
+   pixel-level measurement put cream on that at 1.26:1. Stops are now tied
+   to the bottom edge in pixels, and the whole text zone sits above the
+   plum stop. Re-measured the same way, at 360, 390 and 1280px wide, night
+   and full sunrise: the worst pixel behind any line of sky text is now
+   6.80:1. */
+.sky {
+  --band: 150px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 280px;
+  border-radius: var(--radius-xl);
+  color: #FBF1E6;
+  transition: --dawn 1.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, #120B26, #3B1D63 calc(var(--dawn) * 100%)) 0%,
+    color-mix(in oklab, #1D1142, #7A2E7E calc(var(--dawn) * 100%)) calc(100% - var(--band)),
+    color-mix(in oklab, #2E1956, #E8677E calc(var(--dawn) * 100%)) calc(100% - var(--band) * 0.45),
+    color-mix(in oklab, #3D2163, #FFB26B calc(var(--dawn) * 100%)) 100%
+  );
+}
+.sky-stars {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 58%, #000 88%);
+  mask-image: linear-gradient(90deg, transparent 0 58%, #000 88%);
+}
+.sky-stars span {
+  position: absolute;
+  border-radius: 50%;
+  background: #FFF4DE;
+  opacity: calc(0.85 - var(--dawn) * 0.85);
+  animation: twinkle 4.8s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.55); }
+}
+/* The midnight glow: a warm light behind the horizon, pulsing slowly like
+   a held breath. Brighter as the sun comes up. */
+.sky-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -120px;
+  width: 380px;
+  /* Its top edge sits at the band line and no higher. */
+  height: calc(var(--band) + 120px);
+  margin-left: -190px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, #FF8DBA, #FFC857 calc(var(--dawn) * 100%)), transparent);
+  opacity: calc(0.38 + var(--dawn) * 0.42);
+  animation: glowPulse 6s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes glowPulse {
+  0%, 100% { transform: scale(0.9); }
+  50% { transform: scale(1.08); }
+}
+.sky-sun {
+  --sun: 128px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  margin-left: calc(var(--sun) / -2);
+  /* At night the sun waits mostly below the hills, never fully gone:
+     the point of the picture is that it is on its way. At a full sunrise
+     its top petal reaches 138px up, just under the 150px band line. */
+  transform: translateY(calc(52px - var(--dawn) * 62px));
+  transition: transform 1.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 1;
+}
+.sky-sun svg {
+  display: block;
+  width: var(--sun);
+  height: var(--sun);
+  animation: sunTurn 90s linear infinite;
+}
+@keyframes sunTurn {
+  to { transform: rotate(360deg); }
+}
+.sky-hills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 64px;
+  z-index: 2;
+}
+.hill-back {
+  fill: color-mix(in oklab, #1A0F33, #5B2A6E calc(var(--dawn) * 100%));
+}
+.hill-front {
+  fill: color-mix(in oklab, #0F0A1F, #3A1B4F calc(var(--dawn) * 100%));
+}
+.sky-content {
+  position: relative;
+  z-index: 3;
+  padding: 22px 22px var(--band);
+}
+@media (min-width: 720px) {
+  .sky {
+    --band: 190px;
+    min-height: 340px;
+  }
+  .sky-sun {
+    --sun: 176px;
+    /* Top petal at 180px at full sunrise, under the 190px band line. */
+    transform: translateY(calc(80px - var(--dawn) * 84px));
+  }
+  .sky-glow {
+    width: 520px;
+    margin-left: -260px;
+  }
+  .sky-content {
+    padding: 34px 36px var(--band);
+  }
+}
+.sky-kicker {
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: #F1E4F4;
+  margin: 0 0 6px;
+}
+.sky-title {
+  font-size: clamp(26px, 7.4vw, 36px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+  margin: 0;
+  color: #FFF8F1;
+  text-wrap: balance;
+}
+.sky-sub {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  color: #F1E4F4;
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+.dawn-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #F1E4F4;
+}
+.dawn-dots {
+  display: flex;
+  gap: 4px;
+}
+.dawn-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 248, 241, 0.26);
+  transition: background 0.6s ease;
+}
+.dawn-dots i[data-on="true"] {
+  background: #FFC857;
+}
+
+/* ── surfaces ────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.panel-pink {
+  background: color-mix(in oklab, var(--color-surface), var(--color-pink) 9%);
+}
+.panel-lilac {
+  background: color-mix(in oklab, var(--color-surface), var(--color-lilac) 11%);
+}
+.panel-sun {
+  background: color-mix(in oklab, var(--color-surface), var(--color-sun) 10%);
+}
+.panel h2,
+.panel h3 {
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.panel-lede {
+  color: var(--color-neutral-500);
+  font-size: 14px;
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+.eyebrow {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  margin: 0 0 6px;
+  letter-spacing: 0.02em;
+}
+.why {
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+  margin-top: 12px;
+}
+.why summary {
+  cursor: pointer;
+  color: var(--color-accent-300);
+  width: fit-content;
+}
+.why p {
+  margin: 8px 0 0;
+  text-wrap: pretty;
+}
+
+/* ── buttons ─────────────────────────────────────────────────────────── */
+.btn-sun {
+  background: linear-gradient(135deg, #FFD36E, #FFB26B);
+  color: var(--color-ink);
+  border: none;
+  font-weight: 650;
+  padding: 11px 18px;
+  border-radius: var(--radius-md);
+  min-height: 44px;
+}
+.btn-sun:hover {
+  filter: brightness(1.04);
+}
+.btn-sun:active {
+  filter: brightness(0.96);
+}
+.btn-soft {
+  background: color-mix(in oklab, var(--color-surface), var(--color-pink) 16%);
+  color: var(--color-text);
+  border: 1px solid color-mix(in oklab, var(--color-divider), var(--color-pink) 30%);
+  padding: 10px 16px;
+  min-height: 44px;
+}
+.btn-soft:hover {
+  background: color-mix(in oklab, var(--color-surface), var(--color-pink) 24%);
+}
+.btn-quiet {
+  color: var(--color-accent-300);
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  min-height: 44px;
+  font-weight: 500;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ── the check-in ────────────────────────────────────────────────────── */
+.choices {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  min-height: 50px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 15.5px;
+  color: var(--color-text);
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.choice:hover {
+  border-color: color-mix(in oklab, var(--color-divider), var(--color-sun) 55%);
+}
+.choice[aria-pressed="true"] {
+  border-color: var(--color-sun);
+  background: color-mix(in oklab, var(--color-raised), var(--color-sun) 12%);
+}
+/* A little sky in each option: night for "really heavy", sun for "good".
+   Colour is never the only signal; every option is also its words. */
+.choice-dot {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+.choice-dot[data-v="1"] { background: #3B2A6B; }
+.choice-dot[data-v="2"] { background: #7A4AA8; }
+.choice-dot[data-v="3"] { background: #D9709F; }
+.choice-dot[data-v="4"] { background: #FF9F80; }
+.choice-dot[data-v="5"] { background: #FFC857; }
+.checkin-step {
+  animation: fadeUp 0.36s var(--ease-out) backwards;
+}
+.checkin-q {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.reassure {
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+  margin: 12px 0 0;
+}
+
+/* ── response and saved things ───────────────────────────────────────── */
+.keepsake {
+  border-left: 0;
+  margin: 12px 0 0;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--color-surface), var(--color-lilac) 14%);
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+.keepsake small {
+  display: block;
+  color: var(--color-neutral-600);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.quote-line {
+  font-size: 19px;
+  line-height: 1.4;
+  font-weight: 500;
+  text-wrap: balance;
+  margin: 0;
+}
+
+/* ── 14-day pattern ──────────────────────────────────────────────────── */
+.pattern {
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  gap: 4px;
+  align-items: end;
+  height: 64px;
+  margin-top: 10px;
+}
+.pattern-day {
+  position: relative;
+  border-radius: 3px 3px 1px 1px;
+  background: var(--color-divider);
+  min-height: 4px;
+}
+.pattern-day[data-v="1"] { background: #6D5AA8; height: 20%; }
+.pattern-day[data-v="2"] { background: #9A6BC6; height: 40%; }
+.pattern-day[data-v="3"] { background: #E07FAA; height: 60%; }
+.pattern-day[data-v="4"] { background: #FF9F80; height: 80%; }
+.pattern-day[data-v="5"] { background: #FFC857; height: 100%; }
+.pattern-day[data-flag="true"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -9px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--color-pink);
+}
+.pattern-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  margin-top: 6px;
+}
+
+/* ── breathing ───────────────────────────────────────────────────────── */
+.breath-stage {
+  display: grid;
+  place-items: center;
+  padding: 18px 0 8px;
+}
+.breath-sun {
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.breath-sun::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, #FF8DBA 60%, transparent), transparent);
+  transform: scale(var(--b, 0.6));
+  transition: transform var(--bt, 4s) ease-in-out;
+}
+.breath-sun svg {
+  transform: scale(var(--b, 0.6));
+  transition: transform var(--bt, 4s) ease-in-out;
+}
+.breath-cue {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0 2px;
+  min-height: 1.4em;
+}
+
+/* ── hope box ────────────────────────────────────────────────────────── */
+.hope-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.hope-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--color-raised);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.photo-grid figure {
+  margin: 0;
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-raised);
+}
+.photo-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.photo-grid figcaption {
+  font-size: 12.5px;
+  padding: 6px 8px;
+}
+
+/* ── video ───────────────────────────────────────────────────────────── */
+
+.video-frame {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: #0F0A1F;
+}
+
+/* ── tab bar ─────────────────────────────────────────────────────────── */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-divider);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tabbar button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 58px;
+  padding: 6px 2px;
+  background: none;
+  border: none;
+  color: var(--color-neutral-500);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+  position: relative;
+}
+.tabbar button[aria-current="page"] {
+  color: var(--color-text);
+}
+.tabbar button[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 28%;
+  right: 28%;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, var(--color-pink), var(--color-sun));
+}
+.tabbar svg {
+  width: 22px;
+  height: 22px;
+}
+@media (min-width: 720px) {
+  .tabbar {
+    position: sticky;
+    top: 57px;
+    bottom: auto;
+    max-width: 700px;
+    margin: 12px auto 0;
+    border: 1px solid var(--color-divider);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .tabbar button {
+    flex-direction: row;
+    min-height: 40px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    gap: 7px;
+  }
+  .tabbar button[aria-current="page"] {
+    background: var(--color-raised);
+  }
+  .tabbar button[aria-current="page"]::before {
+    display: none;
+  }
+  .tabbar svg {
+    width: 18px;
+    height: 18px;
+  }
+  .haven {
+    padding-bottom: 60px;
+  }
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 10px;
+  padding: 6px 0;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+.switch-row .switch {
+  display: inline-block;
+}
+
+/* ── segmented sub-navigation inside a tab ───────────────────────────── */
+.subnav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 0 4px;
+}
+.subnav button {
+  flex: none;
+  padding: 8px 14px;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--color-divider);
+  background: none;
+  color: var(--color-neutral-400);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.subnav button[aria-pressed="true"] {
+  background: var(--color-raised);
+  color: var(--color-text);
+  border-color: color-mix(in oklab, var(--color-divider), var(--color-sun) 60%);
+}
+
+/* ── forms in the safe place ─────────────────────────────────────────── */
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 14px 0 4px;
+}
+.field-hint {
+  display: block;
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+  margin: 0 0 6px;
+  text-wrap: pretty;
+}
+.textarea {
+  width: 100%;
+  min-height: 84px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+.textarea:focus-visible,
+.haven .input:focus-visible {
+  border-color: var(--color-sun);
+  outline: 2px solid color-mix(in oklab, var(--color-sun) 50%, transparent);
+  outline-offset: 1px;
+}
+.haven .input {
+  min-height: 44px;
+  font-size: 15px;
+  background: var(--color-raised);
+}
+.saved-note {
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+  min-height: 1.3em;
+}
+
+/* ── urgent care: everything else gets out of the way ────────────────── */
+.urgent {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: linear-gradient(180deg, #1D1142, #3B1D63 55%, #6B2A73);
+  color: #FBF1E6;
+  padding: max(20px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+}
+.urgent-inner {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.urgent h2 {
+  font-size: clamp(24px, 6.4vw, 32px);
+  line-height: 1.12;
+  margin: 12px 0 8px;
+  color: #FFF8F1;
+}
+.urgent p {
+  color: #F1E4F4;
+}
+.call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 12px 16px;
+  margin-top: 10px;
+  border-radius: var(--radius-md);
+  background: #FFC857;
+  color: #2A1636;
+  text-decoration: none;
+  font-weight: 650;
+  font-size: 16px;
+}
+.call-btn small {
+  display: block;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: #3D2A4E;
+}
+.call-btn svg {
+  flex: none;
+}
+.call-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.call-number {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  margin: 2px 0 1px;
+}
+.call-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(42, 22, 54, 0.12);
+}
+.call-btn-soft .call-icon {
+  background: rgba(255, 248, 241, 0.12);
+}
+.call-btn-soft {
+  background: rgba(255, 248, 241, 0.1);
+  color: #FFF8F1;
+  border: 1px solid rgba(255, 248, 241, 0.28);
+}
+.call-btn-soft small {
+  color: #F1E4F4;
+}
+.urgent a:not(.call-btn) {
+  color: #FFD98A;
+}
+
+/* ── first visit: the sunrise ────────────────────────────────────────── */
+/* Hidden unless the pre-paint script in layout.tsx found no record of a
+   previous visit, so a returning person never sees it flash. */
+.intro {
+  display: none;
+}
+:root[data-intro="pending"] .intro {
+  display: flex;
+}
+:root[data-intro="pending"] body {
+  overflow: hidden;
+}
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: #FBF1E6;
+  background: linear-gradient(180deg, #120B26, #1D1142 48%, #2E1956 78%, #3D2163);
+  overflow: hidden;
+}
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #3B1D63, #7A2E7E 48%, #E8677E 78%, #FFB26B);
+  opacity: 0;
+  animation: introDawn 4.6s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes introDawn {
+  to { opacity: 1; }
+}
+.intro-stars span {
+  position: absolute;
+  border-radius: 50%;
+  background: #FFF4DE;
+  animation: twinkle 3.2s ease-in-out infinite, introStarsOut 3.4s 1.6s ease forwards;
+}
+@keyframes introStarsOut {
+  to { opacity: 0; }
+}
+.intro-sun {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 18px;
+  animation: introRise 3.2s 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.intro-sun::before {
+  content: "";
+  position: absolute;
+  inset: -60px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 141, 186, 0.75), transparent);
+  animation: glowPulse 6s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes introRise {
+  from { transform: translateY(46vh) scale(0.7); }
+  to { transform: none; }
+}
+.intro-sun .bloom-petal {
+  animation: petalOpen 1.6s calc(1.8s + var(--i) * 0.08s) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes petalOpen {
+  from { transform: scale(0.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.intro-line {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 30ch;
+  font-size: clamp(22px, 6vw, 30px);
+  line-height: 1.2;
+  font-weight: 600;
+  color: #FFF8F1;
+  opacity: 0;
+  animation: fadeUpSlow 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  text-wrap: balance;
+}
+.intro-line + .intro-line {
+  margin-top: 6px;
+}
+.intro-small {
+  position: relative;
+  z-index: 1;
+  max-width: 34ch;
+  margin: 16px 0 0;
+  font-size: 15px;
+  color: #FFF1E6;
+  opacity: 0;
+  animation: fadeUpSlow 0.9s 3.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  text-wrap: pretty;
+}
+.intro-go {
+  position: relative;
+  z-index: 1;
+  margin-top: 24px;
+  opacity: 0;
+  animation: fadeUpSlow 0.8s 4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+.intro-go:focus-visible {
+  outline: 3px solid #FFF8F1;
+  outline-offset: 3px;
+}
+.intro-hills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 18vh;
+  z-index: 1;
+  --dawn: 1;
+  opacity: 0;
+  animation: fadeUpSlow 1.4s 0.2s ease forwards;
+}
+.intro-skip {
+  position: absolute;
+  z-index: 2;
+  top: max(14px, env(safe-area-inset-top));
+  right: 14px;
+  background: rgba(15, 10, 31, 0.45);
+  color: #FFF8F1;
+  border: 1px solid rgba(255, 248, 241, 0.3);
+  border-radius: 999px;
+  padding: 8px 14px;
+  min-height: 40px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.intro.leaving {
+  animation: introLeave 0.5s ease forwards;
+}
+@keyframes introLeave {
+  to { opacity: 0; visibility: hidden; }
+}
+@keyframes fadeUpSlow {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky,
+.sky-sun,
+.dawn-dots i {
+    transition: none;
+  }
+  .sky-stars span,
+.sky-glow,
+.sky-sun svg,
+.intro-stars span,
+.intro-sun::before {
+    animation: none;
+  }
+  .intro::before,
+.intro-sun,
+.intro-sun .bloom-petal,
+.intro-line,
+.intro-small,
+.intro-go {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .intro-stars {
+    display: none;
+  }
+  .breath-sun::before,
+.breath-sun svg {
+    transition: none;
+  }
+  .checkin-step {
+    animation: none;
+  }
+}
+
+/* High contrast keeps the sky (it carries meaning) but gives its text a
+   solid backing, and turns decorative gradients flat. */
+:root[data-contrast="high"] .sky-content {
+  background: rgba(10, 6, 20, 0.82);
+  border-radius: var(--radius-lg);
+  margin: 10px;
+  padding-bottom: 22px;
+}
+:root[data-contrast="high"] .btn-sun {
+  background: #FFC857;
+  outline: 2px solid currentColor;
+}
+:root[data-contrast="high"] .choice,
+:root[data-contrast="high"] .panel {
+  border: 2px solid var(--color-divider);
+}
+
+/* ── home: one column on a phone, two on a wide screen ───────────────── */
+/* On a phone the two column wrappers dissolve (display: contents) and
+   every panel takes its place in one list by `order`, so the most urgent
+   things stay nearest the thumb. On a wide screen the wrappers become
+   real columns: the conversation on the left, the small comforts on the
+   right. Same markup, no JavaScript media query, nothing to hydrate. */
+.here-cols {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.here-main,
+.here-side {
+  display: contents;
+}
+.haven-here {
+  max-width: 700px;
+}
+@media (min-width: 980px) {
+  .haven-here {
+    max-width: 1080px;
+  }
+  .here-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: start;
+    gap: 18px;
+  }
+  .here-main,
+.here-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .here-side {
+    position: sticky;
+    top: 132px;
+  }
+}
+
+/* ── tool rows ───────────────────────────────────────────────────────── */
+.tools {
+  display: grid;
+  gap: 8px;
+}
+.tool-row {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  min-height: 60px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-raised);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.tool-row:hover {
+  border-color: color-mix(in oklab, var(--color-divider), var(--color-sun) 55%);
+}
+.tool-row strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+.tool-row small {
+  display: block;
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+}
+.tool-glyph {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: var(--color-ink);
+}
+.tool-glyph svg {
+  width: 22px;
+  height: 22px;
+}
+.glyph-lilac { background: linear-gradient(140deg, #D9C8FF, #B89CFF); }
+.glyph-sun { background: linear-gradient(140deg, #FFE08A, #FFB26B); }
+.glyph-pink { background: linear-gradient(140deg, #FFB3D1, #FF8DBA); }
+
+/* ── compact video rows ──────────────────────────────────────────────── */
+.video-row {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-raised);
+}
+.video-row > .video-wide {
+  grid-column: 1 / -1;
+}
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  color: #FFF8F1;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  font: inherit;
+}
+.video-thumb::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  bottom: -22px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 248, 241, 0.45), transparent);
+}
+.video-thumb .play {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(15, 10, 31, 0.55);
+}
+.video-thumb:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.video-meta h4 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.video-meta p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--color-neutral-600);
+}
+.video-meta .video-when {
+  font-size: 13.5px;
+  color: var(--color-neutral-400);
+  margin-top: 6px;
+}
+@media (min-width: 560px) {
+  .video-row {
+    grid-template-columns: 160px 1fr;
   }
 }

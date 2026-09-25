@@ -53,6 +53,26 @@ export default function TermsPage() {
             24/7.
           </li>
         </ul>
+        <h2>This is not a crisis service, and nobody is watching</h2>
+        <p>
+          The safe place asks how you are and, when your answers suggest it, whether you are having
+          thoughts of suicide. Your answers change what the app shows you. They are{" "}
+          <strong>not seen by anyone</strong>, they do not alert anyone, and nobody will come to help
+          because of them. The app has no server and no staff. If you are in danger, call a helpline or
+          your local emergency number yourself; the app puts those numbers one tap away, but it cannot
+          press them for you.
+        </p>
+        <p>
+          The care-team feature helps you write a summary and send it to someone you choose. Sending it
+          is always your action, through your own apps. Wellbeings does not know whether it arrived,
+          whether it was read, or what was done about it, and cannot follow up.
+        </p>
+        <p>
+          The videos, hope box, gratitude practice, breathing and safety plan are self-help tools
+          adapted from published approaches. They are not therapy, and the safety plan is one you
+          write for yourself, not a plan agreed with a clinician unless you take it to one.
+        </p>
+
         <p>
           Some questions in the check-in borrow wording from instruments clinicians use. That borrowing
           does not make the result clinical, and it is not administered or interpreted by a
@@ -120,8 +140,10 @@ export default function TermsPage() {
         <h2>{COMPANION_NAME}</h2>
         <p>
           {COMPANION_NAME} is a separate product with its own terms. Moving between the two passes a
-          single URL parameter naming which app you came from, and nothing else. Neither app can read
-          the other&apos;s storage.
+          URL parameter naming which app you came from, and at most one coarse severity band, and
+          nothing else. The two are served from the same address, so your browser keeps their storage
+          in one place; each app only reads its own keys. The{" "}
+          <Link href="/privacy/">privacy page</Link> explains this in full.
         </p>
 
         <h2>Changes</h2>

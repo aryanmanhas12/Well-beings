@@ -109,7 +109,7 @@ export interface Strings {
 }
 
 const en: Strings = {
-  brandTag: "On-device · no third parties",
+  brandTag: "On-device · nothing sent anywhere",
   helpNow: "Help now",
   language: "Language",
   footerDisclaimer:
@@ -197,7 +197,7 @@ const en: Strings = {
 };
 
 const hi: Strings = {
-  brandTag: "इसी डिवाइस पर · कोई तीसरा पक्ष नहीं",
+  brandTag: "इसी डिवाइस पर · कुछ भी बाहर नहीं भेजा जाता",
   helpNow: "अभी मदद",
   language: "भाषा",
   footerDisclaimer:

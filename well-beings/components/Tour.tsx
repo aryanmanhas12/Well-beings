@@ -265,10 +265,10 @@ export function Tour({
               hole over the real element does not, but nothing inside is
               meant to be interactive during the tour, so this stays purely
               visual. */}
-          <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: Math.max(0, spot.top), background: "rgba(8,9,16,.72)" }} />
-          <div style={{ position: "fixed", top: spot.top + spot.height, left: 0, right: 0, bottom: 0, background: "rgba(8,9,16,.72)" }} />
-          <div style={{ position: "fixed", top: spot.top, left: 0, width: Math.max(0, spot.left), height: spot.height, background: "rgba(8,9,16,.72)" }} />
-          <div style={{ position: "fixed", top: spot.top, left: spot.left + spot.width, right: 0, height: spot.height, background: "rgba(8,9,16,.72)" }} />
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, height: Math.max(0, spot.top), background: "rgba(12,7,26,.72)" }} />
+          <div style={{ position: "fixed", top: spot.top + spot.height, left: 0, right: 0, bottom: 0, background: "rgba(12,7,26,.72)" }} />
+          <div style={{ position: "fixed", top: spot.top, left: 0, width: Math.max(0, spot.left), height: spot.height, background: "rgba(12,7,26,.72)" }} />
+          <div style={{ position: "fixed", top: spot.top, left: spot.left + spot.width, right: 0, height: spot.height, background: "rgba(12,7,26,.72)" }} />
 
           {/* The ring itself — a soft glow, not a hard box, to read as guidance rather than an error state. */}
           <div

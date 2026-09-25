@@ -14,7 +14,10 @@ import { JournalEntry, countWords, mentionsCrisis } from "@/lib/journal";
 import { Lang, t } from "@/lib/i18n";
 import { CheckinEntry, ChatMessage, FlowCtx, PlanIntensity, Profile, Question, RawAnswers } from "@/lib/types";
 
-export type Screen = "welcome" | "chat" | "results" | "app";
+/* "home" is the safe place. "app" is a one-shot signal meaning "the check
+   just finished, show the daily plan it built": the safe place reads it,
+   opens its Plan tab and sets the screen back to "home". */
+export type Screen = "home" | "chat" | "results" | "app";
 export type Tab = "today" | "journal" | "plan" | "burnout" | "library" | "help";
 
 let msgSeq = 0;
@@ -35,7 +38,7 @@ function computeStreak(habitsDone: Record<string, string[]>, id: string): number
 }
 
 export function useWellbeings() {
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>("home");
   const [tab, setTab] = useState<Tab>("today");
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -91,7 +94,12 @@ export function useWellbeings() {
   crisisRef.current = crisis;
 
   // Hydrate any saved session from localStorage after mount — deliberate:
-  // the server render must always paint "welcome" or hydration mismatches.
+  // the server render must always paint "home" or hydration mismatches.
+  //
+  // A finished profile no longer sends someone straight to the lifestyle
+  // dashboard. Everyone lands in the safe place; the daily plan is one tap
+  // away in its Plan tab. The front door of an app a person might open in
+  // crisis should not be a habit tracker.
   useEffect(() => {
     const saved = loadState();
     if (saved && saved.profile) {
@@ -104,7 +112,6 @@ export function useWellbeings() {
       setCrisis(saved.crisis);
       setSettings(saved.settings);
       applyDisplayPrefs(saved.settings);
-      setScreen("app");
     } else if (saved) {
       setSettings(saved.settings);
       applyDisplayPrefs(saved.settings);
@@ -402,7 +409,11 @@ export function useWellbeings() {
     setJournal([]);
     setCrisis(false);
     setSettings(DEFAULT_SETTINGS);
-    setScreen("welcome");
+    setScreen("home");
+    /* The safe place keeps its own keys (lib/haven.ts) and its own state.
+       "Delete all my data" has to mean all of it, so it is told directly
+       rather than trusted to notice. */
+    if (typeof window !== "undefined") window.dispatchEvent(new Event("wellbeings:delete-all"));
     setTab("today");
     setMessages([]);
   }

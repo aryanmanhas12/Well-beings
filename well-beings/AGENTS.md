@@ -14,14 +14,20 @@ checkable".
 
 ## The tells, and what to do instead
 
-**Colour.** Never ship a violet or indigo accent on a blue-black page. That
-combination is the single most recognisable signature of a generated
-interface, and this app has already been through it once. Warm near-blacks,
-creams, clays, honeys and muted earth tones instead. No pure `#000` and no
-pure `#ffffff` anywhere — a hair of warmth in the extremes is most of what
-separates a page that feels like a room from one that feels like a display.
-Saturation stays low: warm *and* muted is earthy, warm alone is a warning
-label.
+**Colour.** The palette is night to dawn, at the owner's explicit request:
+a warm plum midnight (`#150F26`, red in it, not blue), cream text, and the
+colours of an actual sunrise as accents: sun yellow for anything you press,
+dawn pink and lilac for the things that belong to the person (hope box,
+people, good things), peach where the sky meets the horizon. Light mode is
+dawn paper (`#FFF5EC`) with plum ink and berry for links, because sun yellow
+on paper is 1.49:1 and unreadable as text.
+
+This is not the violet-on-blue-black look every generated interface has,
+and keeping it that way is deliberate. That look is a cold blue-black with
+one indigo accent doing everything. Here purple lives in the sky and the
+petals, never on a button; the buttons are sun. If a change makes the page
+read as "indigo gradient startup", it is wrong even if every token is from
+this file. No pure `#000` and no pure `#ffffff` outside high-contrast mode.
 
 **Type.** Inter is banned, and so is everything that arrives in the same
 breath as Inter — DM Sans, Plus Jakarta Sans, Poppins, Outfit, Manrope. Pick
@@ -77,3 +83,41 @@ worse than none.
    already been the case here that source and live site disagreed for five
    commits. Rebuild, load the real output, screenshot it, and check the thing
    you claim to have changed actually changed before saying it is done.
+
+## The safe place: extra rules
+
+The home of the app is for people who may be in a very bad place. That
+changes what "good design" means here.
+
+**Motion is atmosphere, not decoration.** The sky, the pulsing midnight
+glow, the rising sun and the first-visit sunrise are the owner's brief and
+they stay. They are slow (seconds, not milliseconds), they never move
+anything someone is trying to read or tap, and every one of them stops under
+`prefers-reduced-motion`. Nothing bounces, nothing sparkles, and nothing
+animates to get attention.
+
+**Safe messaging is not optional.** Never describe a method, anywhere, in
+copy, a video, a placeholder or a code comment. Stories are chosen for
+hope and recovery, and a video goes in only when its ID and title have
+been checked against a real listing. See `lib/havenContent.ts`.
+
+**Never imply someone is watching.** The app has no server and nobody
+monitors it. Any copy that could be read as "we'll be alerted" is a safety
+bug, because someone may wait for help that is not coming. Sharing with a
+care team is always the person's own action, shown in full first. The
+rules are in `docs/CARE-INTEGRATION.md`, and any change to them changes the
+privacy page and the terms in the same commit.
+
+**Every visit has to be worth it on its own.** Most people use a
+mental-health app a handful of times. So: a two-tap check-in, no streaks
+that can be broken, no survey before comfort, and the most useful thing for
+the answer just given at the top of the screen.
+
+**Rules that decide what someone sees in a crisis live in `lib/care.ts`,**
+as plain functions, with a test for each case in `scripts/test-care.mjs`.
+Never inline a threshold in a component.
+
+**Crisis numbers are checked, not remembered.** KIRAN (1800-599-0019)
+shipped as a primary line here long after the government merged it into
+Tele-MANAS in February 2024 and phased the number out. Before adding or keeping a number, check the operator's
+own site, and put the date and source in a comment.

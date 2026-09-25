@@ -141,6 +141,21 @@ for (const p of pages) {
     if (visible.includes(bad)) fail(p.route, `companion named "${bad}"; it is Ronak`);
   }
 
+  /* Retired crisis numbers. KIRAN was merged into Tele-MANAS in February
+     2024 and its number phased out; a crisis surface listing it offers a
+     line that no longer answers. Any retired line goes in this list. */
+  for (const bad of ["KIRAN", "1800-599-0019", "18005990019"]) {
+    if (p.html.includes(bad)) fail(p.route, `lists a retired helpline: "${bad}"`);
+  }
+
+  /* Claims this site has already had to retract. Both apps are served from
+     one origin, so their storage is shared at the browser level; saying
+     otherwise was false. And the app monitors no one, so nothing may
+     suggest it alerts anybody. */
+  for (const bad of ["neither can read the other", "Neither app can read", "we will alert", "we'll alert", "will be notified"]) {
+    if (visible.toLowerCase().includes(bad.toLowerCase())) fail(p.route, `makes a retracted or false claim: "${bad}"`);
+  }
+
   /* Nothing should leak the framework on a page a stranger might land on. */
   if (isErrorPage && /next\.js/i.test(visible)) fail(p.route, "error page names the framework");
 }

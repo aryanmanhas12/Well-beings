@@ -26,7 +26,7 @@ export const SITE_PATH = "/Well-beings";
 export const SITE_URL = `${SITE_ORIGIN}${SITE_PATH}`;
 
 export const SITE_NAME = "Wellbeings";
-export const SITE_TAGLINE = "Understand your everyday wellbeing, then change one thing that sticks";
+export const SITE_TAGLINE = "A quiet place for hard days, and a private look at everyday wellbeing";
 
 /**
  * The companion product. Wellbeings is the broad lifestyle picture; Ronak is
@@ -70,9 +70,9 @@ export const PAGES: SitePage[] = [
   {
     path: "/",
     nav: "Home",
-    title: "Wellbeings · understand your everyday wellbeing",
+    title: "Wellbeings · a quiet place for hard days",
     description:
-      "A private, five-minute wellbeing check covering sleep, movement, food, stress, connection and routine. It runs entirely in your browser and turns what you report into two or three changes worth actually making.",
+      "A private safe place for hard days: check in with two taps, breathe with the sun, keep a hope box and a safety plan, and reach free helplines in one tap. Everything stays on your phone and nothing is sent anywhere.",
     changeFrequency: "monthly",
     priority: 1,
   },
@@ -159,7 +159,7 @@ export const PAGES: SitePage[] = [
     nav: "About",
     title: "About Wellbeings · what it is and what it is not",
     description:
-      "What Wellbeings measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Ronak.",
+      "What the Wellbeings safe place does when things are hard, the published approaches behind its safety plan and hope box, what nobody sees, and how it differs from the screening in Ronak.",
     changeFrequency: "monthly",
     priority: 0.6,
   },
@@ -183,7 +183,7 @@ export const PAGES: SitePage[] = [
     hiddenInNav: true,
     title: "Terms of use · Wellbeings",
     description:
-      "Wellbeings is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a diagnosis, and not a substitute for professional advice.",
+      "Wellbeings is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a crisis service, not monitored, and not a substitute for professional advice.",
     changeFrequency: "yearly",
     priority: 0.4,
   },
@@ -192,7 +192,7 @@ export const PAGES: SitePage[] = [
     nav: "Privacy",
     title: "Privacy · where your Wellbeings answers live",
     description:
-      "Wellbeings has no account, no server and no analytics. Everything you enter stays in your own browser storage. This page says exactly what is stored, where, and how to delete it.",
+      "Wellbeings has no account, no server and no analytics, and nobody sees your check-ins. This page lists every key it stores, how care-team sharing and videos work, and how to delete it all.",
     changeFrequency: "monthly",
     priority: 0.6,
   },

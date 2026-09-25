@@ -20,7 +20,16 @@ const TAB_DEFS: [Tab, keyof Strings][] = [
   ["help", "tabHelp"],
 ];
 
-export function AppScreen({ wb }: { wb: Wellbeings }) {
+/**
+ * The daily plan built from the wellbeing check.
+ *
+ * `embedded` is how it lives now: inside the safe place's Plan tab, where
+ * the page already has its own <main> and its own sky. It used to be a whole
+ * screen that someone landed on after the check, which made a lifestyle
+ * dashboard the front door for a person who might have come here in crisis.
+ */
+export function AppScreen({ wb, embedded = false }: { wb: Wellbeings; embedded?: boolean }) {
+  const Root = embedded ? "div" : "main";
   const [tourOpen, setTourOpen] = useState(false);
 
   // Auto-launch once, ever, per device — never on the demo profile (a
@@ -39,10 +48,10 @@ export function AppScreen({ wb }: { wb: Wellbeings }) {
   }
 
   return (
-    <main data-screen-label="App" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+    <Root data-screen-label="App" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       {tourOpen && <Tour steps={APP_TOUR} currentTab={wb.tab} setTab={wb.setTab} onFinish={closeTour} />}
       <div style={{ borderBottom: "1px solid var(--color-divider)" }}>
-        <div data-tour="tabs" style={{ maxWidth: 1060, margin: "0 auto", padding: "0 24px", display: "flex", gap: 4, overflowX: "auto" }}>
+        <div data-tour="tabs" style={{ maxWidth: 1060, margin: "0 auto", padding: embedded ? "0 10px" : "0 24px", display: "flex", gap: 4, overflowX: "auto" }}>
           {TAB_DEFS.map(([id, key]) => (
             <button
               key={id}
@@ -70,7 +79,8 @@ export function AppScreen({ wb }: { wb: Wellbeings }) {
           as new content arriving rather than the old one being overwritten. */}
       <div
         key={wb.tab}
-        className="anim-in app-measure app-measure-app"
+        className={embedded ? "anim-in" : "anim-in app-measure app-measure-app"}
+        style={embedded ? { padding: "18px 16px 22px" } : undefined}
       >
         {/* Honest about where the translation currently stops, rather than
             letting a Hindi reader hit an English plan with no explanation. */}
@@ -95,6 +105,6 @@ export function AppScreen({ wb }: { wb: Wellbeings }) {
         {wb.tab === "library" && <LibraryTab />}
         {wb.tab === "help" && <HelpTab wb={wb} onReplayTour={() => setTourOpen(true)} />}
       </div>
-    </main>
+    </Root>
   );
 }

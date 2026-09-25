@@ -263,8 +263,10 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
       <div className="card" style={{ padding: 20 }}>
         <div style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 15, marginBottom: 8 }}>Your data</div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 14 }}>
-          Everything you enter, including answers, scores and check-ins, lives in this browser&apos;s local storage. No account, no
-          server, no analytics, no third parties. Deleting it is instant and irreversible.
+          Everything you enter, including answers, check-ins, your hope box, photos and safety plan, lives in this
+          browser&apos;s local storage. No account, no server, no analytics. The only thing that ever loads from
+          elsewhere is a video, and only when you choose to play one. Deleting is instant and irreversible, and it
+          removes all of it.
         </div>
         <button
           className="btn btn-secondary"

@@ -1,4 +1,5 @@
-import { GearIcon, LogoIcon, ShieldIcon } from "./icons";
+import { GearIcon, ShieldIcon } from "./icons";
+import { BloomSun } from "./haven/BloomSun";
 import { Lang, LANGS, Strings } from "@/lib/i18n";
 
 export function Header({
@@ -7,12 +8,14 @@ export function Header({
   setLang,
   onHelp,
   onSettings,
+  onHome,
 }: {
   s: Strings;
   lang: Lang;
   setLang: (l: Lang) => void;
   onHelp: () => void;
   onSettings: () => void;
+  onHome?: () => void;
 }) {
   return (
     <header
@@ -20,30 +23,38 @@ export function Header({
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 16,
+        gap: 14,
         padding: "10px 22px",
         borderBottom: "1px solid var(--color-divider)",
         position: "sticky",
         top: 0,
-        background: "color-mix(in srgb, var(--color-bg) 92%, transparent)",
-        backdropFilter: "blur(8px)",
+        background: "color-mix(in srgb, var(--color-bg) 94%, transparent)",
         zIndex: 40,
       }}
     >
-      <div className="nav-brand" style={{ display: "flex", alignItems: "center", gap: 9 }}>
-        <LogoIcon style={{ color: "var(--color-accent)" }} />
+      {/* The wordmark doubles as the way home from the wellbeing check,
+          which is a full screen of its own with no tab bar. */}
+      <button
+        type="button"
+        className="nav-brand"
+        onClick={onHome}
+        aria-label="Wellbeings, go to your safe place"
+        style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", padding: 0, minHeight: 44, color: "inherit", cursor: "pointer" }}
+      >
+        <BloomSun size={30} />
         <span
+          className="nav-wordmark"
           style={{
             fontFamily: "var(--font-display)",
             letterSpacing: "var(--font-display-tracking)",
-            fontWeight: "var(--font-display-weight)",
+            fontWeight: 650,
             fontSize: 19,
             whiteSpace: "nowrap",
           }}
         >
           Wellbeings
         </span>
-      </div>
+      </button>
       {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped
           to two cramped lines between the logo and Help now. The same
           promise already lives in the footer and throughout the app, so
@@ -85,16 +96,13 @@ export function Header({
         ))}
       </select>
 
-      <button
-        className="btn btn-ghost btn-icon"
-        onClick={onSettings}
-        aria-label="Settings"
-        title="Settings"
-      >
+      <button className="btn btn-ghost btn-icon" onClick={onSettings} aria-label="Settings" title="Settings" style={{ width: 44, height: 44 }}>
         <GearIcon style={{ color: "currentColor" }} />
       </button>
 
-      <button className="btn btn-ghost" data-tour="help-now" onClick={onHelp} style={{ fontSize: 12.5 }}>
+      {/* Help is the one control that is never more than one tap away, on
+          every screen, so it gets the only filled button in the header. */}
+      <button className="btn btn-sun" data-tour="help-now" onClick={onHelp} style={{ fontSize: 13, minHeight: 44, padding: "8px 12px" }}>
         <ShieldIcon style={{ color: "currentColor", marginRight: 6, verticalAlign: -2 }} />
         <span className="nav-help-label">{s.helpNow}</span>
       </button>

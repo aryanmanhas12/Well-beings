@@ -65,7 +65,7 @@ export function HelplineList({
                 )}
               </div>
               {(h.who || h.hours) && (
-                <div style={{ fontSize: 11, color: metaColor, textWrap: "pretty" }}>
+                <div style={{ fontSize: 12.5, color: metaColor, textWrap: "pretty" }}>
                   {[h.who, h.hours].filter(Boolean).join(" · ")}
                 </div>
               )}

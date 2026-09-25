@@ -266,20 +266,19 @@ export const HELPLINES: Record<Region, HelplineRegion> = {
         who: "Govt. of India · English and 20 regional languages",
         primary: true,
       },
-      {
-        name: "KIRAN",
-        contact: "1800-599-0019",
-        tel: "18005990019",
-        url: "https://depwd.gov.in",
-        who: "Ministry of Social Justice · multilingual",
-        primary: true,
-      },
+      /* KIRAN (1800-599-0019) used to sit here as a primary line. The
+         government merged it into Tele-MANAS in February 2024 and diverted
+         its calls for three months before phasing it out, so a crisis
+         screen listing it was offering a number that no longer answers.
+         Vandrevala takes the second slot: free, 24/7, call or WhatsApp,
+         checked against the foundation's own site. */
       {
         name: "Vandrevala Foundation",
         contact: "9999 666 555",
         tel: "+919999666555",
         url: "https://www.vandrevalafoundation.com/free-counseling",
         who: "Call or WhatsApp · 11 languages",
+        primary: true,
       },
       {
         name: "AASRA",

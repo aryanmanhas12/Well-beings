@@ -71,8 +71,8 @@ export function HelpDialog({
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(10,11,20,.6)",
-        backdropFilter: "blur(4px)",
+        background: "rgba(12,7,26,.62)",
+        
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -155,8 +155,7 @@ export function BreathDialog({ onClose }: { onClose: () => void }) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(10,11,20,.72)",
-        backdropFilter: "blur(6px)",
+        background: "rgba(12,7,26,.74)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

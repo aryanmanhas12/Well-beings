@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
 import { Lang, LANGS } from "@/lib/i18n";
@@ -39,9 +40,19 @@ const INTENSITIES: { value: PlanIntensity; label: string }[] = [
   { value: "driven", label: "Driven" },
 ];
 
-export function SettingsDialog({ wb, onClose }: { wb: Wellbeings; onClose: () => void }) {
+export function SettingsDialog({
+  wb,
+  onClose,
+  onReplayIntro,
+}: {
+  wb: Wellbeings;
+  onClose: () => void;
+  onReplayIntro?: () => void;
+}) {
   const ref = useDialogBehaviour(onClose);
   const s = wb.s;
+  const [confirming, setConfirming] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   return (
     <div
@@ -50,8 +61,8 @@ export function SettingsDialog({ wb, onClose }: { wb: Wellbeings; onClose: () =>
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(10,11,20,.6)",
-        backdropFilter: "blur(4px)",
+        background: "rgba(12,7,26,.62)",
+        
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -181,7 +192,53 @@ export function SettingsDialog({ wb, onClose }: { wb: Wellbeings; onClose: () =>
           onChange={() => wb.setShowCitations(!wb.settings.showCitations)}
         />
 
-        <button className="btn btn-primary" onClick={onClose} style={{ width: "100%", marginTop: 18 }}>
+        {onReplayIntro && (
+          <button type="button" className="btn btn-quiet" onClick={onReplayIntro} style={{ paddingInline: 0 }}>
+            Replay the opening sunrise
+          </button>
+        )}
+
+        {/* Reachable from every screen, not only from inside the daily plan.
+            Someone who only ever used the safe place has a hope box, photos
+            and a safety plan on this device, and "delete all my data" has to
+            be one place they can always find. */}
+        <div style={{ borderTop: "1px solid var(--color-divider)", marginTop: 12, paddingTop: 12 }}>
+          {deleted ? (
+            <p className="saved-note" role="status" style={{ fontSize: 13.5 }}>
+              Everything has been deleted from this browser.
+            </p>
+          ) : confirming ? (
+            <div role="group" aria-label="Confirm deletion">
+              <p style={{ fontSize: 13.5, margin: "0 0 10px" }}>
+                This removes your check-ins, hope box, photos, safety plan, wellbeing check and everything
+                else this app keeps on this device. It can&apos;t be undone.
+              </p>
+              <div className="btn-row">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ minHeight: 44, color: "var(--color-accent-2)" }}
+                  onClick={() => {
+                    wb.deleteData();
+                    setConfirming(false);
+                    setDeleted(true);
+                  }}
+                >
+                  Delete everything
+                </button>
+                <button type="button" className="btn btn-quiet" onClick={() => setConfirming(false)}>
+                  Keep it
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button type="button" className="btn btn-quiet" onClick={() => setConfirming(true)} style={{ paddingInline: 0 }}>
+              Delete all my data
+            </button>
+          )}
+        </div>
+
+        <button className="btn btn-sun" onClick={onClose} style={{ width: "100%", marginTop: 14 }}>
           {s.helpClose}
         </button>
       </div>

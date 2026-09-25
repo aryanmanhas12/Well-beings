@@ -119,64 +119,7 @@ export const APP_TOUR: TourStep[] = [
   },
 ];
 
-/** The front-door walkthrough, for someone who has just landed and has no
-    profile yet. APP_TOUR explains a dashboard they haven't built; this one
-    explains why they'd want to. It deliberately ends on the start button,
-    so finishing the tour leaves the thumb on the thing to press next.
-
-    Step order follows the page down: the deck, the preview button beside it,
-    then the two principles that moved into the bottom band when the research
-    figures took the middle one. Before that reshuffle these steps ran
-    privacy, evidence, preview, which now scrolls past the button and back up
-    to it. The last step is the exception and stays deliberate: it returns to
-    the start button, because ending anywhere else ends on nothing to do. */
-export const WELCOME_TOUR: TourStep[] = [
-  {
-    id: "welcome-hero",
-    selector: '[data-tour="welcome-hero"]',
-    title: "What this actually is",
-    body: "A five-minute check-in about sleep, mood, stress and workload. Then a daily system built from your answers, not a generic list.",
-  },
-  {
-    id: "welcome-preview",
-    selector: '[data-tour="welcome-preview"]',
-    title: "Want to look before you answer?",
-    body: "This opens a sample profile with made-up answers, so you can see exactly what you get before telling it anything about yourself.",
-  },
-  {
-    id: "welcome-privacy",
-    selector: '[data-tour="welcome-privacy"]',
-    title: "Nothing leaves this phone",
-    body: "No account, no server, no third parties. Everything lives in this browser and one tap deletes all of it.",
-  },
-  {
-    id: "welcome-evidence",
-    selector: '[data-tour="welcome-evidence"]',
-    title: "Every claim shows its paper",
-    body: "Each number here comes from a trial or meta-analysis you can open and read. And it says so plainly when the evidence is still young.",
-  },
-  {
-    id: "welcome-help",
-    selector: '[data-tour="help-now"]',
-    title: "Help is never buried",
-    body: "Crisis lines are one tap from every screen in the app, with no score or flag required to unlock them.",
-  },
-  {
-    id: "welcome-install",
-    selector: '[data-tour="welcome-install"]',
-    title: "You can install it as an app",
-    body: "It runs from your home screen or dock in its own window, with no address bar, and still works with no connection. Chrome shows an install icon in the address bar; Brave keeps it in the ☰ menu; iPhones use Share then Add to Home Screen. This card gives you the one-tap button wherever the browser offers one.",
-  },
-  {
-    id: "welcome-start",
-    selector: '[data-tour="welcome-start"]',
-    title: "That's it. Start here",
-    body: "Mostly taps, about five minutes, and you can change any answer as you go. Your read-out comes at the end.",
-  },
-];
-
 const SEEN_KEY = "wellbeings-tour-seen-v1";
-const WELCOME_SEEN_KEY = "wellbeings-welcome-tour-v1";
 
 /** localStorage only, matching the rest of the app — the tour "seen" flag
     never leaves the device either. */
@@ -196,28 +139,5 @@ export function markTourTaken(): void {
   } catch {
     // Storage can be unavailable (private browsing, quota). The tour just
     // replays next time, which is a harmless fallback, not a crash.
-  }
-}
-
-/** Tracked separately from APP_TOUR: they answer different questions ("why
-    would I start this?" vs "how does this dashboard work?"), so taking one
-    should never suppress the other. Both default to "seen" when storage is
-    unreadable, so a locked-down browser gets a quiet app rather than a
-    walkthrough it can never dismiss for good. */
-export function hasSeenWelcomeTour(): boolean {
-  if (typeof window === "undefined") return true;
-  try {
-    return window.localStorage.getItem(WELCOME_SEEN_KEY) === "1";
-  } catch {
-    return true;
-  }
-}
-
-export function markWelcomeTourSeen(): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(WELCOME_SEEN_KEY, "1");
-  } catch {
-    // Same fallback as above: replaying is harmless, crashing is not.
   }
 }

@@ -1,23 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useWellbeings } from "@/hooks/useWellbeings";
+import { useHaven } from "@/hooks/useHaven";
+import { DEFAULT_REGION, HELPLINES } from "@/lib/helplines";
+import type { Region } from "@/lib/types";
 import { Header } from "./Header";
-import { WelcomeScreen } from "./WelcomeScreen";
 import { ChatScreen } from "./ChatScreen";
 import { ResultsScreen } from "./ResultsScreen";
-import { AppScreen } from "./AppScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
 import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
-import { TourInvite } from "./TourInvite";
-import { Tour } from "./Tour";
-import { WELCOME_TOUR, hasSeenWelcomeTour, markWelcomeTourSeen } from "@/lib/tour";
+import { HavenShell } from "./haven/HavenShell";
 
 /** Kept short on purpose. The footer of a working app is not the place for a
-    sitemap; these are the four destinations someone mid-check-in might
-    actually want, and the guides index fans out to the rest. */
+    sitemap; these are the destinations someone in the middle of the app
+    might actually want, and the guides index fans out to the rest. */
 const SITE_LINKS = [
   { href: "/guides/", label: "Guides" },
   { href: "/resources/", label: "Support lines" },
@@ -26,35 +25,26 @@ const SITE_LINKS = [
   { href: "/terms/", label: "Terms" },
 ];
 
+/**
+ * The whole app on one URL.
+ *
+ * Home is the safe place (components/haven). The wellbeing check and its
+ * results are full screens of their own, reached from inside it, and the
+ * daily plan they build lives in the safe place's Plan tab.
+ *
+ * Which helplines to show is decided once, here, in order of what the
+ * person has told us: the region they picked on Reach out, then the one
+ * they gave in the wellbeing check, then a guess from their clock.
+ */
 export function WellbeingsApp() {
   const wb = useWellbeings();
+  const haven = useHaven();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [replayIntro, setReplayIntro] = useState(0);
 
-  /* The welcome tour and the offer that starts it.
-     Both default to hidden and are switched on from an effect, never during
-     render: hasSeenWelcomeTour() reads localStorage, which the server cannot
-     do, so deriving it inline would make the first client render disagree
-     with the server markup. */
-  const [inviteOpen, setInviteOpen] = useState(false);
-  const [welcomeTourOpen, setWelcomeTourOpen] = useState(false);
-
-  useEffect(() => {
-    if (wb.screen !== "welcome") return;
-    if (hasSeenWelcomeTour()) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInviteOpen(true);
-  }, [wb.screen]);
-
-  function startWelcomeTour() {
-    markWelcomeTourSeen();
-    setInviteOpen(false);
-    setWelcomeTourOpen(true);
-  }
-
-  function dismissInvite() {
-    markWelcomeTourSeen();
-    setInviteOpen(false);
-  }
+  const regionKey: Region = haven.state.region ?? (wb.profile?.region as Region | undefined) ?? DEFAULT_REGION;
+  const region = HELPLINES[regionKey] ?? HELPLINES[DEFAULT_REGION];
+  const onHome = wb.screen === "home" || wb.screen === "app";
 
   return (
     <div
@@ -75,80 +65,62 @@ export function WellbeingsApp() {
         setLang={wb.setLang}
         onHelp={wb.openHelp}
         onSettings={() => setSettingsOpen(true)}
+        onHome={() => wb.setScreen("home")}
       />
 
-      {wb.handoff && (
+      {wb.handoff && onHome && (
         <RonakHandoffBanner
           handoff={wb.handoff}
-          screen={wb.screen}
-          onStartChat={wb.startChat}
-          onGoToday={() => wb.setTab("today")}
+          onCheckIn={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           onOpenHelp={wb.openHelp}
           onDismiss={wb.dismissHandoff}
         />
       )}
 
-      {wb.screen === "welcome" && (
-        <WelcomeScreen
-          lang={wb.settings.lang}
-          showCitations={wb.settings.showCitations}
-          onStartChat={wb.startChat}
-          onStartDemo={wb.startDemo}
-          onOpenHelp={wb.openHelp}
-          resumable={wb.resumable}
-          onResume={wb.resumeChat}
-          onDiscardDraft={wb.discardDraft}
-        />
-      )}
+      {onHome && <HavenShell wb={wb} haven={haven} region={region} replayIntro={replayIntro} />}
       {wb.screen === "chat" && <ChatScreen wb={wb} />}
       {wb.screen === "results" && wb.profile && (
         <ResultsScreen
           profile={wb.profile}
           crisis={wb.crisis}
           calm={wb.settings.calmMode}
-          region={wb.region}
+          region={region}
           lang={wb.settings.lang}
           showCitations={wb.settings.showCitations}
           onBuildSystem={wb.buildSystem}
           onOpenHelp={wb.openHelp}
         />
       )}
-      {wb.screen === "app" && wb.profile && <AppScreen wb={wb} />}
 
-      {/* The offer, then the tour itself. WELCOME_TOUR ends on the start
-          button, so finishing it hands straight into the check-in —
-          `onComplete` fires only on Done, never on Skip or Escape. */}
-      {wb.screen === "welcome" && inviteOpen && !welcomeTourOpen && (
-        <TourInvite onStart={startWelcomeTour} onDismiss={dismissInvite} />
-      )}
-      {wb.screen === "welcome" && welcomeTourOpen && (
-        <Tour
-          steps={WELCOME_TOUR}
-          onFinish={() => setWelcomeTourOpen(false)}
-          onComplete={() => wb.startChat("detailed")}
-          finishLabel={wb.s.startCheckin}
+      {wb.helpOpen && <HelpDialog region={region} lang={wb.settings.lang} onClose={wb.closeHelp} />}
+      {wb.breathOpen && <BreathDialog onClose={wb.closeBreath} />}
+      {settingsOpen && (
+        <SettingsDialog
+          wb={wb}
+          onClose={() => setSettingsOpen(false)}
+          onReplayIntro={() => {
+            setSettingsOpen(false);
+            wb.setScreen("home");
+            setReplayIntro((n) => n + 1);
+          }}
         />
       )}
 
-      {wb.helpOpen && <HelpDialog region={wb.region} lang={wb.settings.lang} onClose={wb.closeHelp} />}
-      {wb.breathOpen && <BreathDialog onClose={wb.closeBreath} />}
-      {settingsOpen && <SettingsDialog wb={wb} onClose={() => setSettingsOpen(false)} />}
-
       {/* The app's footer is also the only route out of the application and
           into the written guides, so it carries real links rather than two
-          lines of small print. Without these the content pages would be
-          reachable from search but not from the product, which is the usual
-          way a "content section" ends up orphaned from the thing it explains. */}
+          lines of small print. On a phone it sits above the tab bar's space,
+          which .haven reserves with its bottom padding. */}
       <footer
+        className={onHome ? "app-foot app-foot-tabbed" : "app-foot"}
         style={{
           borderTop: "1px solid var(--color-divider)",
-          padding: "16px 24px calc(16px + env(safe-area-inset-bottom))",
+          padding: "16px 24px",
           display: "flex",
           gap: "10px 18px",
           flexWrap: "wrap",
           justifyContent: "space-between",
           alignItems: "baseline",
-          fontSize: 11,
+          fontSize: 11.5,
           color: "var(--color-neutral-600)",
         }}
       >
@@ -161,7 +133,7 @@ export function WellbeingsApp() {
                and without it, and no separate prefetch payloads at all in
                this static export. An optimisation that cannot be measured is
                just a slower navigation for nothing. */
-            <Link key={l.href} href={l.href} className="app-site-link" style={{ fontSize: 12 }}>
+            <Link key={l.href} href={l.href} className="app-site-link" style={{ fontSize: 12.5 }}>
               {l.label}
             </Link>
           ))}

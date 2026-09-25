@@ -14,24 +14,28 @@ export const metadata: Metadata = metadataFor(PATH);
    what a person actually sees on the page. */
 const FAQ = [
   {
+    q: "Does anyone see what I tell the app?",
+    a: "No. There is no server, no account and no analytics, so your check-ins, hope box, photos and safety plan exist only in your own browser. Telling the app you are not safe does not alert anyone. If you want someone to know how you have been, the app can write a summary for you to send them, and you see every word and press send yourself.",
+  },
+  {
+    q: "Why does it ask about thoughts of suicide?",
+    a: "Only when you say you are arriving heavy or cannot see a way forward. Asking directly is what clinicians are trained to do, and the research on it is consistent: asking does not put the idea in someone's head, and it can reduce distress. Your answer only changes what the app shows you next, such as your safety plan and helplines.",
+  },
+  {
     q: "Does Wellbeings diagnose anything?",
     a: "No. It has no diagnostic capability and makes no diagnostic claim. It reflects back what you reported, says which patterns are worth attention, and names the point at which a qualified professional is the better next step. Nothing it shows you is a medical finding.",
   },
   {
-    q: "What is the wellbeing snapshot, exactly?",
-    a: "It is this app's own summary of the answers you gave, grouped into areas like sleep, movement and recovery. It is not a validated instrument and it is not a percentage of health. It is a way of ordering your own report so the most useful thing to change first is visible.",
-  },
-  {
     q: "Where do my answers go?",
-    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit and nothing for anyone else to read. Clearing the data deletes it from that browser permanently.",
+    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit. The one thing that ever loads from elsewhere is a video on the Calm screen, and only after you tap it and agree. Deleting your data removes it from that browser permanently.",
   },
   {
     q: "How is Wellbeings different from Ronak?",
-    a: "Wellbeings looks at the breadth of daily life: sleep, movement, food and drink, stress, recovery, connection, screen use and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps, they share no data, and each links to the other when the other is the more useful one.",
+    a: "Wellbeings is the everyday safe place: checking in, calming down, keeping hope and a safety plan within reach, and a broad look at sleep, movement and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps that link to each other; neither sends the other your answers.",
   },
   {
     q: "Is the advice evidence-based?",
-    a: "The claims that carry a citation come from named studies you can open and read, and the Evidence section inside the app lists all of them with their design and sample size. Where evidence is weak or young, the app says so rather than rounding it up. General practical guidance that is not tied to a specific study is not dressed up as though it were.",
+    a: "Each tool in the safe place is adapted from a published approach, and the app says which, with the size of the effect in plain words, including when it is small. That evidence is for the techniques, not for this app: Wellbeings itself has not been tested in a trial, and it says so. Where evidence is weak or young, the app says that too.",
   },
 ];
 
@@ -42,21 +46,77 @@ export default function AboutPage() {
       <div className="prose">
         <h1>About Wellbeings</h1>
         <p className="lede">
-          Wellbeings helps you understand your everyday wellbeing and turn that understanding into
-          two or three changes you might actually keep. It runs entirely in your browser, it does not
-          diagnose anything, and it is honest about where it stops.
+          Wellbeings is a quiet place for hard days, and a private look at everyday wellbeing for the
+          steadier ones. It runs entirely on your phone, it does not diagnose anything, and it is
+          honest about where it stops.
         </p>
 
-        <h2>What it looks at</h2>
+        <h2>The safe place</h2>
         <p>
-          Sleep and its timing, energy, physical activity, eating and drinking, stress and recovery,
+          Opening the app lands you in the safe place, not in a questionnaire. It asks how you are
+          arriving in two taps, answers in a way that fits what you said, and keeps a handful of tools
+          within reach. Each one is adapted from a published approach, and the size of the evidence is
+          stated as it is:
+        </p>
+        <ul>
+          <li>
+            <strong>A safety plan</strong>, following the Stanley–Brown Safety Planning Intervention:
+            warning signs, things you can do alone, people and places that lift you, people to ask for
+            help, professionals, and making where you are safer. In a study of 1,640 people seen in
+            emergency departments for suicidal crises, safety planning with follow-up calls was linked
+            to 45% fewer suicidal behaviours over six months (Stanley et al. 2018, JAMA Psychiatry).
+          </li>
+          <li>
+            <strong>A hope box</strong>: people, plans, memories, proof of hard times you got through,
+            songs and photos. In a trial with 118 veterans who had recently had suicidal thoughts, a
+            phone version helped people feel more able to cope, though it did not measurably change
+            suicidal thinking on its own (Bush et al. 2017, Psychiatric Services).
+          </li>
+          <li>
+            <strong>Good things</strong>, a daily gratitude practice. Across 27 studies the effect on
+            depression and anxiety was small (Cregg &amp; Cheavens 2021), so it is offered as a gentle
+            habit, not a treatment.
+          </li>
+          <li>
+            <strong>Stories and films</strong> chosen for hard days. Stories of people getting through
+            a crisis were linked to a small drop in suicidal thoughts among viewers who were
+            struggling, across six randomised trials (Niederkrotenthaler et al. 2022, Lancet Public
+            Health).
+          </li>
+          <li>
+            <strong>Breathing and grounding</strong> that work offline, and <strong>words to borrow</strong>{" "}
+            for messaging someone, because people reliably underestimate how glad others are to hear
+            from them (Liu et al. 2022).
+          </li>
+        </ul>
+
+        <h2>How it responds when things are hard</h2>
+        <p>
+          The rules are written down in the source and tested, not hidden in a model. If you say you
+          are arriving heavy or cannot see a way forward, the app asks directly whether you are having
+          thoughts of suicide. If you are, your safety plan and free helplines move to the top and stay
+          there for three days. If you say you do not feel safe, everything else leaves the screen and
+          the numbers to call become the buttons. If the days have been heavy for a while, it says so
+          and offers to help you tell someone.
+        </p>
+        <p>
+          None of that alerts anyone. There is no server and nobody watching. If you add a therapist,
+          doctor or someone you trust on the Reach out screen, the app can write a summary of your last
+          two weeks for you to send them, and you see every word first. Ronak is working toward
+          connecting people with professionals directly; if that ever reaches this app, it will ask you
+          first and say exactly what it would share.
+        </p>
+
+        <h2>The wellbeing check</h2>
+        <p>
+          For a day with a bit more room, there is also a private check of everyday life: sleep and its timing, energy, physical activity, eating and drinking, stress and recovery,
           mood, social connection, work or study load, concentration, screen use, routine and
           environment. The point of that breadth is that the thing making your weeks hard is often
           not the thing you would have named. A schedule problem gets blamed on motivation, and a
           recovery problem gets blamed on discipline.
         </p>
 
-        <h2>How a result is put together</h2>
+        <h3>How a result is put together</h3>
         <p>
           The result separates four things that are usually mashed together, because conflating them
           is how wellbeing tools end up overclaiming:
@@ -97,16 +157,16 @@ export default function AboutPage() {
 
         <h2>Wellbeings and {COMPANION_NAME}</h2>
         <p>
-          These are two tools with two jobs. Wellbeings is the broad lifestyle picture and the daily
-          system built from it. {COMPANION_NAME} is the dedicated mental-health screening experience.
+          These are two tools with two jobs. Wellbeings is the everyday safe place and the broad
+          lifestyle picture. {COMPANION_NAME} is the dedicated mental-health screening experience.
           Wellbeings deliberately does not try to be the second one: if what you describe looks like
           it needs a proper mental-health screen, it says so and points you there rather than
           pretending to do it itself.
         </p>
         <p>
-          They share no data. Moving between them passes a single URL parameter saying which app you
-          came from, and nothing else. No answers, no scores, no identifier. Each app keeps its own
-          data on your own device.{" "}
+          Neither sends the other your answers. Moving between them passes a URL parameter saying
+          which app you came from, and at most one coarse severity band. No answers, no scores, no
+          identifier. Each app keeps its own data on your device and reads only its own keys.{" "}
           <a href={ronakLink()} target="_blank" rel="noopener noreferrer">
             Open {COMPANION_NAME}
           </a>

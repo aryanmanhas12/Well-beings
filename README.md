@@ -1,60 +1,82 @@
 # Wellbeings
 
-A private, browser-only wellbeing check for sleep, movement, food and drink, stress, recovery,
-mood, social connection, work or study load, screen use, routine and environment. It turns what
-you report into two or three realistic changes, and it does not diagnose anything.
+A quiet place for hard days, and a private look at everyday wellbeing for the steadier ones. It
+opens on a two-tap check-in, answers in a way that fits what you said, and keeps a safety plan, a
+hope box, breathing, grounding and free helplines within one tap. Everything runs on your phone.
+It does not diagnose anything, and nobody sees what you tell it.
 
 **Live app:** https://aryanmanhas12.github.io/Well-beings/
-**About the author:** https://aryanmanhas12.github.io/Well-beings/me/ — Aryan Manhas, the
-NeuroBioPsych vision, goals and ways to connect.
-**Companion project:** [Ronak](https://aryanmanhas12.github.io/Psych/) — the dedicated
+**About the author:** https://aryanmanhas12.github.io/Well-beings/me/ (Aryan Manhas, the
+NeuroBioPsych vision, goals and ways to connect).
+**Companion project:** [Ronak](https://aryanmanhas12.github.io/Psych/), the dedicated
 mental-health screening experience (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages).
 
-Wellbeings and Ronak are deliberately separate products. Wellbeings is the broad
-lifestyle picture and the daily system built from it; Ronak is the mental-health screen.
-Wellbeings does not try to be the second one — when what someone describes looks like it needs a
-proper mental-health screen, it says so and points there. The two apps share no data: moving
-between them passes a single URL parameter naming the origin app and nothing else.
+Wellbeings and Ronak are deliberately separate products. Moving between them passes a URL
+parameter naming the origin app, and at most one coarse severity band, and nothing else. They are
+served from the same origin, so a browser keeps their `localStorage` together; each app only ever
+reads its own keys.
 
-### The check-in
+### The safe place
 
-Two depths. **Quick** is about three minutes and covers the lifestyle picture. **Detailed** adds
-hydration, evening screens, environment and sense of direction, plus the optional deeper
-instruments. Answers save to `localStorage` on every tap, so a refresh resumes rather than losing
-the form.
+Five rooms, on a bottom tab bar on phones and a top bar on wider screens:
 
-The read-out is a snapshot, not a score. There is no percentage, because no validated scale could
-produce one from these questions. It separates four things that are usually run together:
-observation (what you reported), interpretation (what that pattern may suggest, hedged),
-recommendation (something to try, split across 24 hours / 7 days / longer), and medical concern
-(the separate, clearly marked category for "a person, not an app, is the right next step").
+| Tab | What is in it |
+| --- | --- |
+| **Here** | The dawn sky, the check-in ("How are you arriving?", "And the days ahead?"), a reply fitted to the answers, one small thing to do, and something you saved yourself on a low day. |
+| **Calm** | Breathe with the sun (in 4, out 6), 5-4-3-2-1 grounding, and a short list of verified films for hard days that load from YouTube only after you agree. |
+| **Hope** | Three good things, a hope box (people, things ahead, good moments, hard times survived, songs, photos) and a note written on a steadier day for a heavier one. |
+| **Plan** | A Stanley–Brown safety plan, with a calm-day editor and a "use it now" view where every number is a button; plus the daily plan from the wellbeing check. |
+| **Reach out** | Helplines for your region, words to borrow for messaging someone, an opt-in care-team contact, and the way to Ronak. |
+
+The sky starts every day as night and rises a step with each small thing you do for yourself.
+Nothing is ever taken away; a missed day is a new night, not a broken streak. The first visit
+opens on a short sunrise, shown once.
+
+### When things are hard
+
+The rules live in `well-beings/lib/care.ts` and are tested in `well-beings/scripts/test-care.mjs`.
+A heavy mood or very little hope brings a direct question about thoughts of suicide. "Yes, but
+I'm safe" pins the safety plan and helplines to the top for three days. "I don't feel safe" clears
+the screen for numbers to call. A run of heavy days brings a prompt to tell someone. **None of it
+alerts anyone**: there is no server and nobody watching, and the crisis screen says so.
+
+The care team is how professional follow-up can work without monitoring anyone. A person adds a
+therapist, doctor or someone they trust, and the app writes a two-week summary of their own
+check-ins for them to send, by share sheet, text, email or file. The file has a versioned schema
+(`wellbeings.care-summary/1`), documented in
+[`well-beings/docs/CARE-INTEGRATION.md`](well-beings/docs/CARE-INTEGRATION.md) for the planned
+Ronak professional integration.
+
+### The wellbeing check
+
+For a day with more room: sleep, movement, food and drink, stress, recovery, mood, connection,
+work or study load, screen use and routine, in a quick (about three minutes) or detailed (about
+five) version. The read-out is a snapshot, not a score, and separates observation, interpretation,
+recommendation and medical concern.
 
 ### Public pages
 
-`/` the check · `/guides/` six evidence-informed guides · `/resources/` helplines and directories ·
-`/about/` what it is and is not · `/privacy/` exactly what is stored and where.
+`/` the safe place · `/guides/` six evidence-informed guides · `/resources/` helplines and
+directories · `/about/` what it is and is not · `/privacy/` every storage key and exactly what is
+and is not sent · `/terms/` not a medical device, not a crisis service, not monitored.
 
-Everything runs in the browser. Answers, scores and check-ins live in `localStorage` — no account,
-no server, no analytics, no third parties, no cookies. Region-local crisis helplines appear
-instantly if the self-harm screener item flags, and are always one tap away.
-
-> Wellbeings is a self-guidance tool, not a medical device. Its screeners signal — they don't
-> diagnose. If you're struggling, [findahelpline.com](https://findahelpline.com) lists verified,
-> free, 24/7 support lines for 130+ countries.
+> Wellbeings is a self-guidance tool, not a medical device and not a crisis service. If you're
+> struggling, [findahelpline.com](https://findahelpline.com) lists verified, free, 24/7 support
+> lines for 130+ countries.
 
 ### Checks
 
-`npm run verify` runs the typechecker, the linter, a production build and `scripts/audit-site.mjs`,
-which asserts against the real export: unique titles and descriptions, self-referencing canonicals,
-exactly one `<h1>` per page, no skipped heading levels, alt text on every image, valid JSON-LD that
-never claims a medical schema type, no broken internal links, a sitemap that matches the built
-pages, and correct brand spelling in visible copy.
+`npm run verify` runs the care-logic tests, the typechecker, the linter, a production build and
+`scripts/audit-site.mjs`, which asserts against the real export: unique titles and descriptions,
+self-referencing canonicals, exactly one `<h1>` per page, no skipped heading levels, alt text on
+every image, valid JSON-LD that never claims a medical schema type, no broken internal links, a
+sitemap that matches the built pages, correct brand spelling, and no retired helpline numbers.
 
 ## Repository layout
 
 | Path | What it is |
 | --- | --- |
-| `well-beings/` | The app — Next.js 16 + TypeScript, statically exported |
+| `well-beings/` | The app: Next.js 16 + TypeScript, statically exported |
 | `project/` | The original Claude Design prototype this was built from |
 | `chats/` | The design-session transcript (the intent behind the design) |
 | `.github/workflows/deploy.yml` | Builds and publishes the app to GitHub Pages on every push to `main` |
@@ -71,11 +93,14 @@ npm run dev        # http://localhost:3000
 
 Pushing to `main` triggers the GitHub Actions workflow, which builds a static export
 (`NEXT_PUBLIC_BASE_PATH=/Well-beings npm run build` → `out/`) and deploys it to GitHub Pages.
-First-time setup: if the workflow can't enable Pages itself, flip **Settings → Pages → Source**
-to **GitHub Actions** once and re-run it.
+The built export is also committed at the repository root (listed in `.pages-manifest`) so the
+site works when Pages is set to deploy from a branch.
 
 ## Evidence
 
-Every practice in the app cites its meta-analysis, RCT or cohort study — 16 papers sourced via
-Consensus/PubMed during the design session, browsable in the app's **Evidence** tab. Where the
-evidence is young or mixed (e.g. breathwork), the app says so.
+Each tool cites the approach it is adapted from, with the effect size in plain words:
+safety planning (Stanley et al. 2018, JAMA Psychiatry), the hope box (Bush et al. 2017,
+Psychiatric Services), gratitude (Cregg & Cheavens 2021, small effect), stories of hope and
+recovery (Niederkrotenthaler et al. 2022, Lancet Public Health), asking directly about suicide
+(Dazzi et al. 2014, Psychological Medicine) and reaching out (Liu et al. 2022, JPSP). That is
+evidence for the techniques, not for this app, which has not been trialled.
