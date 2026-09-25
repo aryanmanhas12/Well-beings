@@ -12,6 +12,7 @@ import { HelpDialog, BreathDialog } from "./dialogs";
 import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { TourInvite } from "./TourInvite";
+import { ListenerProvider } from "./ListenerProvider";
 import { Tour } from "./Tour";
 import { WELCOME_TOUR, hasSeenWelcomeTour, markWelcomeTourSeen } from "@/lib/tour";
 
@@ -57,6 +58,7 @@ export function WellbeingsApp() {
   }
 
   return (
+    <ListenerProvider lang={wb.settings.lang} region={wb.region}>
     <div
       style={{
         minHeight: "100dvh",
@@ -98,6 +100,7 @@ export function WellbeingsApp() {
           resumable={wb.resumable}
           onResume={wb.resumeChat}
           onDiscardDraft={wb.discardDraft}
+          region={wb.region}
         />
       )}
       {wb.screen === "chat" && <ChatScreen wb={wb} />}
@@ -152,7 +155,7 @@ export function WellbeingsApp() {
           color: "var(--color-neutral-600)",
         }}
       >
-        <nav aria-label="Wellbeings site" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <nav aria-label="Arun site" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           {SITE_LINKS.map((l) => (
             /* No prefetch={false} here, deliberately. It was tried, on the
                reasoning that prefetching four routes from a working app
@@ -171,5 +174,6 @@ export function WellbeingsApp() {
         </span>
       </footer>
     </div>
+    </ListenerProvider>
   );
 }

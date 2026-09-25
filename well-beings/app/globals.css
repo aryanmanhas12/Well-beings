@@ -23,79 +23,102 @@ html {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Palette: warm, not "tech".
+   Palette: dawn, not "tech".
 
-   What was here before was a blue-black page (#0E131D) with an
+   What was here first was a blue-black page (#0E131D) with an
    indigo-violet accent (#9184d9) and Inter throughout. That trio —
    cold near-black, indigo, Inter — is the visual default of every
    template and every generated landing page of the last two years,
    and it reads as machine-made no matter how good the writing is.
-   For an app that asks someone how they slept and whether they are
-   coping, reading as machine-made is an actual cost, not a taste
-   quibble.
 
-   So: a warm near-black with brown in it rather than blue, a clay
-   accent instead of violet, and a neutral ramp with warmth all the
-   way through so nothing on the page is a dead grey. Nothing here is
-   pure #000 or #fff — real paper and real ink never are, and the
-   small amount of colour in the extremes is most of what makes a
-   screen feel like a room rather than a display.
+   The second palette fixed that with clay on a brown-black, kept
+   deliberately muted. It was warm and it was quiet, and quiet turned
+   out to be the problem: the app is now Arun, the red glow of dawn,
+   and its whole job is to be the bright thing someone opens on a bad
+   day. So the saturation moved into the accents and nowhere else.
+   The ground is still a warm near-black (a hair redder now, #1A0F0D),
+   the text is still cream, and the colour lives in the sun: gold for
+   the thing to press, vermilion for the second voice, aruna red and
+   ember for the sky bands of the dawn scene.
 
-   Every value below was measured, not eyeballed. See the ratios in
-   the comments on the tighter pairs; the rule is 4.5:1 for anything
-   that carries words and 3:1 for borders and focus rings.
+   Nothing here is pure #000 or #fff. Every value below was measured,
+   not eyeballed, and the ratios are in the comments on the tighter
+   pairs; the rule is 4.5:1 for anything that carries words and 3:1
+   for borders and focus rings.
    ───────────────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-  --color-bg: #17120E;
-  --color-surface: #221A14;
-  --color-text: #F3E9DC;
-  --color-accent: #E9A579;
-  /* A second voice, honey rather than another shade of the first. The
-     old --color-accent-2 was #a7a1db against an accent of #9184d9:
-     two names for the same violet, which is not a palette. */
-  --color-accent-2: #D9B26A;
-  --color-divider: color-mix(in srgb, #F3E9DC 16%, transparent);
+  --color-bg: #1A0F0D;
+  /* Cream is 15.54:1 on a card, 16.89:1 on the page. */
+  --color-surface: #27170F;
+  --color-text: #FFF1DE;
+  /* The sun. 13.09:1 on the page and 12.04:1 on a card, and the same
+     pair the other way round (night text on a gold button) is 13.09:1,
+     so it can be a fill or a line without a second token. */
+  --color-accent: #FFD25E;
+  /* Vermilion, the second voice: 5.49:1 on the page, 5.05:1 on a card.
+     It was honey before, which sat too close to the clay to be heard;
+     red against gold is the contrast the dawn scene is built on. */
+  --color-accent-2: #EE5A2C;
+  --color-divider: color-mix(in srgb, #FFF1DE 16%, transparent);
 
-  --color-neutral-100: #FDF8F1;
-  --color-neutral-200: #F2E7D8;
-  --color-neutral-300: #E1D2BE;
-  --color-neutral-400: #C7B6A0;
-  --color-neutral-500: #A8967E;
+  --color-neutral-100: #FFF8EE;
+  --color-neutral-200: #F7E9D6;
+  --color-neutral-300: #E8D3BA;
+  /* 8.92:1 on the page. */
+  --color-neutral-400: #C9AE95;
+  --color-neutral-500: #B19680;
   /* The captions token, and the one that decides whether the small
      print is readable. It has to clear 4.5:1 on --color-surface, not
-     just on --color-bg: nearly every use is inside a .card. #8E7C66
-     passed on the page (4.63:1) and failed on a card (4.26:1), which
-     is the trap the old palette's #75798c fell into too. #9A8770
-     clears both, at 5.38:1 and 4.95:1. */
-  --color-neutral-600: #9A8770;
-  --color-neutral-700: #6E6150;
-  --color-neutral-800: #4A4034;
-  --color-neutral-900: #2E251D;
+     just on --color-bg: nearly every use is inside a .card. An earlier
+     caption grey passed on the page (4.63:1) and failed on a card
+     (4.26:1). #A8907A clears both, at 6.20:1 and 5.70:1. */
+  --color-neutral-600: #A8907A;
+  --color-neutral-700: #7A5E4C;
+  --color-neutral-800: #4E3528;
+  --color-neutral-900: #33201A;
 
-  --color-accent-100: #FEF4EC;
-  --color-accent-200: #FBE0CD;
-  --color-accent-300: #F5C4A3;
-  --color-accent-400: #EDA277;
-  --color-accent-500: #E08A5C;
-  --color-accent-600: #C26C42;
-  --color-accent-700: #985232;
-  --color-accent-800: #6D3B26;
-  --color-accent-900: #43261A;
+  --color-accent-100: #FFF8E1;
+  --color-accent-200: #FFEDB8;
+  /* The link colour: 14.94:1 on the page, 13.74:1 on a card, 11.72:1
+     on an ember section panel. */
+  --color-accent-300: #FFE39A;
+  --color-accent-400: #FFD25E;
+  --color-accent-500: #F9B93B;
+  --color-accent-600: #E09A1E;
+  --color-accent-700: #A8701A;
+  --color-accent-800: #6E4712;
+  --color-accent-900: #3F280C;
 
-  --color-accent-2-100: #FEF7EA;
-  --color-accent-2-200: #FAE9C4;
-  --color-accent-2-300: #F2D598;
-  --color-accent-2-400: #E5BE74;
-  --color-accent-2-500: #D2A458;
-  --color-accent-2-600: #B18542;
-  --color-accent-2-700: #8A6733;
-  --color-accent-2-800: #614927;
-  --color-accent-2-900: #3C2E1B;
+  --color-accent-2-100: #FFEDE6;
+  --color-accent-2-200: #FFD0BE;
+  --color-accent-2-300: #FFA98A;
+  --color-accent-2-400: #F57E55;
+  --color-accent-2-500: #EE5A2C;
+  --color-accent-2-600: #D2461F;
+  --color-accent-2-700: #A8351A;
+  --color-accent-2-800: #6E2214;
+  --color-accent-2-900: #3D140D;
 
-  --color-section: #3A2416;
-  --color-section-glow: #5A3A22;
-  --color-section-ghost: #7A5236;
+  /* The fanlight: the logo's five bands of dawn, outside in. Shapes
+     only, never text: sea is 3.12:1 and rose 3.43:1 on the page, which
+     clears 3:1 for a graphic and nothing more. They stay the same in
+     both themes, because the symbol is the one thing that should not
+     change colour when the page does. */
+  --dawn-sea: #2A8A94;
+  --dawn-rose: #C2304F;
+  --dawn-vermilion: #EE5A2C;
+  --dawn-saffron: #F9A11B;
+  --dawn-sun: #FFD25E;
+  /* The logo's window frame: cream on night, ink on paper, so the window
+     always has an edge. */
+  --mark-frame: #FFF1DE;
+
+  /* Ember, for the statement cards and section panels. Cream on it is
+     13.25:1 and the light caption (#E8D3BA) 10.14:1. */
+  --color-section: #4A1716;
+  --color-section-glow: #6E1F1B;
+  --color-section-ghost: #8E2A1C;
 
   /* ── Type ──────────────────────────────────────────────────
      Two voices, deliberately unalike.
@@ -151,9 +174,9 @@ html {
   /* Shadows carry a little brown too. A neutral-black drop shadow over a
      warm ground is the thing that quietly makes a warm palette look
      muddy — the shade has to belong to the same light. */
-  --shadow-sm: 0 0 0 1px #4A4034;
-  --shadow-md: 0 0 0 1px #6E6150, 0 3px 10px rgba(18, 11, 5, 0.4);
-  --shadow-lg: 0 0 0 1px #A8967E, 0 6px 20px rgba(18, 11, 5, 0.45);
+  --shadow-sm: 0 0 0 1px #4E3528;
+  --shadow-md: 0 0 0 1px #7A5E4C, 0 3px 10px rgba(20, 6, 3, 0.45);
+  --shadow-lg: 0 0 0 1px #B19680, 0 6px 20px rgba(20, 6, 3, 0.5);
 }
 
 *,
@@ -692,7 +715,8 @@ a,
    the theme they specifically turned off.
 
    Every pair below was measured against WCAG AA before being used;
-   the lightest text on paper is 4.65:1, the body text 15.19:1.
+   the lightest text on paper is 5.12:1 (a caption on a section
+   panel), the body text 16.99:1.
    ───────────────────────────────────────────────────────────── */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
@@ -702,52 +726,55 @@ a,
        looks like; a page that is 3% warmer reads as something someone
        chose. --color-surface is a shade lighter than the page so cards
        still lift off it without a border doing the work. */
-    --color-bg: #FAF4E9;
-    --color-surface: #FFFCF6;
-    --color-text: #2A211A;
-    --color-accent: #8C4626;
-    --color-accent-2: #8A6733;
-    --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
+    --color-bg: #FFF6EA;
+    --color-surface: #FFFBF4;
+    --color-text: #231013;
+    --color-accent: #B8391A;
+    --color-accent-2: #6E4A0E;
+    --color-divider: color-mix(in srgb, #231013 14%, transparent);
 
-    --color-neutral-100: #2A211A;
-    --color-neutral-200: #3A2F26;
-    --color-neutral-300: #4C3F34;
-    --color-neutral-400: #5C4E41;
-    --color-neutral-500: #6B5C4D;
-    /* 4.76:1 on the page, 5.08:1 on a card. */
-    --color-neutral-600: #7A6A59;
-    --color-neutral-700: #A2917E;
-    --color-neutral-800: #D6C9B8;
-    --color-neutral-900: #EFE6D8;
+    --color-neutral-100: #231013;
+    --color-neutral-200: #3A221C;
+    --color-neutral-300: #4E342A;
+    --color-neutral-400: #5E4436;
+    --color-neutral-500: #6E5242;
+    /* 5.81:1 on the page, 6.03:1 on a card, 5.12:1 on a section panel. */
+    --color-neutral-600: #7A5A45;
+    --color-neutral-700: #A88B76;
+    --color-neutral-800: #DCC7B2;
+    --color-neutral-900: #F3E4D2;
 
-    --color-accent-100: #4A2312;
-    --color-accent-200: #5E2E19;
-    /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
-    --color-accent-300: #743A20;
-    --color-accent-400: #8C4626;
-    --color-accent-500: #A6552F;
-    --color-accent-600: #C06A3F;
-    --color-accent-700: #E0A87F;
-    --color-accent-800: #F5DCC7;
-    --color-accent-900: #FBEEE2;
+    --color-accent-100: #4A150B;
+    --color-accent-200: #6E1F12;
+    /* The link colour. 7.87:1 on the page, 8.17:1 on a card. The accent
+       itself (#B8391A) is 5.39:1 on the page, and cream on it 5.19:1. */
+    --color-accent-300: #8E2A16;
+    --color-accent-400: #B8391A;
+    --color-accent-500: #D2461F;
+    --color-accent-600: #E0602A;
+    --color-accent-700: #F4AE77;
+    --color-accent-800: #FCE0C8;
+    --color-accent-900: #FEF0E4;
 
-    --color-accent-2-100: #3C2E1B;
-    --color-accent-2-200: #4E3B22;
-    --color-accent-2-300: #634B2B;
-    --color-accent-2-400: #7A5C34;
-    --color-accent-2-500: #96723F;
-    --color-accent-2-600: #B18542;
-    --color-accent-2-700: #D9B87A;
-    --color-accent-2-800: #F0DFBC;
-    --color-accent-2-900: #F9F0DF;
+    --color-accent-2-100: #3F2A08;
+    --color-accent-2-200: #563A0B;
+    --color-accent-2-300: #6E4A0E;
+    --color-accent-2-400: #8A5D12;
+    --color-accent-2-500: #A87318;
+    --color-accent-2-600: #C98A1F;
+    --color-accent-2-700: #F2C46B;
+    --color-accent-2-800: #FBE6B5;
+    --color-accent-2-900: #FEF4DC;
 
-    --color-section: #F6E7D6;
-    --color-section-glow: #EFD8C0;
-    --color-section-ghost: #DCBE9C;
+    --color-section: #FCE6C8;
+    --color-section-glow: #F9CFA0;
+    --color-section-ghost: #F4AE77;
+  --mark-frame: #231013;
+    --mark-frame: #231013;
 
-    --shadow-sm: 0 0 0 1px #E3D6C4;
-    --shadow-md: 0 0 0 1px #D6C9B8, 0 6px 18px rgba(42, 33, 26, 0.08);
-    --shadow-lg: 0 0 0 1px #BFAE97, 0 16px 40px rgba(42, 33, 26, 0.16);
+    --shadow-sm: 0 0 0 1px #EBD9C4;
+    --shadow-md: 0 0 0 1px #DCC7B2, 0 6px 18px rgba(35, 16, 19, 0.08);
+    --shadow-lg: 0 0 0 1px #C4A68E, 0 16px 40px rgba(35, 16, 19, 0.16);
   }
 }
 
@@ -758,52 +785,54 @@ a,
      looks like; a page that is 3% warmer reads as something someone
      chose. --color-surface is a shade lighter than the page so cards
      still lift off it without a border doing the work. */
-  --color-bg: #FAF4E9;
-  --color-surface: #FFFCF6;
-  --color-text: #2A211A;
-  --color-accent: #8C4626;
-  --color-accent-2: #8A6733;
-  --color-divider: color-mix(in srgb, #2A211A 14%, transparent);
+  --color-bg: #FFF6EA;
+  --color-surface: #FFFBF4;
+  --color-text: #231013;
+  --color-accent: #B8391A;
+  --color-accent-2: #6E4A0E;
+  --color-divider: color-mix(in srgb, #231013 14%, transparent);
 
-  --color-neutral-100: #2A211A;
-  --color-neutral-200: #3A2F26;
-  --color-neutral-300: #4C3F34;
-  --color-neutral-400: #5C4E41;
-  --color-neutral-500: #6B5C4D;
-  /* 4.76:1 on the page, 5.08:1 on a card. */
-  --color-neutral-600: #7A6A59;
-  --color-neutral-700: #A2917E;
-  --color-neutral-800: #D6C9B8;
-  --color-neutral-900: #EFE6D8;
+  --color-neutral-100: #231013;
+  --color-neutral-200: #3A221C;
+  --color-neutral-300: #4E342A;
+  --color-neutral-400: #5E4436;
+  --color-neutral-500: #6E5242;
+  /* 5.81:1 on the page, 6.03:1 on a card, 5.12:1 on a section panel. */
+  --color-neutral-600: #7A5A45;
+  --color-neutral-700: #A88B76;
+  --color-neutral-800: #DCC7B2;
+  --color-neutral-900: #F3E4D2;
 
-  --color-accent-100: #4A2312;
-  --color-accent-200: #5E2E19;
-  /* The link colour. 8.10:1 on the page, 8.66:1 on a card. */
-  --color-accent-300: #743A20;
-  --color-accent-400: #8C4626;
-  --color-accent-500: #A6552F;
-  --color-accent-600: #C06A3F;
-  --color-accent-700: #E0A87F;
-  --color-accent-800: #F5DCC7;
-  --color-accent-900: #FBEEE2;
+  --color-accent-100: #4A150B;
+  --color-accent-200: #6E1F12;
+  /* The link colour. 7.87:1 on the page, 8.17:1 on a card. The accent
+       itself (#B8391A) is 5.39:1 on the page, and cream on it 5.19:1. */
+  --color-accent-300: #8E2A16;
+  --color-accent-400: #B8391A;
+  --color-accent-500: #D2461F;
+  --color-accent-600: #E0602A;
+  --color-accent-700: #F4AE77;
+  --color-accent-800: #FCE0C8;
+  --color-accent-900: #FEF0E4;
 
-  --color-accent-2-100: #3C2E1B;
-  --color-accent-2-200: #4E3B22;
-  --color-accent-2-300: #634B2B;
-  --color-accent-2-400: #7A5C34;
-  --color-accent-2-500: #96723F;
-  --color-accent-2-600: #B18542;
-  --color-accent-2-700: #D9B87A;
-  --color-accent-2-800: #F0DFBC;
-  --color-accent-2-900: #F9F0DF;
+  --color-accent-2-100: #3F2A08;
+  --color-accent-2-200: #563A0B;
+  --color-accent-2-300: #6E4A0E;
+  --color-accent-2-400: #8A5D12;
+  --color-accent-2-500: #A87318;
+  --color-accent-2-600: #C98A1F;
+  --color-accent-2-700: #F2C46B;
+  --color-accent-2-800: #FBE6B5;
+  --color-accent-2-900: #FEF4DC;
 
-  --color-section: #F6E7D6;
-  --color-section-glow: #EFD8C0;
-  --color-section-ghost: #DCBE9C;
+  --color-section: #FCE6C8;
+  --color-section-glow: #F9CFA0;
+  --color-section-ghost: #F4AE77;
+  --mark-frame: #231013;
 
-  --shadow-sm: 0 0 0 1px #E3D6C4;
-  --shadow-md: 0 0 0 1px #D6C9B8, 0 3px 10px rgba(42, 33, 26, 0.07);
-  --shadow-lg: 0 0 0 1px #BFAE97, 0 6px 20px rgba(42, 33, 26, 0.1);
+  --shadow-sm: 0 0 0 1px #EBD9C4;
+  --shadow-md: 0 0 0 1px #DCC7B2, 0 3px 10px rgba(35, 16, 19, 0.07);
+  --shadow-lg: 0 0 0 1px #C4A68E, 0 6px 20px rgba(35, 16, 19, 0.1);
 }
 
 /* High contrast: layered on top of whichever theme is active, so it works
@@ -815,16 +844,16 @@ a,
   --color-text: #000000;
   /* High contrast is the one place the warm palette gives way: the whole
      point is maximum separation, so the ground goes to flat white and the
-     accent to the darkest usable clay, 9.09:1 on it. */
-  --color-accent: #7A3311;
+     accent to the darkest usable aruna red, 9.69:1 on it. */
+  --color-accent: #7A2A10;
   --color-divider: #000000;
   --color-neutral-400: #1a1a1a;
   --color-neutral-500: #1a1a1a;
   --color-neutral-600: #1a1a1a;
   --color-neutral-700: #000000;
-  --color-accent-200: #4A1F0C;
-  --color-accent-300: #5F2A11;
-  --color-accent-400: #7A3311;
+  --color-accent-200: #4A150B;
+  --color-accent-300: #5E1F0D;
+  --color-accent-400: #7A2A10;
   --color-section: #ffffff;
   --color-section-glow: #ffffff;
   --shadow-sm: 0 0 0 2px #000;
@@ -835,14 +864,14 @@ a,
   --color-bg: #000000;
   --color-surface: #000000;
   --color-text: #ffffff;
-  /* 14.49:1 on black. */
-  --color-accent: #F7CFAE;
+  /* 15.25:1 on black. */
+  --color-accent: #FFD779;
   --color-divider: #ffffff;
   --color-neutral-400: #f0f0f0;
   --color-neutral-500: #f0f0f0;
   --color-neutral-600: #f0f0f0;
-  --color-accent-200: #FBE0CD;
-  --color-accent-300: #F5C4A3;
+  --color-accent-200: #FFE7A8;
+  --color-accent-300: #FFD779;
   --shadow-sm: 0 0 0 2px #fff;
   --shadow-md: 0 0 0 2px #fff;
   --shadow-lg: 0 0 0 2px #fff;
@@ -1385,6 +1414,9 @@ header.nav,
   gap: 10px 24px;
 }
 .site-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-display);
   font-weight: var(--font-display-weight);
   letter-spacing: var(--font-display-tracking);
@@ -1831,4 +1863,342 @@ header.nav,
   .app-measure-app {
     padding-block: 30px 70px;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   The front door, voice input and the listener.
+
+   The gold button is the one filled button in the app. Everything else
+   stays outlined; the thing to press on the front door should be the
+   brightest object on the screen after the sun itself. Night text on
+   gold is 13.09:1.
+   ───────────────────────────────────────────────────────────── */
+.btn-sun {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #1A0F0D;
+  font-weight: 700;
+}
+.btn-sun:hover {
+  background: var(--color-accent-300);
+  color: #1A0F0D;
+}
+:root[data-theme="light"] .btn-sun,
+:root[data-contrast="high"] .btn-sun {
+  color: #FFF6EA;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .btn-sun {
+    /* On paper the accent is aruna red; cream on it is 5.19:1. */
+    color: #FFF6EA;
+  }
+}
+
+.linklike {
+  all: unset;
+  cursor: pointer;
+  color: var(--color-accent-300);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.linklike:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.light-door {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 20px 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.light-door-compact {
+  max-width: 620px;
+  padding: 0 0 28px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.light-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.light-frame {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+.light-date {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+}
+.light-hello {
+  margin: 0;
+  font-size: clamp(30px, 6vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+.light-door-compact .light-hello {
+  font-size: 24px;
+}
+.light-line {
+  margin: 0 auto;
+  max-width: 34ch;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-neutral-300);
+  min-height: 1.5em;
+  text-wrap: pretty;
+}
+.light-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  margin-top: 6px;
+}
+.light-prompt {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.light-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.light-input {
+  flex: 1;
+  min-height: 56px;
+  resize: vertical;
+  font: inherit;
+  font-size: 16px;
+}
+.light-keep {
+  min-height: 48px;
+  font-size: 16px;
+}
+.light-status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 14px;
+  color: var(--color-accent-300);
+}
+.light-week {
+  text-align: left;
+  font-size: 14px;
+}
+.light-week summary {
+  cursor: pointer;
+  color: var(--color-neutral-400);
+}
+.light-week ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.light-week li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--color-divider);
+}
+.light-remove {
+  min-width: 36px;
+}
+.light-sit {
+  align-self: center;
+  border-color: var(--color-neutral-700);
+  min-height: 48px;
+  padding: 10px 20px;
+  font-size: 15px;
+}
+.light-private {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-neutral-600);
+}
+.light-crisis {
+  text-align: left;
+  padding: 16px;
+  border: 1px solid var(--color-accent-2);
+}
+.light-crisis-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.wel-more {
+  margin: 28px auto 0;
+  padding: 0 20px;
+  max-width: 1060px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+}
+
+.voice {
+  display: contents;
+}
+.voice-btn {
+  flex: none;
+  border-color: var(--color-divider);
+  border-radius: 50%;
+  padding: 0;
+}
+.voice-btn-live {
+  background: var(--color-accent-2);
+  border-color: var(--color-accent-2);
+  color: #1A0F0D;
+  animation: voicePulse 1.4s var(--ease-out) infinite;
+}
+@keyframes voicePulse {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent-2) 30%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice-btn-live {
+    animation: none;
+  }
+}
+.voice-interim,
+.voice-note {
+  flex-basis: 100%;
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-neutral-500);
+}
+.voice-ask {
+  flex-basis: 100%;
+  font-size: 13.5px;
+  padding: 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  text-align: left;
+}
+.voice-ask p {
+  margin: 0 0 10px;
+}
+.voice-ask-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.light-input-row {
+  flex-wrap: wrap;
+}
+.light-input-row .light-input {
+  flex: 1 1 200px;
+}
+
+.listener-backdrop {
+  position: fixed;
+  inset: 0;
+  /* Above the tour (200) and its invitation (150): someone who opens the
+     listener mid-tour must be able to reach the Send button. */
+  z-index: 250;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: color-mix(in srgb, #0D0706 70%, transparent);
+}
+.listener {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border-inline: 1px solid var(--color-divider);
+}
+.listener-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.listener-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+.listener-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.listener-turn {
+  margin: 0;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.listener-listener {
+  align-self: flex-start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+}
+.listener-user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--color-accent) 16%, var(--color-bg));
+}
+.listener-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-neutral-500);
+}
+.listener-card {
+  padding: 14px;
+  font-size: 14.5px;
+}
+.listener-compose {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 12px 18px;
+  border-top: 1px solid var(--color-divider);
+}
+.listener-compose textarea {
+  flex: 1 1 200px;
+  font: inherit;
+  font-size: 16px;
+  resize: none;
+}
+.listener-foot {
+  padding: 0 18px calc(14px + env(safe-area-inset-bottom));
+  font-size: 12.5px;
+  color: var(--color-neutral-500);
+}
+.listener-foot p {
+  margin: 0;
+}
+.listener-ask {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--color-neutral-400);
 }

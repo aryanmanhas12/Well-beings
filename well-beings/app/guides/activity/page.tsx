@@ -100,7 +100,7 @@ export default function ActivityGuide() {
             <Link href="/guides/habits/">Habits</Link>: how to make a session survive a bad week.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link>: see where movement sits against everything
+            <Link href="/">The Arun check</Link>: see where movement sits against everything
             else going on.
           </li>
         </ul>

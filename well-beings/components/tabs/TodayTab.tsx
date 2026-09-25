@@ -1,5 +1,6 @@
 import { CheckIcon } from "../icons";
 import { ProgressCard } from "../ProgressCard";
+import { DailyLight } from "../DailyLight";
 import { buildSchedule } from "@/lib/scoring";
 import { Wellbeings } from "@/hooks/useWellbeings";
 
@@ -32,6 +33,8 @@ export function TodayTab({ wb }: { wb: Wellbeings }) {
     (p.goal || "consistency");
 
   return (
+    <>
+    <DailyLight lang={wb.settings.lang} region={wb.region} compact />
     <div data-screen-label="Today" style={{ display: "flex", flexWrap: "wrap", gap: 26, alignItems: "flex-start" }}>
       <div style={{ flex: "1 1 440px", minWidth: 300 }}>
         <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 500, fontSize: 24, margin: "0 0 2px" }}>
@@ -167,5 +170,6 @@ export function TodayTab({ wb }: { wb: Wellbeings }) {
         </div>
       </div>
     </div>
+    </>
   );
 }

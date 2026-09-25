@@ -1,6 +1,9 @@
-# Wellbeings
+# Arun
 
-A private, browser-only wellbeing check for sleep, movement, food and drink, stress, recovery,
+Formerly Wellbeings. A small daily lift first: a new line of hope each day
+(edit `well-beings/lib/daily-lines.ts` weekly), one good thing noticed, and a
+quiet listener with an optional AI mode (`listener-relay/`). Underneath, a
+private, browser-only wellbeing check for sleep, movement, food and drink, stress, recovery,
 mood, social connection, work or study load, screen use, routine and environment. It turns what
 you report into two or three realistic changes, and it does not diagnose anything.
 

@@ -1,17 +1,15 @@
 {
-  "name": "Wellbeings: your everyday wellbeing check",
-  "short_name": "Wellbeings",
-  "description": "A private wellbeing check covering sleep, movement, food, stress, connection and routine. Runs entirely in your browser. Not a diagnosis.",
+  "name": "Arun: a little light, every day",
+  "short_name": "Arun",
+  "description": "A new line of hope each day, one good thing noticed, and somewhere quiet to be heard. Runs in your browser. Not a diagnosis.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#17120E",
-  "theme_color": "#17120E",
+  "background_color": "#1A0F0D",
+  "theme_color": "#1A0F0D",
   "categories": [
     "health",
-    "medical",
-    "lifestyle",
-    "productivity"
+    "lifestyle"
   ],
   "icons": [
     {

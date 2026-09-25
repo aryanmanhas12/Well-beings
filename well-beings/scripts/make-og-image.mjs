@@ -16,55 +16,64 @@
  * data, because this runs on a developer's machine long before anyone answers
  * anything.
  *
- * Colours are pasted from the dark-theme tokens in app/globals.css. If those
- * change, change them here too and re-run; there is no way to import CSS
- * custom properties into a standalone renderer.
+ * The symbol comes from lib/mark-geometry.mjs; the text colours are pasted
+ * from the dark-theme tokens in app/globals.css. If those change, change them
+ * here too and re-run: there is no way to import CSS custom properties into a
+ * standalone renderer.
  */
 import { chromium } from "playwright-core";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { markSvgBody } from "../lib/mark-geometry.mjs";
 
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), "../public/og.png");
 const EXECUTABLE = process.env.CHROMIUM_PATH || "/opt/pw-browsers/chromium";
 
-/* The card used to carry the same orbiting rings and radial glow the welcome
-   screen had. Both are gone from the product for the same reason: a glowing
-   orb is decoration that says nothing. What replaces it is the mark itself —
-   four bars, descending, the first in clay — which is the actual shape of
-   what the app produces and now the shape of its icon. */
+/* The card carries the symbol at poster scale, from the same geometry as the
+   icon, so a shared link and the installed app look like the same thing.
+   The copy promises only what is true with every setting at its default:
+   voice typing and the optional AI listener can send words off the device
+   when someone turns them on, so "nothing is sent anywhere" is no longer a
+   claim this card is allowed to make. */
+const GROUND = "#1A0F0D";
+
+/* Karla comes from Google Fonts by default. Behind a proxy the headless
+   browser cannot always reach it, and a card rendered in the fallback face
+   gets committed without anyone noticing, so KARLA_TTF can point at a local
+   copy of the variable font instead; it is embedded as a data URI because
+   an about:blank page may not load file:// URLs. */
+const fontFace = process.env.KARLA_TTF
+  ? `<style>@font-face{font-family:Karla;font-weight:400 800;src:url(data:font/${process.env.KARLA_TTF.endsWith(".woff2") ? "woff2" : "ttf"};base64,${readFileSync(process.env.KARLA_TTF).toString("base64")})}</style>`
+  : `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700&display=swap" rel="stylesheet">`;
+
 const html = `<!doctype html><meta charset="utf-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600&display=swap" rel="stylesheet">
+${fontFace}
 <style>
   *{box-sizing:border-box;margin:0}
-  body{width:1200px;height:630px;background:#17120E;color:#F3E9DC;
+  body{width:1200px;height:630px;background:${GROUND};color:#FFF1DE;
        font-family:Karla,system-ui,sans-serif;display:flex;
-       padding:72px 80px;gap:64px;align-items:center;overflow:hidden}
+       padding:72px 72px 72px 80px;gap:48px;align-items:center;overflow:hidden}
   .copy{flex:1;min-width:0}
-  .mark{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
-  h1{font-size:66px;line-height:1.05;font-weight:600;letter-spacing:-.025em;max-width:660px}
-  p{font-size:24px;line-height:1.45;color:#C7B6A0;max-width:620px;margin-top:20px}
-  .foot{display:flex;gap:12px;margin-top:38px;font-size:18px;color:#A8967E}
-  .pill{border:1px solid rgba(243,233,220,.20);border-radius:6px;padding:6px 16px}
-  /* The mark, at poster scale. Same geometry as scripts/make-icons.mjs. */
-  .bars{flex:none;width:250px;display:flex;flex-direction:column;gap:22px}
-  .bars i{display:block;height:34px;border-radius:9px;background:#8C7B66}
-  .bars i:nth-child(1){width:100%;background:#E9A579}
-  .bars i:nth-child(2){width:74%}
-  .bars i:nth-child(3){width:50%}
-  .bars i:nth-child(4){width:29%}
+  .mark{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-bottom:28px;color:#FFD25E}
+  h1{font-size:70px;line-height:1.02;font-weight:700;letter-spacing:-.03em;max-width:600px}
+  p{font-size:24px;line-height:1.45;color:#C9AE95;max-width:560px;margin-top:22px}
+  .foot{display:flex;gap:12px;margin-top:36px;font-size:18px;color:#B19680}
+  .pill{border:1px solid rgba(255,241,222,.22);border-radius:6px;padding:6px 16px;white-space:nowrap}
+  svg{flex:none;display:block}
 </style>
 <div class="copy">
-  <div class="mark">Wellbeings</div>
-  <h1>Understand your everyday wellbeing</h1>
-  <p>Sleep, movement, food, stress, connection and routine. Five minutes, then two or three changes worth actually making.</p>
+  <div class="mark">arun</div>
+  <h1>A little light, every day.</h1>
+  <p>A new line of hope each morning, one good thing noticed, and somewhere quiet to be heard.</p>
   <div class="foot">
     <span class="pill">Runs in your browser</span>
-    <span class="pill">Nothing is sent anywhere</span>
+    <span class="pill">No account</span>
     <span class="pill">Not a diagnosis</span>
   </div>
 </div>
-<div class="bars"><i></i><i></i><i></i><i></i></div>`;
+<svg width="440" height="474" viewBox="8 8 104 112" aria-hidden="true">${markSvgBody({ detail: "full" })}</svg>`;
 
 const browser = await chromium.launch({ executablePath: EXECUTABLE, args: ["--no-sandbox"] });
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

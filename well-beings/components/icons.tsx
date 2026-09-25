@@ -5,30 +5,6 @@ interface IconProps {
   style?: CSSProperties;
 }
 
-/**
- * The wordmark's glyph, and the same mark as the app icon: four bars,
- * descending, the first one picked out.
- *
- * It used to be a heart with an ECG trace through it — the stock icon of
- * every health app, and a medical signifier on a product that is explicitly
- * not medical. This is the shape of what the app actually produces: your
- * areas, sorted, with one named as the place to start.
- *
- * Drawn with currentColor for the three quiet bars so it inherits whatever
- * the header text is, and the accent token for the first one, so the mark
- * stays legible in both themes and in high contrast without a second asset.
- */
-export function LogoIcon({ size = 18, style }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style} aria-hidden="true">
-      <rect x="3" y="4" width="18" height="3.6" rx="1" fill="var(--color-accent)" />
-      <rect x="3" y="9.4" width="13.3" height="3.6" rx="1" fill="currentColor" opacity="0.75" />
-      <rect x="3" y="14.8" width="9" height="3.6" rx="1" fill="currentColor" opacity="0.55" />
-      <rect x="3" y="20.2" width="5.2" height="3.6" rx="1" fill="currentColor" opacity="0.4" />
-    </svg>
-  );
-}
-
 export function ShieldIcon({ size = 13, style }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" style={style}>

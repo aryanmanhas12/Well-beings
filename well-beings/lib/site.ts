@@ -25,11 +25,17 @@ export const SITE_ORIGIN = "https://aryanmanhas12.github.io";
 export const SITE_PATH = "/Well-beings";
 export const SITE_URL = `${SITE_ORIGIN}${SITE_PATH}`;
 
-export const SITE_NAME = "Wellbeings";
-export const SITE_TAGLINE = "Understand your everyday wellbeing, then change one thing that sticks";
+/* The product was called Wellbeings until September 2026. It is Arun now
+   (अरुण, the red glow of dawn), and the rename is display-only on purpose:
+   the deploy path, the repository, the localStorage key `wellbeings-v1`
+   and the `ref=wellbeings` handoff parameter all keep the old spelling,
+   because changing any of them would either lose people's saved data or
+   break the wire format Ronak reads. See lib/bridge.ts. */
+export const SITE_NAME = "Arun";
+export const SITE_TAGLINE = "A little light, every day";
 
 /**
- * The companion product. Wellbeings is the broad lifestyle picture; Ronak is
+ * The companion product. Arun is the broad lifestyle picture; Ronak is
  * the dedicated mental-health screening experience. They are separate tools on
  * purpose and share no data. See lib/bridge.ts for the whole contract.
  *
@@ -70,9 +76,9 @@ export const PAGES: SitePage[] = [
   {
     path: "/",
     nav: "Home",
-    title: "Wellbeings · understand your everyday wellbeing",
+    title: "Arun · a little light, every day",
     description:
-      "A private, five-minute wellbeing check covering sleep, movement, food, stress, connection and routine. It runs entirely in your browser and turns what you report into two or three changes worth actually making.",
+      "A small daily lift: a new line of hope each day, one good thing noticed, somewhere quiet to be heard, and a short check on sleep, stress and routine when you want one. It runs in your browser.",
     changeFrequency: "monthly",
     priority: 1,
   },
@@ -148,7 +154,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/resources/",
     nav: "Support",
-    title: "Support lines and directories · Wellbeings",
+    title: "Support lines and directories · Arun",
     description:
       "Free, confidential helplines and directories for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when a conversation with a professional is worth having.",
     changeFrequency: "monthly",
@@ -157,9 +163,9 @@ export const PAGES: SitePage[] = [
   {
     path: "/about/",
     nav: "About",
-    title: "About Wellbeings · what it is and what it is not",
+    title: "About Arun · what it is and what it is not",
     description:
-      "What Wellbeings measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Ronak.",
+      "What Arun measures, how the wellbeing snapshot is put together, what its limits are, and how it differs from the dedicated mental-health screening in Ronak.",
     changeFrequency: "monthly",
     priority: 0.6,
   },
@@ -181,18 +187,18 @@ export const PAGES: SitePage[] = [
     path: "/terms/",
     nav: "Terms",
     hiddenInNav: true,
-    title: "Terms of use · Wellbeings",
+    title: "Terms of use · Arun",
     description:
-      "Wellbeings is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a diagnosis, and not a substitute for professional advice.",
+      "Arun is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a diagnosis, and not a substitute for professional advice.",
     changeFrequency: "yearly",
     priority: 0.4,
   },
   {
     path: "/privacy/",
     nav: "Privacy",
-    title: "Privacy · where your Wellbeings answers live",
+    title: "Privacy · where your Arun answers live",
     description:
-      "Wellbeings has no account, no server and no analytics. Everything you enter stays in your own browser storage. This page says exactly what is stored, where, and how to delete it.",
+      "Arun has no account, no server and no analytics. Everything you enter stays in your own browser storage. This page says exactly what is stored, where, and how to delete it.",
     changeFrequency: "monthly",
     priority: 0.6,
   },

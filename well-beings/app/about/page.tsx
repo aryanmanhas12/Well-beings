@@ -14,7 +14,7 @@ export const metadata: Metadata = metadataFor(PATH);
    what a person actually sees on the page. */
 const FAQ = [
   {
-    q: "Does Wellbeings diagnose anything?",
+    q: "Does Arun diagnose anything?",
     a: "No. It has no diagnostic capability and makes no diagnostic claim. It reflects back what you reported, says which patterns are worth attention, and names the point at which a qualified professional is the better next step. Nothing it shows you is a medical finding.",
   },
   {
@@ -23,11 +23,15 @@ const FAQ = [
   },
   {
     q: "Where do my answers go?",
-    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit and nothing for anyone else to read. Clearing the data deletes it from that browser permanently.",
+    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit and nothing for anyone else to read. Clearing the data deletes it from that browser permanently. The only exceptions are ones you switch on yourself: voice typing on a browser that cannot do it on the phone, and the optional AI listener. The privacy page explains both.",
   },
   {
-    q: "How is Wellbeings different from Ronak?",
-    a: "Wellbeings looks at the breadth of daily life: sleep, movement, food and drink, stress, recovery, connection, screen use and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps, they share no data, and each links to the other when the other is the more useful one.",
+    q: "Why is it called Arun?",
+    a: "Arun (अरुण) is the red glow of dawn, the light just before the sun clears the horizon. The app was called Wellbeings until September 2026. It became Arun when it became a daily lift first and a check-in second: a line of hope each day, one good thing noticed, and somewhere quiet to be heard.",
+  },
+  {
+    q: "How is Arun different from Ronak?",
+    a: "Arun looks at the breadth of daily life: sleep, movement, food and drink, stress, recovery, connection, screen use and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps, they share no data, and each links to the other when the other is the more useful one.",
   },
   {
     q: "Is the advice evidence-based?",
@@ -40,9 +44,9 @@ export default function AboutPage() {
     <PageShell path={PATH}>
       <JsonLd path={PATH} faq={FAQ} />
       <div className="prose">
-        <h1>About Wellbeings</h1>
+        <h1>About Arun</h1>
         <p className="lede">
-          Wellbeings helps you understand your everyday wellbeing and turn that understanding into
+          Arun helps you understand your everyday wellbeing and turn that understanding into
           two or three changes you might actually keep. It runs entirely in your browser, it does not
           diagnose anything, and it is honest about where it stops.
         </p>
@@ -95,11 +99,11 @@ export default function AboutPage() {
           <Link href="/resources/">support page</Link> lists free lines you can reach today.
         </p>
 
-        <h2>Wellbeings and {COMPANION_NAME}</h2>
+        <h2>Arun and {COMPANION_NAME}</h2>
         <p>
-          These are two tools with two jobs. Wellbeings is the broad lifestyle picture and the daily
+          These are two tools with two jobs. Arun is the broad lifestyle picture and the daily
           system built from it. {COMPANION_NAME} is the dedicated mental-health screening experience.
-          Wellbeings deliberately does not try to be the second one: if what you describe looks like
+          Arun deliberately does not try to be the second one: if what you describe looks like
           it needs a proper mental-health screen, it says so and points you there rather than
           pretending to do it itself.
         </p>
@@ -123,7 +127,7 @@ export default function AboutPage() {
 
         <h2>Who made it</h2>
         <p>
-          Wellbeings is built by Aryan Manhas as part of the NeuroBioPsych project. It is not a
+          Arun is built by Aryan Manhas as part of the NeuroBioPsych project. It is not a
           clinical product, it has no institutional backing, and it carries no professional
           accreditation. Saying so plainly seems more useful than implying otherwise. More about the
           project is on the <a href="../me/">author page</a>.

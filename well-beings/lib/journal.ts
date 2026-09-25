@@ -1,5 +1,5 @@
 /**
- * The journal — Wellbeings' core, and what separates it from the screener.
+ * The journal — Arun's core, and what separates it from the screener.
  *
  * This is expressive writing, and the research is specific enough to design
  * against rather than guess at:
@@ -210,6 +210,13 @@ const CONCERN_PATTERNS = [
   /\bhurt(ing)? myself\b/i,
   /\bself[- ]harm/i,
   /\bno reason to (live|go on)\b/i,
+  /\b(point|reason) (in|of) (living|life|being alive)\b/i,
+  /\bdon'?t want to (live|be alive|be here anymore|wake up)\b/i,
+  /\b(overdose|take all (my|the) pills)\b/i,
+  /* Hindi and Hinglish, because Hindi is the app's second language and
+     people in distress write the way they talk. */
+  /\b(khudkushi|aatmahatya|marna chahta|marna chahti|mar jaana|jeena nahi|jeene ka mann nahi)\b/i,
+  /(आत्महत्या|खुदकुशी|मरना चाहता|मरना चाहती|जीना नहीं)/,
 ];
 
 export function mentionsCrisis(text: string): boolean {

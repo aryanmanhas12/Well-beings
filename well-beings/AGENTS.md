@@ -20,8 +20,11 @@ interface, and this app has already been through it once. Warm near-blacks,
 creams, clays, honeys and muted earth tones instead. No pure `#000` and no
 pure `#ffffff` anywhere — a hair of warmth in the extremes is most of what
 separates a page that feels like a room from one that feels like a display.
-Saturation stays low: warm *and* muted is earthy, warm alone is a warning
-label.
+Grounds and text stay warm and muted. Since the Arun rename (September
+2026) the owner asked for bright, contrasting colour, so saturation lives in
+the accents and the symbol only: sun gold for the thing to press, vermilion
+for the second voice, and the logo's sky blue, sea, rose and dawn orange.
+Never on text grounds, and every pair is still measured.
 
 **Type.** Inter is banned, and so is everything that arrives in the same
 breath as Inter — DM Sans, Plus Jakarta Sans, Poppins, Outfit, Manrope. Pick

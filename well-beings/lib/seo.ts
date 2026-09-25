@@ -22,7 +22,7 @@ export const OG_IMAGE = {
   url: `${SITE_URL}/og.png`,
   width: 1200,
   height: 630,
-  alt: "Wellbeings: a private wellbeing check that runs entirely in your browser",
+  alt: "Arun: the sun rising out of a window over blue sky and mountains, with the words A little light, every day",
 };
 
 export function metadataFor(path: string): Metadata {

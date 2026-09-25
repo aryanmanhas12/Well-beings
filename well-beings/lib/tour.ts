@@ -109,7 +109,7 @@ export const APP_TOUR: TourStep[] = [
     tab: "help",
     selector: '[data-tour="companion-screener"]',
     title: "This app has a companion",
-    body: `Wellbeings is the day-to-day journal. If something looks more serious, ${COMPANION_NAME} next to it runs the fuller clinical picture and can point you to real help.`,
+    body: `Arun is the everyday lift. If something looks more serious, ${COMPANION_NAME} next to it runs the fuller clinical picture and can point you to real help.`,
   },
   {
     id: "help-now",

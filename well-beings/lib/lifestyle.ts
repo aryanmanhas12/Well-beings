@@ -2,14 +2,14 @@ import { ChoiceOption, Profile, Question } from "./types";
 import { COMPANION_NAME } from "./site";
 
 /**
- * The lifestyle half of Wellbeings, and the thing that makes it a different
+ * The lifestyle half of Arun, and the thing that makes it a different
  * product from Ronak rather than a smaller copy of it.
  *
  * Before this file existed, the check-in was built almost entirely out of
  * clinical mental-health instruments — PHQ-9, GAD-7, AUDIT-C — plus sleep.
  * That is a mental-health screen, which is precisely the job the companion
  * app already does properly and in six languages. What was missing was
- * everything Wellbeings is actually for: whether you move, whether you eat at
+ * everything Arun is actually for: whether you move, whether you eat at
  * something like regular times, whether you see anyone, whether any part of
  * the week is genuinely yours, whether the room you sleep in works, and
  * whether any of it feels like it is for something.
@@ -308,7 +308,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
       },
       medical:
         band(p.meals) >= 3
-          ? "Wellbeings does not assess eating disorders and is the wrong tool for it. If food, eating or your body takes up a lot of your thinking, or eating is followed by guilt or compensating, please speak to a GP or a dedicated service."
+          ? "Arun does not assess eating disorders and is the wrong tool for it. If food, eating or your body takes up a lot of your thinking, or eating is followed by guilt or compensating, please speak to a GP or a dedicated service."
           : undefined,
     });
   }
@@ -443,7 +443,7 @@ export function buildSnapshot(p: Profile): DomainRead[] {
     });
   }
 
-  /* Mood and anxiety appear as a SIGNAL only, never as a rating. Wellbeings
+  /* Mood and anxiety appear as a SIGNAL only, never as a rating. Arun
      does not screen for either — the companion app does — and the read here
      is deliberately shallow and points somewhere better. */
   if (p.moodWatch || p.anxWatch || p.moodFlag || p.anxFlag) {
@@ -454,14 +454,14 @@ export function buildSnapshot(p: Profile): DomainRead[] {
       observation:
         "The two mood questions and the two worry questions flagged rather than passing quietly.",
       interpretation:
-        "Wellbeings asks two of each as a signal, not as a screen, and two items cannot tell you anything about whether something is going on. What it can do is say that this is worth looking at properly, which is a different tool's job.",
+        "Arun asks two of each as a signal, not as a screen, and two items cannot tell you anything about whether something is going on. What it can do is say that this is worth looking at properly, which is a different tool's job.",
       actions: {
         now: "Nothing on this page is the right response to this one. Read the next line instead.",
         week: "If it has been most days for a couple of weeks, put a GP appointment in the diary. That is the step that changes the odds.",
         longer: "Keep the lifestyle changes going alongside. They help, and they are not a substitute.",
       },
       medical:
-        `Some of what you have described may be worth exploring more specifically than a lifestyle check can. ${COMPANION_NAME} is the companion tool built for exactly that, and speaking with a GP or a counsellor is the step this app cannot replace. Wellbeings does not diagnose anything and nothing here is a diagnosis.`,
+        `Some of what you have described may be worth exploring more specifically than a lifestyle check can. ${COMPANION_NAME} is the companion tool built for exactly that, and speaking with a GP or a counsellor is the step this app cannot replace. Arun does not diagnose anything and nothing here is a diagnosis.`,
     });
   }
 

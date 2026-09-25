@@ -1,0 +1,22 @@
+name = "arun-listener-relay"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Comma-separated. Only these origins may call the relay.
+ALLOWED_ORIGINS = "https://aryanmanhas12.github.io"
+# MODEL = "claude-opus-5"
+
+# The API key is a secret, never a var:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+
+# Strongly recommended before sharing the app widely: a per-IP limit so one
+# visitor cannot run up the bill. Check the current syntax for the Workers
+# rate limiting binding in Cloudflare's docs before enabling.
+# [[ratelimits]]
+# name = "LISTENER_LIMITER"
+# namespace_id = "1001"
+#   [ratelimits.simple]
+#   limit = 20
+#   period = 60

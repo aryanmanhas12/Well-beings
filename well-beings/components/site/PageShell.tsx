@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArunMark } from "@/components/ArunMark";
 import { NAV_PAGES, PAGE_BY_PATH, SITE_NAME, breadcrumbsFor } from "@/lib/site";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { SiteFooter } from "./SiteFooter";
@@ -39,6 +40,7 @@ export function PageShell({
       <header className="site-head">
         <div className="site-head-inner">
           <Link href="/" className="site-wordmark">
+            <ArunMark width={40} />
             {SITE_NAME}
           </Link>
           <nav aria-label="Main">

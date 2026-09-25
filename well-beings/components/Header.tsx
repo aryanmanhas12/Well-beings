@@ -1,4 +1,5 @@
-import { GearIcon, LogoIcon, ShieldIcon } from "./icons";
+import { GearIcon, ShieldIcon } from "./icons";
+import { ArunMark } from "./ArunMark";
 import { Lang, LANGS, Strings } from "@/lib/i18n";
 
 export function Header({
@@ -30,8 +31,8 @@ export function Header({
         zIndex: 40,
       }}
     >
-      <div className="nav-brand" style={{ display: "flex", alignItems: "center", gap: 9 }}>
-        <LogoIcon style={{ color: "var(--color-accent)" }} />
+      <div className="nav-brand" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <ArunMark width={44} />
         <span
           style={{
             fontFamily: "var(--font-display)",
@@ -41,7 +42,7 @@ export function Header({
             whiteSpace: "nowrap",
           }}
         >
-          Wellbeings
+          Arun
         </span>
       </div>
       {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped

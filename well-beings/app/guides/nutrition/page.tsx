@@ -62,7 +62,7 @@ export default function NutritionGuide() {
           evening, those two efforts are pulling against each other.
         </p>
         <p>
-          The <Link href="/">Wellbeings check</Link> asks one question about drinking, and only asks
+          The <Link href="/">Arun check</Link> asks one question about drinking, and only asks
           more if the first answer is not &quot;never&quot;. It is there because drinking shows up in
           sleep and mood, not to put a label on anyone. It does not diagnose anything.
         </p>
@@ -83,7 +83,7 @@ export default function NutritionGuide() {
         <div className="callout">
           <h3>Where this guide stops</h3>
           <p>
-            Wellbeings does not assess eating disorders and this page is not written for that
+            Arun does not assess eating disorders and this page is not written for that
             purpose. If eating, food or your body takes up a lot of your thinking, if you are
             skipping meals deliberately, or if eating is followed by guilt or compensating
             behaviour, please talk to a GP or a dedicated service rather than a wellbeing tool. That

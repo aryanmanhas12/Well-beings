@@ -86,7 +86,7 @@ export function StatementIntro({
         {s.heroKicker}
       </div>
 
-      <h1
+      <h2
         style={{
           fontFamily: "var(--font-display)",
           letterSpacing: "var(--font-display-tracking)",
@@ -97,7 +97,7 @@ export function StatementIntro({
         }}
       >
         {s.heroPrompt}
-      </h1>
+      </h2>
 
       {/* key= restarts the enter animation and the timer bar on every card. */}
       <div

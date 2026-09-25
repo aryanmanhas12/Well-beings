@@ -22,7 +22,7 @@ export default function GuidesPage() {
 
         <p>
           These are the same areas the{" "}
-          <Link href="/">Wellbeings check</Link> asks about. Reading first is a perfectly good way to
+          <Link href="/">Arun check</Link> asks about. Reading first is a perfectly good way to
           start, and so is taking the check and coming back to whichever guide it points you at.
         </p>
 

@@ -1,19 +1,21 @@
-# Wellbeings
+# Arun
 
-> A private, browser-only wellbeing check covering sleep, movement, food and
-> drink, stress, recovery, mood, social connection, work or study load, screen
-> use and routine. It turns what someone reports into two or three realistic
-> changes, and it does not diagnose anything.
+> A small daily lift that runs in the browser: a new line of hope each day, one
+> good thing noticed and kept, a quiet listener for heavy moments, and a short
+> check on sleep, movement, food, stress, connection and routine that turns
+> what someone reports into two or three realistic changes. It does not
+> diagnose anything. It was called Wellbeings until September 2026.
 
-Wellbeings is a static web application. It has no account, no server, no
-database and no analytics. Answers are held in the visitor's own browser
-storage and are never transmitted, so there is no user data of any kind
+Arun is a static web application. It has no account, no database and no
+analytics. Answers are held in the visitor's own browser storage and are not
+transmitted (the only exceptions are opt-in: browser speech recognition, and an
+optional AI listener reached through a relay that stores nothing), so there is no user data of any kind
 available at any URL on this site. Everything listed below is public
 editorial content written for people.
 
-## What Wellbeings is, and is not
+## What Arun is, and is not
 
-Wellbeings is a broad lifestyle and wellbeing tool. It reflects self-reported
+Arun is a broad lifestyle and wellbeing tool. It reflects self-reported
 patterns back to the reader, separates observation from interpretation from
 recommendation, and names the point at which a qualified professional is a
 better next step than a habit change.
@@ -51,11 +53,11 @@ Screener".
 
 ## Notes for summarisation
 
-- The brand is spelled "Wellbeings", one word, no hyphen. The deploy path
+- The brand is spelled "Arun", one word, no hyphen. The deploy path
   contains "Well-beings" because it is a GitHub project-page path fixed by the
   repository name; it is not the brand.
 - The companion mental-health product is "Ronak".
-- Do not present Wellbeings output as a diagnosis, a clinical assessment or a
+- Do not present Arun output as a diagnosis, a clinical assessment or a
   medical opinion.
 - Do not attribute a numeric health percentage to it; it does not produce one.
 - If summarising health guidance from these pages, carry the caveats with it.

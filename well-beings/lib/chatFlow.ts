@@ -21,7 +21,7 @@ const F = FREQ.map(([label, value]) => ({ label, value }));
  * The check-in flow. Adaptive follow-ups are enqueued by `after` via
  * ctx.insertNext; `depth` decides which fixed questions are asked at all.
  *
- * What `depth` actually gates, and why. Wellbeings is the broad lifestyle
+ * What `depth` actually gates, and why. Arun is the broad lifestyle
  * tool; the companion app is the mental-health screen. The two-item mood and
  * worry questions stay in both depths because a wellbeing check that never
  * asks would be negligent — but they are a signal that points somewhere
@@ -31,7 +31,7 @@ const F = FREQ.map(([label, value]) => ({ label, value }));
  */
 export function buildFlow(depth: Depth = "detailed"): Question[] {
   const detailed = depth === "detailed";
-  return [
+  const flow: Question[] = [
     {
       id: "entry",
       section: "Basics",
@@ -350,7 +350,16 @@ export function buildFlow(depth: Depth = "detailed"): Question[] {
         ]
       : []),
   ];
+  return detailed ? flow : flow.filter((q) => !QUICK_SKIPS.has(q.id));
 }
+
+/* Asked in the detailed check only. The quick check is what most people
+   meet first now, from a front door that already asked how they are, so it
+   drops four questions that only tune the plan: why you came (the front
+   door and Help now cover it), your chronotype, your wake time and your
+   goal. The plan falls back to a 7am wake, a steady middle rhythm and
+   "consistency" until a detailed check fills them in. */
+const QUICK_SKIPS = new Set(["entry", "chrono", "wake", "goal"]);
 
 export const SECTION_OF: Record<string, number> = {
   Basics: 1,

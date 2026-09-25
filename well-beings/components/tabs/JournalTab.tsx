@@ -37,7 +37,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
           Write it down
         </h2>
         <p style={{ color: "var(--color-neutral-500)", fontSize: 13, margin: "0 0 18px", maxWidth: 560, textWrap: "pretty" }}>
-          This is the part of Wellbeings with the longest research history behind it. Nobody reads these entries
+          This is the part of Arun with the longest research history behind it. Nobody reads these entries
           but you. They never leave this device, and you can delete any of them.
         </p>
 

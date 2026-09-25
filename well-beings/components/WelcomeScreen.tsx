@@ -2,6 +2,8 @@ import { Lang, t } from "@/lib/i18n";
 import { StatementIntro } from "./StatementIntro";
 import { InstallApp } from "./InstallApp";
 import { Depth } from "@/lib/lifestyle";
+import { DailyLight } from "./DailyLight";
+import { HelplineRegion } from "@/lib/types";
 
 /**
  * The landing page.
@@ -35,7 +37,9 @@ export function WelcomeScreen({
   resumable,
   onResume,
   onDiscardDraft,
+  region,
 }: {
+  region: HelplineRegion;
   lang?: Lang;
   showCitations?: boolean;
   onStartChat: (depth: Depth) => void;
@@ -69,6 +73,11 @@ export function WelcomeScreen({
      style cannot carry a media query. See `.wel-*` in globals.css. */
   return (
     <main data-screen-label="Welcome" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      {/* The front door comes first: a line for today, one good thing, and
+          someone to sit with. The check-in below is still here for anyone
+          who wants a closer look, but it no longer opens the app. */}
+      <DailyLight lang={lang} region={region} />
+      <h2 className="wel-more">When you want a closer look at how you are living</h2>
       <div className="wel-band wel-hero">
         <div className="wel-hero-main">
           {/* A decorative orbit used to sit here: three rotating rings and a

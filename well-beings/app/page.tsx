@@ -7,7 +7,7 @@ import { metadataFor } from "@/lib/seo";
    same route table as every static page, so the title and description a
    crawler sees are maintained in one place with the rest of the site.
 
-   The JSON-LD here describes the page — what Wellbeings is and who publishes
+   The JSON-LD here describes the page — what Arun is and who publishes
    it. It never describes a result: results exist only as client state on this
    one URL, so there is nothing per-person for structured data to expose. */
 export const metadata: Metadata = metadataFor("/");
