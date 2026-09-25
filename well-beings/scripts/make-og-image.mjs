@@ -80,7 +80,7 @@ const html = `<!doctype html><meta charset="utf-8">
   .star{position:absolute;width:4px;height:4px;border-radius:50%;background:#FFF4DE;opacity:.7}
 </style>
 <div class="copy">
-  <div class="mark"><svg width="44" height="44" viewBox="0 0 64 64">${bloomElements()}</svg>Wellbeings</div>
+  <div class="mark"><svg width="44" height="44" viewBox="0 0 64 64">${bloomElements()}</svg>Arun</div>
   <h1>A quiet place for the hard days</h1>
   <p>Check in with two taps. Breathe with the sun, keep a hope box and a safety plan, and reach the right people fast.</p>
   <div class="foot">

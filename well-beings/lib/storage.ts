@@ -1,4 +1,6 @@
 import { JournalEntry } from "./journal";
+import { LISTENER_KEY } from "./listener";
+import { VOICE_KEY } from "@/hooks/useSpeech";
 import { Lang } from "./i18n";
 import { CheckinEntry, PlanIntensity, Profile } from "./types";
 
@@ -95,10 +97,16 @@ export function saveState(state: PersistedState) {
   }
 }
 
+/* Everything else Arun keeps on the device, each in its own key so the
+   listener and the microphone work before any check-in exists. "Delete
+   everything" has to mean everything, so they are all listed here. */
+const OTHER_KEYS = [LISTENER_KEY, VOICE_KEY];
+
 export function clearState() {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(KEY);
+    for (const k of OTHER_KEYS) window.localStorage.removeItem(k);
   } catch {
     // ignore
   }

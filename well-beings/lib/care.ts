@@ -220,7 +220,7 @@ export function hopeTrend(arrivals: Arrival[], now: Date = new Date()): Trend {
 /* ─────────────────────────────────────────────────────────────
    The care-team summary.
 
-   This is the whole of what Wellbeings can tell a professional, and it only
+   This is the whole of what Arun can tell a professional, and it only
    ever leaves the phone because the person pressed a button and chose where
    it goes. There is no server here to send it anywhere else. The text is
    written to be read by a clinician in thirty seconds and by the person
@@ -306,7 +306,7 @@ export function careSummaryText(input: SummaryInput): string {
   const s = buildCareSummary(input);
   const fmt = input.formatDate ?? ((d: Date) => d.toDateString());
   const lines: string[] = [];
-  lines.push(`My Wellbeings check-in summary, shared by me on ${fmt(new Date(s.generatedAt))}.`);
+  lines.push(`My Arun check-in summary, shared by me on ${fmt(new Date(s.generatedAt))}.`);
   lines.push("");
   if (!s.checkins) {
     lines.push(`No check-ins in the last ${s.windowDays} days.`);
@@ -338,7 +338,7 @@ export function careSummaryText(input: SummaryInput): string {
   }
   lines.push("");
   lines.push(
-    "This was put together by the Wellbeings app on my own phone and sent by me. The app has no server and keeps no copy anywhere else. It is a self-report, not a clinical assessment."
+    "This was put together by the Arun app on my own phone and sent by me. The app has no server and keeps no copy anywhere else. It is a self-report, not a clinical assessment."
   );
   return lines.join("\n");
 }

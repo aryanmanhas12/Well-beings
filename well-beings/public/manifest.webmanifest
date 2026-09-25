@@ -1,6 +1,6 @@
 {
-  "name": "Wellbeings: a quiet place for hard days",
-  "short_name": "Wellbeings",
+  "name": "Arun: a quiet place for hard days",
+  "short_name": "Arun",
   "description": "A private safe place for hard days: a two-tap check-in, breathing, a hope box, a safety plan and helplines one tap away. Runs on your phone; nothing is sent anywhere. Not a diagnosis.",
   "start_url": "./",
   "scope": "./",

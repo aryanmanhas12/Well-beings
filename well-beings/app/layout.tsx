@@ -22,7 +22,7 @@ const karla = Karla({
 });
 
 /* The display face, added in v2 to sit beside Ronak's redesign. Ronak sets
-   its headlines in Baloo 2, a heavy rounded face; Wellbeings uses Fredoka,
+   its headlines in Baloo 2, a heavy rounded face; Arun uses Fredoka,
    rounder and lighter, so the two read as family without reading as one
    product. It is only for things said out loud: the sky, headings, the
    numbers on the crisis screen. Everything read slowly stays in Karla.

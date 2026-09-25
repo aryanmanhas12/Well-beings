@@ -25,11 +25,19 @@ export const SITE_ORIGIN = "https://aryanmanhas12.github.io";
 export const SITE_PATH = "/Well-beings";
 export const SITE_URL = `${SITE_ORIGIN}${SITE_PATH}`;
 
-export const SITE_NAME = "Wellbeings";
+/* The product was called Wellbeings until September 2026. It is Arun now
+   (अरुण, the red glow of dawn, which is what the whole night-to-dawn look
+   was already drawing), and the rename is display-only on purpose: the
+   deploy path, the repository, every localStorage key (`wellbeings-v1`,
+   `wellbeings-safe-v1` and the rest), the `ref=wellbeings` handoff and the
+   `wellbeings.care-summary/1` schema keep the old spelling, because
+   changing any of them would lose people's saved data or break the wire
+   format Ronak reads. See lib/bridge.ts. */
+export const SITE_NAME = "Arun";
 export const SITE_TAGLINE = "A quiet place for hard days, and a private look at everyday wellbeing";
 
 /**
- * The companion product. Wellbeings is the broad lifestyle picture; Ronak is
+ * The companion product. Arun is the broad lifestyle picture; Ronak is
  * the dedicated mental-health screening experience. They are separate tools on
  * purpose and share no data. See lib/bridge.ts for the whole contract.
  *
@@ -70,7 +78,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/",
     nav: "Home",
-    title: "Wellbeings · a quiet place for hard days",
+    title: "Arun · a quiet place for hard days",
     description:
       "A private safe place for hard days: check in with two taps, breathe with the sun, keep a hope box and a safety plan, and reach free helplines in one tap. Everything stays on your phone and nothing is sent anywhere.",
     changeFrequency: "monthly",
@@ -148,7 +156,7 @@ export const PAGES: SitePage[] = [
   {
     path: "/resources/",
     nav: "Support",
-    title: "Support lines and directories · Wellbeings",
+    title: "Support lines and directories · Arun",
     description:
       "Free, confidential helplines and directories for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when a conversation with a professional is worth having.",
     changeFrequency: "monthly",
@@ -157,9 +165,9 @@ export const PAGES: SitePage[] = [
   {
     path: "/about/",
     nav: "About",
-    title: "About Wellbeings · what it is and what it is not",
+    title: "About Arun · what it is and what it is not",
     description:
-      "What the Wellbeings safe place does when things are hard, the published approaches behind its safety plan and hope box, what nobody sees, and how it differs from the screening in Ronak.",
+      "What the Arun safe place does when things are hard, the published approaches behind its safety plan and hope box, what nobody sees, and how it differs from the screening in Ronak.",
     changeFrequency: "monthly",
     priority: 0.6,
   },
@@ -173,7 +181,7 @@ export const PAGES: SitePage[] = [
     hiddenInNav: true,
     title: "Aryan Manhas · NeuroBioPsych",
     description:
-      "Aryan Manhas builds free, private, evidence-based wellbeing and mental-health tools: Wellbeings and the Ronak. The NeuroBioPsych vision treats the neural, biological and psychosocial layers as one problem.",
+      "Aryan Manhas builds free, private, evidence-based wellbeing and mental-health tools: Arun and Ronak. The NeuroBioPsych vision treats the neural, biological and psychosocial layers as one problem.",
     changeFrequency: "yearly",
     priority: 0.3,
   },
@@ -181,18 +189,18 @@ export const PAGES: SitePage[] = [
     path: "/terms/",
     nav: "Terms",
     hiddenInNav: true,
-    title: "Terms of use · Wellbeings",
+    title: "Terms of use · Arun",
     description:
-      "Wellbeings is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a crisis service, not monitored, and not a substitute for professional advice.",
+      "Arun is free, has no account and stores nothing off your device. These terms cover what it is not: not a medical device, not a crisis service, not monitored, and not a substitute for professional advice.",
     changeFrequency: "yearly",
     priority: 0.4,
   },
   {
     path: "/privacy/",
     nav: "Privacy",
-    title: "Privacy · where your Wellbeings answers live",
+    title: "Privacy · where your Arun answers live",
     description:
-      "Wellbeings has no account, no server and no analytics, and nobody sees your check-ins. This page lists every key it stores, how care-team sharing and videos work, and how to delete it all.",
+      "Arun has no account, no server and no analytics, and nobody sees your check-ins. This page lists every key it stores, how care-team sharing and videos work, and how to delete it all.",
     changeFrequency: "monthly",
     priority: 0.6,
   },

@@ -79,7 +79,7 @@ export default function HabitsGuide() {
           discipline. Exhaustion, low mood, or a load that genuinely does not fit are the usual
           reasons, and the answer is to look at that rather than to design a better system. The{" "}
           <Link href="/guides/stress/">stress and recovery guide</Link> covers the load side, and
-          the <Link href="/">Wellbeings check</Link> will tell you which of those is most likely.
+          the <Link href="/">Arun check</Link> will tell you which of those is most likely.
         </p>
 
         <h2>Related</h2>

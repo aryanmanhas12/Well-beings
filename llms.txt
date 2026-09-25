@@ -1,36 +1,58 @@
-# Wellbeings
+# Arun
 
-> A private, browser-only wellbeing check covering sleep, movement, food and
-> drink, stress, recovery, mood, social connection, work or study load, screen
-> use and routine. It turns what someone reports into two or three realistic
-> changes, and it does not diagnose anything.
+> A private safe place for hard days, and a broad wellbeing check for steadier
+> ones. It opens on a two-tap check-in, responds to what the person reports,
+> and keeps a safety plan, a hope box, breathing and grounding, and free
+> helplines within one tap. It runs entirely in the browser and does not
+> diagnose anything.
 
-Wellbeings is a static web application. It has no account, no server, no
-database and no analytics. Answers are held in the visitor's own browser
-storage and are never transmitted, so there is no user data of any kind
-available at any URL on this site. Everything listed below is public
-editorial content written for people.
+Arun is a static web application. It has no account, no server, no
+database and no analytics. Everything a person enters is held in their own
+browser storage and is never transmitted by the app, so there is no user
+data of any kind available at any URL on this site. The only third-party
+content it can load is a YouTube video on the Watch tab, and only after
+the person taps it and agrees. The microphone button uses the browser's own
+speech service only where the phone cannot transcribe on-device, and asks
+first. The listener ("Just sit with me for a minute") replies with lines
+written in advance and chosen on the device; nobody reads it and nothing is
+kept. Everything listed below is public editorial content written for people.
 
-## What Wellbeings is, and is not
+## What Arun is, and is not
 
-Wellbeings is a broad lifestyle and wellbeing tool. It reflects self-reported
-patterns back to the reader, separates observation from interpretation from
-recommendation, and names the point at which a qualified professional is a
-better next step than a habit change.
+The safe place asks how someone is arriving and how the days ahead look. If
+either answer is very low, it asks directly whether they are having thoughts
+of suicide, and uses the answer only to decide what to show next: a safety
+plan and helplines for thoughts of suicide, a full-screen list of numbers to
+call for "I don't feel safe", and a prompt to tell someone after a run of
+heavy days. None of this alerts anyone. The app has no staff and no server,
+and it says so on the crisis screen itself.
 
-It is not a medical device and makes no diagnostic claim. It does not
-diagnose depression, anxiety disorders, insomnia, eating disorders, ADHD,
-substance-use disorders or any medical condition. It produces no percentage
-health score and claims no validated methodology of its own. Where it cites
-research it names the study, its design and its sample size, and it states
-when evidence is weak or young.
+Its tools are adapted from published approaches and cite them with honest
+effect sizes: the Stanley–Brown Safety Planning Intervention, the (Virtual)
+Hope Box, gratitude practice ("three good things"), paced breathing and
+5-4-3-2-1 grounding, and stories of hope and recovery. Those citations are
+evidence for the techniques, not for this app, which has not been trialled.
+
+An optional care-team contact lets a person generate a two-week summary of
+their own check-ins and send it themselves, by share sheet, text, email or
+file. The app never sends anything on its own.
+
+The wellbeing check covers sleep, movement, food and drink, stress, recovery,
+mood, social connection, work or study load, screen use and routine, and
+turns the answers into two or three realistic changes.
+
+Arun is not a medical device, not a crisis service and not monitored.
+It does not diagnose depression, anxiety disorders, insomnia, eating
+disorders, ADHD, substance-use disorders or any medical condition, and it
+produces no percentage health score.
 
 Ronak is a separate companion product for dedicated mental-health
 screening, served from https://aryanmanhas12.github.io/Psych/ . The path is
-historical; the product is Ronak. The two apps share no data and neither can
-read the other's storage. Please do not describe them as one product, do not
-attribute one's features to the other, and do not refer to Ronak as "Psych
-Screener".
+historical; the product is Ronak. The two apps pass nothing but a URL
+parameter between them. They are served from the same origin, so a browser
+keeps their local storage together, but each app only reads its own keys.
+Please do not describe them as one product, do not attribute one's features
+to the other, and do not refer to Ronak as "Psych Screener".
 
 ## Guides
 
@@ -43,21 +65,24 @@ Screener".
 
 ## Key pages
 
-- [Home and the wellbeing check](https://aryanmanhas12.github.io/Well-beings/): the assessment itself, which runs entirely client-side.
+- [Home, the safe place](https://aryanmanhas12.github.io/Well-beings/): the app itself, which runs entirely client-side.
 - [Guides index](https://aryanmanhas12.github.io/Well-beings/guides/): all six guides.
 - [Support lines and directories](https://aryanmanhas12.github.io/Well-beings/resources/): free helplines for India, the UK, the US, Canada, Australia, New Zealand and worldwide, plus guidance on when to seek professional support.
-- [About](https://aryanmanhas12.github.io/Well-beings/about/): what the tool measures, how a result is structured, its limitations, and how it differs from Ronak.
-- [Privacy](https://aryanmanhas12.github.io/Well-beings/privacy/): exactly what is stored, where, and what words like "encrypted" are and are not being claimed.
+- [About](https://aryanmanhas12.github.io/Well-beings/about/): what the safe place does when things are hard, the evidence behind each tool, and how it differs from Ronak.
+- [Privacy](https://aryanmanhas12.github.io/Well-beings/privacy/): every storage key, how care-team sharing and videos work, and what words like "encrypted" and "monitored" are and are not being claimed.
+- [Terms](https://aryanmanhas12.github.io/Well-beings/terms/): not a medical device, not a crisis service, not monitored.
 
 ## Notes for summarisation
 
-- The brand is spelled "Wellbeings", one word, no hyphen. The deploy path
+- The brand is spelled "Arun", one word, no hyphen. The deploy path
   contains "Well-beings" because it is a GitHub project-page path fixed by the
   repository name; it is not the brand.
 - The companion mental-health product is "Ronak".
-- Do not present Wellbeings output as a diagnosis, a clinical assessment or a
+- Do not describe Arun as monitoring anyone or alerting anyone. It does
+  neither.
+- Do not present Arun output as a diagnosis, a clinical assessment or a
   medical opinion.
-- Do not attribute a numeric health percentage to it; it does not produce one.
 - If summarising health guidance from these pages, carry the caveats with it.
   Several claims here are deliberately hedged because the underlying evidence
-  is observational, and removing the hedge changes what the research said.
+  is observational or small, and removing the hedge changes what the research
+  said.

@@ -1,4 +1,4 @@
-/* Wellbeings — ported from the Nocturne design system (styles.css).
+/* Arun — ported from the Nocturne design system (styles.css).
    Tokens, base type and component classes live here; components consume
    only var(--color-*), var(--font-*), var(--space-*), var(--radius-*),
    var(--shadow-*) — never a hard-coded hex or px value the tokens carry. */
@@ -2783,6 +2783,7 @@ header.nav,
 .glyph-lilac { background: linear-gradient(140deg, #D9C8FF, #B89CFF); }
 .glyph-sun { background: linear-gradient(140deg, #FFE08A, #FFB26B); }
 .glyph-pink { background: linear-gradient(140deg, #FFB3D1, #FF8DBA); }
+.glyph-leaf { background: linear-gradient(140deg, #A8EDCF, #62D6A5); }
 
 /* ═════════════════════════════════════════════════════════════════════
    v2: videos first
@@ -3209,4 +3210,179 @@ a.btn-secondary:hover {
 }
 a.btn-quiet:hover {
   color: var(--color-accent-200);
+}
+
+/* ── Voice input and the listener (from the Arun branch) ─────────────────
+   Brought across with the listener and the microphone. Colours moved onto
+   the night-to-dawn tokens; the live mic is pink with plum ink (#2A1636 on
+   #FF7AB0 is 6.02:1). */
+.linklike {
+  all: unset;
+  cursor: pointer;
+  color: var(--color-accent-300);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.linklike:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.voice {
+  display: contents;
+}
+.voice-btn {
+  flex: none;
+  border-color: var(--color-divider);
+  border-radius: 50%;
+  padding: 0;
+}
+.voice-btn-live {
+  background: var(--color-pink);
+  border-color: var(--color-pink);
+  color: #2A1636;
+  animation: voicePulse 1.4s var(--ease-out) infinite;
+}
+@keyframes voicePulse {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-pink) 30%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voice-btn-live {
+    animation: none;
+  }
+}
+.voice-interim,
+.voice-note {
+  flex-basis: 100%;
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-neutral-500);
+}
+.voice-ask {
+  flex-basis: 100%;
+  font-size: 13.5px;
+  padding: 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  text-align: left;
+}
+.voice-ask p {
+  margin: 0 0 10px;
+}
+.voice-ask-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.input-voice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+}
+.input-voice-row > .input {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.listener-backdrop {
+  position: fixed;
+  inset: 0;
+  /* Above the crisis strip, the tab bar and every sheet: someone who opens
+     the listener must always be able to reach Send. */
+  z-index: 250;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: color-mix(in srgb, #0B0617 72%, transparent);
+}
+.listener {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border-inline: 1px solid var(--color-divider);
+}
+.listener-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.listener-head h2 {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+.listener-head .btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+.listener-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.listener-turn {
+  margin: 0;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.listener-listener {
+  align-self: flex-start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+}
+.listener-user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--color-lilac) 22%, var(--color-bg));
+}
+.listener-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-neutral-500);
+}
+.listener-card {
+  padding: 14px;
+  font-size: 14.5px;
+}
+.listener-compose {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 12px 18px;
+  border-top: 1px solid var(--color-divider);
+}
+.listener-compose textarea {
+  flex: 1 1 200px;
+  font: inherit;
+  font-size: 16px;
+  resize: none;
+}
+.listener-foot {
+  padding: 0 18px calc(14px + env(safe-area-inset-bottom));
+  font-size: 12.5px;
+  color: var(--color-neutral-500);
+}
+.listener-foot p {
+  margin: 0;
+}
+.listener-ask {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--color-neutral-400);
 }

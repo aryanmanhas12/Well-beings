@@ -12,6 +12,13 @@ like every other machine-made site, and that is a real cost for an app whose
 whole proposition is "a person thought about this and the evidence is
 checkable".
 
+**The name.** The product is Arun (अरुण, the red glow of dawn), one word.
+It was Wellbeings until September 2026. The rename is display-only: the
+repository, the `/Well-beings` path, every `wellbeings-*` storage key, the
+`ref=wellbeings` handoff and the `wellbeings.care-summary/1` schema keep the
+old spelling, and must, because changing them loses saved data or breaks
+Ronak. The mark is the bloom-sun.
+
 ## The tells, and what to do instead
 
 **Colour.** The palette is night to dawn, at the owner's explicit request:

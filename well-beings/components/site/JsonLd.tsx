@@ -12,7 +12,7 @@ import { PAGE_BY_PATH, SITE_NAME, SITE_URL, absoluteUrl, breadcrumbsFor } from "
  *
  * What is deliberately absent matters as much. There is no Organization (this
  * is one person's project, not a registered body), no MedicalWebPage or
- * MedicalEntity (Wellbeings does not diagnose and claiming a medical schema
+ * MedicalEntity (Arun does not diagnose and claiming a medical schema
  * type would assert otherwise to every crawler that reads it), no
  * aggregateRating, no review, and no credential of any kind. Those are the
  * fields that get health sites into trouble, and every one of them would be

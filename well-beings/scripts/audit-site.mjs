@@ -137,6 +137,9 @@ for (const p of pages) {
   for (const bad of ["Well-Beings", "Well Beings", "WellBeing ", "Wellbeingss"]) {
     if (visible.includes(bad)) fail(p.route, `wrong brand spelling in visible text: "${bad}"`);
   }
+  /* The product is Arun now. The old name is allowed once, on the About
+     page, where it explains the rename; anywhere else it is a leftover. */
+  if (p.route !== "/about/" && /\bWellbeings\b/.test(visible)) fail(p.route, 'old brand name "Wellbeings" in visible text');
   for (const bad of ["Psych Screener", "PsychScreener"]) {
     if (visible.includes(bad)) fail(p.route, `companion named "${bad}"; it is Ronak`);
   }
@@ -192,7 +195,7 @@ else {
 
 for (const [f, required] of [
   ["robots.txt", ["Sitemap:", "Allow: /"]],
-  ["llms.txt", ["# Wellbeings", "Ronak"]],
+  ["llms.txt", ["# Arun", "Ronak"]],
   ["og.png", []],
   ["404.html", []],
 ]) {

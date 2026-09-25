@@ -14,6 +14,7 @@ import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { HavenShell } from "./haven/HavenShell";
 import { CrisisStrip } from "./CrisisStrip";
+import { ListenerProvider } from "./ListenerProvider";
 
 /** Kept short on purpose. The footer of a working app is not the place for a
     sitemap; these are the destinations someone in the middle of the app
@@ -48,6 +49,7 @@ export function WellbeingsApp() {
   const onHome = wb.screen === "home" || wb.screen === "app";
 
   return (
+    <ListenerProvider lang={wb.settings.lang} region={region}>
     <div
       style={{
         minHeight: "100dvh",
@@ -135,7 +137,7 @@ export function WellbeingsApp() {
           color: "var(--color-neutral-600)",
         }}
       >
-        <nav aria-label="Wellbeings site" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <nav aria-label="Arun site" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           {SITE_LINKS.map((l) => (
             /* No prefetch={false} here, deliberately. It was tried, on the
                reasoning that prefetching four routes from a working app
@@ -154,5 +156,6 @@ export function WellbeingsApp() {
         </span>
       </footer>
     </div>
+    </ListenerProvider>
   );
 }

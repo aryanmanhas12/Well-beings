@@ -38,7 +38,7 @@ export default function ResourcesPage() {
 
         <p>
           These are listed here as static information, so the page works with no connection and
-          nothing you do on it is recorded. Wellbeings does not know which region you are reading,
+          nothing you do on it is recorded. Arun does not know which region you are reading,
           does not log which number you tap, and has no analytics of any kind. See the{" "}
           <Link href="/privacy/">privacy page</Link>.
         </p>
@@ -83,7 +83,7 @@ export default function ResourcesPage() {
 
         <h2>When a professional is the right call</h2>
         <p>
-          Wellbeings is built for patterns in ordinary life: sleep, movement, food, stress,
+          Arun is built for patterns in ordinary life: sleep, movement, food, stress,
           connection, routine. There is a point where that stops being the useful lens, and it is
           worth naming rather than leaving you to guess:
         </p>

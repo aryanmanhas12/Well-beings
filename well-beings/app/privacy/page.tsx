@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       <div className="prose">
         <h1>Privacy</h1>
         <p className="lede">
-          Wellbeings has no account, no server, no database and no analytics. Everything you enter
+          Arun has no account, no server, no database and no analytics. Everything you enter
           stays in your own browser on your own device. This page says exactly what that means, and
           exactly where it stops, without the words that usually get used loosely.
         </p>
@@ -48,11 +48,20 @@ export default function PrivacyPage() {
           <li>
             <code>wellbeings-tour-seen-v1</code>: whether you have seen the tour of the daily plan.
           </li>
+          <li>
+            <code>arun-voice-v1</code>: whether you agreed to your browser&apos;s online speech service
+            for the microphone button. Only written if you were asked.
+          </li>
+          <li>
+            <code>arun-listener-v1</code>: whether you turned on AI replies in the listener. Only
+            written if you chose. The conversations themselves are never stored: close the listener and
+            they are gone.
+          </li>
         </ul>
         <p>
           There is no cookie, no session storage, no IndexedDB and no fingerprinting. Nothing is
-          loaded from anyone else&apos;s server when the app opens, with one exception you choose
-          yourself, covered below.
+          loaded from anyone else&apos;s server when the app opens. The exceptions are ones you
+          choose yourself, one tap at a time, covered below.
         </p>
         <p>
           The region used to show you helplines is first guessed from your device&apos;s time zone.
@@ -62,9 +71,9 @@ export default function PrivacyPage() {
 
         <h2>What is never sent anywhere</h2>
         <p>
-          All of it. The app is a static site: once the page has loaded, it makes no network requests
-          of its own. There is no endpoint to send answers to, because there is no server. You can
-          verify this yourself. Open your browser&apos;s developer tools, go to the Network tab, and
+          Everything you write or tap, unless you switch on one of the three things below. The app is
+          a static site: once the page has loaded, it makes no network requests of its own. There is
+          no endpoint to send answers to, because there is no server. You can verify this yourself. Open your browser&apos;s developer tools, go to the Network tab, and
           check in. Nothing goes out.
         </p>
         <p>
@@ -96,7 +105,7 @@ export default function PrivacyPage() {
           it is sent: your phone&apos;s share sheet, a text, an email, a copy you paste yourself, or a
           file you save. Whatever you choose is an ordinary message sent by you, through your own
           apps, and from then on it is covered by the privacy terms of those apps and whoever you sent
-          it to. Wellbeings keeps no record that anything was sent.
+          it to. Arun keeps no record that anything was sent.
         </p>
         <p>
           The app never sends a summary on its own, on a schedule, or in response to an answer. If
@@ -109,7 +118,29 @@ export default function PrivacyPage() {
           this page will be updated to say exactly what would be shared, with whom, and how to stop it.
         </p>
 
-        <h2>Videos are the one thing that loads from elsewhere</h2>
+        <h2>The three things that can leave the device, and only if you say yes</h2>
+        <p>
+          <strong>Speaking instead of typing.</strong> Some text boxes have a microphone. Where your
+          browser can turn speech into text on the phone itself (recent Chrome), it does, and nothing
+          is sent. Where it cannot, the first tap explains that your browser would send the audio to
+          its own speech service (Google in Chrome, Apple in Safari), and asks. Arun never receives the
+          audio, and the words land in the box for you to read before anything is kept. Your
+          keyboard&apos;s microphone key is always another option.
+        </p>
+        <p>
+          <strong>The listener.</strong> &ldquo;Just sit with me for a minute&rdquo; answers with
+          replies written in advance by a person and chosen on your phone. Nobody reads what you
+          write. If this site is ever built with an AI listener set up, you will be able to switch it
+          on, and only then does the recent part of that conversation go through Arun&apos;s relay, a
+          small server that stores nothing and logs no message content, to Anthropic, which uses
+          Claude to write the reply under its API privacy terms. It is off until you turn it on, the
+          screen says where the words go before you do, and one tap turns it off again.
+        </p>
+        <p>
+          <strong>Videos,</strong> described next.
+        </p>
+
+        <h2>Videos load from elsewhere, only when you choose</h2>
         <p>
           The Watch screen lists a few videos. None of them loads until you tap it and agree, and the
           thumbnails are drawn by the app rather than fetched. When you do choose to play one, it is
@@ -175,7 +206,7 @@ export default function PrivacyPage() {
           <li>
             <strong>The site is hosted on GitHub Pages.</strong> Like any web host, GitHub serves the
             files and will see standard request information such as your IP address when the page
-            loads. That is hosting, not Wellbeings, and it happens before any of your answers exist.
+            loads. That is hosting, not Arun, and it happens before any of your answers exist.
             It is covered by{" "}
             <a
               href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement"
@@ -193,7 +224,7 @@ export default function PrivacyPage() {
           </li>
         </ul>
 
-        <h2>Moving between Wellbeings and {COMPANION_NAME}</h2>
+        <h2>Moving between Arun and {COMPANION_NAME}</h2>
         <p>
           The two apps link to each other. That handoff passes one URL parameter naming which app you
           came from, and at most a single coarse severity band in the other direction. No answers, no
@@ -205,7 +236,7 @@ export default function PrivacyPage() {
           (<code>aryanmanhas12.github.io</code>), and browsers keep local storage per address, not per
           app, so the two share one storage area on your device. What is true is that each app only
           ever reads and writes its own keys, which is something you can check in the source of
-          either. Wellbeings never reads {COMPANION_NAME}&apos;s safety plan or results, and deleting
+          either. Arun never reads {COMPANION_NAME}&apos;s safety plan or results, and deleting
           your data here removes only the keys listed above.
         </p>
 
@@ -220,7 +251,7 @@ export default function PrivacyPage() {
 
         <div className="callout">
           <p>
-            Wellbeings is not a healthcare provider, so health-record protections such as HIPAA or
+            Arun is not a healthcare provider, so health-record protections such as HIPAA or
             the NHS confidentiality framework do not apply to it and this page does not claim they
             do. That is one of the reasons nothing is stored off your device.{" "}
             <Link href="/about/">More about what the tool is and is not</Link>.

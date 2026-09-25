@@ -1,0 +1,17 @@
+{
+  "name": "arun-listener-relay",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The one server Arun has: a Cloudflare Worker that holds the API key for the optional AI listener. Stores nothing.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.140.0"
+  }
+}

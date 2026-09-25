@@ -77,7 +77,7 @@ export default function StressGuide() {
         <p>
           Stress is a response to a load, and it resolves when the load does. If worry is
           free-floating, present most days, hard to control, and does not lift when the deadline
-          passes, that is a different pattern and this guide is not the right tool for it. Wellbeings
+          passes, that is a different pattern and this guide is not the right tool for it. Arun
           deliberately does not screen for anxiety disorders. {COMPANION_NAME}, the companion tool, is
           built for exactly that and takes a few minutes.
         </p>

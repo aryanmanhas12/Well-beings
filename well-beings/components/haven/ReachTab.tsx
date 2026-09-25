@@ -21,7 +21,7 @@ import { GoTo, Why } from "./shared";
  * This app will soon sit next to professionals through Ronak. Until that
  * exists, and after it does, the rule is the same: nothing about a person
  * reaches anyone unless the person decides it should, sees exactly what it
- * says, and presses send. Wellbeings has no server, so it could not send
+ * says, and presses send. Arun has no server, so it could not send
  * anything behind someone's back even if it wanted to, and this screen says
  * so in plain words.
  *
@@ -316,7 +316,7 @@ function SummarySender({ haven, care }: { haven: Haven; care: CareTeam }) {
     [haven.state.arrivals, haven.state.plan, note]
   );
   const text = careSummaryText(input);
-  const subject = "My Wellbeings check-in summary";
+  const subject = "My Arun check-in summary";
 
   async function share() {
     try {

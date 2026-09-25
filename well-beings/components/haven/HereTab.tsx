@@ -10,9 +10,13 @@ import { GETTING_THROUGH, RESPONSES, TINY_STEPS, VIDEOS, WORDS, type Video } fro
 import { ronakLink } from "@/lib/bridge";
 import { COMPANION_NAME } from "@/lib/site";
 import { HelplineList } from "../HelplineList";
+import { VoiceButton } from "../VoiceButton";
+import { useOpenListener } from "../ListenerProvider";
+import { mentionsCrisis } from "@/lib/journal";
+import { lineFor } from "@/lib/daily-lines";
 import { CheckIn } from "./CheckIn";
 import { DawnSky } from "./DawnSky";
-import { CalmIcon, HereIcon, PlayIcon } from "./icons";
+import { CalmIcon, HereIcon, PlayIcon, ReachIcon } from "./icons";
 import { SCENE_BG, SceneArt } from "./SceneArt";
 import { dailyPick, formatDay, GoTo, partOfDay, useNow } from "./shared";
 
@@ -44,6 +48,8 @@ export function HereTab({
   const [good, setGood] = useState("");
   const [goodSaved, setGoodSaved] = useState(false);
   const [tinyDone, setTinyDone] = useState(false);
+  const [goodWorry, setGoodWorry] = useState(false);
+  const openListener = useOpenListener();
 
   const { latest, level, returning } = haven;
   const name = wb.profile?.name?.trim();
@@ -73,7 +79,12 @@ export function HereTab({
   }
 
   const step = dailyPick(TINY_STEPS, "step", stepOffset, now);
-  const word = dailyPick(WORDS, "word", wordOffset, now);
+  /* Today's line is written by hand each week (lib/daily-lines.ts) and
+     comes first; "Another" then walks the evergreen WORDS. Read only once
+     the clock is known, like every other daily pick, so the static export
+     never shows the line of the day it was built. */
+  const today = now ? lineFor(now) : null;
+  const word = wordOffset === 0 && today ? today.line : dailyPick(WORDS, "word", wordOffset, now);
   const keepsakes = [
     ...haven.state.hope.filter((h) => h.kind !== "sounds").map((h) => ({ text: h.text, from: "From your hope box" })),
     ...haven.state.goodThings.flatMap((g) => g.items.map((t) => ({ text: t, from: `A good thing, ${formatDay(g.date + "T12:00:00")}` }))),
@@ -154,6 +165,9 @@ export function HereTab({
                 </button>
                 <button type="button" className="btn btn-soft" onClick={() => goTo("reach")}>
                   Text someone
+                </button>
+                <button type="button" className="btn btn-quiet" onClick={openListener}>
+                  Sit with me
                 </button>
                 {level === "urgent" && (
                   <button type="button" className="btn btn-quiet" onClick={openUrgent}>
@@ -353,6 +367,15 @@ export function HereTab({
                   <small>Five things you can see, then four you can feel.</small>
                 </span>
               </button>
+              <button type="button" className="tool-row" onClick={openListener}>
+                <span className="tool-glyph glyph-leaf" aria-hidden="true">
+                  <ReachIcon />
+                </span>
+                <span>
+                  <strong>Just sit with me for a minute</strong>
+                  <small>Say the heavy thing. Nobody reads it, and it&apos;s gone when you close it.</small>
+                </span>
+              </button>
               <button type="button" className="tool-row" onClick={() => goTo("watch")}>
                 <span className="tool-glyph glyph-pink" aria-hidden="true">
                   <PlayIcon />
@@ -374,20 +397,28 @@ export function HereTab({
                 </p>
               ) : (
                 <>
-                  <p className="panel-lede">However small. The chai was hot. Someone replied. The bus came on time.</p>
+                  <p className="panel-lede">
+                    {today ? `${today.prompt} ` : ""}However small. The chai was hot. Someone replied.
+                  </p>
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
                       if (!good.trim()) return;
+                      /* Someone who answers "what went right" with something
+                         frightening gets support, not a thank-you, and the
+                         words are not filed as a good thing. */
+                      if (mentionsCrisis(good)) {
+                        setGoodWorry(true);
+                        return;
+                      }
                       haven.addGoodThings([good]);
                       setGood("");
                       setGoodSaved(true);
                     }}
-                    className="btn-row"
-                    style={{ flexWrap: "nowrap" }}
+                    className="input-voice-row"
                   >
                     <label htmlFor="good-one" className="sr-only">
-                      One good thing today
+                      {today?.prompt ?? "One good thing today"}
                     </label>
                     <input
                       id="good-one"
@@ -398,17 +429,34 @@ export function HereTab({
                       maxLength={200}
                       autoComplete="off"
                     />
+                    <VoiceButton appLang={wb.settings.lang} onText={(t) => setGood((d) => (d.trim() ? `${d.trim()} ${t}` : t))} />
                     <button type="submit" className="btn btn-sun" style={{ flex: "none" }}>
                       Keep it
                     </button>
                   </form>
+                  {goodWorry && (
+                    <div role="alert" style={{ marginTop: 14 }}>
+                      <p className="panel-lede" style={{ fontWeight: 600 }}>
+                        That sounds really heavy. You don&apos;t have to carry it alone.
+                      </p>
+                      <HelplineList lines={crisisLines(region)} />
+                      <div className="btn-row" style={{ marginTop: 12 }}>
+                        <button type="button" className="btn btn-sun" onClick={openListener}>
+                          Sit with me for a minute
+                        </button>
+                        <button type="button" className="btn btn-soft" onClick={() => goTo("plan", "use")}>
+                          Open my safety plan
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </section>
           )}
 
           <section className="panel panel-lilac" aria-label="Words for right now" style={{ order: 10 }}>
-            <p className="eyebrow">Words for right now</p>
+            <p className="eyebrow">{wordOffset === 0 && today ? "Today's line" : "Words for right now"}</p>
             <p className="quote-line">{word}</p>
             <button type="button" className="btn btn-quiet" onClick={() => setWordOffset((n) => n + 1)}>
               Another

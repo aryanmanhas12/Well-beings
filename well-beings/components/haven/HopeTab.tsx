@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { MAX_PHOTOS, type Haven } from "@/hooks/useHaven";
 import { mentionsCrisis } from "@/lib/journal";
+import { VoiceButton } from "../VoiceButton";
 import { HOPE_KINDS, WHY } from "@/lib/havenContent";
 import type { HopeKind } from "@/lib/haven";
 import { formatDay, GoTo, Why } from "./shared";
@@ -23,7 +24,7 @@ type View = "path" | "good" | "box" | "note";
  * danger, the same check the journal has always had, and if it trips, the
  * app offers help instead of silently filing the words away.
  */
-export function HopeTab({ haven, view, goTo }: { haven: Haven; view?: string; goTo: GoTo }) {
+export function HopeTab({ haven, view, goTo, lang }: { haven: Haven; view?: string; goTo: GoTo; lang: string }) {
   const [tab, setTab] = useState<View>(view === "box" || view === "note" || view === "good" ? view : "path");
   const [flagged, setFlagged] = useState(false);
 
@@ -71,14 +72,14 @@ export function HopeTab({ haven, view, goTo }: { haven: Haven; view?: string; go
       )}
 
       {tab === "path" && <HopePathForm haven={haven} check={check} />}
-      {tab === "good" && <GoodThings haven={haven} check={check} />}
+      {tab === "good" && <GoodThings haven={haven} check={check} lang={lang} />}
       {tab === "box" && <HopeBox haven={haven} check={check} />}
-      {tab === "note" && <Letter haven={haven} check={check} />}
+      {tab === "note" && <Letter haven={haven} check={check} lang={lang} />}
     </div>
   );
 }
 
-function GoodThings({ haven, check }: { haven: Haven; check: (t: string) => void }) {
+function GoodThings({ haven, check, lang }: { haven: Haven; check: (t: string) => void; lang: string }) {
   const [items, setItems] = useState(["", "", ""]);
   const [saved, setSaved] = useState(false);
   const days = [...haven.state.goodThings].sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -103,7 +104,7 @@ function GoodThings({ haven, check }: { haven: Haven; check: (t: string) => void
           }}
         >
           {items.map((v, i) => (
-            <div key={i} style={{ marginBottom: 8 }}>
+            <div key={i} className="input-voice-row" style={{ marginBottom: 8 }}>
               <label htmlFor={`good-${i}`} className="sr-only">
                 Good thing {i + 1}
               </label>
@@ -117,6 +118,15 @@ function GoodThings({ haven, check }: { haven: Haven; check: (t: string) => void
                 onChange={(e) => {
                   const next = [...items];
                   next[i] = e.target.value;
+                  setItems(next);
+                  setSaved(false);
+                }}
+              />
+              <VoiceButton
+                appLang={lang}
+                onText={(t) => {
+                  const next = [...items];
+                  next[i] = next[i].trim() ? `${next[i].trim()} ${t}` : t;
                   setItems(next);
                   setSaved(false);
                 }}
@@ -351,7 +361,7 @@ function Photos({ haven }: { haven: Haven }) {
   );
 }
 
-function Letter({ haven, check }: { haven: Haven; check: (t: string) => void }) {
+function Letter({ haven, check, lang }: { haven: Haven; check: (t: string) => void; lang: string }) {
   const existing = haven.state.letter;
   const [editing, setEditing] = useState(!existing);
   const [text, setText] = useState(existing?.text ?? "");
@@ -385,6 +395,7 @@ function Letter({ haven, check }: { haven: Haven; check: (t: string) => void }) 
             maxLength={2000}
           />
           <div className="btn-row" style={{ marginTop: 8 }}>
+            <VoiceButton appLang={lang} onText={(t) => setText((d) => (d.trim() ? `${d.trim()} ${t}` : t))} />
             <button type="submit" className="btn btn-sun">
               Keep this note
             </button>

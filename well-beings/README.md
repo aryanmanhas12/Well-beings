@@ -1,4 +1,4 @@
-# Wellbeings (app)
+# Arun (app)
 
 The Next.js app behind https://aryanmanhas12.github.io/Well-beings/. See the repository
 [README](../README.md) for what it is; this file is for working on it.

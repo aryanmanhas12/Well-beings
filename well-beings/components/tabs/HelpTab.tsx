@@ -78,7 +78,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
           Companion screener
         </div>
         <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", marginBottom: 12, textWrap: "pretty" }}>
-          Wellbeings is the day-to-day journal. The{" "}
+          Arun is the everyday lift. The{" "}
           <a href={ronakLink()} target="_blank" rel="noopener noreferrer">
             {COMPANION_NAME}
           </a>{" "}
@@ -271,7 +271,7 @@ export function HelpTab({ wb, onReplayTour }: { wb: Wellbeings; onReplayTour: ()
         <button
           className="btn btn-secondary"
           onClick={() => {
-            if (window.confirm("Delete all Wellbeings data from this browser? This cannot be undone.")) {
+            if (window.confirm("Delete all Arun data from this browser? This cannot be undone.")) {
               wb.deleteData();
             }
           }}

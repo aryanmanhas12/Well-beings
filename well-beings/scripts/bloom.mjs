@@ -36,7 +36,7 @@ export function iconSvg(size, content) {
      so its diameter is 56 units. Scale that to `content` of the canvas. */
   const scale = (content * size) / 56;
   const offset = size / 2 - 32 * scale;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="Wellbeings">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="Arun">
   <defs>
     <linearGradient id="n" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="${NIGHT_TOP}"/>

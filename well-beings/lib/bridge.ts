@@ -1,10 +1,10 @@
 /**
- * The Wellbeings ↔ Ronak handoff.
+ * The Arun ↔ Ronak handoff.
  *
  * Ronak does the occasional deep clinical check across five
- * instruments (PHQ-9, GAD-7, WHO-5, AUDIT-C…); Wellbeings does the daily
+ * instruments (PHQ-9, GAD-7, WHO-5, AUDIT-C…); Arun does the daily
  * pulse and the system built around it. Each points at the other when it's
- * the more useful tool for the moment — this file is the Wellbeings half
+ * the more useful tool for the moment — this file is the Arun half
  * of a protocol Ronak already ships (see its index.html, "Well-
  * beings companion app").
  *
@@ -13,12 +13,12 @@
  * on its own privacy page that nothing it holds ever leaves the device,
  * and a richer handoff would quietly break that promise.
  *
- *   Outbound (Wellbeings -> Ronak):
+ *   Outbound (Arun -> Ronak):
  *     ?ref=wellbeings
  *     Ronak shows a welcome-back banner. Carries nothing about
  *     what triggered the redirect on this end.
  *
- *   Inbound (Ronak -> Wellbeings):
+ *   Inbound (Ronak -> Arun):
  *     ?ref=psych-screener&band=<0-3>
  *     band is the severity band just shown there — 0 minimal, 3 high —
  *     nothing finer-grained. Read once, then stripped from the address bar

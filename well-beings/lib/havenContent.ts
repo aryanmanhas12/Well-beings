@@ -326,7 +326,7 @@ export const VIDEOS: Video[] = [
 ];
 
 /**
- * Videos from the person who made Wellbeings, Aryan Manhas, planned for
+ * Videos from the person who made Arun, Aryan Manhas, planned for
  * Instagram. Empty until real reels exist; the "From Aryan" shelf appears
  * on its own once this has entries. To add one:
  *

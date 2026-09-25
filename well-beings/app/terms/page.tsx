@@ -15,20 +15,20 @@ export default function TermsPage() {
       <div className="prose">
         <h1>Terms of use</h1>
         <p className="lede">
-          Short, because there is very little to agree to. Wellbeings is free, has no account, takes
+          Short, because there is very little to agree to. Arun is free, has no account, takes
           no payment and stores nothing about you anywhere but your own browser. What follows is
           mostly about what it is not.
         </p>
 
         <h2>What you are agreeing to</h2>
         <p>
-          By using Wellbeings you accept these terms. If you do not, the remedy is simple: close the
+          By using Arun you accept these terms. If you do not, the remedy is simple: close the
           page. Nothing has been created, nothing has been sent, and there is no account to close.
         </p>
 
         <h2>This is not healthcare</h2>
         <p>
-          Wellbeings is a self-guidance tool. It is <strong>not a medical device</strong>, not a
+          Arun is a self-guidance tool. It is <strong>not a medical device</strong>, not a
           diagnosis, not a treatment, and not a substitute for advice from a doctor, a nurse, a
           pharmacist, a psychologist, a counsellor or any other qualified professional.
         </p>
@@ -64,13 +64,19 @@ export default function TermsPage() {
         </p>
         <p>
           The care-team feature helps you write a summary and send it to someone you choose. Sending it
-          is always your action, through your own apps. Wellbeings does not know whether it arrived,
+          is always your action, through your own apps. Arun does not know whether it arrived,
           whether it was read, or what was done about it, and cannot follow up.
         </p>
         <p>
           The videos, hope box, gratitude practice, breathing and safety plan are self-help tools
           adapted from published approaches. They are not therapy, and the safety plan is one you
           write for yourself, not a plan agreed with a clinician unless you take it to one.
+        </p>
+        <p>
+          The listener (&ldquo;Just sit with me for a minute&rdquo;) is not a person, not a therapist
+          and not a crisis line. Its replies are written in advance and chosen on your phone. If what
+          you write sounds like you are in danger, it shows you helplines, because a person on one of
+          those lines can do what it cannot.
         </p>
 
         <p>
@@ -111,7 +117,7 @@ export default function TermsPage() {
         <p>Please do not:</p>
         <ul>
           <li>
-            present output from Wellbeings as a clinical assessment, a diagnosis, or evidence of
+            present output from Arun as a clinical assessment, a diagnosis, or evidence of
             anyone&apos;s health status, to an employer, an institution or anyone else;
           </li>
           <li>use it to screen, assess or make decisions about another person without their knowledge;</li>
@@ -132,7 +138,7 @@ export default function TermsPage() {
 
         <h2>Licence and the code</h2>
         <p>
-          Wellbeings is an open-source project. The source is public and MIT licensed, so you are free
+          Arun is an open-source project. The source is public and MIT licensed, so you are free
           to read it, run it and verify for yourself that nothing leaves the page. That is the point of
           publishing it: a privacy claim you can check beats one you have to take on trust.
         </p>
@@ -155,7 +161,7 @@ export default function TermsPage() {
 
         <h2>Contact</h2>
         <p>
-          Wellbeings is built by Aryan Manhas. Questions, corrections and reports of anything
+          Arun is built by Aryan Manhas. Questions, corrections and reports of anything
           inaccurate are genuinely welcome through the project&apos;s public repository or the{" "}
           <a href="../me/">author page</a>. There is no support desk and no guaranteed response time.
         </p>

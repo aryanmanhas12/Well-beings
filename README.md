@@ -1,4 +1,6 @@
-# Wellbeings
+# Arun
+
+_Formerly Wellbeings. Arun (अरुण) is the red glow of dawn._
 
 A quiet place for hard days, and a private look at everyday wellbeing for the steadier ones. It
 opens on a two-tap check-in, answers in a way that fits what you said, and keeps a safety plan, a
@@ -11,7 +13,7 @@ NeuroBioPsych vision, goals and ways to connect).
 **Companion project:** [Ronak](https://aryanmanhas12.github.io/Psych/), the dedicated
 mental-health screening experience (PHQ-9 / GAD-7 / PHQ-4 / AUDIT-C in six languages).
 
-Wellbeings and Ronak are deliberately separate products. Moving between them passes a URL
+Arun and Ronak are deliberately separate products. Moving between them passes a URL
 parameter naming the origin app, and at most one coarse severity band, and nothing else. They are
 served from the same origin, so a browser keeps their `localStorage` together; each app only ever
 reads its own keys.
@@ -23,10 +25,17 @@ Five rooms, on a bottom tab bar on phones and a top bar on wider screens:
 | Tab | What is in it |
 | --- | --- |
 | **Here** | The dawn sky, the check-in ("How are you arriving?", "And the days ahead?"), a reply fitted to the answers, one small thing to do, and something you saved yourself on a low day. |
-| **Calm** | Breathe with the sun (in 4, out 6), 5-4-3-2-1 grounding, and a short list of verified films for hard days that load from YouTube only after you agree. |
+| **Watch** | Talks and stories chosen for hard days (I See Something, Leading with Lollipops, Fred Rogers and more), loaded from YouTube only after you agree, with breathing and 5-4-3-2-1 grounding underneath for when you can't watch. An Instagram shelf for Aryan's own videos is ready and appears once it has reels. |
 | **Hope** | Three good things, a hope box (people, things ahead, good moments, hard times survived, songs, photos) and a note written on a steadier day for a heavier one. |
 | **Plan** | A Stanley–Brown safety plan, with a calm-day editor and a "use it now" view where every number is a button; plus the daily plan from the wellbeing check. |
 | **Reach out** | Helplines for your region, words to borrow for messaging someone, an opt-in care-team contact, and the way to Ronak. |
+
+**Just sit with me for a minute** opens a quiet listener from anywhere on Here: replies written in
+advance and chosen on the phone, helplines the moment something sounds dangerous, and nothing kept
+when it closes. An optional AI mode exists behind a relay (`listener-relay/`) and is off unless the
+site is built with `NEXT_PUBLIC_LISTENER_ENDPOINT`. Text boxes for good things and the note have a
+microphone that asks before any browser speech service is used. **Today's line** on Here is edited
+by hand each week in `well-beings/lib/daily-lines.ts`.
 
 The sky starts every day as night and rises a step with each small thing you do for yourself.
 Nothing is ever taken away; a missed day is a new night, not a broken streak. The first visit
@@ -60,7 +69,7 @@ recommendation and medical concern.
 directories · `/about/` what it is and is not · `/privacy/` every storage key and exactly what is
 and is not sent · `/terms/` not a medical device, not a crisis service, not monitored.
 
-> Wellbeings is a self-guidance tool, not a medical device and not a crisis service. If you're
+> Arun is a self-guidance tool, not a medical device and not a crisis service. If you're
 > struggling, [findahelpline.com](https://findahelpline.com) lists verified, free, 24/7 support
 > lines for 130+ countries.
 

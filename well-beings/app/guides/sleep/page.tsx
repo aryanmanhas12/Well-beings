@@ -114,7 +114,7 @@ export default function SleepGuide() {
             of which land on sleep before they land anywhere else.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link>: five minutes, and it tells you whether sleep
+            <Link href="/">The Arun check</Link>: five minutes, and it tells you whether sleep
             is actually your weak link or whether something else is.
           </li>
         </ul>

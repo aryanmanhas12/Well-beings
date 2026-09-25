@@ -283,7 +283,7 @@ export function ResultsScreen({
               This looks like more than a quick check-in
             </div>
             <div style={{ fontSize: 12.5, color: "var(--color-neutral-400)", textWrap: "pretty" }}>
-              {COMPANION_NAME} is Wellbeings&apos; companion app: the full PHQ-9/GAD-7/AUDIT-C picture, in six
+              {COMPANION_NAME} is Arun&apos;s companion app: the full PHQ-9/GAD-7/AUDIT-C picture, in six
               languages, with score history over time and a guided conversation if you&apos;re not sure where to
               start. It&apos;s free, private, and runs entirely on-device, same as this one.
             </div>

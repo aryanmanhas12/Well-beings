@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BloomSun } from "@/components/haven/BloomSun";
 import Link from "next/link";
 import { GUIDE_PAGES, NAV_PAGES, SITE_NAME } from "@/lib/site";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -33,6 +34,7 @@ export default function NotFound() {
       <header className="site-head">
         <div className="site-head-inner">
           <Link href="/" className="site-wordmark">
+            <BloomSun size={26} />
             {SITE_NAME}
           </Link>
           <nav aria-label="Main">
@@ -58,7 +60,7 @@ export default function NotFound() {
           <h2>Where you probably meant to go</h2>
           <ul>
             <li>
-              <Link href="/">The Wellbeings check</Link>: five minutes, entirely private, and it
+              <Link href="/">The Arun check</Link>: five minutes, entirely private, and it
               tells you which one thing is worth changing first.
             </li>
             <li>
@@ -66,7 +68,7 @@ export default function NotFound() {
               someone now.
             </li>
             <li>
-              <Link href="/about/">About Wellbeings</Link>: what it measures and what it does not.
+              <Link href="/about/">About Arun</Link>: what it measures and what it does not.
             </li>
             <li>
               <Link href="/privacy/">Privacy</Link>: where your answers live.

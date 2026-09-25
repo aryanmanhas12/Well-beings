@@ -276,7 +276,7 @@ export function useWellbeings() {
             "It gives you a snapshot and two or three things worth trying. It is not a diagnosis of anything, and any question can tell you why it is being asked.",
           ]
         : [
-            "Hey there. I’m your Wellbeings check-in. It takes about five minutes, mostly taps. You can change any answer as you go, your answers save as you go, and there’s a help button on every screen.",
+            "Hey there. I’m your Arun check-in. It takes about five minutes, mostly taps. You can change any answer as you go, your answers save as you go, and there’s a help button on every screen.",
             "The important bit first: nothing leaves this device. No account, no server, no third parties. You can delete all of it with one tap, whenever you want.",
             "It covers sleep, movement, food, stress, time to yourself and how your week is shaped. A few questions borrow wording from screeners clinicians use. Those signal what is worth attention, they do not diagnose you.",
           ],
@@ -361,7 +361,7 @@ export function useWellbeings() {
       sleepLatency: A.sleepLatency !== undefined ? Number(A.sleepLatency) : undefined,
       sleepScreens: A.sleepScreens !== undefined ? Number(A.sleepScreens) : undefined,
       chrono: A.chrono as RawAnswers["chrono"],
-      wake: Number(A.wake),
+      wake: Number(A.wake) || 7,
       workload: Number(A.workload),
       phq: phqKeys.map((k) => A[k]).filter((v) => v !== undefined).map(Number),
       phqExpanded: A.phq3 !== undefined,

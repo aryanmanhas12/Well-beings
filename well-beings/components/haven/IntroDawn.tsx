@@ -61,7 +61,7 @@ export function IntroDawn({ onDone, replayKey }: { onDone: () => void; replayKey
       className={leaving ? "intro leaving" : "intro"}
       role="dialog"
       aria-modal="true"
-      aria-label="Welcome to Wellbeings"
+      aria-label="Welcome to Arun"
     >
       <button type="button" className="intro-skip" onClick={finish}>
         Skip

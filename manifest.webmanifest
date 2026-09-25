@@ -1,17 +1,15 @@
 {
-  "name": "Wellbeings: your everyday wellbeing check",
-  "short_name": "Wellbeings",
-  "description": "A private wellbeing check covering sleep, movement, food, stress, connection and routine. Runs entirely in your browser. Not a diagnosis.",
+  "name": "Arun: a quiet place for hard days",
+  "short_name": "Arun",
+  "description": "A private safe place for hard days: a two-tap check-in, breathing, a hope box, a safety plan and helplines one tap away. Runs on your phone; nothing is sent anywhere. Not a diagnosis.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#17120E",
-  "theme_color": "#17120E",
+  "background_color": "#110921",
+  "theme_color": "#0B0617",
   "categories": [
     "health",
-    "medical",
-    "lifestyle",
-    "productivity"
+    "lifestyle"
   ],
   "icons": [
     {

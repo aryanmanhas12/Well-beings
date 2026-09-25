@@ -37,7 +37,7 @@ export function Header({
         type="button"
         className="nav-brand"
         onClick={onHome}
-        aria-label="Wellbeings, go to your safe place"
+        aria-label="Arun, go to your safe place"
         style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", padding: 0, minHeight: 44, minWidth: 44, color: "inherit", cursor: "pointer" }}
       >
         <BloomSun size={30} />
@@ -51,7 +51,7 @@ export function Header({
             whiteSpace: "nowrap",
           }}
         >
-          Wellbeings
+          Arun
         </span>
       </button>
       {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped

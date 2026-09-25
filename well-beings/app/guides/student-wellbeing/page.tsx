@@ -24,7 +24,7 @@ export default function StudentGuide() {
           It is worth saying plainly, because almost every study tool implies otherwise. Grades are
           one part of a life. A term where you worked constantly, slept badly, saw nobody and hit
           your targets is not a good term, and a tool that scores it as one is measuring the wrong
-          thing. Wellbeings deliberately asks about sleep, food, movement, connection and recovery
+          thing. Arun deliberately asks about sleep, food, movement, connection and recovery
           alongside workload, and it will not tell you to trade them for hours.
         </p>
 
@@ -99,7 +99,7 @@ export default function StudentGuide() {
             failure.
           </li>
           <li>
-            <Link href="/">The Wellbeings check</Link>: tell it you are studying and it adapts the
+            <Link href="/">The Arun check</Link>: tell it you are studying and it adapts the
             questions and the plan.
           </li>
         </ul>

@@ -22,20 +22,24 @@ const FAQ = [
     a: "Only when you say you are arriving heavy or cannot see a way forward. Asking directly is what clinicians are trained to do, and the research on it is consistent: asking does not put the idea in someone's head, and it can reduce distress. Your answer only changes what the app shows you next, such as your safety plan and helplines.",
   },
   {
-    q: "Does Wellbeings diagnose anything?",
+    q: "Does Arun diagnose anything?",
     a: "No. It has no diagnostic capability and makes no diagnostic claim. It reflects back what you reported, says which patterns are worth attention, and names the point at which a qualified professional is the better next step. Nothing it shows you is a medical finding.",
   },
   {
     q: "Where do my answers go?",
-    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit. The one thing that ever loads from elsewhere is a video on the Calm screen, and only after you tap it and agree. Deleting your data removes it from that browser permanently.",
+    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit. Two things can reach outside the phone, and both only after you tap and agree: a video on the Watch tab loads from YouTube, and the microphone button, in browsers that cannot turn speech into text on the phone itself, uses the browser's own speech service (Google in Chrome, Apple in Safari). Arun never receives the audio. Deleting your data removes everything from that browser permanently.",
   },
   {
-    q: "How is Wellbeings different from Ronak?",
-    a: "Wellbeings is the everyday safe place: checking in, calming down, keeping hope and a safety plan within reach, and a broad look at sleep, movement and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps that link to each other; neither sends the other your answers.",
+    q: "Why is it called Arun?",
+    a: "Arun (अरुण) is the red glow of dawn, the light just before the sun clears the horizon, which is what the whole app is drawn around: a night sky that lightens a step with each small thing you do. It was called Wellbeings until September 2026.",
+  },
+  {
+    q: "How is Arun different from Ronak?",
+    a: "Arun is the everyday safe place: checking in, calming down, keeping hope and a safety plan within reach, and a broad look at sleep, movement and routine. Ronak is the dedicated mental-health screening tool, covering depression, anxiety and related instruments in depth and in six languages. They are separate apps that link to each other; neither sends the other your answers.",
   },
   {
     q: "Is the advice evidence-based?",
-    a: "Each tool in the safe place is adapted from a published approach, and the app says which, with the size of the effect in plain words, including when it is small. That evidence is for the techniques, not for this app: Wellbeings itself has not been tested in a trial, and it says so. Where evidence is weak or young, the app says that too.",
+    a: "Each tool in the safe place is adapted from a published approach, and the app says which, with the size of the effect in plain words, including when it is small. That evidence is for the techniques, not for this app: Arun itself has not been tested in a trial, and it says so. Where evidence is weak or young, the app says that too.",
   },
 ];
 
@@ -44,9 +48,9 @@ export default function AboutPage() {
     <PageShell path={PATH}>
       <JsonLd path={PATH} faq={FAQ} />
       <div className="prose">
-        <h1>About Wellbeings</h1>
+        <h1>About Arun</h1>
         <p className="lede">
-          Wellbeings is a quiet place for hard days, and a private look at everyday wellbeing for the
+          Arun is a quiet place for hard days, and a private look at everyday wellbeing for the
           steadier ones. It runs entirely on your phone, it does not diagnose anything, and it is
           honest about where it stops.
         </p>
@@ -155,11 +159,11 @@ export default function AboutPage() {
           <Link href="/resources/">support page</Link> lists free lines you can reach today.
         </p>
 
-        <h2>Wellbeings and {COMPANION_NAME}</h2>
+        <h2>Arun and {COMPANION_NAME}</h2>
         <p>
-          These are two tools with two jobs. Wellbeings is the everyday safe place and the broad
+          These are two tools with two jobs. Arun is the everyday safe place and the broad
           lifestyle picture. {COMPANION_NAME} is the dedicated mental-health screening experience.
-          Wellbeings deliberately does not try to be the second one: if what you describe looks like
+          Arun deliberately does not try to be the second one: if what you describe looks like
           it needs a proper mental-health screen, it says so and points you there rather than
           pretending to do it itself.
         </p>
@@ -183,7 +187,7 @@ export default function AboutPage() {
 
         <h2>Who made it</h2>
         <p>
-          Wellbeings is built by Aryan Manhas as part of the NeuroBioPsych project. It is not a
+          Arun is built by Aryan Manhas as part of the NeuroBioPsych project. It is not a
           clinical product, it has no institutional backing, and it carries no professional
           accreditation. Saying so plainly seems more useful than implying otherwise. More about the
           project is on the <a href="../me/">author page</a>.

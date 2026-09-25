@@ -112,7 +112,7 @@ function manualHint(): string {
   // Brave copies Chrome's user-agent, so the navigator.brave probe is the only
   // reliable way to tell them apart and not send you to the wrong menu.
   if ("brave" in navigator)
-    return "In Brave: open the ☰ menu (top right), then “Install Wellbeings…”. Brave keeps it there instead of in the address bar. On Brave for Android it's ⋮ → “Add to Home screen”.";
+    return "In Brave: open the ☰ menu (top right), then “Install Arun…”. Brave keeps it there instead of in the address bar. On Brave for Android it's ⋮ → “Add to Home screen”.";
   if (/Firefox\//.test(ua))
     return "Firefox on desktop doesn’t install web apps. Chrome, Edge or Brave will, and Firefox on Android does it via ⋮ → Install.";
   if (/Edg\//.test(ua)) return "In Edge: ⋯ menu → Apps → “Install this site as an app”.";
@@ -182,7 +182,7 @@ export function InstallApp({
 
           {state === "ready" ? (
             <button className="btn btn-primary" onClick={install} style={{ fontSize: 12.5 }}>
-              Install Wellbeings
+              Install Arun
             </button>
           ) : (
             <div

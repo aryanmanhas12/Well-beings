@@ -1,8 +1,8 @@
 # Care integration: how professionals can be involved without anyone being watched
 
 Ronak is planned to connect people with mental-health professionals who can step in when someone
-cannot find hope. Wellbeings is where people check in day to day. This document is the contract
-between those two ideas: what Wellbeings can hand to a care team, how, and the rules any future
+cannot find hope. Arun is where people check in day to day. This document is the contract
+between those two ideas: what Arun can hand to a care team, how, and the rules any future
 integration has to keep.
 
 It exists because "monitor the person" and "a safe place" pull in opposite directions, and the
@@ -83,11 +83,11 @@ does not know.
 
 In order, and none of it before the one above it:
 
-1. A consent screen in Wellbeings naming the clinic or professional, what they receive, how often,
+1. A consent screen in Arun naming the clinic or professional, what they receive, how often,
    what they do with it and what they do not (for example: "this is not monitored overnight").
 2. The same wording on `/privacy/` and `/terms/`, shipped in the same release.
 3. A transport the person triggers. The simplest honest version is still the share sheet, with the
-   JSON attached. Any server-side receiver belongs to Ronak or the clinic, never to Wellbeings, and
+   JSON attached. Any server-side receiver belongs to Ronak or the clinic, never to Arun, and
    carries its own privacy policy.
 4. A clear way to stop: revoking consent on the Reach out screen ends any further sending, and the
    screen says what the receiving side keeps.

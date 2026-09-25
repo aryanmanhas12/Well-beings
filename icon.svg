@@ -1,2 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Wellbeings">
-  <rect width="512" height="512" fill="#17120E"/><rect x="81.92" y="81.92" width="348.16" height="58.51" rx="15.21" fill="#E9A579"/><rect x="81.92" y="178.47" width="257.64" height="58.51" rx="15.21" fill="#8C7B66"/><rect x="81.92" y="275.02" width="174.08" height="58.51" rx="15.21" fill="#8C7B66"/><rect x="81.92" y="371.57" width="100.97" height="58.51" rx="15.21" fill="#8C7B66"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Arun">
+  <defs>
+    <linearGradient id="n" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#110921"/>
+      <stop offset="1" stop-color="#2E1956"/>
+    </linearGradient>
+    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FF7AB0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#FF7AB0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#n)"/>
+  <circle cx="256" cy="256" r="254.2344827586207" fill="url(#g)"/>
+  <g transform="translate(45.35 45.35) scale(6.5829)"><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(0 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(45 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(90 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(135 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(180 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(225 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(270 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(315 32 32)"/><circle cx="32" cy="32" r="11.5" fill="#FFC857"/><circle cx="32" cy="32" r="6.5" fill="#FFE3A1" opacity="0.85"/></g>
+</svg>
