@@ -16,12 +16,13 @@
  * data, because this runs on a developer's machine long before anyone answers
  * anything.
  *
- * Colours are pasted from the tokens and the sky in app/globals.css, and the
- * mark comes from scripts/bloom.mjs. If those change, re-run; there is no
- * way to import CSS custom properties into a standalone renderer.
+ * Colours are pasted from the tokens in app/globals.css, and the logo comes
+ * from lib/mark-geometry.mjs, the same file that draws the header mark and
+ * the app icons. If either changes, re-run; there is no way to import CSS
+ * custom properties into a standalone renderer.
  */
 import { chromium } from "playwright-core";
-import { bloomElements } from "./bloom.mjs";
+import { markSvgBody } from "../lib/mark-geometry.mjs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, join } from "node:path";
 import { readdirSync, readFileSync, existsSync } from "node:fs";
@@ -53,34 +54,28 @@ function karlaDataUrl() {
 const KARLA = karlaDataUrl();
 const EXECUTABLE = process.env.CHROMIUM_PATH || "/opt/pw-browsers/chromium";
 
-/* The card is the app's own first screen, flattened: a sunrise panel with
-   the bloom-sun coming up over the hills, and the one sentence that says
-   what the place is. No screenshot of a real person's check-in could ever
-   end up here, because this runs once at build time on a developer's
-   machine. */
+/* The card is the primary lockup from the logo canvas, flattened: the
+   sun rising out of the window, large, beside the one sentence that says
+   what the place is, under a small mark-and-"arun" lockup. No screenshot
+   of a real person's check-in could ever end up here, because this runs
+   once at build time on a developer's machine. */
 const html = `<!doctype html><meta charset="utf-8">
 <style>
   @font-face{font-family:Karla;font-weight:200 800;src:url(${KARLA}) format("woff2")}
   *{box-sizing:border-box;margin:0}
   body{width:1200px;height:630px;background:#110921;color:#FFF4E8;
        font-family:Karla,system-ui,sans-serif;display:flex;
-       padding:64px 64px 64px 80px;gap:56px;align-items:center;overflow:hidden}
+       padding:56px 72px 56px 80px;gap:56px;align-items:center;overflow:hidden}
   .copy{flex:1;min-width:0}
-  .mark{display:flex;align-items:center;gap:14px;font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:34px}
+  .mark{display:flex;align-items:center;gap:12px;font-size:36px;font-weight:700;letter-spacing:-.03em;margin-bottom:34px;color:#FFF1DE}
   h1{font-size:64px;line-height:1.04;font-weight:700;letter-spacing:-.025em;max-width:600px}
   p{font-size:24px;line-height:1.45;color:#CFC3DE;max-width:560px;margin-top:22px}
   .foot{display:flex;gap:12px;margin-top:34px;font-size:18px;color:#BDB0D0}
   .pill{border:1px solid rgba(251,241,230,.22);border-radius:999px;padding:6px 16px}
-  .sky{position:relative;flex:none;width:400px;height:500px;border-radius:28px;overflow:hidden;
-       background:linear-gradient(180deg,#3B1D63 0%,#7A2E7E 48%,#E8677E 78%,#FFB26B 100%)}
-  .glow{position:absolute;left:50%;bottom:-150px;width:520px;height:420px;margin-left:-260px;border-radius:50%;
-        background:radial-gradient(closest-side,#FFC857,transparent);opacity:.75}
-  .sun{position:absolute;left:50%;bottom:14px;margin-left:-120px}
-  .hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:120px}
-  .star{position:absolute;width:4px;height:4px;border-radius:50%;background:#FFF4DE;opacity:.7}
+  .logo{flex:none;display:block}
 </style>
 <div class="copy">
-  <div class="mark"><svg width="44" height="44" viewBox="0 0 64 64">${bloomElements()}</svg>Arun</div>
+  <div class="mark"><svg width="40" height="43" viewBox="8 8 104 112" aria-hidden="true">${markSvgBody({ detail: "medium" })}</svg>arun</div>
   <h1>A quiet place for the hard days</h1>
   <p>Check in with two taps. Breathe with the sun, keep a hope box and a safety plan, and reach the right people fast.</p>
   <div class="foot">
@@ -88,16 +83,7 @@ const html = `<!doctype html><meta charset="utf-8">
     <span class="pill">Free helplines, one tap</span>
   </div>
 </div>
-<div class="sky">
-  <span class="star" style="left:70%;top:9%"></span><span class="star" style="left:84%;top:18%"></span>
-  <span class="star" style="left:22%;top:12%"></span><span class="star" style="left:48%;top:6%"></span>
-  <div class="glow"></div>
-  <svg class="sun" width="240" height="240" viewBox="0 0 64 64">${bloomElements()}</svg>
-  <svg class="hills" viewBox="0 0 400 90" preserveAspectRatio="none">
-    <path fill="#5B2A6E" d="M0 52 C 60 30, 110 34, 170 48 S 290 26, 400 40 L 400 90 L 0 90 Z"/>
-    <path fill="#3A1B4F" d="M0 70 C 70 52, 140 58, 210 66 S 330 54, 400 62 L 400 90 L 0 90 Z"/>
-  </svg>
-</div>`;
+<svg class="logo" width="420" height="452" viewBox="8 8 104 112" aria-hidden="true">${markSvgBody({ detail: "full" })}</svg>`;
 
 const browser = await chromium.launch({ executablePath: EXECUTABLE, args: ["--no-sandbox"] });
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

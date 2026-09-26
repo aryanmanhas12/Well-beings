@@ -17,7 +17,16 @@ It was Wellbeings until September 2026. The rename is display-only: the
 repository, the `/Well-beings` path, every `wellbeings-*` storage key, the
 `ref=wellbeings` handoff and the `wellbeings.care-summary/1` schema keep the
 old spelling, and must, because changing them loses saved data or breaks
-Ronak. The mark is the bloom-sun.
+Ronak.
+
+**The logo** is the "Arun logo" canvas: the sun rising out of the top of a
+square window, over flat bands of blue sky warming to dawn orange, sea and
+deep-blue peaks and a rose ridge, beside a lowercase "arun" in Karla 700.
+One file draws it everywhere (`lib/mark-geometry.mjs`: header, site pages,
+listener, icons, favicon, social card), and detail steps down with size:
+five rays, then three, then none and a bigger sun. The bloom-sun is the
+app's illustration (the sun in the sky, the intro, breathing), not the
+logo. Never draw either by hand a second time.
 
 ## The tells, and what to do instead
 

@@ -1,6 +1,8 @@
 # Arun
 
-_Formerly Wellbeings. Arun (अरुण) is the red glow of dawn._
+_Formerly Wellbeings. Arun (अरुण) is the red glow of dawn. The logo is the sun rising out of a
+window, drawn once in `well-beings/lib/mark-geometry.mjs` for the header, icons, favicon and
+social card._
 
 A quiet place for hard days, and a private look at everyday wellbeing for the steadier ones. It
 opens on a two-tap check-in, answers in a way that fits what you said, and keeps a safety plan, a

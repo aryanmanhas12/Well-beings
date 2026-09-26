@@ -3386,3 +3386,46 @@ a.btn-quiet:hover {
   font-size: 13.5px;
   color: var(--color-neutral-400);
 }
+
+/* ── The Arun logo ────────────────────────────────────────────────────────
+   From the "Arun logo" design canvas: the sun rising out of a square window
+   over blue sky and mountains (components/ArunMark.tsx, drawn from
+   lib/mark-geometry.mjs), set beside a lowercase "arun" in Karla 700 with
+   tight tracking. The wordmark stays Karla in Hindi too: it is a logo, not
+   running text. The frame is cream on night and plum-black on paper, as
+   the canvas's night and paper lockups draw it. */
+:root {
+  --mark-frame: #FFF1DE;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --mark-frame: #231013;
+  }
+}
+:root[data-theme="light"] {
+  --mark-frame: #231013;
+}
+:root[data-theme="dark"] {
+  --mark-frame: #FFF1DE;
+}
+.arun-wordmark {
+  font-family: var(--font-karla), "Karla", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.site-wordmark .arun-wordmark {
+  font-size: 26px;
+}
+.rays-week {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.rays-note {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--color-neutral-600);
+}

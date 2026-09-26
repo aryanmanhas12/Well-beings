@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { MAX_PHOTOS, type Haven } from "@/hooks/useHaven";
 import { mentionsCrisis } from "@/lib/journal";
 import { VoiceButton } from "../VoiceButton";
+import { localDateKey } from "@/lib/care";
+import { ArunMark } from "../ArunMark";
 import { HOPE_KINDS, WHY } from "@/lib/havenContent";
 import type { HopeKind } from "@/lib/haven";
 import { formatDay, GoTo, Why } from "./shared";
@@ -84,10 +86,24 @@ function GoodThings({ haven, check, lang }: { haven: Haven; check: (t: string) =
   const [saved, setSaved] = useState(false);
   const days = [...haven.state.goodThings].sort((a, b) => (a.date < b.date ? 1 : -1));
   const total = days.reduce((n, d) => n + d.items.length, 0);
+  /* The logo's rays, from the Arun logo canvas: the middle one is always
+     lit and each good thing kept since Monday lights one more. It counts
+     what was noticed, never the days that were missed, so there is nothing
+     to break. */
+  const week = mondayKey(new Date());
+  const lit = Math.min(RAYS - 1, days.filter((d) => d.date >= week).reduce((n, d) => n + d.items.length, 0));
 
   return (
     <>
       <section className="panel panel-pink" aria-labelledby="three-title">
+        <div className="rays-week">
+          <ArunMark width={96} lit={lit} />
+          <p className="rays-note">
+            {lit >= RAYS - 1
+              ? "Every ray is lit this week."
+              : `${lit + 1} of ${RAYS} rays lit this week. Each good thing you keep lights one more.`}
+          </p>
+        </div>
         <h2 id="three-title">Three good things</h2>
         <p className="panel-lede">
           Up to three things from today that went okay, however small. One is plenty on a hard day.
@@ -564,4 +580,12 @@ function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => vo
       <Why>{WHY.hopepath}</Why>
     </section>
   );
+}
+
+const RAYS = 5;
+
+/** This week's Monday as a local YYYY-MM-DD, the same shape good things are
+    dated with, so the two compare as strings. */
+function mondayKey(d: Date): string {
+  return localDateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7)));
 }

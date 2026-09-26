@@ -7,11 +7,11 @@ import type { CSSProperties } from "react";
  * idea in a single shape: something coming up after a dark night, and
  * something that grows. Rays would read as weather; petals read as alive.
  *
- * The same geometry draws the header mark, the sun rising in the sky, the
- * first-visit intro and the app icon (scripts/make-icons.mjs repeats these
- * numbers). Eight petals, alternating dawn pink and lilac, behind a sun
- * disc. At 16px it still reads as a flower-sun because the petals are few
- * and fat.
+ * It draws the sun rising in the sky, the first-visit intro and the
+ * breathing sun. It is the app's illustration, not its logo: the logo is
+ * the sun rising out of a window (components/ArunMark.tsx), from the Arun
+ * logo canvas. Eight petals, alternating dawn pink and lilac, behind a sun
+ * disc.
  *
  * `open` unfolds the petals from the centre, 0 to 1, for the intro. The
  * transform is on each petal's own group, so it animates on the compositor.

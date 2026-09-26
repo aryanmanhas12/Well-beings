@@ -3,7 +3,7 @@ import { NAV_PAGES, PAGE_BY_PATH, SITE_NAME, breadcrumbsFor } from "@/lib/site";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { SiteFooter } from "./SiteFooter";
 import { CrisisStrip } from "../CrisisStrip";
-import { BloomSun } from "../haven/BloomSun";
+import { ArunMark } from "../ArunMark";
 
 /**
  * The frame every content page sits in.
@@ -47,9 +47,9 @@ export function PageShell({
 
       <header className="site-head">
         <div className="site-head-inner">
-          <Link href="/" className="site-wordmark" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-            <BloomSun size={26} />
-            {SITE_NAME}
+          <Link href="/" className="site-wordmark" aria-label={SITE_NAME} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <ArunMark width={40} />
+            <span className="arun-wordmark">arun</span>
           </Link>
           <nav aria-label="Main">
             <ul className="site-nav">

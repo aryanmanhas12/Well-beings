@@ -1,15 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Arun">
-  <defs>
-    <linearGradient id="n" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#110921"/>
-      <stop offset="1" stop-color="#2E1956"/>
-    </linearGradient>
-    <radialGradient id="g" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#FF7AB0" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#FF7AB0" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="512" height="512" fill="url(#n)"/>
-  <circle cx="256" cy="256" r="254.2344827586207" fill="url(#g)"/>
-  <g transform="translate(45.35 45.35) scale(6.5829)"><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(0 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(45 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(90 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(135 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(180 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(225 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#FF7AB0" transform="rotate(270 32 32)"/><ellipse cx="32" cy="15.5" rx="6.6" ry="11.5" fill="#B794FF" transform="rotate(315 32 32)"/><circle cx="32" cy="32" r="11.5" fill="#FFC857"/><circle cx="32" cy="32" r="6.5" fill="#FFE3A1" opacity="0.85"/></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 120 120" role="img" aria-label="Arun">
+  <rect width="120" height="120" fill="#110921"/><g transform="translate(60 61) scale(0.98) translate(-60 -65)"><rect x="22" y="40" width="76" height="22" fill="#3E9FD0"/><rect x="22" y="62" width="76" height="14" fill="#86CBE6"/><rect x="22" y="76" width="76" height="10" fill="#FFD98A"/><rect x="22" y="86" width="76" height="28" fill="#EE7A45"/><path d="M 22 114 V 92 L 42 72 L 70 114 Z" fill="#2A8A94"/><path d="M 52 114 L 78 68 L 98 88 V 114 Z" fill="#1F6B82"/><path d="M 22 114 V 104 Q 44 96 62 103 T 98 101 V 114 Z" fill="#C2304F"/><path d="M 21 35 H 99 A 4 4 0 0 1 103 39 V 115 A 4 4 0 0 1 99 119 H 21 A 4 4 0 0 1 17 115 V 39 A 4 4 0 0 1 21 35 Z M 22 40 V 114 H 98 V 40 Z" fill="#FFF1DE" fill-rule="evenodd"/><circle cx="60" cy="40" r="16" fill="#FFD25E"/><line x1="47.66" y1="23.01" x2="42.95" y2="16.54" stroke="#FFD25E" stroke-width="4.4" stroke-linecap="round" stroke-opacity="1"/><line x1="60" y1="19" x2="60" y2="11" stroke="#FFD25E" stroke-width="4.4" stroke-linecap="round" stroke-opacity="1"/><line x1="72.34" y1="23.01" x2="77.05" y2="16.54" stroke="#FFD25E" stroke-width="4.4" stroke-linecap="round" stroke-opacity="1"/></g></svg>

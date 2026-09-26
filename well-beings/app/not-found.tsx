@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BloomSun } from "@/components/haven/BloomSun";
+import { ArunMark } from "@/components/ArunMark";
 import Link from "next/link";
 import { GUIDE_PAGES, NAV_PAGES, SITE_NAME } from "@/lib/site";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -33,9 +33,9 @@ export default function NotFound() {
 
       <header className="site-head">
         <div className="site-head-inner">
-          <Link href="/" className="site-wordmark">
-            <BloomSun size={26} />
-            {SITE_NAME}
+          <Link href="/" className="site-wordmark" aria-label={SITE_NAME} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <ArunMark width={40} />
+            <span className="arun-wordmark">arun</span>
           </Link>
           <nav aria-label="Main">
             <ul className="site-nav">

@@ -1,5 +1,5 @@
 import { GearIcon, ShieldIcon } from "./icons";
-import { BloomSun } from "./haven/BloomSun";
+import { ArunMark } from "./ArunMark";
 import { Lang, LANGS, Strings } from "@/lib/i18n";
 
 export function Header({
@@ -40,18 +40,12 @@ export function Header({
         aria-label="Arun, go to your safe place"
         style={{ display: "flex", alignItems: "center", gap: 9, background: "none", border: "none", padding: 0, minHeight: 44, minWidth: 44, color: "inherit", cursor: "pointer" }}
       >
-        <BloomSun size={30} />
+        <ArunMark width={40} />
         <span
-          className="nav-wordmark"
-          style={{
-            fontFamily: "var(--font-display)",
-            letterSpacing: "var(--font-display-tracking)",
-            fontWeight: 600,
-            fontSize: 22,
-            whiteSpace: "nowrap",
-          }}
+          className="nav-wordmark arun-wordmark"
+          style={{ fontSize: 27, whiteSpace: "nowrap" }}
         >
-          Arun
+          arun
         </span>
       </button>
       {/* Hidden below 520px via .nav-privacy-tag — at phone widths it wrapped

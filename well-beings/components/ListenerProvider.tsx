@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, ReactNode, createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { BloomSun } from "./haven/BloomSun";
+import { ArunMark } from "./ArunMark";
 import { HelplineList } from "./HelplineList";
 import { VoiceButton } from "./VoiceButton";
 import { useDialogBehaviour } from "./dialogs";
@@ -119,7 +119,7 @@ function ListenerDialog({ lang, region, onClose }: { lang: string; region: Helpl
         onClick={(e) => e.stopPropagation()}
       >
         <div className="listener-head">
-          <BloomSun size={34} />
+          <ArunMark width={34} />
           <h2 id="listener-h">Sit with me</h2>
           <button type="button" className="btn btn-ghost" onClick={onClose} aria-label="Close">
             <span aria-hidden="true">×</span>
