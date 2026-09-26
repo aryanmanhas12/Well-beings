@@ -1,7 +1,10 @@
 {
+  "id": "./",
   "name": "Arun: a quiet place for hard days",
   "short_name": "Arun",
   "description": "A private safe place for hard days: a two-tap check-in, breathing, a hope box, a safety plan and helplines one tap away. Runs on your phone; nothing is sent anywhere. Not a diagnosis.",
+  "lang": "en-IN",
+  "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -35,6 +38,36 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/phone-here.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Here: a two-tap check-in under a dawn sky"
+    },
+    {
+      "src": "screenshots/phone-watch.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Watch: talks and stories chosen for hard days"
+    },
+    {
+      "src": "screenshots/phone-hope.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Hope: a hope path, good things, a hope box and a note"
+    },
+    {
+      "src": "screenshots/desktop-here.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Arun on a computer"
     }
   ]
 }

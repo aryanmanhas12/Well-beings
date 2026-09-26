@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { InstallRow } from "./InstallApp";
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
 import { Lang, LANGS } from "@/lib/i18n";
@@ -191,6 +192,8 @@ export function SettingsDialog({
           on={wb.settings.showCitations}
           onChange={() => wb.setShowCitations(!wb.settings.showCitations)}
         />
+
+        <InstallRow />
 
         {onReplayIntro && (
           <button type="button" className="btn btn-quiet" onClick={onReplayIntro} style={{ paddingInline: 0 }}>

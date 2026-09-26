@@ -39,6 +39,11 @@ site is built with `NEXT_PUBLIC_LISTENER_ENDPOINT`. Text boxes for good things a
 microphone that asks before any browser speech service is used. **Today's line** on Here is edited
 by hand each week in `well-beings/lib/daily-lines.ts`.
 
+**Install it as an app.** A quiet card on Here (one tap puts it away for a month) and a row in
+Settings install Arun to the home screen: one tap where the browser offers a prompt, and plain
+steps for iPhone, for Brave, Edge and Firefox, and for Instagram's in-app browser, which cannot
+install and has to hand over to Chrome or Safari first.
+
 The sky starts every day as night and rises a step with each small thing you do for yourself.
 Nothing is ever taken away; a missed day is a new night, not a broken streak. The first visit
 opens on a short sunrise, shown once.

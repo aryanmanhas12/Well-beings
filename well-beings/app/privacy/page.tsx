@@ -57,6 +57,10 @@ export default function PrivacyPage() {
             written if you chose. The conversations themselves are never stored: close the listener and
             they are gone.
           </li>
+          <li>
+            <code>arun-install-v1</code>: the date you tapped &ldquo;Not now&rdquo; on the card about
+            installing Arun, so it stays away for a month. Only written if you tapped it.
+          </li>
         </ul>
         <p>
           There is no cookie, no session storage, no IndexedDB and no fingerprinting. Nothing is

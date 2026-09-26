@@ -11,6 +11,7 @@ import { ronakLink } from "@/lib/bridge";
 import { COMPANION_NAME } from "@/lib/site";
 import { HelplineList } from "../HelplineList";
 import { VoiceButton } from "../VoiceButton";
+import { InstallPanel } from "../InstallApp";
 import { useOpenListener } from "../ListenerProvider";
 import { mentionsCrisis } from "@/lib/journal";
 import { lineFor } from "@/lib/daily-lines";
@@ -466,6 +467,10 @@ export function HereTab({
           <div style={{ order: 12 }}>
             <WellbeingCheckCard wb={wb} goTo={goTo} />
           </div>
+
+          {/* Never on a day that brought up thoughts of suicide: that screen
+              is for the plan and a person, not for an app-store moment. */}
+          {!serious && <InstallPanel style={{ order: 14 }} />}
         </div>
       </div>
     </div>
