@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BloomSun } from "./BloomSun";
 import { Hills } from "./DawnSky";
 import { oohSvg } from "@/lib/ooh.mjs";
-import { playSunrise, setSoundWanted, soundWanted, subscribeSound } from "@/lib/ambient";
+import { playSunrise, setSoundWanted } from "@/lib/ambient";
 import { markIntroPlayed } from "@/lib/intro";
 import { HAVEN_KEY } from "@/lib/haven";
 
@@ -13,9 +13,13 @@ import { HAVEN_KEY } from "@/lib/haven";
  *
  * TWO MOMENTS
  *
- *   Waiting: a night sky, stars, and Ooh asleep on the hill, with one big
- *   button, "Wake the sun". This is the "press start" of a game, and it is
- *   also the only honest way to put music under the sunrise: browsers
+ *   Waiting: a night sky, stars, and Ooh asleep on the hill, the two
+ *   things worth knowing before anything else (nothing you write leaves
+ *   the phone, and it costs nothing), a hint that something is coming, and
+ *   one big button, "Wake the sun". The words are the owner's: say those
+ *   two things and leave the sunrise as a surprise, so the gate does not
+ *   describe what is about to happen. This is the "press start" of a
+ *   game, and it is also the only honest way to put music under the sunrise: browsers
  *   refuse to make sound before a tap, so without it the music would start
  *   halfway through, or not at all. "Without music" beside it turns the
  *   music off and wakes the sun quietly, for anyone on a bus or in a
@@ -57,14 +61,6 @@ function visitedBefore(): boolean {
   }
 }
 
-function greeting(): string {
-  const h = new Date().getHours();
-  if (h < 5 || h >= 22) return "It's late. Be gentle with yourself.";
-  if (h < 12) return "Good morning.";
-  if (h < 17) return "Good afternoon.";
-  return "Good evening.";
-}
-
 export function IntroDawn({
   onDone,
   onHelp,
@@ -79,8 +75,6 @@ export function IntroDawn({
   const goRef = useRef<HTMLButtonElement | null>(null);
   const wakeRef = useRef<HTMLButtonElement | null>(null);
   const returning = useSyncExternalStore(noop, visitedBefore, () => false);
-  const hello = useSyncExternalStore(noop, greeting, () => "");
-  const music = useSyncExternalStore(subscribeSound, soundWanted, () => true);
 
   // Replaying restarts the opening from the top.
   useEffect(() => {
@@ -156,8 +150,9 @@ export function IntroDawn({
 
       {/* Waiting for the tap. */}
       <div className="intro-gate">
-        <p className="intro-gate-hello">{hello || " "}</p>
-        <p className="intro-gate-line">The sun is still asleep.</p>
+        <p className="intro-gate-line">Nothing you write leaves your phone.</p>
+        <p className="intro-gate-sub">And it&apos;s free. No account, nothing to sign up for.</p>
+        <p className="intro-gate-hint">Tap below, then wait for a little surprise.</p>
         <button ref={wakeRef} type="button" className="btn btn-sun intro-wake" onClick={() => void wake(true)}>
           <span className="intro-wake-sun" aria-hidden="true">
             <BloomSun size={26} />
@@ -167,7 +162,6 @@ export function IntroDawn({
         <button type="button" className="intro-quiet" data-sound-control onClick={() => void wake(false)}>
           Without music
         </button>
-        {music && <p className="intro-gate-note">Soft music plays with the sunrise. The speaker at the top turns it off.</p>}
       </div>
 
       {/* Rising. */}
@@ -180,8 +174,13 @@ export function IntroDawn({
       <p className="intro-line" style={{ animationDelay: "2.3s" }}>
         {returning ? "The sun came up for you again." : "That counts for something."}
       </p>
+      {/* After the gate the person has just read the privacy and cost, so
+          the rise does not repeat them; with music off there was no gate,
+          and this is where they are said. */}
       <p className="intro-small">
-        This is a quiet place. Nothing here is a test, and nothing you write leaves your phone.
+        {awake
+          ? "This is a quiet place. Nothing here is a test."
+          : "Nothing here is a test. Nothing you write leaves your phone, and it's free."}
       </p>
       <button ref={goRef} type="button" className="btn btn-sun intro-go" onClick={finish}>
         Come in

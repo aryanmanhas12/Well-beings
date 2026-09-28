@@ -51,7 +51,10 @@ choice is remembered.
 **The opening sunrise** plays each time Arun is opened (once per browser
 session; `lib/intro.ts`, decided before paint in `app/page.tsx`). With
 music on it waits on a night sky for "Wake the sun", because browsers
-allow sound only after a tap, and the rise starts only once the audio is
+allow sound only after a tap. The waiting sky says only what the owner
+asked for: nothing you write leaves your phone, it is free, and a little
+surprise is coming. It never describes the sunrise, which is the
+surprise. The rise starts only once the audio is
 confirmed running, so the swell and the petal bells (`SUNRISE_BELLS`) land
 on the picture. Never after a check-in in the last three days that
 reported thoughts of suicide or not feeling safe. "Need help now" and

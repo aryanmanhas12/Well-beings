@@ -3813,6 +3813,15 @@ a.btn-quiet:hover {
   gap: 12px;
   animation: fadeUpSlow 0.9s 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
+/* On a short phone (320 x 640) the centred gate came down to Ooh's
+   floating z's, which touched "Without music". The margin lifts it by
+   half its size, since it is the only item in the centred column. */
+@media (max-height: 720px) {
+  :root[data-intro-gate] .intro-gate {
+    gap: 10px;
+    margin-bottom: 80px;
+  }
+}
 :root[data-intro-gate] .intro::before {
   animation: none;
   opacity: 0;
@@ -3826,20 +3835,32 @@ a.btn-quiet:hover {
 :root[data-intro-gate] .intro-go {
   display: none;
 }
-.intro-gate-hello {
-  margin: 0;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #E9DDF5;
-}
 .intro-gate-line {
-  margin: 0 0 8px;
+  max-width: 16ch;
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(26px, 7vw, 34px);
   line-height: 1.15;
   color: #FFF8F1;
+  text-wrap: balance;
+}
+.intro-gate-sub {
+  max-width: 30ch;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #FFF1E6;
+  text-wrap: balance;
+}
+/* The hint is the one line that promises something, so it wears the
+   sunrise colour. #FFC857 on the night sky is 8.55:1 at its lightest
+   stop (#3D2163) and 11.27:1 at the middle, where it sits. */
+.intro-gate-hint {
+  margin: 6px 0 8px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #FFC857;
 }
 .intro-wake {
   display: inline-flex;
@@ -3883,13 +3904,6 @@ a.btn-quiet:hover {
   outline: 3px solid #FFF8F1;
   outline-offset: 2px;
   border-radius: 8px;
-}
-.intro-gate-note {
-  max-width: 30ch;
-  margin: 2px 0 0;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: #E9DDF5;
 }
 
 /* Ooh on the hill: asleep while the sky waits, awake with a hop as the
