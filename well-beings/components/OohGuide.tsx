@@ -74,8 +74,13 @@ function reducedMotion() {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 }
 
+/* Only fields that bring up a keyboard. A checkbox, a switch or a button
+   taking focus is not typing: treating every <input> as typing hid the
+   bar on each tap on iPhone (see lib/haptics.ts) and swallowed the tap. */
+const TEXT_ENTRY =
+  "textarea, [contenteditable='true'], input:not([type]), input[type='text'], input[type='search'], input[type='email'], input[type='tel'], input[type='url'], input[type='number'], input[type='password']";
 function isTypingTarget(el: Element | null) {
-  return !!el && el.matches("input, textarea, select, [contenteditable='true']");
+  return !!el && !el.closest(".haptic-switch") && el.matches(TEXT_ENTRY);
 }
 
 interface Part {
@@ -90,6 +95,7 @@ interface Current {
   key: string;
   line: OohLine;
   go?: OohBeat["go"];
+  edge?: boolean;
 }
 
 function OohRun({
@@ -217,7 +223,7 @@ function OohRun({
         const r = edge.el.getBoundingClientRect();
         if (r.top < vh - 24 && (r.width || r.height)) best = edge;
       }
-      const next: Current | null = best ? { key: best.key, line: best.line, go: best.go } : null;
+      const next: Current | null = best ? { key: best.key, line: best.line, go: best.go, edge: best.edge } : null;
       if (settle) clearTimeout(settle);
       const apply = () => {
         /* Never change under a finger that is down: the bar could appear
@@ -290,7 +296,12 @@ function OohRun({
 
   const closeAsk = useCallback(() => setAsk(false), []);
   const past = !stripOpen || !stripInView;
-  const narrating = past && !typing && !script.quiet && !dockAway && !!current;
+  /* The way onward is offered at the bottom even if the greeting is still
+     on screen. On a tall iPad a short room (Hope) fits whole, the
+     greeting never scrolls away, and the bar, with its link to the next
+     room, used never to appear at all. */
+  const onward = !!current?.edge && !!current.go;
+  const narrating = (past || onward) && !typing && !script.quiet && !dockAway && !!current;
   const cornered = past && !typing && !narrating;
 
   return (

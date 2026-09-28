@@ -45,15 +45,25 @@ and at the bottom offers the next room. Every section of every room has a
 line; site pages narrate their headings (`pageHeadingLine`). The bar steps
 aside while typing and comes back only 0.9 s later, and never appears or
 changes under a finger that is down: coming back at once once put it
-under a thumb tapping "Keep it". No bar on a heavy day.
+under a thumb tapping "Keep it". No bar on a heavy day. The bar's link to
+the next room shows even while the greeting is on screen, because on a
+tall iPad a short room fits whole and the bar never came. Only fields
+that bring up a keyboard count as typing: the iPhone haptic switch is a
+hidden checkbox, Safari focuses it on every tick, and when any <input>
+counted, the bar vanished mid-tap and "Go to Hope" did nothing on iPhone
+and iPad (lib/haptics.ts now hands focus straight back).
 
 **The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
 major pads, bowl tones, a synthetic room. It pauses for videos, the
 microphone and hidden tabs. The speaker at the top turns it off, and that
 choice is remembered.
 
-**The opening sunrise** plays each time Arun is opened (once per browser
-session; `lib/intro.ts`, decided before paint in `app/page.tsx`). With
+**The opening sunrise** is permanent, at the owner's request: it plays
+every time Arun is opened, and there is no switch to turn it off. Opened
+means a new tab or launch, or coming back after 20 minutes or more away,
+because an installed app on a phone is mostly resumed, not relaunched; a
+reload does not replay it (`lib/intro.ts`, decided before paint in
+`app/page.tsx`). With
 music on it waits on a night sky for "Wake the sun", because browsers
 allow sound only after a tap. The waiting sky says only what the owner
 asked for: nothing you write leaves your phone, it is free, and a little

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Wellbeings } from "@/hooks/useWellbeings";
 import type { Haven } from "@/hooks/useHaven";
 import type { HelplineRegion } from "@/lib/types";
@@ -19,6 +19,7 @@ import { OohGuide } from "../OohGuide";
 import type { OohScene } from "@/lib/oohScript";
 import { planIsWritten } from "@/lib/haven";
 import { soundWanted } from "@/lib/ambient";
+import { watchReturns } from "@/lib/intro";
 
 const TABS: { id: HavenTab; label: string; Icon: typeof HereIcon }[] = [
   { id: "here", label: "Here", Icon: HereIcon },
@@ -114,6 +115,15 @@ export function HavenShell({
     window.addEventListener(HOME_EVENT, home);
     return () => window.removeEventListener(HOME_EVENT, home);
   }, [tab, view, goTo]);
+
+  /* Back after 20 minutes or more away counts as opening Arun again,
+     which an installed app on a phone mostly never is: it just returns
+     from the background. */
+  const replayRef = useRef(onReplayIntro);
+  useEffect(() => {
+    replayRef.current = onReplayIntro;
+  });
+  useEffect(() => watchReturns(() => replayRef.current()), []);
 
   // The replay button in settings.
   useEffect(() => {

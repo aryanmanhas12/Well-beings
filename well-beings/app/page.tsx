@@ -18,9 +18,11 @@ export const metadata: Metadata = metadataFor("/");
    scrolling while it is up, and a stale attribute on /guides/ would freeze
    a page that has no intro to dismiss. See lib/intro.ts for the rules:
 
-   - once per browser session (sessionStorage "arun-intro-session"), so
-     every time Arun is opened, but not on a reload;
-   - never if turned off in Settings (localStorage "arun-intro-v1" = "off");
+   - every time Arun is opened: a new tab or launch, or coming back after
+     20 minutes or more away (sessionStorage "arun-intro-left"; 12e5 ms is
+     AWAY_MS), but not on a reload (sessionStorage "arun-intro-session");
+   - permanent: there is no off switch, and the "arun-intro-v1" = "off" an
+     old Settings switch could leave is cleared here;
    - never on a day after a check-in in the last three days reported
      thoughts of suicide or not feeling safe: then the plan and the numbers
      come first, not an animation;
@@ -29,8 +31,9 @@ export const metadata: Metadata = metadataFor("/");
      and the music is meant to rise with the sun. */
 const INTRO_BOOTSTRAP = `(function(){try{
 var d=document.documentElement;
-if(localStorage.getItem("arun-intro-v1")==="off")return;
-if(sessionStorage.getItem("arun-intro-session"))return;
+try{localStorage.removeItem("arun-intro-v1");}catch(e){}
+var left=Number(sessionStorage.getItem("arun-intro-left"));
+if(sessionStorage.getItem("arun-intro-session")&&!(left&&Date.now()-left>=12e5))return;
 var s=JSON.parse(localStorage.getItem("wellbeings-safe-v1")||"null");
 var a=s&&Array.isArray(s.arrivals)?s.arrivals:[];
 var cut=Date.now()-3*864e5;
