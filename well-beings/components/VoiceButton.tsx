@@ -36,11 +36,19 @@ export function VoiceButton({
         title={listening ? "Stop listening" : "Speak instead of typing"}
         style={{ width: size, height: size }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <rect x="9" y="3" width="6" height="11" rx="3" />
-          <path d="M5 11a7 7 0 0 0 14 0" />
-          <path d="M12 18v3" />
-        </svg>
+        {listening ? (
+          /* A stop square while listening, so it is plain that the same
+             button ends it. */
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5" y="5" width="14" height="14" rx="3" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="9" y="3" width="6" height="11" rx="3" />
+            <path d="M5 11a7 7 0 0 0 14 0" />
+            <path d="M12 18v3" />
+          </svg>
+        )}
       </button>
 
       {/* Live region: a screen-reader user hears that listening started and
@@ -55,7 +63,10 @@ export function VoiceButton({
         </p>
       )}
       {listening && (
-        <p className="voice-note">{speech.local ? "Listening on this phone. Nothing is sent." : "Listening through your browser's speech service."}</p>
+        <p className="voice-note">
+          {speech.local ? "Listening on this phone. Nothing is sent." : "Listening through your browser's speech service."} Tap
+          the square to stop.
+        </p>
       )}
 
       {speech.status === "asking" && (
