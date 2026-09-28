@@ -82,6 +82,21 @@ export function HavenShell({
     }
   }, [wb.screen, wb, goTo]);
 
+  /* Ooh's "Go to Plan" from a guide or the privacy page arrives as
+     ?room=plan (and maybe &view=daily). Read once, then taken out of the
+     address bar so a refresh or a shared link does not replay it. Only
+     these two keys are touched; Ronak's ref= handoff has its own reader. */
+  useEffect(() => {
+    const u = new URL(window.location.href);
+    const room = u.searchParams.get("room");
+    if (!room || !TABS.some((t) => t.id === room)) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    goTo(room as HavenTab, u.searchParams.get("view") ?? undefined);
+    u.searchParams.delete("room");
+    u.searchParams.delete("view");
+    window.history.replaceState(window.history.state, "", u.pathname + u.search + u.hash);
+  }, [goTo]);
+
   // The replay button in settings.
   useEffect(() => {
     if (replayIntro > 0) document.documentElement.setAttribute("data-intro", "pending");
@@ -112,10 +127,10 @@ export function HavenShell({
       <main className={`haven haven-${tab}`} key={nav} id="main">
         {/* Ooh speaks at the top of each room; on Here, just under the sky,
             which HereTab places itself. */}
-        {tab !== "here" && <OohGuide scene={scene} dock="tabbar" />}
+        {tab !== "here" && <OohGuide scene={scene} dock="tabbar" onGo={goTo} />}
         {tab === "here" && (
           <HereTab
-            ooh={<OohGuide scene={scene} dock="tabbar" />}
+            ooh={<OohGuide scene={scene} dock="tabbar" onGo={goTo} />}
             wb={wb}
             haven={haven}
             region={region}

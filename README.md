@@ -41,6 +41,8 @@ by hand each week in `well-beings/lib/daily-lines.ts`.
 
 **Ooh and the music.** Ooh, a small sunrise-coloured character shared with Ronak, narrates
 each page in a comic speech bubble the first time you visit it, then says one line after that.
+Further down, Ooh follows in the corner, remarks on each part of the page as you reach it, and at
+the bottom offers the next room (Here to Hope, Hope to Plan, Plan to Reach out).
 On heavy days Ooh stays quietly in the corner so the safety plan and helplines come first. Soft
 music, made on the phone as it plays (no audio files), starts with your first tap; the speaker
 at the top turns it off.

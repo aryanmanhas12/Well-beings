@@ -11,7 +11,7 @@ import { test } from "node:test";
 import { allScripts, oohScript, GENTLE_MOODS } from "../lib/oohScript.ts";
 import { MOODS, oohSvg } from "../lib/ooh.mjs";
 
-const lines = allScripts().flatMap((s) => [...s.lines, s.short].map((l) => ({ ...l, id: s.id })));
+const lines = allScripts().flatMap((s) => [...s.lines, s.short, ...(s.beats ?? [])].map((l) => ({ ...l, id: s.id })));
 
 test("every line fits a phone bubble", () => {
   for (const l of lines) assert.ok(l.text.length <= 120, `${l.id}: ${l.text.length} chars`);
@@ -40,6 +40,25 @@ test("on heavy days and worse, Ooh never takes space above the plan and the numb
     for (const returning of [false, true]) assert.equal(oohScript({ kind: "here", level, returning, hour: 12 }).quiet, true, level);
   }
   for (const level of [null, "steady", "low"]) assert.notEqual(oohScript({ kind: "here", level, returning: false, hour: 12 }).quiet, true, String(level));
+});
+
+test("no remarks while scrolling on heavy days: nothing competes with the plan", () => {
+  for (const s of allScripts()) if (s.quiet) assert.equal((s.beats ?? []).length, 0, s.id);
+});
+
+test("every room's walk ends by pointing somewhere else", () => {
+  const rooms = new Set(["here", "watch", "hope", "plan", "reach"]);
+  for (const s of allScripts().filter((x) => !x.quiet && x.id !== "p-404" && x.id !== "results")) {
+    const next = (s.beats ?? []).find((b) => b.go);
+    assert.ok(next && rooms.has(next.go.room), `${s.id} has a way onward`);
+  }
+});
+
+test("remark ids are unique within a page", () => {
+  for (const s of allScripts()) {
+    const ids = (s.beats ?? []).map((b) => b.id);
+    assert.equal(new Set(ids).size, ids.length, s.id);
+  }
 });
 
 test("thoughts and urgent always point at the numbers and the plan", () => {

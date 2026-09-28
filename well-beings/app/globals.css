@@ -3737,3 +3737,41 @@ a.btn-quiet:hover {
 .ooh-guide[data-open="false"] {
   gap: 0;
 }
+
+/* Ooh's way onward: a button under the bubble, in the same comic ink.
+   Ink on sun #FFC857 is 10.8:1. */
+.ooh-go {
+  display: flex;
+  width: fit-content;
+  margin: 8px 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 3px solid #2A1636;
+  border-radius: 999px;
+  background: #FFC857;
+  color: #2A1636;
+  box-shadow: 3px 3px 0 #2A1636;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ooh-go:hover {
+  color: #2A1636;
+  text-decoration: none;
+  background: #FFD57A;
+}
+.ooh-go:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #2A1636;
+}
+.ooh-go:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+.ooh-guide .ooh-bubble:has(.ooh-go)::after {
+  bottom: 60px;
+}

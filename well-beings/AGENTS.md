@@ -35,7 +35,10 @@ Eight moods. What Ooh says lives in `lib/oohScript.ts` and is tested in
 `scripts/test-ooh.mjs`: short, no em dashes, never implies anyone is
 watching, only gentle moods on heavy days, and on heavy days and worse Ooh
 starts tucked in the corner so nothing pushes the safety plan down. Ooh
-speaks in the page, never over it.
+speaks in the page at the top; further down it follows in the corner and
+remarks on each section as it arrives, and at the bottom offers the next
+room. Remarks only come when scrolling pauses, never while typing, at
+least fifteen seconds apart, and never on a heavy day.
 
 **The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
 major pads, bowl tones, a synthetic room. It starts on the first tap,
