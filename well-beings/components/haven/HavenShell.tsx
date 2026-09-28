@@ -11,7 +11,7 @@ import { HereIcon, HopeIcon, PlanIcon, ReachIcon, WatchIcon } from "./icons";
 import { IntroDawn } from "./IntroDawn";
 import { PlanTab } from "./PlanTab";
 import { ReachTab } from "./ReachTab";
-import { useNow, type HavenTab } from "./shared";
+import { HOME_EVENT, useNow, type HavenTab } from "./shared";
 import { UrgentCare } from "./UrgentCare";
 import { VideoSheet } from "./VideoSheet";
 import { WatchTab } from "./WatchTab";
@@ -97,6 +97,23 @@ export function HavenShell({
     u.searchParams.delete("view");
     window.history.replaceState(window.history.state, "", u.pathname + u.search + u.hash);
   }, [goTo]);
+
+  /* The "arun" wordmark in the header is the way home from any room. It
+     lives outside this component, so it asks by event rather than being
+     handed goTo. Already on Here, it glides back to the top instead of
+     remounting the room, so nothing half-typed there is lost. */
+  useEffect(() => {
+    const home = () => {
+      if (tab === "here" && !view) {
+        const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+        return;
+      }
+      goTo("here");
+    };
+    window.addEventListener(HOME_EVENT, home);
+    return () => window.removeEventListener(HOME_EVENT, home);
+  }, [tab, view, goTo]);
 
   // The replay button in settings.
   useEffect(() => {

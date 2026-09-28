@@ -27,6 +27,10 @@ listener, icons, favicon, social card), and detail steps down with size:
 five rays, then three, then none and a bigger sun. The bloom-sun is the
 app's illustration (the sun in the sky, the intro, breathing), not the
 logo. Never draw either by hand a second time.
+Ronak sets its name the same way (lowercase "ronak", Karla 700, -0.03em),
+at the owner's request, so the two sister apps read as one family. The
+wordmark in the header is the way home: from any room it goes to Here,
+and on Here it glides back to the top.
 
 **Ooh** is the companion character, shared with Ronak: a round sunrise-gold
 creature with the bloom-sun's two petals sprouting from its head, drawn in

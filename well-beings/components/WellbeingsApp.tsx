@@ -13,6 +13,7 @@ import { HelpDialog, BreathDialog } from "./dialogs";
 import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { HavenShell } from "./haven/HavenShell";
+import { HOME_EVENT } from "./haven/shared";
 import { CrisisStrip } from "./CrisisStrip";
 import { ListenerProvider } from "./ListenerProvider";
 import { OohGuide } from "./OohGuide";
@@ -71,7 +72,12 @@ export function WellbeingsApp() {
         setLang={wb.setLang}
         onHelp={wb.openHelp}
         onSettings={() => setSettingsOpen(true)}
-        onHome={() => wb.setScreen("home")}
+        onHome={() => {
+          /* From the wellbeing check the safe place mounts fresh on Here;
+             from inside it, the shell hears the event and goes to Here. */
+          wb.setScreen("home");
+          window.dispatchEvent(new Event(HOME_EVENT));
+        }}
       />
 
       {wb.handoff && onHome && (

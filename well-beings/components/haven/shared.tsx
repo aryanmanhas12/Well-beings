@@ -8,6 +8,9 @@ export type HavenTab = "here" | "watch" | "hope" | "plan" | "reach";
 /** Where a button elsewhere in the app can send someone. */
 export type GoTo = (tab: HavenTab, view?: string) => void;
 
+/** Sent by the header's "arun" wordmark: back to Here, from any room. */
+export const HOME_EVENT = "arun:home";
+
 /**
  * The time, but only after mount.
  *
