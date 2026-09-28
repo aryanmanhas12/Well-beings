@@ -66,6 +66,13 @@ export default function PrivacyPage() {
             if you did.
           </li>
           <li>
+            <code>arun-haptics-v1</code>: &ldquo;off&rdquo; if you turned vibration off.
+          </li>
+          <li>
+            <code>arun-intro-v1</code>: &ldquo;off&rdquo; if you turned off the sunrise that plays
+            when you open Arun.
+          </li>
+          <li>
             <code>arun-ooh-v1</code>: whether you turned Ooh, the guide, off, and which pages&apos;
             introductions you have already heard, so Ooh says one line instead of the whole tour.
           </li>
@@ -76,7 +83,10 @@ export default function PrivacyPage() {
           into the app; Ooh does not read what you write and sends nothing.
         </p>
         <p>
-          There is no cookie, no session storage, no IndexedDB and no fingerprinting. Nothing is
+          There is no cookie, no IndexedDB and no fingerprinting. There is one small note in session
+          storage, <code>arun-intro-session</code>, which only records that the opening sunrise has
+          played in this tab, so a reload does not play it again; it disappears when the tab or the app
+          is closed. Nothing is
           loaded from anyone else&apos;s server when the app opens. The exceptions are ones you
           choose yourself, one tap at a time, covered below.
         </p>

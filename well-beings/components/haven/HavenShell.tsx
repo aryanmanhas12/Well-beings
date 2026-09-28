@@ -18,6 +18,7 @@ import { WatchTab } from "./WatchTab";
 import { OohGuide } from "../OohGuide";
 import type { OohScene } from "@/lib/oohScript";
 import { planIsWritten } from "@/lib/haven";
+import { soundWanted } from "@/lib/ambient";
 
 const TABS: { id: HavenTab; label: string; Icon: typeof HereIcon }[] = [
   { id: "here", label: "Here", Icon: HereIcon },
@@ -99,7 +100,12 @@ export function HavenShell({
 
   // The replay button in settings.
   useEffect(() => {
-    if (replayIntro > 0) document.documentElement.setAttribute("data-intro", "pending");
+    if (replayIntro <= 0) return;
+    const root = document.documentElement;
+    root.setAttribute("data-intro", "pending");
+    /* Music on: wait for a tap so the music can rise with the sun. */
+    if (soundWanted()) root.setAttribute("data-intro-gate", "1");
+    else root.removeAttribute("data-intro-gate");
   }, [replayIntro]);
 
   /* What Ooh narrates: the tab, and on Here the level of the check-in if
@@ -169,7 +175,7 @@ export function HavenShell({
         />
       )}
 
-      <IntroDawn replayKey={replayIntro} onDone={haven.markIntroSeen} />
+      <IntroDawn replayKey={replayIntro} onDone={haven.markIntroSeen} onHelp={wb.openHelp} />
     </>
   );
 }

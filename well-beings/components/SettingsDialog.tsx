@@ -1,6 +1,8 @@
 import { useState, useSyncExternalStore } from "react";
 import { setSoundWanted, soundWanted, subscribeSound } from "@/lib/ambient";
 import { OOH_SERVER, readOoh, setOohHidden, subscribeOoh } from "@/lib/oohStore";
+import { hapticsWanted, setHapticsWanted, subscribeHaptics } from "@/lib/haptics";
+import { introWanted, setIntroWanted, subscribeIntro } from "@/lib/intro";
 import { InstallRow } from "./InstallApp";
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
@@ -56,6 +58,8 @@ export function SettingsDialog({
   const s = wb.s;
   const music = useSyncExternalStore(subscribeSound, soundWanted, () => true);
   const ooh = useSyncExternalStore(subscribeOoh, readOoh, () => OOH_SERVER);
+  const haptics = useSyncExternalStore(subscribeHaptics, hapticsWanted, () => true);
+  const sunrise = useSyncExternalStore(subscribeIntro, introWanted, () => true);
   const [confirming, setConfirming] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
@@ -201,6 +205,18 @@ export function SettingsDialog({
           hint="The little character who says what each page is for."
           on={!ooh.hidden}
           onChange={() => setOohHidden(!ooh.hidden)}
+        />
+        <Toggle
+          label="Vibration"
+          hint="A light tick on taps and as new sections arrive, on phones that allow it."
+          on={haptics}
+          onChange={() => setHapticsWanted(!haptics)}
+        />
+        <Toggle
+          label="Sunrise when I open Arun"
+          hint="The opening sunrise, once each time the app is opened."
+          on={sunrise}
+          onChange={() => setIntroWanted(!sunrise)}
         />
         <Toggle
           label="Always show sources"

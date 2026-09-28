@@ -39,10 +39,21 @@ site is built with `NEXT_PUBLIC_LISTENER_ENDPOINT`. Text boxes for good things a
 microphone that asks before any browser speech service is used. **Today's line** on Here is edited
 by hand each week in `well-beings/lib/daily-lines.ts`.
 
+**The opening, every time.** Each time Arun is opened, a short sunrise plays. With music on it
+waits on a night sky with Ooh asleep on the hill until you tap "Wake the sun"; the music swells in
+with the sun and a bowl tone rings as each pair of petals opens. "Without music", "Skip" and "Need
+help now" are there from the first frame, and it never plays after a check-in in the last three
+days that reported thoughts of suicide or not feeling safe.
+
+**Feedback you can see and feel.** A ripple of dawn light where you tap, sections gliding in with a
+glow as you scroll, a sunrise line across the top for how far down you are, rooms sliding in, and a
+light vibration on phones that allow it (Android for taps and scrolling, iPhone for taps). All of it
+stops under reduced motion, and "Vibration" in Settings turns the ticks off.
+
 **Ooh and the music.** Ooh, a small sunrise-coloured character shared with Ronak, narrates
 each page in a comic speech bubble the first time you visit it, then says one line after that.
-Further down, Ooh follows in the corner, remarks on each part of the page as you reach it, and at
-the bottom offers the next room (Here to Hope, Hope to Plan, Plan to Reach out).
+Further down, a narrator bar above the tab bar describes whatever you are looking at, section by
+section, and at the bottom offers the next room (Here to Hope, Hope to Plan, Plan to Reach out).
 On heavy days Ooh stays quietly in the corner so the safety plan and helplines come first. Soft
 music, made on the phone as it plays (no audio files), starts with your first tap; the speaker
 at the top turns it off.

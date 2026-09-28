@@ -2,37 +2,40 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { oohSvg } from "@/lib/ooh.mjs";
 import type { OohBeat, OohLine, OohRoom, OohScene } from "@/lib/oohScript";
-import { oohScript } from "@/lib/oohScript";
+import { oohScript, pageHeadingLine } from "@/lib/oohScript";
 import { OOH_SERVER, markOohSeen, readOoh, subscribeOoh } from "@/lib/oohStore";
 import { chime } from "@/lib/ambient";
+import { tick } from "@/lib/haptics";
 
 /**
- * Ooh, narrating the page like the guide in a game, all the way down it.
+ * Ooh, narrating the page like the guide in a game, from top to bottom.
  *
  * AT THE TOP, Ooh speaks in the page: a comic bubble in the flow that
  * pushes things down rather than covering them, and stays until tapped
  * away. (The first version floated here and landed on "How are you
  * arriving?", the one thing a struggling person most needs to tap.)
  *
- * FURTHER DOWN, Ooh follows along in the corner (above the tab bar on a
- * phone) and, as each part of the page arrives, says something about it,
- * and at the bottom offers the next room: Here to Hope, Hope to Plan, Plan
- * to Reach out. These remarks are the one place Ooh floats over the page,
- * so they are kept on a short leash:
- *   - only once the scrolling pauses, never mid-swipe;
- *   - never while someone is typing (the keyboard is up, and a bubble
- *     arriving then is an interruption, not company);
- *   - at least fifteen seconds apart, once each per visit;
- *   - gone again after a few seconds, or as soon as scrolling resumes;
- *   - never at all on a heavy day, when the plan and the numbers come
- *     first (the script is "quiet" and has no remarks).
+ * AS THE PAGE SCROLLS, Ooh rides along in a narrator bar docked just above
+ * the tab bar, like the dialogue box in a game, and describes whichever
+ * part of the page is being read: the part whose heading most recently
+ * crossed the middle of the screen. The line changes only once that part
+ * has held for a quarter of a second, so a fast flick does not strobe
+ * through every sentence. At the bottom of a room the bar offers the next
+ * one. On site pages it narrates each heading (lib/oohScript.ts
+ * pageHeadingLine).
  *
- * Tapping Ooh in the corner brings back the page's line at any time.
- * The words and the rules they keep are in lib/oohScript.ts. A screen
- * reader hears each line once through a polite live region, and every
- * control is a real button or link.
+ * The bar stays out of the way where it matters: it is never on screen at
+ * the same time as the greeting, it hides while someone is typing (the
+ * keyboard is up), it can be put away with × for the rest of the page (Ooh
+ * waits in the corner; tap to bring the bar back), Settings can turn Ooh
+ * off, and on a heavy day there is no bar at all: Ooh waits quietly in the
+ * corner so the plan and the numbers come first.
+ *
+ * A screen reader hears each new line once, through a polite live region;
+ * every control is a real button or link.
  */
 export function OohGuide({
   scene,
@@ -52,16 +55,20 @@ export function OohGuide({
 }
 
 const TYPE_MS = 26;
-const REMARK_GAP_MS = 15_000;
-const SETTLE_MS = 700;
-const LINGER_MS = 7_000;
-const LINGER_GO_MS = 11_000;
-const SCROLL_CLOSE_PX = 260;
+const DOCK_TYPE_MS = 16;
+const SETTLE_MS = 260;
+const READ_LINE = 0.55;
+const LINGER_MS = 9_000;
+const RETURN_AFTER_TYPING_MS = 900;
 
-/* Remarks already made this visit, across rooms, so going back and forth
-   between two tabs does not replay them. Memory only. */
-const SAID = new Set<string>();
-let lastRemarkAt = 0;
+/* Is a finger (or the mouse button) down anywhere right now? */
+let pressing = false;
+if (typeof window !== "undefined") {
+  window.addEventListener("pointerdown", () => (pressing = true), true);
+  for (const t of ["pointerup", "pointercancel"]) window.addEventListener(t, () => setTimeout(() => (pressing = false), 60), true);
+}
+const SCROLL_CLOSE_PX = 260;
+let lastChimeAt = 0;
 
 function reducedMotion() {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -71,7 +78,19 @@ function isTypingTarget(el: Element | null) {
   return !!el && el.matches("input, textarea, select, [contenteditable='true']");
 }
 
-type Float = { kind: "ask"; line: OohLine } | { kind: "beat"; beat: OohBeat } | null;
+interface Part {
+  key: string;
+  el: Element;
+  line: OohLine;
+  go?: OohBeat["go"];
+  edge?: boolean;
+}
+
+interface Current {
+  key: string;
+  line: OohLine;
+  go?: OohBeat["go"];
+}
 
 function OohRun({
   script,
@@ -89,18 +108,17 @@ function OohRun({
   const [index, setIndex] = useState(0);
   const [take, setTake] = useState(0);
   const [stripInView, setStripInView] = useState(true);
-  const [float, setFloat] = useState<Float>(null);
+  const [current, setCurrent] = useState<Current | null>(null);
+  const [dockAway, setDockAway] = useState(false);
+  const [ask, setAsk] = useState(false);
   const [typing, setTyping] = useState(false);
   const stripRef = useRef<HTMLElement | null>(null);
-  const state = useRef({ stripShowing: true, float: false, typing: false });
-  useEffect(() => {
-    state.current = { stripShowing: stripOpen && stripInView, float: !!float, typing };
-  });
+  const dockRef = useRef<HTMLDivElement | null>(null);
 
   const line = lines[Math.min(index, lines.length - 1)];
   const last = index >= lines.length - 1;
 
-  /* Behind the first-visit sunrise Ooh is hidden (see the CSS). When the
+  /* Behind the opening sunrise Ooh is hidden (see the CSS). When the
      sunrise lifts, Ooh starts again from the first letter. */
   useEffect(() => {
     const root = document.documentElement;
@@ -115,7 +133,7 @@ function OohRun({
     return () => mo.disconnect();
   }, []);
 
-  /* Is the greeting still on screen? If not, Ooh is in the corner. */
+  /* Is the greeting still on screen? */
   useEffect(() => {
     const el = stripRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -124,111 +142,156 @@ function OohRun({
     return () => io.disconnect();
   }, [stripOpen]);
 
-  /* The keyboard is up: Ooh steps out of the way. */
+  /* The keyboard is up: Ooh steps out of the way, and comes back only a
+     while after typing ends. Coming back at once was a real bug: tapping
+     "Keep it" after typing moves the focus on the way down, the bar
+     reappeared under the finger, and the tap landed on Ooh instead of the
+     button. */
   useEffect(() => {
-    const onIn = (e: FocusEvent) => setTyping(isTypingTarget(e.target as Element));
-    const onOut = () => setTimeout(() => setTyping(isTypingTarget(document.activeElement)), 0);
+    let back: ReturnType<typeof setTimeout> | null = null;
+    const onIn = (e: FocusEvent) => {
+      if (!isTypingTarget(e.target as Element)) return;
+      if (back) clearTimeout(back);
+      setTyping(true);
+    };
+    const onOut = () => {
+      if (back) clearTimeout(back);
+      back = setTimeout(() => {
+        if (pressing) return onOut();
+        setTyping(isTypingTarget(document.activeElement));
+      }, RETURN_AFTER_TYPING_MS);
+    };
     document.addEventListener("focusin", onIn);
     document.addEventListener("focusout", onOut);
     return () => {
       document.removeEventListener("focusin", onIn);
       document.removeEventListener("focusout", onOut);
+      if (back) clearTimeout(back);
     };
   }, []);
 
-  /* Remarks as the page scrolls. */
+  /* Which part of the page is being read. */
   useEffect(() => {
-    const beats = script.beats ?? [];
-    if (script.quiet || !beats.length || typeof IntersectionObserver === "undefined") return;
-    const byEl = new Map<Element, OohBeat>();
-    /* Everything on screen that Ooh has not remarked on yet. When several
-       arrive together (the bottom of a short room), the way onward wins,
-       then whichever is furthest down; the rest wait their turn. */
-    const arrived = new Map<string, OohBeat>();
-    const pick = () => {
-      const list = [...arrived.values()];
-      return list.find((x) => x.go) ?? list.sort((x, y) => beats.indexOf(y) - beats.indexOf(x))[0] ?? null;
-    };
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    if (script.quiet) return;
+    let parts: Part[] = [];
+    let raf = 0;
+    let settle: ReturnType<typeof setTimeout> | null = null;
+    let collectTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastY = window.scrollY;
+    let leanTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const tryShow = () => {
-      timer = null;
-      const next = pick();
-      if (!next) return;
-      const s = state.current;
-      if (s.stripShowing || s.float || s.typing) return;
-      const wait = REMARK_GAP_MS - (Date.now() - lastRemarkAt);
-      if (wait > 0) {
-        timer = setTimeout(tryShow, wait);
-        return;
-      }
-      const beat = next;
-      arrived.delete(beat.id);
-      SAID.add(`${script.id}:${beat.id}`);
-      lastRemarkAt = Date.now();
-      setFloat({ kind: "beat", beat });
-    };
-    const settle = () => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(tryShow, SETTLE_MS);
-    };
-    const seen = (entries: IntersectionObserverEntry[]) => {
-      for (const e of entries) {
-        const beat = byEl.get(e.target);
-        if (!beat) continue;
-        if (e.isIntersecting && !SAID.has(`${script.id}:${beat.id}`)) arrived.set(beat.id, beat);
-        else if (!e.isIntersecting) arrived.delete(beat.id);
-      }
-      settle();
-    };
-    /* "Arrived" means in the upper two thirds, not peeking at the edge;
-       the page's last thing counts as soon as it shows at all. */
-    const io = new IntersectionObserver(seen, { rootMargin: "0px 0px -33% 0px", threshold: 0 });
-    const edge = new IntersectionObserver(seen, { threshold: 0 });
-    const resolve = () => {
-      for (const beat of beats) {
+    const collect = () => {
+      const next: Part[] = [];
+      for (const beat of script.beats ?? []) {
         const all = document.querySelectorAll(beat.at);
         const el = all[beat.nth === undefined ? 0 : beat.nth < 0 ? all.length + beat.nth : beat.nth];
-        if (el && !byEl.has(el)) {
-          byEl.set(el, beat);
-          (beat.edge ? edge : io).observe(el);
+        if (el) next.push({ key: beat.id, el, line: beat, go: beat.go, edge: beat.edge });
+      }
+      if (script.headings) {
+        document.querySelectorAll("main h2").forEach((h, i) => {
+          if (h.closest(".ooh-strip")) return;
+          next.push({ key: `h${i}`, el: h, line: pageHeadingLine(h.textContent ?? "", i) });
+        });
+      }
+      parts = next;
+    };
+
+    const measure = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      const readAt = vh * READ_LINE;
+      let best: Part | null = null;
+      let bestTop = -Infinity;
+      for (const p of parts) {
+        if (p.edge) continue;
+        const r = p.el.getBoundingClientRect();
+        if (!r.width && !r.height) continue;
+        if (r.top <= readAt && r.top > bestTop) {
+          best = p;
+          bestTop = r.top;
         }
       }
+      /* At the very bottom, the way onward. */
+      const edge = parts.find((p) => p.edge);
+      if (edge) {
+        const r = edge.el.getBoundingClientRect();
+        if (r.top < vh - 24 && (r.width || r.height)) best = edge;
+      }
+      const next: Current | null = best ? { key: best.key, line: best.line, go: best.go } : null;
+      if (settle) clearTimeout(settle);
+      const apply = () => {
+        /* Never change under a finger that is down: the bar could appear
+           or grow over the very thing being tapped. */
+        if (pressing) {
+          settle = setTimeout(apply, 120);
+          return;
+        }
+        setCurrent((prev) => (prev?.key === next?.key ? prev : next));
+      };
+      settle = setTimeout(apply, SETTLE_MS);
     };
-    resolve();
-    /* Sections that appear later, like a switch of view inside a room. */
-    const mo = new MutationObserver(resolve);
+
+    const onScroll = () => {
+      /* Ooh leans into the scroll, and straightens when it stops. Written
+         straight to the element: re-rendering on every scroll frame would
+         cost more than the lean is worth. */
+      const y = window.scrollY;
+      const el = dockRef.current;
+      if (el && !reducedMotion() && Math.abs(y - lastY) > 2) {
+        el.dataset.lean = y > lastY ? "down" : "up";
+        if (leanTimer) clearTimeout(leanTimer);
+        leanTimer = setTimeout(() => {
+          if (dockRef.current) delete dockRef.current.dataset.lean;
+        }, 180);
+      }
+      lastY = y;
+      if (!raf) raf = requestAnimationFrame(measure);
+    };
+
+    collect();
+    measure();
+    /* Parts that appear later: a view switch inside a room, a panel that
+       opens. Batched, because the typewriter changes the page constantly. */
+    const mo = new MutationObserver(() => {
+      if (collectTimer) return;
+      collectTimer = setTimeout(() => {
+        collectTimer = null;
+        collect();
+        onScroll();
+      }, 200);
+    });
     mo.observe(document.body, { childList: true, subtree: true });
-    window.addEventListener("scroll", settle, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      io.disconnect();
-      edge.disconnect();
       mo.disconnect();
-      window.removeEventListener("scroll", settle);
-      if (timer) clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      for (const t of [settle, collectTimer, leanTimer]) if (t) clearTimeout(t);
     };
   }, [script]);
 
-  /* A floating bubble tidies itself away on a real scroll. */
-  const closeFloat = useCallback(() => setFloat(null), []);
+  /* The corner's bubble tidies itself away on a real scroll. */
   useEffect(() => {
-    if (!float) return;
+    if (!ask) return;
     const start = window.scrollY;
     const onScroll = () => {
-      if (Math.abs(window.scrollY - start) > SCROLL_CLOSE_PX) setFloat(null);
+      if (Math.abs(window.scrollY - start) > SCROLL_CLOSE_PX) setAsk(false);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [float]);
+  }, [ask]);
 
   function tuckStrip() {
     markOohSeen(script.id);
     setStripOpen(false);
   }
 
-  const cornerShown = (!stripOpen || !stripInView) && !typing;
-  const floatLine: OohLine | null = float ? (float.kind === "ask" ? float.line : float.beat) : null;
-  const floatGo = float?.kind === "beat" ? float.beat.go : undefined;
+  const closeAsk = useCallback(() => setAsk(false), []);
+  const past = !stripOpen || !stripInView;
+  const narrating = past && !typing && !script.quiet && !dockAway && !!current;
+  const cornered = past && !typing && !narrating;
 
   return (
     <>
@@ -252,42 +315,115 @@ function OohRun({
         </section>
       )}
 
-      {cornerShown && (
-        <div className={`ooh-guide ooh-dock-${dock}`} data-open={!!float}>
-          {float && floatLine && (
-            <Bubble
-              key={float.kind === "beat" ? float.beat.id : "ask"}
-              line={floatLine}
-              last
-              linger={floatGo ? LINGER_GO_MS : LINGER_MS}
-              onAdvance={closeFloat}
-              onClose={closeFloat}
-              go={floatGo}
+      {/* The bar and the corner Ooh are fixed to the screen, so they live
+          at the root of the page: inside a room they would ride along with
+          the room's slide-in animation instead of staying put. */}
+      {narrating &&
+        current &&
+        createPortal(
+          <div className={`ooh-dock ooh-dock-${dock}`} ref={dockRef} role="region" aria-label="Ooh, narrating this page">
+            <button type="button" className="ooh-dock-me" aria-label="Ooh, your guide. Put the narration away" onClick={() => setDockAway(true)}>
+              <span key={current.key} className="ooh-hop" dangerouslySetInnerHTML={{ __html: oohSvg({ mood: current.line.mood, size: 64 }) }} />
+            </button>
+            <DockBubble
+              key={current.key}
+              line={current.line}
+              go={current.go}
               onGo={
-                floatGo && onGo
+                onGo && current.go
                   ? () => {
-                      setFloat(null);
-                      onGo(floatGo.room, floatGo.view);
+                      const g = current.go!;
+                      onGo(g.room, g.view);
                     }
                   : undefined
               }
+              onClose={() => setDockAway(true)}
             />
-          )}
-          <button
-            type="button"
-            className="ooh-me"
-            aria-expanded={!!float}
-            aria-label={float ? "Ooh, your guide. Hide what Ooh says" : "Ooh, your guide. Hear what Ooh says"}
-            onClick={() => (float ? setFloat(null) : setFloat({ kind: "ask", line: script.short }))}
-            dangerouslySetInnerHTML={{ __html: oohSvg({ mood: floatLine ? floatLine.mood : script.short.mood, size: float ? 72 : 54 }) }}
-          />
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
+
+      {cornered &&
+        createPortal(
+          <div className={`ooh-guide ooh-dock-${dock}`} data-open={ask}>
+            {ask && <Bubble key="ask" line={script.short} last linger={LINGER_MS} onAdvance={closeAsk} onClose={closeAsk} />}
+            <button
+              type="button"
+              className="ooh-me"
+              aria-expanded={ask}
+              aria-label={ask ? "Ooh, your guide. Hide what Ooh says" : "Ooh, your guide. Hear what Ooh says"}
+              onClick={() => {
+                /* Narration put away? Bring it back. Otherwise, the page's line. */
+                if (dockAway && !script.quiet && current) {
+                  setDockAway(false);
+                  setAsk(false);
+                  return;
+                }
+                setAsk((a) => !a);
+              }}
+              dangerouslySetInnerHTML={{ __html: oohSvg({ mood: script.short.mood, size: ask ? 72 : 54 }) }}
+            />
+          </div>,
+          document.body,
+        )}
 
       <p className="sr-only" aria-live="polite">
-        {floatLine ? `Ooh says: ${floatLine.text}` : stripOpen ? `Ooh says: ${line.text}` : ""}
+        {narrating && current ? `Ooh says: ${current.line.text}` : ask ? `Ooh says: ${script.short.text}` : stripOpen ? `Ooh says: ${line.text}` : ""}
       </p>
     </>
+  );
+}
+
+function useTypewriter(length: number, speed: number) {
+  const [typed, setTyped] = useState(() => (reducedMotion() ? Infinity : 0));
+  const done = typed >= length;
+  useEffect(() => {
+    if (done) return;
+    const t = setInterval(() => setTyped((n) => n + 1), speed);
+    return () => clearInterval(t);
+  }, [done, speed]);
+  return { shown: Math.min(typed, length), done, finish: () => setTyped(Infinity) };
+}
+
+/** The narrator bar's bubble: one line, typed quickly, a way onward at the bottom. */
+function DockBubble({ line, go, onGo, onClose }: { line: OohLine; go?: OohBeat["go"]; onGo?: () => void; onClose: () => void }) {
+  const { shown } = useTypewriter(line.text.length, DOCK_TYPE_MS);
+  /* A soft bowl tone and a light tick as a new line lands, spaced out so a
+     long scroll does not become a drum roll. */
+  useEffect(() => {
+    if (Date.now() - lastChimeAt < 5_000) return;
+    lastChimeAt = Date.now();
+    chime();
+    tick("light");
+  }, []);
+  const href = go ? `/?room=${go.room}${go.view ? `&view=${go.view}` : ""}` : "";
+  return (
+    <div className="ooh-dock-bubble">
+      <span className="ooh-name" aria-hidden="true">
+        Ooh
+      </span>
+      <p className="ooh-dock-text">
+        {line.text.slice(0, shown)}
+        <span className="ooh-rest" aria-hidden="true">
+          {line.text.slice(shown)}
+        </span>
+      </p>
+      {go &&
+        (onGo ? (
+          <button type="button" className="ooh-go" onClick={onGo}>
+            {go.label}
+            <span aria-hidden="true">▸</span>
+          </button>
+        ) : (
+          <Link className="ooh-go" href={href}>
+            {go.label}
+            <span aria-hidden="true">▸</span>
+          </Link>
+        ))}
+      <button type="button" className="ooh-x" aria-label="Put Ooh's narration away" onClick={onClose}>
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
   );
 }
 
@@ -299,8 +435,6 @@ function Bubble({
   onClose,
   onDone,
   linger,
-  go,
-  onGo,
 }: {
   line: OohLine;
   last: boolean;
@@ -309,11 +443,8 @@ function Bubble({
   onDone?: () => void;
   /** Close by itself this long after the line is fully out. */
   linger?: number;
-  go?: OohBeat["go"];
-  onGo?: () => void;
 }) {
-  const [typed, setTyped] = useState(() => (reducedMotion() ? Infinity : 0));
-  const done = typed >= line.text.length;
+  const { shown, done, finish } = useTypewriter(line.text.length, TYPE_MS);
   const doneRef = useRef(onDone);
   const closeRef = useRef(onClose);
   useEffect(() => {
@@ -327,12 +458,6 @@ function Bubble({
   }, []);
 
   useEffect(() => {
-    if (done) return;
-    const t = setInterval(() => setTyped((n) => n + 1), TYPE_MS);
-    return () => clearInterval(t);
-  }, [done]);
-
-  useEffect(() => {
     if (done) doneRef.current?.();
   }, [done]);
 
@@ -342,12 +467,9 @@ function Bubble({
     return () => clearTimeout(t);
   }, [done, linger]);
 
-  const shown = Math.min(typed, line.text.length);
-  const href = go ? `/?room=${go.room}${go.view ? `&view=${go.view}` : ""}` : "";
-
   return (
     <div className="ooh-bubble">
-      <button type="button" className="ooh-say" onClick={() => (done ? onAdvance() : setTyped(Infinity))}>
+      <button type="button" className="ooh-say" onClick={() => (done ? onAdvance() : finish())}>
         <span className="ooh-name" aria-hidden="true">
           Ooh
         </span>
@@ -359,25 +481,11 @@ function Bubble({
             {line.text.slice(shown)}
           </span>
         </span>
-        {!go && (
-          <span className="ooh-next" data-ready={done}>
-            {last ? "Got it" : "Next"}
-            <span aria-hidden="true"> ▸</span>
-          </span>
-        )}
+        <span className="ooh-next" data-ready={done}>
+          {last ? "Got it" : "Next"}
+          <span aria-hidden="true"> ▸</span>
+        </span>
       </button>
-      {go &&
-        (onGo ? (
-          <button type="button" className="ooh-go" onClick={onGo}>
-            {go.label}
-            <span aria-hidden="true"> ▸</span>
-          </button>
-        ) : (
-          <Link className="ooh-go" href={href}>
-            {go.label}
-            <span aria-hidden="true"> ▸</span>
-          </Link>
-        ))}
       <button type="button" className="ooh-x" aria-label="Close what Ooh is saying" onClick={onClose}>
         <span aria-hidden="true">×</span>
       </button>

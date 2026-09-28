@@ -15,6 +15,7 @@ export function SoundToggle() {
     <button
       type="button"
       className="btn btn-ghost btn-icon sound-toggle"
+      data-sound-control
       aria-pressed={on}
       aria-label="Music"
       title={on ? "Music is on. Tap to turn it off." : "Music is off. Tap to turn it on."}

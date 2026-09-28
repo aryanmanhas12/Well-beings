@@ -35,15 +35,27 @@ Eight moods. What Ooh says lives in `lib/oohScript.ts` and is tested in
 `scripts/test-ooh.mjs`: short, no em dashes, never implies anyone is
 watching, only gentle moods on heavy days, and on heavy days and worse Ooh
 starts tucked in the corner so nothing pushes the safety plan down. Ooh
-speaks in the page at the top; further down it follows in the corner and
-remarks on each section as it arrives, and at the bottom offers the next
-room. Remarks only come when scrolling pauses, never while typing, at
-least fifteen seconds apart, and never on a heavy day.
+speaks in the page at the top; further down, a narrator bar above the tab
+bar describes whichever part is being read, changing as the page moves,
+and at the bottom offers the next room. Every section of every room has a
+line; site pages narrate their headings (`pageHeadingLine`). The bar steps
+aside while typing and comes back only 0.9 s later, and never appears or
+changes under a finger that is down: coming back at once once put it
+under a thumb tapping "Keep it". No bar on a heavy day.
 
 **The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
-major pads, bowl tones, a synthetic room. It starts on the first tap,
-fades in, and pauses for videos, the microphone and hidden tabs. The
-speaker at the top turns it off, and that choice is remembered.
+major pads, bowl tones, a synthetic room. It pauses for videos, the
+microphone and hidden tabs. The speaker at the top turns it off, and that
+choice is remembered.
+
+**The opening sunrise** plays each time Arun is opened (once per browser
+session; `lib/intro.ts`, decided before paint in `app/page.tsx`). With
+music on it waits on a night sky for "Wake the sun", because browsers
+allow sound only after a tap, and the rise starts only once the audio is
+confirmed running, so the swell and the petal bells (`SUNRISE_BELLS`) land
+on the picture. Never after a check-in in the last three days that
+reported thoughts of suicide or not feeling safe. "Need help now" and
+"Skip" are there from the first frame.
 
 ## The tells, and what to do instead
 
@@ -128,12 +140,18 @@ worse than none.
 The home of the app is for people who may be in a very bad place. That
 changes what "good design" means here.
 
-**Motion is atmosphere, not decoration.** The sky, the pulsing midnight
-glow, the rising sun and the first-visit sunrise are the owner's brief and
-they stay. They are slow (seconds, not milliseconds), they never move
-anything someone is trying to read or tap, and every one of them stops under
-`prefers-reduced-motion`. Nothing bounces, nothing sparkles, and nothing
-animates to get attention.
+**Motion is atmosphere, and feedback answers the person.** The sky, the
+pulsing midnight glow, the rising sun and the opening sunrise are the
+owner's brief and they stay; they are slow and never move anything
+someone is trying to read or tap. Since September 2026 the owner also
+asked for feedback that is visible and felt: a ripple where a finger
+lands, sections gliding in with a dawn glow, a sunrise line for scroll
+progress, rooms sliding in, Ooh leaning into a scroll, and a light
+vibration (`components/Feedback.tsx`, `lib/haptics.ts`). The rule for all
+of it: it only ever answers something the person just did (a tap, a
+scroll), never fires on its own to get attention, moves and glows but
+never fades text (contrast holds mid-animation), and every piece stops
+under `prefers-reduced-motion` or with "Vibration" off.
 
 **Safe messaging is not optional.** Never describe a method, anywhere, in
 copy, a video, a placeholder or a code comment. Stories are chosen for

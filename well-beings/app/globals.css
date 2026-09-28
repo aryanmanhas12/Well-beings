@@ -3775,3 +3775,477 @@ a.btn-quiet:hover {
 .ooh-guide .ooh-bubble:has(.ooh-go)::after {
   bottom: 60px;
 }
+
+/* ── The opening, every time Arun is opened ───────────────────────────────
+   Two moments (components/haven/IntroDawn.tsx). While <html> carries
+   data-intro-gate, the sky waits in the night: stars, hills, Ooh asleep,
+   and "Wake the sun". Every rising animation above is held with
+   animation: none, so removing the attribute on the tap starts them all
+   on the same frame the music's swell and bells were scheduled for. */
+.intro-hills {
+  opacity: 1;
+  animation: none;
+}
+.intro-top {
+  position: absolute;
+  z-index: 3;
+  top: max(14px, env(safe-area-inset-top));
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.intro-top .intro-skip {
+  position: static;
+  min-height: 44px;
+  padding: 10px 16px;
+}
+.intro-gate {
+  display: none;
+}
+:root[data-intro-gate] .intro-gate {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUpSlow 0.9s 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+:root[data-intro-gate] .intro::before {
+  animation: none;
+  opacity: 0;
+}
+:root[data-intro-gate] .intro-stars span {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+:root[data-intro-gate] .intro-sun,
+:root[data-intro-gate] .intro-line,
+:root[data-intro-gate] .intro-small,
+:root[data-intro-gate] .intro-go {
+  display: none;
+}
+.intro-gate-hello {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #E9DDF5;
+}
+.intro-gate-line {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 7vw, 34px);
+  line-height: 1.15;
+  color: #FFF8F1;
+}
+.intro-wake {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 14px 28px;
+  font-size: 18px;
+  border-radius: 999px;
+  animation: wakeGlow 2.6s ease-in-out infinite;
+}
+.intro-wake:focus-visible {
+  outline: 3px solid #FFF8F1;
+  outline-offset: 4px;
+}
+.intro-wake-sun {
+  display: inline-flex;
+}
+@keyframes wakeGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 87, 0.45), 0 10px 30px -10px rgba(255, 159, 128, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(255, 200, 87, 0), 0 10px 40px -8px rgba(255, 159, 128, 0.85);
+  }
+}
+.intro-quiet {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  background: none;
+  color: #FFF1E6;
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.intro-quiet:focus-visible {
+  outline: 3px solid #FFF8F1;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.intro-gate-note {
+  max-width: 30ch;
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #E9DDF5;
+}
+
+/* Ooh on the hill: asleep while the sky waits, awake with a hop as the
+   sun comes up. Both faces are in the markup; this picks one. */
+.intro-ooh {
+  position: absolute;
+  z-index: 2;
+  left: max(6%, 12px);
+  bottom: calc(18vh - 34px);
+  line-height: 0;
+  filter: drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 0 1.2px #FFF4E8);
+}
+.intro-ooh-awake {
+  display: none;
+}
+:root:not([data-intro-gate]) .intro-ooh-asleep {
+  display: none;
+}
+:root:not([data-intro-gate]) .intro-ooh-awake {
+  display: block;
+  animation: oohHop 0.7s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.intro-ooh-asleep {
+  display: block;
+  position: relative;
+}
+.intro-ooh-asleep::after {
+  content: "z z";
+  position: absolute;
+  right: -18px;
+  top: -6px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: #E9DDF5;
+  animation: oohZ 2.8s ease-in-out infinite;
+}
+@keyframes oohZ {
+  0% {
+    opacity: 0;
+    transform: translate(0, 6px);
+  }
+  30%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10px, -14px);
+  }
+}
+@keyframes oohHop {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  35% {
+    transform: translateY(-16px) scale(0.96, 1.05);
+  }
+  70% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+  100% {
+    transform: none;
+  }
+}
+@media (max-height: 620px) {
+  .intro-ooh {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-wake,
+  :root[data-intro-gate] .intro-gate,
+  :root:not([data-intro-gate]) .intro-ooh-awake,
+  .intro-ooh-asleep::after {
+    animation: none;
+  }
+}
+
+/* ── Ooh's narrator bar ───────────────────────────────────────────────────
+   Docked above the tab bar like a game's dialogue box: Ooh on the left,
+   the bubble beside it, its tail pointing back at Ooh. It describes the
+   part of the page being read (components/OohGuide.tsx). Same inks as the
+   bubble above: 15.7:1 text, 10.8:1 buttons. */
+.ooh-dock {
+  position: fixed;
+  z-index: 55;
+  left: max(8px, env(safe-area-inset-left));
+  right: max(8px, env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  pointer-events: none;
+  animation: ooh-dock-in 0.32s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+.ooh-dock > * {
+  pointer-events: auto;
+}
+.ooh-dock.ooh-dock-tabbar {
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 720px) {
+  .ooh-dock,
+  .ooh-dock.ooh-dock-tabbar {
+    left: auto;
+    right: max(18px, env(safe-area-inset-right));
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    width: min(520px, calc(100vw - 36px));
+  }
+}
+@keyframes ooh-dock-in {
+  from {
+    transform: translateY(24px) scale(0.96);
+  }
+}
+.ooh-dock-me {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+  filter: drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 6px 10px rgba(6, 2, 16, 0.45));
+}
+.ooh-dock-me:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+.ooh-dock-me .ooh-hop {
+  display: block;
+  transition: transform 0.2s ease-out;
+  animation: oohHop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Ooh leans into the scroll and straightens when it stops. */
+.ooh-dock[data-lean="down"] .ooh-dock-me .ooh-hop {
+  transform: rotate(7deg) translateY(2px);
+}
+.ooh-dock[data-lean="up"] .ooh-dock-me .ooh-hop {
+  transform: rotate(-7deg) translateY(-3px);
+}
+.ooh-dock-bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 8px;
+  padding: 13px 44px 11px 15px;
+  background: #FFF8EE;
+  color: #2A1636;
+  border: 3px solid #2A1636;
+  border-radius: 18px 18px 18px 6px;
+  box-shadow: 4px 4px 0 #2A1636;
+}
+.ooh-dock-bubble::after {
+  content: "";
+  position: absolute;
+  left: -9px;
+  bottom: 8px;
+  width: 16px;
+  height: 16px;
+  background: #FFF8EE;
+  border-left: 3px solid #2A1636;
+  border-bottom: 3px solid #2A1636;
+  transform: skewY(35deg) rotate(20deg);
+  border-bottom-left-radius: 4px;
+}
+.ooh-dock-bubble .ooh-name {
+  top: -12px;
+  font-size: 12px;
+}
+.ooh-dock-text {
+  margin: 0;
+  font-family: var(--font-karla), "Karla", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.42;
+}
+.ooh-dock-bubble .ooh-go {
+  margin-top: 8px;
+}
+
+/* Room for the bar: the last thing on a page can always be scrolled clear
+   of Ooh and the tab bar. */
+@media (max-width: 719px) {
+  .app-foot-tabbed {
+    padding-bottom: calc(250px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+.site-foot {
+  padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ── Feedback you can see (components/Feedback.tsx) ─────────────────────── */
+
+/* A ripple of dawn light where a finger lands. */
+.tap-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  overflow: hidden;
+}
+.tap-ripple {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 224, 138, 0.9), rgba(255, 122, 176, 0.55) 60%, rgba(255, 122, 176, 0));
+  box-shadow: 0 0 18px 6px rgba(255, 200, 87, 0.45);
+  animation: tapRipple 0.62s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes tapRipple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(5.2);
+    opacity: 0;
+  }
+}
+
+/* A line of sunrise across the top that fills as the page scrolls. */
+.scroll-dawn {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  width: 100%;
+  height: 3px;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #B794FF, #FF7AB0 45%, #FFC857);
+  box-shadow: 0 0 10px rgba(255, 159, 128, 0.7);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.scroll-dawn[data-on="false"] {
+  opacity: 0;
+}
+
+/* Sections glide up into place with a glow of dawn as they arrive. They
+   move and glow; they never fade, so text is at full contrast throughout. */
+[data-reveal="pending"] {
+  transform: translateY(26px) scale(0.975);
+}
+[data-reveal="in"] {
+  animation: revealUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both, revealGlow 1.2s 0.05s ease-out;
+}
+@keyframes revealUp {
+  from {
+    transform: translateY(26px) scale(0.975);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes revealGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 87, 0);
+  }
+  30% {
+    box-shadow: 0 0 0 3px rgba(255, 200, 87, 0.55), 0 0 28px 6px rgba(255, 122, 176, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 87, 0);
+  }
+}
+
+/* A room slides in when its tab is chosen. */
+.haven {
+  animation: roomIn 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes roomIn {
+  from {
+    transform: translateY(14px);
+  }
+}
+.tabbar button {
+  transition: transform 0.18s ease-out, background 0.25s;
+}
+.tabbar button:active {
+  transform: scale(0.92);
+}
+.tabbar button[aria-current="page"] svg {
+  animation: tabPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes tabPop {
+  0% {
+    transform: scale(0.7) rotate(-8deg);
+  }
+  60% {
+    transform: scale(1.18) rotate(4deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+.tool-row,
+.choice,
+.tile {
+  transition: transform 0.16s ease-out;
+}
+.tool-row:active,
+.choice:active,
+.tile:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ooh-dock,
+  .ooh-dock-me .ooh-hop,
+  .tap-ripple,
+  [data-reveal="in"],
+  .haven,
+  .tabbar button[aria-current="page"] svg {
+    animation: none;
+  }
+  [data-reveal="pending"],
+  .ooh-dock[data-lean] .ooh-dock-me .ooh-hop,
+  .tabbar button:active,
+  .tool-row:active,
+  .choice:active,
+  .tile:active {
+    transform: none;
+  }
+  .scroll-dawn {
+    display: none;
+  }
+}
+
+/* A soft fade of the page's own night behind the bar, like the shade under
+   a game's dialogue box, so Ooh and the bubble stand clear of the text
+   scrolling underneath. Paper in light mode. */
+.ooh-dock::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: calc(-1 * max(8px, env(safe-area-inset-left)));
+  right: calc(-1 * max(8px, env(safe-area-inset-right)));
+  top: -26px;
+  bottom: -120px;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-bg) 90%, transparent) 38%);
+  pointer-events: none;
+}
+@media (min-width: 720px) {
+  .ooh-dock::before {
+    left: -24px;
+    right: -24px;
+    border-radius: 28px 28px 0 0;
+  }
+}

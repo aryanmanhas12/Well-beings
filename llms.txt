@@ -17,8 +17,10 @@ first. The listener ("Just sit with me for a minute") replies with lines
 written in advance and chosen on the device; nobody reads it and nothing is
 kept. Soft background music is synthesised in the browser (no audio is
 downloaded or streamed) and starts only after the person's first tap. Ooh,
-a cartoon guide shared with the companion app Ronak, narrates each page with
-lines written in advance; it reads nothing the person writes. Everything
+a cartoon guide shared with the companion app Ronak, narrates each page and
+each section as it scrolls past with lines written in advance; it reads
+nothing the person writes. A short opening sunrise plays each time the app is
+opened, except after a recent check-in that reported thoughts of suicide. Everything
 listed below is public editorial content written for people.
 
 ## What Arun is, and is not

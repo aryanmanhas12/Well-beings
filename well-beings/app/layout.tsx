@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fredoka, Karla, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { Feedback } from "@/components/Feedback";
 import { PAGE_BY_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -139,6 +140,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <Feedback />
         <ServiceWorker />
       </body>
     </html>

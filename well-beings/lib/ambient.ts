@@ -114,26 +114,36 @@ function schedule() {
   timer = setTimeout(schedule, 5000);
 }
 
+function ensureContext(): boolean {
+  if (ctx && engine) return true;
+  const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AC) return false;
+  try {
+    ctx = new AC({ latencyHint: "playback" });
+  } catch {
+    return false;
+  }
+  engine = createAmbient(ctx);
+  return true;
+}
+
 function update() {
   if (typeof window === "undefined") return;
   const play = shouldPlay();
   if (play) {
-    if (!ctx) {
-      const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (!AC) return;
-      try {
-        ctx = new AC({ latencyHint: "playback" });
-      } catch {
-        return;
-      }
-      engine = createAmbient(ctx);
-    }
+    if (!ensureContext() || !ctx) return;
     if (suspendTimer) {
       clearTimeout(suspendTimer);
       suspendTimer = null;
     }
     void ctx.resume().then(() => {
-      if (!ctx || !engine || !shouldPlay()) return;
+      if (ctx?.state === "running") detachUnlock();
+      if (!ctx || !engine) return;
+      if (!shouldPlay()) {
+        /* Turned off between the tap and the context waking: stay silent. */
+        void ctx.suspend();
+        return;
+      }
       const g = engine.out.gain;
       g.cancelScheduledValues(ctx.currentTime);
       g.setValueAtTime(g.value, ctx.currentTime);
@@ -166,6 +176,57 @@ export function soundPlaying(): boolean {
   return !!ctx && ctx.state === "running" && shouldPlay();
 }
 
+/* Bowl tones for the sunrise, timed to the opening: the first as the sun
+   clears the hills, then one per pair of petals as they open (the CSS
+   opens petal i at 1.8s + i x 0.08s), rising through the pentatonic, and
+   a last high one as the words arrive. Seconds after the tap. */
+export const SUNRISE_BELLS: [number, number][] = [
+  [0.35, 62],
+  [1.8, 74],
+  [1.96, 76],
+  [2.12, 78],
+  [2.28, 81],
+  [2.6, 83],
+  [3.3, 86],
+];
+const SUNRISE_FADE = 3.2;
+
+/**
+ * Starts the music together with the sunrise. Called from the tap that
+ * wakes the sun, so it is inside the browser's permission to play. It
+ * resolves once sound is actually running (or after 400 ms if it cannot
+ * start, so the sunrise never waits on audio), and the caller starts the
+ * animation at that moment: the swell and the bells land on the picture.
+ */
+export async function playSunrise(): Promise<void> {
+  if (typeof window === "undefined") return;
+  unlocked = true;
+  if (!soundWanted() || !ensureContext() || !ctx || !engine) return;
+  const c = ctx;
+  const e = engine;
+  try {
+    await Promise.race([c.resume(), new Promise((r) => setTimeout(r, 400))]);
+  } catch {
+    return;
+  }
+  if (c.state !== "running" || !shouldPlay()) return;
+  detachUnlock();
+  const t = c.currentTime + 0.03;
+  const g = e.out.gain;
+  g.cancelScheduledValues(t);
+  g.setValueAtTime(Math.min(g.value, 0.0001), t);
+  g.linearRampToValueAtTime(VOLUME, t + SUNRISE_FADE);
+  /* The harmony starts on the sunrise, unless it is already going (the
+     opening replayed from Settings), in which case only the bells join. */
+  if (!timer) {
+    nextChord = t;
+    chordIndex = 0;
+    schedule();
+  }
+  for (const [at, midi] of SUNRISE_BELLS) e.bell(t + at, midi, 0.034);
+  notify();
+}
+
 /** A single soft bowl tone, for Ooh's bubbles. Only when music is playing. */
 export function chime() {
   if (!ctx || !engine || !soundPlaying()) return;
@@ -175,14 +236,25 @@ export function chime() {
 /* The first tap or key anywhere is the browser's permission to make sound.
    Several event types, because iOS unlocks audio on touchend and click but
    not on pointerdown. */
+const UNLOCK_EVENTS = ["pointerup", "touchend", "click", "keydown"];
+/* Listening stops only once sound is confirmed running: an older iPhone
+   does not count the first touch event as permission, and dropping the
+   listeners on it left the music silent until something else nudged it. */
+function unlock(e: Event) {
+  /* A tap on a control that is itself about the music ("Without music",
+     the speaker) must not start it on the way to switching it off: a tap
+     arrives as pointerup and then click, and the music would begin in
+     between. Those controls carry data-sound-control and decide alone. */
+  if ((e.target as Element | null)?.closest?.("[data-sound-control]")) return;
+  unlocked = true;
+  update();
+  notify();
+}
+function detachUnlock() {
+  for (const t of UNLOCK_EVENTS) window.removeEventListener(t, unlock, true);
+}
 if (typeof window !== "undefined") {
-  const unlock = () => {
-    unlocked = true;
-    update();
-    notify();
-    for (const t of ["pointerup", "touchend", "click", "keydown"]) window.removeEventListener(t, unlock, true);
-  };
-  for (const t of ["pointerup", "touchend", "click", "keydown"]) window.addEventListener(t, unlock, true);
+  for (const t of UNLOCK_EVENTS) window.addEventListener(t, unlock, true);
   document.addEventListener("visibilitychange", update);
   window.addEventListener("wellbeings:delete-all", resetSoundPref);
 }
