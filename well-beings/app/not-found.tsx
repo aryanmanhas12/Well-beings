@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { ArunMark } from "@/components/ArunMark";
+import { OohGuide } from "@/components/OohGuide";
+import { SoundToggle } from "@/components/SoundToggle";
 import Link from "next/link";
 import { GUIDE_PAGES, NAV_PAGES, SITE_NAME } from "@/lib/site";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -46,10 +48,14 @@ export default function NotFound() {
               ))}
             </ul>
           </nav>
+          <div className="site-sound">
+            <SoundToggle />
+          </div>
         </div>
       </header>
 
       <main id="main" className="site-main">
+        <OohGuide scene={{ kind: "page", path: "/404" }} />
         <div className="prose">
           <h1>That page does not exist</h1>
           <p className="lede">

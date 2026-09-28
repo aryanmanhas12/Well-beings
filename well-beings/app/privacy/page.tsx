@@ -61,7 +61,20 @@ export default function PrivacyPage() {
             <code>arun-install-v1</code>: the date you tapped &ldquo;Not now&rdquo; on the card about
             installing Arun, so it stays away for a month. Only written if you tapped it.
           </li>
+          <li>
+            <code>arun-sound-v1</code>: &ldquo;off&rdquo; if you turned the music off. Only written
+            if you did.
+          </li>
+          <li>
+            <code>arun-ooh-v1</code>: whether you turned Ooh, the guide, off, and which pages&apos;
+            introductions you have already heard, so Ooh says one line instead of the whole tour.
+          </li>
         </ul>
+        <p>
+          The music is made on your phone as it plays, from a few tones and a synthetic room. There is
+          no audio file to download and nothing is streamed from anywhere. Ooh&apos;s lines are written
+          into the app; Ooh does not read what you write and sends nothing.
+        </p>
         <p>
           There is no cookie, no session storage, no IndexedDB and no fingerprinting. Nothing is
           loaded from anyone else&apos;s server when the app opens. The exceptions are ones you

@@ -73,6 +73,10 @@ export default function TermsPage() {
           write for yourself, not a plan agreed with a clinician unless you take it to one.
         </p>
         <p>
+          Ooh, the little character who says what each page is for, is a drawing with lines written
+          in advance. It does not read what you write and it is not a person.
+        </p>
+        <p>
           The listener (&ldquo;Just sit with me for a minute&rdquo;) is not a person, not a therapist
           and not a crisis line. Its replies are written in advance and chosen on your phone. If what
           you write sounds like you are in danger, it shows you helplines, because a person on one of

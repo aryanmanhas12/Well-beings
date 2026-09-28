@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { hold, release } from "@/lib/ambient";
 
 /**
  * Speech to text, for the people who find it easier to say a thing than to
@@ -140,6 +141,7 @@ export function useSpeech({ lang, onFinal }: { lang: string; onFinal: (text: str
   const finish = useCallback((s: Session, next: SpeechStatus = "idle", mounted = true) => {
     if (s.done) return;
     s.done = true;
+    release("mic");
     s.timers.forEach(clearTimeout);
     if (s.silence) clearTimeout(s.silence);
     s.rec.onresult = null;
@@ -249,6 +251,8 @@ export function useSpeech({ lang, onFinal }: { lang: string; onFinal: (text: str
         hardStop(s, "error");
       };
       sessionRef.current = s;
+      /* The music would be transcribed as words; it waits while listening. */
+      hold("mic");
       setError(null);
       setLocal(onDevice);
       setInterim("");

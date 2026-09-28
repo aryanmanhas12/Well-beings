@@ -1,5 +1,6 @@
 import { GearIcon, ShieldIcon } from "./icons";
 import { ArunMark } from "./ArunMark";
+import { SoundToggle } from "./SoundToggle";
 import { Lang, LANGS, Strings } from "@/lib/i18n";
 
 export function Header({
@@ -89,6 +90,7 @@ export function Header({
         ))}
       </select>
 
+      <SoundToggle />
       <button className="btn btn-ghost btn-icon" onClick={onSettings} aria-label="Settings" title="Settings" style={{ width: 44, height: 44 }}>
         <GearIcon style={{ color: "currentColor" }} />
       </button>

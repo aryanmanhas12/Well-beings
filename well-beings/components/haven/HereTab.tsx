@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { Wellbeings } from "@/hooks/useWellbeings";
 import type { Haven } from "@/hooks/useHaven";
 import { crisisLines } from "@/lib/helplines";
@@ -32,7 +32,9 @@ export function HereTab({
   openUrgent,
   openVideo,
   onReplayIntro,
+  ooh,
 }: {
+  ooh?: ReactNode;
   wb: Wellbeings;
   haven: Haven;
   region: HelplineRegion;
@@ -138,6 +140,8 @@ export function HereTab({
           Watch the opening
         </button>
       </DawnSky>
+
+      {ooh}
 
       <div className="here-cols">
         <div className="here-main">

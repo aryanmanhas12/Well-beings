@@ -28,6 +28,20 @@ five rays, then three, then none and a bigger sun. The bloom-sun is the
 app's illustration (the sun in the sky, the intro, breathing), not the
 logo. Never draw either by hand a second time.
 
+**Ooh** is the companion character, shared with Ronak: a round sunrise-gold
+creature with the bloom-sun's two petals sprouting from its head, drawn in
+comic style by `lib/ooh.mjs` (plain JS, so Ronak imports the same file).
+Eight moods. What Ooh says lives in `lib/oohScript.ts` and is tested in
+`scripts/test-ooh.mjs`: short, no em dashes, never implies anyone is
+watching, only gentle moods on heavy days, and on heavy days and worse Ooh
+starts tucked in the corner so nothing pushes the safety plan down. Ooh
+speaks in the page, never over it.
+
+**The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
+major pads, bowl tones, a synthetic room. It starts on the first tap,
+fades in, and pauses for videos, the microphone and hidden tabs. The
+speaker at the top turns it off, and that choice is remembered.
+
 ## The tells, and what to do instead
 
 **Colour.** The palette is night to dawn, at the owner's explicit request:

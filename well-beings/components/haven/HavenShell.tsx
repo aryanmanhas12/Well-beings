@@ -11,10 +11,13 @@ import { HereIcon, HopeIcon, PlanIcon, ReachIcon, WatchIcon } from "./icons";
 import { IntroDawn } from "./IntroDawn";
 import { PlanTab } from "./PlanTab";
 import { ReachTab } from "./ReachTab";
-import type { HavenTab } from "./shared";
+import { useNow, type HavenTab } from "./shared";
 import { UrgentCare } from "./UrgentCare";
 import { VideoSheet } from "./VideoSheet";
 import { WatchTab } from "./WatchTab";
+import { OohGuide } from "../OohGuide";
+import type { OohScene } from "@/lib/oohScript";
+import { planIsWritten } from "@/lib/haven";
 
 const TABS: { id: HavenTab; label: string; Icon: typeof HereIcon }[] = [
   { id: "here", label: "Here", Icon: HereIcon },
@@ -84,6 +87,17 @@ export function HavenShell({
     if (replayIntro > 0) document.documentElement.setAttribute("data-intro", "pending");
   }, [replayIntro]);
 
+  /* What Ooh narrates: the tab, and on Here the level of the check-in if
+     there is a recent one (the same three hours Here uses). */
+  const now = useNow();
+  const recent = !!(haven.latest && now && now.getTime() - Date.parse(haven.latest.at) < 3 * 3_600_000);
+  const scene: OohScene =
+    tab === "here"
+      ? { kind: "here", level: recent ? haven.level : null, returning: !!haven.returning && !recent, hour: now ? now.getHours() : null }
+      : tab === "plan"
+        ? { kind: "plan", written: planIsWritten(haven.state.plan) }
+        : { kind: tab };
+
   return (
     <>
       <nav className="tabbar" aria-label="Safe place">
@@ -96,8 +110,12 @@ export function HavenShell({
       </nav>
 
       <main className={`haven haven-${tab}`} key={nav} id="main">
+        {/* Ooh speaks at the top of each room; on Here, just under the sky,
+            which HereTab places itself. */}
+        {tab !== "here" && <OohGuide scene={scene} dock="tabbar" />}
         {tab === "here" && (
           <HereTab
+            ooh={<OohGuide scene={scene} dock="tabbar" />}
             wb={wb}
             haven={haven}
             region={region}

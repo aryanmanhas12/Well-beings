@@ -3479,3 +3479,261 @@ a.btn-quiet:hover {
   margin-top: 0;
   padding-top: 0;
 }
+
+/* ── Ooh, the guide ───────────────────────────────────────────────────────
+   Drawn by lib/ooh.mjs, narrated by components/OohGuide.tsx. A comic
+   speech bubble: cream paper, a thick plum outline and a hard offset
+   shadow, the way a panel in a comic is inked. Text is Karla, because it
+   is read; only the name plate is Fredoka.
+   Measured: ink #2A1636 on cream #FFF8EE is 15.7:1; "Next" in #7A2748 on
+   cream is 9.0:1; the name plate, ink on sun #FFC857, is 10.8:1. */
+.ooh-guide {
+  position: fixed;
+  right: max(10px, env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 55;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+}
+.ooh-guide > * {
+  pointer-events: auto;
+}
+.ooh-dock-tabbar {
+  bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 720px) {
+  .ooh-dock-tabbar {
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+  .ooh-guide {
+    right: max(18px, env(safe-area-inset-right));
+  }
+}
+/* Never over the first-visit sunrise. */
+:root[data-intro="pending"] .ooh-guide,
+:root[data-intro="pending"] .ooh-strip {
+  display: none;
+}
+
+.ooh-me {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  /* A thin cream edge, like a sticker, so the plum outline still reads on
+     the plum night. */
+  filter: drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 6px 10px rgba(6, 2, 16, 0.45));
+  transition: transform 0.25s var(--ease-out, ease-out);
+}
+.ooh-me:active {
+  transform: scale(0.94);
+}
+.ooh-me:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 2px;
+}
+
+.ooh-bubble {
+  position: relative;
+  max-width: min(300px, calc(100vw - 112px));
+  margin-bottom: 30px;
+  animation: ooh-pop 0.28s var(--ease-out, ease-out);
+}
+@keyframes ooh-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+.ooh-say {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  padding: 16px 42px 10px 15px;
+  background: #FFF8EE;
+  color: #2A1636;
+  border: 3px solid #2A1636;
+  border-radius: 20px 20px 6px 20px;
+  box-shadow: 4px 4px 0 #2A1636;
+  font: inherit;
+  font-family: var(--font-karla), "Karla", system-ui, sans-serif;
+  cursor: pointer;
+}
+/* The tail, pointing down at Ooh. */
+.ooh-bubble::after {
+  content: "";
+  position: absolute;
+  right: -9px;
+  bottom: 8px;
+  width: 18px;
+  height: 18px;
+  background: #FFF8EE;
+  border-right: 3px solid #2A1636;
+  border-bottom: 3px solid #2A1636;
+  transform: skewY(-35deg) rotate(-20deg);
+  border-bottom-right-radius: 4px;
+}
+.ooh-name {
+  position: absolute;
+  top: -13px;
+  left: 12px;
+  padding: 2px 10px 1px;
+  border: 2.5px solid #2A1636;
+  border-radius: 999px;
+  background: #FFC857;
+  color: #2A1636;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.ooh-text {
+  display: block;
+  font-size: 15.5px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.ooh-rest {
+  color: transparent;
+}
+.ooh-next {
+  display: block;
+  margin-top: 6px;
+  text-align: right;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #7A2748;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ooh-next[data-ready="true"] {
+  opacity: 1;
+  animation: ooh-nudge 1.6s ease-in-out infinite;
+}
+@keyframes ooh-nudge {
+  50% {
+    transform: translateX(3px);
+  }
+}
+.ooh-say:focus-visible,
+.ooh-x:focus-visible {
+  outline: 3px solid var(--color-sun);
+  outline-offset: 3px;
+}
+.ooh-x {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #2A1636;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ooh-bubble,
+  .ooh-next[data-ready="true"] {
+    animation: none;
+  }
+}
+
+/* Room at the bottom of each page so the last card can scroll clear of
+   Ooh standing in the corner. */
+@media (max-width: 719px) {
+  .app-foot-tabbed {
+    padding-bottom: calc(170px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+.site-foot {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+/* The speaker. */
+.sound-toggle[aria-pressed="false"] {
+  color: var(--color-neutral-500);
+}
+.site-sound {
+  margin-left: auto;
+}
+@media (max-width: 719px) {
+  .site-sound {
+    order: 1;
+  }
+  .site-head-inner > nav {
+    order: 2;
+    flex-basis: 100%;
+  }
+}
+
+/* Ooh in the page: the figure on the left, the bubble to its right with
+   its tail pointing back at Ooh. In the flow of the page, so it covers
+   nothing. */
+.ooh-strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.haven > .ooh-strip {
+  margin-bottom: 16px;
+}
+.site-main > .ooh-strip {
+  margin-bottom: 18px;
+}
+.ooh-figure {
+  flex: none;
+  display: block;
+  line-height: 0;
+  filter: drop-shadow(0 0 1.2px #FFF4E8) drop-shadow(0 0 1.2px #FFF4E8);
+}
+:root[data-theme="light"] .ooh-figure,
+:root[data-theme="light"] .ooh-me {
+  filter: drop-shadow(0 4px 8px rgba(42, 22, 54, 0.18));
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .ooh-figure,
+  :root:not([data-theme="dark"]) .ooh-me {
+    filter: drop-shadow(0 4px 8px rgba(42, 22, 54, 0.18));
+  }
+}
+.ooh-strip .ooh-bubble {
+  flex: 1;
+  min-width: 0;
+  max-width: 460px;
+  margin: 14px 0 22px;
+}
+.ooh-strip .ooh-say {
+  border-radius: 20px 20px 20px 6px;
+}
+.ooh-strip .ooh-bubble::after {
+  right: auto;
+  left: -9px;
+  border-right: 0;
+  border-left: 3px solid #2A1636;
+  transform: skewY(35deg) rotate(20deg);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 4px;
+}
+/* Tucked in the corner, Ooh is only the figure. */
+.ooh-guide[data-open="false"] {
+  gap: 0;
+}

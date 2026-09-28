@@ -15,6 +15,7 @@ import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { HavenShell } from "./haven/HavenShell";
 import { CrisisStrip } from "./CrisisStrip";
 import { ListenerProvider } from "./ListenerProvider";
+import { OohGuide } from "./OohGuide";
 
 /** Kept short on purpose. The footer of a working app is not the place for a
     sitemap; these are the destinations someone in the middle of the app
@@ -92,6 +93,7 @@ export function WellbeingsApp() {
         />
       )}
       {wb.screen === "chat" && <ChatScreen wb={wb} />}
+      {wb.screen === "results" && wb.profile && <OohGuide scene={{ kind: "results" }} />}
       {wb.screen === "results" && wb.profile && (
         <ResultsScreen
           profile={wb.profile}

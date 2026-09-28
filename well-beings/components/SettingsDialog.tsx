@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { setSoundWanted, soundWanted, subscribeSound } from "@/lib/ambient";
+import { OOH_SERVER, readOoh, setOohHidden, subscribeOoh } from "@/lib/oohStore";
 import { InstallRow } from "./InstallApp";
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
@@ -52,6 +54,8 @@ export function SettingsDialog({
 }) {
   const ref = useDialogBehaviour(onClose);
   const s = wb.s;
+  const music = useSyncExternalStore(subscribeSound, soundWanted, () => true);
+  const ooh = useSyncExternalStore(subscribeOoh, readOoh, () => OOH_SERVER);
   const [confirming, setConfirming] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
@@ -185,6 +189,18 @@ export function SettingsDialog({
           hint="Scores and streak numbers become words."
           on={wb.settings.calmMode}
           onChange={() => wb.setCalmMode(!wb.settings.calmMode)}
+        />
+        <Toggle
+          label="Music"
+          hint="Soft, slow music made on this phone. It pauses for videos and the microphone."
+          on={music}
+          onChange={() => setSoundWanted(!music)}
+        />
+        <Toggle
+          label="Ooh, your guide"
+          hint="The little character who says what each page is for."
+          on={!ooh.hidden}
+          onChange={() => setOohHidden(!ooh.hidden)}
         />
         <Toggle
           label="Always show sources"

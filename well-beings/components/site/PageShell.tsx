@@ -4,6 +4,8 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { SiteFooter } from "./SiteFooter";
 import { CrisisStrip } from "../CrisisStrip";
 import { ArunMark } from "../ArunMark";
+import { SoundToggle } from "../SoundToggle";
+import { OohGuide } from "../OohGuide";
 
 /**
  * The frame every content page sits in.
@@ -67,12 +69,16 @@ export function PageShell({
               })}
             </ul>
           </nav>
+          <div className="site-sound">
+            <SoundToggle />
+          </div>
         </div>
       </header>
 
       {trail.length > 1 && <Breadcrumbs trail={trail} />}
 
       <main id="main" className="site-main">
+        <OohGuide scene={{ kind: "page", path }} />
         {children}
       </main>
 

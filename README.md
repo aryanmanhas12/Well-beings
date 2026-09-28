@@ -39,6 +39,12 @@ site is built with `NEXT_PUBLIC_LISTENER_ENDPOINT`. Text boxes for good things a
 microphone that asks before any browser speech service is used. **Today's line** on Here is edited
 by hand each week in `well-beings/lib/daily-lines.ts`.
 
+**Ooh and the music.** Ooh, a small sunrise-coloured character shared with Ronak, narrates
+each page in a comic speech bubble the first time you visit it, then says one line after that.
+On heavy days Ooh stays quietly in the corner so the safety plan and helplines come first. Soft
+music, made on the phone as it plays (no audio files), starts with your first tap; the speaker
+at the top turns it off.
+
 **Install it as an app.** A quiet card on Here (one tap puts it away for a month) and a row in
 Settings install Arun to the home screen: one tap where the browser offers a prompt, and plain
 steps for iPhone, for Brave, Edge and Firefox, and for Instagram's in-app browser, which cannot

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { hold, release } from "@/lib/ambient";
 import { embedUrl, sourceName, watchUrl, type Video } from "@/lib/havenContent";
 import { useDialogBehaviour } from "../dialogs";
 import { SCENE_BG, SceneArt } from "./SceneArt";
@@ -35,6 +36,12 @@ export function VideoSheet({
   const [playing, setPlaying] = useState(false);
   const [online, setOnline] = useState(true);
   const src = sourceName(video);
+
+  /* Two soundtracks at once is noise: the music waits while the sheet is up. */
+  useEffect(() => {
+    hold("video");
+    return () => release("video");
+  }, []);
 
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
