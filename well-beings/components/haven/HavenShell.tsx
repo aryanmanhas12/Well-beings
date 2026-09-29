@@ -6,15 +6,14 @@ import type { Haven } from "@/hooks/useHaven";
 import type { HelplineRegion } from "@/lib/types";
 import type { Video } from "@/lib/havenContent";
 import { HereTab } from "./HereTab";
-import { HopeTab } from "./HopeTab";
 import { HereIcon, HopeIcon, PlanIcon, ReachIcon, WatchIcon } from "./icons";
 import { IntroDawn } from "./IntroDawn";
 import { PlanTab } from "./PlanTab";
 import { ReachTab } from "./ReachTab";
 import { HOME_EVENT, useNow, type HavenTab } from "./shared";
 import { UrgentCare } from "./UrgentCare";
+import { HopeTab, WatchTab, preloadRoom } from "../lazyParts";
 import { VideoSheet } from "./VideoSheet";
-import { WatchTab } from "./WatchTab";
 import { OohGuide } from "../OohGuide";
 import { ROOM_EVENT } from "../Feedback";
 import type { OohScene } from "@/lib/oohScript";
@@ -153,14 +152,22 @@ export function HavenShell({
     <>
       <nav className="tabbar" aria-label="Safe place">
         {TABS.map(({ id, label, Icon }) => (
-          <button key={id} type="button" aria-current={tab === id ? "page" : undefined} onClick={() => goTo(id)}>
+          <button
+            key={id}
+            type="button"
+            aria-current={tab === id ? "page" : undefined}
+            onPointerDown={() => preloadRoom(id)}
+            onPointerEnter={() => preloadRoom(id)}
+            onFocus={() => preloadRoom(id)}
+            onClick={() => goTo(id)}
+          >
             <Icon />
             <span>{label}</span>
           </button>
         ))}
       </nav>
 
-      <main className={`haven haven-${tab}`} key={nav} id="main">
+      <main className={`haven haven-${tab}`} key={nav} id="main" data-moved={nav > 0 ? "true" : undefined}>
         {/* Ooh speaks at the top of each room; on Here, just under the sky,
             which HereTab places itself. */}
         {tab !== "here" && <OohGuide scene={scene} dock="tabbar" onGo={goTo} />}

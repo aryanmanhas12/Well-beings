@@ -7,7 +7,7 @@ import { crisisLines, helplineHref } from "@/lib/helplines";
 import type { HelplineRegion } from "@/lib/types";
 import { EMPTY_PLAN, planIsWritten, type PlanContact, type SafetyPlan } from "@/lib/haven";
 import { WHY } from "@/lib/havenContent";
-import { AppScreen } from "../AppScreen";
+import { AppScreen } from "../lazyParts";
 import { PhoneIcon } from "./icons";
 import { formatDay, GoTo, Why } from "./shared";
 
@@ -99,19 +99,19 @@ const STEPS: { key: keyof SafetyPlan; title: string; hint: string; placeholder: 
     key: "warningSigns",
     title: "1. Signs a hard time is starting",
     hint: "Thoughts, feelings, places or times of day that tell you things are sliding.",
-    placeholder: "e.g. Not replying to anyone. Lying awake after 2am. Thinking 'what's the point'.",
+    placeholder: "e.g. Not replying to anyone. Lying awake after 2am. Thinking ‘what’s the point’…",
   },
   {
     key: "coping",
     title: "2. Things I can do on my own",
     hint: "Small things that take the edge off, even a little.",
-    placeholder: "e.g. Cold water on my face. A walk round the block. That one playlist. A hot shower.",
+    placeholder: "e.g. Cold water on my face. A walk round the block. That one playlist. A hot shower…",
   },
   {
     key: "distractions",
     title: "3. People and places that give me a lift",
     hint: "You don't have to tell them anything. Just being around them helps.",
-    placeholder: "e.g. The chai stall near college. Calling my cousin about cricket. The library.",
+    placeholder: "e.g. The chai stall near college. Calling my cousin about cricket. The library…",
   },
 ];
 
@@ -152,7 +152,7 @@ function EditPlan({ initial, region, onSave }: { initial: SafetyPlan; region: He
             <span className="field-hint" id={`plan-${s.key}-hint`}>
               {s.hint}
             </span>
-            <textarea
+            <textarea autoComplete="off" name="plan-step"
               id={`plan-${s.key}`}
               aria-describedby={`plan-${s.key}-hint`}
               className="textarea"
@@ -202,7 +202,7 @@ function EditPlan({ initial, region, onSave }: { initial: SafetyPlan; region: He
           Ways to keep yourself safe while it passes. Asking someone to hold onto things for a while, or not being
           alone tonight.
         </span>
-        <textarea
+        <textarea autoComplete="off" name="plan-safer"
           id="plan-safer"
           aria-describedby="plan-safer-hint"
           className="textarea"
@@ -217,7 +217,7 @@ function EditPlan({ initial, region, onSave }: { initial: SafetyPlan; region: He
         <span className="field-hint" id="plan-reason-hint">
           One person, one hope, one reason. It goes at the top of your plan.
         </span>
-        <textarea
+        <textarea autoComplete="off" name="plan-reason"
           id="plan-reason"
           aria-describedby="plan-reason-hint"
           className="textarea"
@@ -263,10 +263,10 @@ function Contacts({
           <label htmlFor={`${idBase}-name-${i}`} className="sr-only">
             Name
           </label>
-          <input
+          <input name="contact-name"
             id={`${idBase}-name-${i}`}
             className="input"
-            placeholder="Name"
+            placeholder="Their name…"
             value={c.name}
             maxLength={60}
             autoComplete="off"
@@ -275,10 +275,10 @@ function Contacts({
           <label htmlFor={`${idBase}-phone-${i}`} className="sr-only">
             Phone
           </label>
-          <input
+          <input name="contact-phone"
             id={`${idBase}-phone-${i}`}
             className="input"
-            placeholder="Phone"
+            placeholder="Their number…"
             type="tel"
             inputMode="tel"
             value={c.phone}

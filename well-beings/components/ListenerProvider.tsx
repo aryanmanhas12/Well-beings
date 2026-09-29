@@ -159,7 +159,7 @@ function ListenerDialog({ lang, region, onClose }: { lang: string; region: Helpl
           <label htmlFor="listener-input" className="sr-only">
             What is on your mind
           </label>
-          <textarea
+          <textarea autoComplete="off" name="listener-input"
             id="listener-input"
             className="input"
             rows={2}
@@ -172,7 +172,7 @@ function ListenerDialog({ lang, region, onClose }: { lang: string; region: Helpl
                 e.currentTarget.form?.requestSubmit();
               }
             }}
-            placeholder="Say it or type it"
+            placeholder="Say it or type it…"
           />
           <VoiceButton appLang={lang} onText={(t) => setDraft((d) => (d.trim() ? `${d.trim()} ${t}` : t))} />
           <button type="submit" className="btn btn-sun" disabled={!draft.trim() || thinking}>

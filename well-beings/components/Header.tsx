@@ -44,6 +44,7 @@ export function Header({
         <ArunMark width={40} />
         <span
           className="nav-wordmark arun-wordmark"
+          translate="no"
           style={{ fontSize: 27, whiteSpace: "nowrap" }}
         >
           arun

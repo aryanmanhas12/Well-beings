@@ -146,7 +146,7 @@ function MessageSomeone({ onSent }: { onSent: () => void }) {
       <label htmlFor="msg" className="sr-only">
         Your message
       </label>
-      <textarea id="msg" className="textarea" value={msg} onChange={(e) => setMsg(e.target.value)} maxLength={500} style={{ marginTop: 8 }} />
+      <textarea id="msg" name="message" autoComplete="off" className="textarea" value={msg} onChange={(e) => setMsg(e.target.value)} maxLength={500} style={{ marginTop: 8 }} />
       <div className="btn-row" style={{ marginTop: 8 }}>
         <button type="button" className="btn btn-sun" onClick={share}>
           Send it
@@ -262,7 +262,7 @@ function CareForm({ initial, onSave, onCancel }: { initial: CareTeam | null; onS
       <label className="field-label" htmlFor="care-name">
         Their name
       </label>
-      <input id="care-name" className="input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} autoComplete="off" required />
+      <input name="care-name" id="care-name" className="input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} autoComplete="off" required />
       <label className="field-label" htmlFor="care-role">
         Who they are
       </label>
@@ -276,14 +276,14 @@ function CareForm({ initial, onSave, onCancel }: { initial: CareTeam | null; onS
       <label className="field-label" htmlFor="care-phone">
         Phone, for a text <span style={{ fontWeight: 400, color: "var(--color-neutral-600)" }}>(optional)</span>
       </label>
-      <input id="care-phone" className="input" type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} autoComplete="off" />
+      <input name="care-phone" id="care-phone" className="input" type="tel" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} autoComplete="off" />
       <label className="field-label" htmlFor="care-email">
         Email <span style={{ fontWeight: 400, color: "var(--color-neutral-600)" }}>(optional)</span>
       </label>
-      <input id="care-email" className="input" type="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={120} autoComplete="off" />
+      <input name="care-email" id="care-email" className="input" type="email" spellCheck={false} inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={120} autoComplete="off" />
 
       <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 14, fontSize: 14 }}>
-        <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 4, width: 18, height: 18, flex: "none" }} />
+        <input name="care-agree" type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 4, width: 18, height: 18, flex: "none" }} />
         <span>
           I understand the app never sends anything by itself. It prepares a summary, and I decide whether to send it.
         </span>
@@ -352,7 +352,7 @@ function SummarySender({ haven, care }: { haven: Haven; care: CareTeam }) {
       <label className="field-label" htmlFor="care-note">
         Anything you want to add? <span style={{ fontWeight: 400, color: "var(--color-neutral-600)" }}>(optional)</span>
       </label>
-      <textarea id="care-note" className="textarea" value={note} onChange={(e) => setNote(e.target.value)} maxLength={600} placeholder="e.g. Exams start next week and I'm not sleeping." />
+      <textarea id="care-note" name="care-note" autoComplete="off" className="textarea" value={note} onChange={(e) => setNote(e.target.value)} maxLength={600} placeholder="e.g. Exams start next week and I’m not sleeping…" />
       <p className="eyebrow" style={{ marginTop: 12 }}>
         Exactly what {care.name} will see
       </p>

@@ -50,7 +50,7 @@ export function buildProfile(raw: RawAnswers): Profile {
     /* This app never asks sex, so it can't use the sex-specific AUDIT-C
        cutoffs (≥4 men / ≥3 women) some guidelines recommend. It uses a
        single youth-calibrated cutoff instead: ≥3 is the sensitivity-optimised
-       threshold found in 12–19 year olds (Liskola et al., 2018), ≥6 sits at
+       threshold found in 12-19 year olds (Liskola et al., 2018), ≥6 sits at
        the higher end of cutoffs found across young-adult samples (Skogen et
        al., 2024). Less precise for some people — an honest tradeoff for
        asking for less. See the Evidence tab for both citations. */
@@ -123,7 +123,7 @@ export function buildSchedule(p: Profile, intensity: PlanIntensity): ScheduleBlo
     "Wind-down: screens dim, lights low",
     (p.sleepScreens ?? 0) >= 3 ? "Your phone-in-bed habit flagged: charge it out of reach" : "Same ritual nightly = faster sleep onset"
   );
-  add(lightsOut, "Lights out", "Window: " + fmt(lightsOut) + " – " + fmt(wake) + ", all 7 days");
+  add(lightsOut, "Lights out", "Window: " + fmt(lightsOut) + " to " + fmt(wake) + ", all 7 days");
   return blocks;
 }
 
@@ -161,7 +161,7 @@ export function buildInterventions(p: Profile): Intervention[] {
     iv.push({
       title: "Movement as mood medicine",
       tag: "Mood",
-      why: "In trials with 12–25 year olds, exercise lifted low mood by about as much as front-line treatments do. Roughly 8 in 10 young people who moved regularly did better than those who didn't.",
+      why: "In trials with 12-25 year olds, exercise lifted low mood by about as much as front-line treatments do. Roughly 8 in 10 young people who moved regularly did better than those who didn't.",
       steps: [
         "30 min, moderate: brisk walk, cycle, gym, sport, dance",
         "3× a week minimum; scheduled, not \"when I feel like it\"",
@@ -246,7 +246,7 @@ export function buildInterventions(p: Profile): Intervention[] {
     steps: [
       "50 min single-task, notifications off",
       "10 min genuinely off: move, window, water, not another feed",
-      "After 2–3 cycles, take a real 30-min break",
+      "After 2-3 cycles, take a real 30-min break",
     ],
     src: "Albulescu et al. 2022",
     tryBreath: false,

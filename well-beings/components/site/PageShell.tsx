@@ -51,7 +51,7 @@ export function PageShell({
         <div className="site-head-inner">
           <Link href="/" className="site-wordmark" aria-label={SITE_NAME} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
             <ArunMark width={40} />
-            <span className="arun-wordmark">arun</span>
+            <span className="arun-wordmark" translate="no">arun</span>
           </Link>
           <nav aria-label="Main">
             <ul className="site-nav">

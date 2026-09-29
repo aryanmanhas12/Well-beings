@@ -47,12 +47,12 @@ export const EVIDENCE: EvidenceItem[] = [
   },
   {
     tag: "Screening",
-    design: "Clinical cohort · 2,183 visits, ages 12–25",
+    design: "Clinical cohort · 2,183 visits, ages 12-25",
     figure: "89%",
     caption: "Of young people with real depressive symptoms were caught by 2 questions",
     strength: "large",
     finding:
-      "In 12–25 year olds, answering “yes, more than a few days” to either of the first two mood questions caught 89% of those who turned out to have moderate-or-worse depression. Two questions, nearly nine in ten found.",
+      "In 12-25 year olds, answering “yes, more than a few days” to either of the first two mood questions caught 89% of those who turned out to have moderate-or-worse depression. Two questions, nearly nine in ten found.",
     use: "the youth-calibrated cutoff that triggers the deeper mood questions.",
     cite: "Pitts et al., 2023, J. Adolescent Health",
     url: "https://consensus.app/papers/details/d1249c895e1d5747b54ccb24654945fa/",
@@ -120,7 +120,7 @@ export const EVIDENCE: EvidenceItem[] = [
   },
   {
     tag: "Burnout",
-    design: "Review · stressor–detachment model",
+    design: "Review · stressor-detachment model",
     figure: "A loop",
     caption: "Heavy workload → can't switch off → strain → heavier workload",
     strength: "moderate",
@@ -133,7 +133,7 @@ export const EVIDENCE: EvidenceItem[] = [
   {
     tag: "Focus",
     design: "Meta-analysis · 22 samples · N=2,335",
-    figure: "2–10 min",
+    figure: "2-10 min",
     caption: "Break length that reliably restores energy and cuts fatigue",
     strength: "small",
     finding:
@@ -183,7 +183,7 @@ export const EVIDENCE: EvidenceItem[] = [
   },
   {
     tag: "Drinking",
-    design: "Diagnostic validation · 621 adolescents, ages 12–19",
+    design: "Diagnostic validation · 621 adolescents, ages 12-19",
     figure: "95%",
     caption: "Of problem drinking in teens caught by a 3-question screen",
     strength: "large",
@@ -208,12 +208,12 @@ export const EVIDENCE: EvidenceItem[] = [
   },
   {
     tag: "Mood",
-    design: "Meta-analysis · 16 randomised trials, ages 12–25",
+    design: "Meta-analysis · 16 randomised trials, ages 12-25",
     figure: "8 in 10",
     caption: "Young people exercising do better on mood than those who don't",
     strength: "large",
     finding:
-      "For 12–25 year olds, physical activity had a large effect on depressive symptoms, large enough that head-to-head reviews put it in the same conversation as front-line treatments. An umbrella review across 375 trials finds the same for anxiety.",
+      "For 12-25 year olds, physical activity had a large effect on depressive symptoms, large enough that head-to-head reviews put it in the same conversation as front-line treatments. An umbrella review across 375 trials finds the same for anxiety.",
     technical: "SMD −0.82, a large effect. The minus sign means symptoms went down.",
     use: "the 30-min movement block, 3× a week, in mood-flagged plans.",
     cite: "Bailey et al., 2017, Psych. Medicine · Singh et al., 2025, JAACAP",
@@ -287,7 +287,7 @@ export const EVIDENCE: EvidenceItem[] = [
     strength: "large",
     finding:
       "India's National Mental Health Survey found that roughly 1 in 20 adults currently has a depressive or anxiety disorder, and four in five of them get no treatment. Nearly 60% reported disability of some severity. The gap isn't at the edges; it is the normal case.",
-    technical: "Weighted current prevalence of common mental disorders 5.1% (95% CI 5.06–5.13); treatment gap 80.4%.",
+    technical: "Weighted current prevalence of common mental disorders 5.1% (95% CI 5.06-5.13); treatment gap 80.4%.",
     use: "why this app defaults to India, and why it is free, private and needs no referral to start.",
     cite: "Jayasankar et al., 2022, Indian J. Psychiatry",
     url: "https://consensus.app/papers/details/a5f36aaf85645e3ea622482e1e9e8386/",

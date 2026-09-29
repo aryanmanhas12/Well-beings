@@ -24,9 +24,9 @@ export function PlanTab({ wb }: { wb: Wellbeings }) {
   const p = wb.profile!;
   const interventions = buildInterventions(p);
   const lightsOut = (p.wake - p.need + 24) % 24;
-  const sleepWindow = fmt(lightsOut) + " – " + fmt(p.wake);
+  const sleepWindow = fmt(lightsOut) + " to " + fmt(p.wake);
   const sleepWindowWhy =
-    (p.need === 9 ? "Teen target: 8–10h. " : "Adult target: 7–9h. ") +
+    (p.need === 9 ? "Teen target: 8-10h. " : "Adult target: 7-9h. ") +
     "Held within ±30 min all 7 days. Regularity beats duration for mental health risk.";
   const weekFocus = p.sleepBad
     ? "Stabilise the sleep window"

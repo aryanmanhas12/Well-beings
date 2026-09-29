@@ -5,7 +5,8 @@ branch's root by `.github/workflows/deploy.yml`). Its real instructions are
 in **`well-beings/AGENTS.md`**: read that first, every session.
 
 ## Skills (`.claude/skills/`, shared with the sister app Ronak)
-1. Visual work: read the design source of truth first, then
+1. Visual work: read the design source of truth first
+   (`well-beings/DESIGN.md`, tokens copied from `app/globals.css`), then
    `design-taste-frontend` (brief, then the three dials); add
    `high-end-visual-design` for calm, premium polish.
 2. Changing what exists: `redesign-existing-projects` (audit first).

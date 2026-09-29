@@ -2297,6 +2297,27 @@ header.nav,
 :root[data-contrast="high"] .haven-atmos {
   display: none;
 }
+/* A whisper of film grain on the night, so it reads as a sky rather than
+   a flat fill (the redesign skill's texture rule). It lives on the fixed
+   atmosphere layer, behind every card and word, so it textures the
+   background and never touches text contrast; drawn once, never moved. */
+.haven-atmos::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .94 0 0 0 0 .88 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="light"] .haven-atmos::after {
+  opacity: 0.05;
+  filter: invert(1);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .haven-atmos::after {
+    opacity: 0.05;
+    filter: invert(1);
+  }
+}
 .haven {
   position: relative;
   z-index: 1;
@@ -4310,6 +4331,43 @@ a.btn-quiet:hover {
 .haven {
   animation: roomIn 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+/* Opened by a tap (not on first load): the room's parts step in one
+   after another (the redesign skill's "staggered entry"), moving only,
+   never fading, so every word is at full contrast throughout. */
+.haven[data-moved="true"] {
+  animation: none;
+}
+/* Not on a part already waiting to glide in as it arrives (Feedback.tsx):
+   one animation per element, or the glide is lost and the part jumps. */
+.haven[data-moved="true"] > :not([data-reveal]) {
+  animation: roomIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.haven[data-moved="true"] > :nth-child(2) {
+  animation-delay: 45ms;
+}
+.haven[data-moved="true"] > :nth-child(3) {
+  animation-delay: 90ms;
+}
+.haven[data-moved="true"] > :nth-child(4) {
+  animation-delay: 135ms;
+}
+.haven[data-moved="true"] > :nth-child(n + 5) {
+  animation-delay: 180ms;
+}
+/* The room's name is drawn in by the dawn: a wipe of the words from left
+   to right, as light crossing them (Aceternity's text reveal, as a clip,
+   so the words are either there at full contrast or not yet). */
+.haven[data-moved="true"] h1 {
+  animation: nameDawn 0.7s 0.08s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes nameDawn {
+  from {
+    clip-path: inset(-10% 100% -10% 0);
+  }
+  to {
+    clip-path: inset(-10% 0 -10% 0);
+  }
+}
 @keyframes roomIn {
   from {
     transform: translateY(14px);
@@ -4355,6 +4413,8 @@ a.btn-quiet:hover {
   .ooh-dock-me .ooh-hop,
   [data-reveal="in"],
   .haven,
+  .haven[data-moved="true"] > :not([data-reveal]),
+  .haven[data-moved="true"] h1,
   .tabbar button[aria-current="page"] svg {
     animation: none;
   }
@@ -4428,4 +4488,114 @@ a.btn-quiet:hover {
     right: -24px;
     border-radius: 28px 28px 0 0;
   }
+}
+
+/* A part of the app still arriving (components/lazyParts.tsx): a quiet
+   panel the shape of what is coming, glowing faintly, never a spinner.
+   Almost never seen: every part is fetched as soon as the phone is idle. */
+.part-loading {
+  border-radius: var(--radius-xl);
+  background: linear-gradient(100deg, var(--color-surface) 30%, color-mix(in oklab, var(--color-surface), #fff 5%) 50%, var(--color-surface) 70%);
+  background-size: 300% 100%;
+  animation: partGlow 1.6s ease-in-out infinite;
+}
+@keyframes partGlow {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .part-loading {
+    animation: none;
+  }
+}
+
+/* "Removed. Undo" (HopeTab): in place under what was removed, for seven
+   seconds. Empty, it takes no room, so nothing jumps when it goes. */
+.undo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0;
+  font-size: 14px;
+}
+.undo-bar:not(:empty) {
+  margin: 4px 0 12px;
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--radius-lg);
+  background: var(--color-raised);
+}
+.undo-bar .btn {
+  flex: none;
+  min-height: 44px;
+}
+
+/* ── Web interface guidelines (vercel-labs), applied site-wide ─────────── */
+/* Headings break into balanced lines; paragraphs never leave one word
+   alone on the last line. */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+p,
+li,
+figcaption {
+  text-wrap: pretty;
+}
+/* The pinned crisis strip (38px) must never cover something scrolled or
+   tabbed to, and neither must the tab bar and Ooh's bar at the bottom of
+   a phone. scroll-padding is honoured by focus, anchors and find-in-page. */
+html {
+  scroll-padding-top: 64px;
+}
+@media (max-width: 719px) {
+  html {
+    scroll-padding-bottom: 200px;
+  }
+}
+/* Numbers read digit by digit (helplines, counts) sit on even columns. */
+.crisis-strip a,
+.call-btn,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lift on hover, for a mouse or trackpad only (a phone has the tap ring). */
+@media (hover: hover) and (pointer: fine) {
+  .choice,
+  .tile,
+  .tool-row {
+    transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .choice:hover,
+  .tile:hover,
+  .tool-row:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* A spotlight that follows a mouse around a card's edge (Aceternity's
+   Card Spotlight, as Ronak ports it). One element, laid over the card
+   under the pointer; only the 1.5px ring lights, so the words inside are
+   never touched. Feedback.tsx moves it; mouse and trackpad only. */
+.fx-spot {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  padding: 1.5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 200, 87, 0.95), rgba(255, 122, 176, 0.55) 35%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.fx-spot[data-on="true"] {
+  opacity: 1;
 }

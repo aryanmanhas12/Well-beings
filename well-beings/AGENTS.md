@@ -185,6 +185,26 @@ them explicitly, as it does the breathing pacer. "Vibration" and "Sounds"
 turn their parts off. A helpline link and the urgent screen are silent
 and still, and Ooh does not talk over an open screen.
 
+**Loaded in parts, never the safety parts.** The wellbeing check, its
+results, the Watch and Hope rooms and the daily plan are their own files
+(`components/lazyParts.tsx`), fetched when the phone is idle and on a
+finger touching a tab. Here, the safety plan, Reach out, the urgent
+screen, Help, Settings and the video sheet are never split off: they
+hold the plan, the people and the numbers and must not wait on a network.
+A part that cannot arrive offline says so and offers "Try again".
+
+**Design source of truth.** `DESIGN.md` holds the tokens (copied from
+`app/globals.css`; drift is a bug) and how Arun looks. The skills in
+`/.claude/skills` (design taste, redesign audit, high-end visual design,
+animated UI libraries, web interface guidelines, design-md, playwright)
+apply, and where their generic rules disagree with this file or
+`DESIGN.md`, these win: a safe place for people on hard days is not a
+landing page. From the Web Interface Guidelines, now house rules: every
+field has a name and an autocomplete setting, placeholders end with "…",
+removing something from the hope box offers "Undo" for seven seconds,
+headings balance, nothing pinned covers a focused field, brand names are
+`translate="no"`, number ranges use a hyphen.
+
 **Fast means measured.** Everything that moves is transform or opacity on
 its own element; nothing animates `box-shadow`, a filter or layout. Put a
 filter on the drawing inside a moving wrapper, never on the wrapper. Do

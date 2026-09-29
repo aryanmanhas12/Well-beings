@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MAX_PHOTOS, type Haven } from "@/hooks/useHaven";
 import { mentionsCrisis } from "@/lib/journal";
 import { VoiceButton } from "../VoiceButton";
@@ -124,7 +124,7 @@ function GoodThings({ haven, check, lang }: { haven: Haven; check: (t: string) =
               <label htmlFor={`good-${i}`} className="sr-only">
                 Good thing {i + 1}
               </label>
-              <input
+              <input name="good-thing"
                 id={`good-${i}`}
                 className="input"
                 value={v}
@@ -210,6 +210,7 @@ function HopeSection({ kind, haven, check }: { kind: HopeKind; haven: Haven; che
   const [url, setUrl] = useState("");
   const items = haven.state.hope.filter((h) => h.kind === kind);
   const id = `hope-${kind}`;
+  const { offer, bar } = useUndo();
 
   return (
     <section className="panel" aria-labelledby={`${id}-title`}>
@@ -234,7 +235,11 @@ function HopeSection({ kind, haven, check }: { kind: HopeKind; haven: Haven; che
                 type="button"
                 className="btn btn-quiet"
                 style={{ minHeight: 44, padding: "2px 8px", flex: "none", fontSize: 13 }}
-                onClick={() => haven.removeHope(h.id)}
+                onClick={() => {
+                  const index = haven.state.hope.findIndex((x) => x.id === h.id);
+                  haven.removeHope(h.id);
+                  offer(h.text ? `“${h.text.length > 40 ? `${h.text.slice(0, 40)}…` : h.text}”` : "the link", () => haven.restoreHope(h, index));
+                }}
                 aria-label={`Remove: ${h.text}`}
               >
                 Remove
@@ -243,6 +248,7 @@ function HopeSection({ kind, haven, check }: { kind: HopeKind; haven: Haven; che
           ))}
         </ul>
       )}
+      {bar}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -260,7 +266,7 @@ function HopeSection({ kind, haven, check }: { kind: HopeKind; haven: Haven; che
         <label htmlFor={`${id}-text`} className="sr-only">
           {meta.title}
         </label>
-        <input
+        <input name="hope-text"
           id={`${id}-text`}
           className="input"
           value={text}
@@ -274,7 +280,7 @@ function HopeSection({ kind, haven, check }: { kind: HopeKind; haven: Haven; che
             <label htmlFor={`${id}-url`} className="sr-only">
               Link
             </label>
-            <input
+            <input name="hope-link"
               id={`${id}-url`}
               className="input"
               /* Text, not type="url": a url input rejects "open.spotify.com/…"
@@ -302,6 +308,7 @@ function Photos({ haven }: { haven: Haven }) {
   const [caption, setCaption] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  const { offer, bar } = useUndo();
 
   return (
     <section className="panel" aria-labelledby="photos-title">
@@ -315,14 +322,18 @@ function Photos({ haven }: { haven: Haven }) {
           {haven.photos.map((p) => (
             <figure key={p.id}>
               {/* eslint-disable-next-line @next/next/no-img-element -- a local data URL; next/image cannot optimise it and would only add weight */}
-              <img src={p.src} alt={p.caption || "A photo from your hope box"} />
+              <img src={p.src} alt={p.caption || "A photo from your hope box"} width={160} height={160} />
               <figcaption style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
                 <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>{p.caption}</span>
                 <button
                   type="button"
                   className="btn btn-quiet"
                   style={{ minHeight: 44, padding: "2px 6px", fontSize: 13 }}
-                  onClick={() => haven.removePhoto(p.id)}
+                  onClick={() => {
+                    const index = haven.photos.findIndex((x) => x.id === p.id);
+                    haven.removePhoto(p.id);
+                    offer(p.caption ? `the photo “${p.caption}”` : "a photo", () => haven.restorePhoto(p, index));
+                  }}
                   aria-label={`Remove photo${p.caption ? `: ${p.caption}` : ""}`}
                 >
                   Remove
@@ -332,21 +343,22 @@ function Photos({ haven }: { haven: Haven }) {
           ))}
         </div>
       )}
+      {bar}
       {haven.photos.length < MAX_PHOTOS && (
         <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
           <label htmlFor="photo-caption" className="sr-only">
             Caption
           </label>
-          <input
+          <input name="photo-caption"
             id="photo-caption"
             className="input"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder="A caption, if you like"
+            placeholder="A caption, if you like…"
             maxLength={80}
             autoComplete="off"
           />
-          <input
+          <input name="photo-file"
             ref={input}
             type="file"
             accept="image/*"
@@ -401,7 +413,7 @@ function Letter({ haven, check, lang }: { haven: Haven; check: (t: string) => vo
           <label htmlFor="letter" className="sr-only">
             Your note
           </label>
-          <textarea
+          <textarea autoComplete="off" name="letter"
             id="letter"
             className="textarea"
             style={{ minHeight: 160 }}
@@ -505,7 +517,7 @@ function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => vo
       hint: "Small enough to actually happen. Not \"be happy\"; more like \"call my cousin\".",
       value: want,
       set: setWant,
-      placeholder: "e.g. Go for one walk with Didi",
+      placeholder: "e.g. Go for one walk with Didi…",
       dot: "var(--color-sun)",
     },
     {
@@ -514,7 +526,7 @@ function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => vo
       hint: "The first step, and when.",
       value: way,
       set: setWay,
-      placeholder: "e.g. Message her on Saturday morning",
+      placeholder: "e.g. Message her on Saturday morning…",
       dot: "var(--color-pink)",
     },
     {
@@ -523,7 +535,7 @@ function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => vo
       hint: "Something you've done before, or someone who'd help.",
       value: can,
       set: setCan,
-      placeholder: "e.g. I did it last month, even on a bad week",
+      placeholder: "e.g. I did it last month, even on a bad week…",
       dot: "var(--color-leaf)",
     },
   ];
@@ -552,7 +564,7 @@ function HopePathForm({ haven, check }: { haven: Haven; check: (t: string) => vo
             <span className="field-hint" id={`${f.id}-hint`}>
               {f.hint}
             </span>
-            <input
+            <input name="hope-path"
               id={f.id}
               aria-describedby={`${f.id}-hint`}
               className="input"
@@ -588,4 +600,40 @@ const RAYS = 5;
     dated with, so the two compare as strings. */
 function mondayKey(d: Date): string {
   return localDateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7)));
+}
+
+/**
+ * "Removed. Undo" for seven seconds after a removal, in place, announced
+ * politely to a screen reader. One tap removes a memory from the hope
+ * box, so one tap puts it back (web interface guidelines: a destructive
+ * action needs a confirmation or an undo window, never just gone).
+ */
+function useUndo() {
+  const [undo, setUndo] = useState<{ what: string; restore: () => void; n: number } | null>(null);
+  useEffect(() => {
+    if (!undo) return;
+    const t = setTimeout(() => setUndo(null), 7000);
+    return () => clearTimeout(t);
+  }, [undo]);
+  const offer = (what: string, restore: () => void) => setUndo((u) => ({ what, restore, n: (u?.n ?? 0) + 1 }));
+  const bar = (
+    <p className="undo-bar" role="status" aria-live="polite">
+      {undo && (
+        <>
+          <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>Removed {undo.what}.</span>
+          <button
+            type="button"
+            className="btn btn-soft"
+            onClick={() => {
+              undo.restore();
+              setUndo(null);
+            }}
+          >
+            Undo
+          </button>
+        </>
+      )}
+    </p>
+  );
+  return { offer, bar };
 }

@@ -24,11 +24,11 @@ export type ProgressDirection = "up" | "flat" | "down" | "insufficient";
 
 export interface ProgressRead {
   direction: ProgressDirection;
-  /** Daily scores, oldest→newest, null where nothing was logged. 1–5, higher is better. */
+  /** Daily scores, oldest→newest, null where nothing was logged. 1-5, higher is better. */
   series: (number | null)[];
   recentAvg: number | null;
   priorAvg: number | null;
-  /** Change in points on the 1–5 scale, positive = better. */
+  /** Change in points on the 1-5 scale, positive = better. */
   delta: number | null;
   loggedDays: number;
   /** How many more days of logging before the comparison becomes meaningful. */
@@ -75,7 +75,7 @@ export function readProgress(checkins: Record<string, CheckinEntry>): ProgressRe
   const recentAvg = avg(recent);
   const priorAvg = avg(prior);
   const delta = recentAvg - priorAvg;
-  // 0.3 of a point on a 1–5 scale: below this, day-to-day noise explains it.
+  // 0.3 of a point on a 1-5 scale: below this, day-to-day noise explains it.
   const direction: ProgressDirection = delta >= 0.3 ? "up" : delta <= -0.3 ? "down" : "flat";
 
   const headline =

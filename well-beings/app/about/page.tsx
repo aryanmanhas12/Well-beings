@@ -64,7 +64,7 @@ export default function AboutPage() {
         </p>
         <ul>
           <li>
-            <strong>A safety plan</strong>, following the Stanley–Brown Safety Planning Intervention:
+            <strong>A safety plan</strong>, following the Stanley-Brown Safety Planning Intervention:
             warning signs, things you can do alone, people and places that lift you, people to ask for
             help, professionals, and making where you are safer. In a study of 1,640 people seen in
             emergency departments for suicidal crises, safety planning with follow-up calls was linked

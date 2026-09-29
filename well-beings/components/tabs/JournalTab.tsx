@@ -71,7 +71,7 @@ export function JournalTab({ wb }: { wb: Wellbeings }) {
             </p>
           )}
 
-          <textarea
+          <textarea autoComplete="off" name="journal"
             className="input"
             value={text}
             onChange={(e) => {

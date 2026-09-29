@@ -125,6 +125,18 @@ export function useHaven() {
   );
 
   const removeHope = useCallback((id: string) => update((s) => ({ ...s, hope: s.hope.filter((h) => h.id !== id) })), [update]);
+  /* Undo: back where it was. Removing is one tap, so it can be taken back
+     (web interface guidelines: a destructive action needs an undo). */
+  const restoreHope = useCallback(
+    (item: HopeItem, index: number) =>
+      update((s) => {
+        if (s.hope.some((h) => h.id === item.id)) return s;
+        const hope = [...s.hope];
+        hope.splice(Math.min(index, hope.length), 0, item);
+        return { ...s, hope };
+      }),
+    [update]
+  );
 
   const setLetter = useCallback(
     (text: string) => {
@@ -184,6 +196,24 @@ export function useHaven() {
     [photos]
   );
 
+  /* Reads the photos as they are now, not as they were when the Undo was
+     offered: that closure still held the removed photo, and restoring
+     found it "already there" and did nothing. */
+  const photosRef = useRef(photos);
+  useEffect(() => {
+    photosRef.current = photos;
+  }, [photos]);
+  const restorePhoto = useCallback((photo: Photo, index: number) => {
+    const now = photosRef.current;
+    if (now.some((p) => p.id === photo.id)) return;
+    const next = [...now];
+    next.splice(Math.min(index, next.length), 0, photo);
+    if (savePhotos(next)) {
+      photosRef.current = next;
+      setPhotos(next);
+    }
+  }, []);
+
   const reset = useCallback(() => {
     clearHaven();
     const fresh = { ...EMPTY_HAVEN, introSeen: true, region: guessRegion() };
@@ -220,6 +250,7 @@ export function useHaven() {
     addGoodThings,
     addHope,
     removeHope,
+    restoreHope,
     setLetter,
     setHopePath,
     savePlan,
@@ -229,6 +260,7 @@ export function useHaven() {
     markStep,
     addPhoto,
     removePhoto,
+    restorePhoto,
     reset,
   };
 }

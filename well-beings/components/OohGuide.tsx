@@ -665,7 +665,7 @@ function DockBubble({
   const href = go ? `/?room=${go.room}${go.view ? `&view=${go.view}` : ""}` : "";
   return (
     <div className="ooh-dock-bubble">
-      <span className="ooh-name" aria-hidden="true">
+      <span className="ooh-name" aria-hidden="true" translate="no">
         Ooh
       </span>
       <p className="ooh-dock-text">
@@ -743,7 +743,7 @@ function Bubble({
   return (
     <div className="ooh-bubble">
       <button type="button" className="ooh-say" onClick={() => (done ? onAdvance() : finish())}>
-        <span className="ooh-name" aria-hidden="true">
+        <span className="ooh-name" aria-hidden="true" translate="no">
           Ooh
         </span>
         <span className="ooh-text">

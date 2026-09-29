@@ -269,7 +269,7 @@ export function ChatScreen({ wb }: { wb: Wellbeings }) {
         )}
         {awaitingText && (
           <div style={{ display: "flex", gap: 8 }}>
-            <input
+            <input autoComplete="off" name="answer"
               className="input"
               value={wb.draft}
               onChange={(e) => wb.setDraft(e.target.value)}

@@ -47,6 +47,8 @@ const STRONG = ".choice, .tile, [role='radio'], .ooh-say, .ooh-go, .intro-wake, 
 const SECTIONS =
   ".panel, .scene, .shelf, .deck, .hope-hero, .card, .install-panel, .sky, .site-main .prose > h2, .site-main .prose > .callout";
 const NEVER = ".intro, .dialog, .urgent, .ooh-strip, .ooh-dock, .ooh-guide, .tabbar";
+/* What the mouse spotlight follows. */
+const SPOT = ".panel, .card, .scene, .shelf, .deck, .tile, .choice, .install-panel, .sky";
 /* Only while scrolling: what is on screen when a page opens stays still. */
 const SCROLL_WINDOW_MS = 450;
 const GLOW_AGAIN_MS = 5000;
@@ -145,6 +147,59 @@ export function Feedback() {
       window.removeEventListener("pointerdown", onDown, true);
       window.removeEventListener("click", onClick, true);
       for (const t of ["pointerdown", "touchend", "keydown", "click"]) window.removeEventListener(t, unlock, true);
+    };
+  }, []);
+
+  /* A mouse over a card: a spotlight follows it around the card's edge.
+     Mouse and trackpad only; one element, moved at most once a frame. */
+  useEffect(() => {
+    if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return;
+    let spot: HTMLSpanElement | null = null;
+    let target: Element | null = null;
+    let last: PointerEvent | null = null;
+    let raf = 0;
+    const off = () => {
+      target = null;
+      if (spot) spot.dataset.on = "false";
+    };
+    const frame = () => {
+      raf = 0;
+      const e = last;
+      if (!e) return;
+      const el = (e.target as Element | null)?.closest?.(SPOT) ?? null;
+      if (!el || el.closest(NEVER)) return off();
+      if (!spot) {
+        spot = document.createElement("span");
+        spot.className = "fx-spot";
+        spot.setAttribute("aria-hidden", "true");
+        document.body.append(spot);
+      }
+      const r = el.getBoundingClientRect();
+      if (el !== target) {
+        target = el;
+        spot.style.cssText = `left:${r.left + window.scrollX}px;top:${r.top + window.scrollY}px;width:${r.width}px;height:${r.height}px;border-radius:${getComputedStyle(el).borderRadius || "18px"}`;
+      }
+      spot.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      spot.style.setProperty("--my", `${e.clientY - r.top}px`);
+      spot.dataset.on = "true";
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      last = e;
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const onLeave = () => off();
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    window.addEventListener("resize", onLeave);
+    window.addEventListener(ROOM_EVENT, onLeave);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("resize", onLeave);
+      window.removeEventListener(ROOM_EVENT, onLeave);
+      if (raf) cancelAnimationFrame(raf);
+      spot?.remove();
     };
   }, []);
 
@@ -276,7 +331,7 @@ export function Feedback() {
     let timer: ReturnType<typeof setTimeout> | null = null;
     const mo = new MutationObserver((records) => {
       /* Its own lights coming and going are not new cards. */
-      const fx = (n: Node) => n instanceof Element && n.matches(".fx-glow, .fx-ring, .fx-sweep");
+      const fx = (n: Node) => n instanceof Element && n.matches(".fx-glow, .fx-ring, .fx-sweep, .fx-spot");
       if (records.every((r) => [...r.addedNodes, ...r.removedNodes].every(fx))) return;
       if (timer) return;
       timer = setTimeout(() => {

@@ -112,31 +112,31 @@ export const HOPE_KINDS: { kind: HopeKind; title: string; prompt: string; placeh
     kind: "people",
     title: "People who matter to me",
     prompt: "Someone who'd want you here. A friend, a sibling, a teacher, a pet counts too.",
-    placeholder: "e.g. Didi, who always calls on Sundays",
+    placeholder: "e.g. Didi, who always calls on Sundays…",
   },
   {
     kind: "ahead",
     title: "Things I'm looking forward to",
     prompt: "Big or tiny. A trip, a show's next season, mango season, a friend's wedding.",
-    placeholder: "e.g. The new season in December",
+    placeholder: "e.g. The new season in December…",
   },
   {
     kind: "moments",
     title: "Moments that felt good",
     prompt: "A memory you can step back into for a minute.",
-    placeholder: "e.g. Chai on the terrace after the exams ended",
+    placeholder: "e.g. Chai on the terrace after the exams ended…",
   },
   {
     kind: "through",
     title: "Things I've got through",
     prompt: "Proof, from your own life, that hard stretches end.",
-    placeholder: "e.g. The year I moved cities alone",
+    placeholder: "e.g. The year I moved cities alone…",
   },
   {
     kind: "sounds",
     title: "Songs and videos that help",
     prompt: "Paste a link to something that lifts you, and give it a name.",
-    placeholder: "e.g. The song from the road trip",
+    placeholder: "e.g. The song from the road trip…",
   },
 ];
 
@@ -266,7 +266,7 @@ export const VIDEOS: Video[] = [
     source: "youtube",
     id: "n3Xv_g3g-mA",
     title: "Loneliness",
-    by: "Kurzgesagt – In a Nutshell",
+    by: "Kurzgesagt - In a Nutshell",
     length: "About 10 min",
     when: "When you feel cut off. Why loneliness is a signal your body sends, not a verdict about you.",
     group: "understand",
@@ -390,7 +390,7 @@ export const WHY: Record<"hopebox" | "plan" | "gratitude" | "breathe" | "watch" 
   hopebox:
     "A hope box is a tool clinicians use with people who are struggling: reminders of reasons to keep going, kept somewhere you can reach in a bad moment. In a trial with 118 veterans who had recently had suicidal thoughts, a phone version helped people feel more able to cope with painful thoughts and feelings (Bush et al. 2017, Psychiatric Services).",
   plan:
-    "This follows the Stanley–Brown Safety Planning Intervention. In a study of 1,640 people seen in emergency departments for suicidal crises, a safety plan with follow-up calls was linked to 45% fewer suicidal behaviours over six months and twice the odds of getting to a mental-health appointment (Stanley et al. 2018, JAMA Psychiatry).",
+    "This follows the Stanley-Brown Safety Planning Intervention. In a study of 1,640 people seen in emergency departments for suicidal crises, a safety plan with follow-up calls was linked to 45% fewer suicidal behaviours over six months and twice the odds of getting to a mental-health appointment (Stanley et al. 2018, JAMA Psychiatry).",
   gratitude:
     "Across 27 studies, gratitude practices produced a small reduction in symptoms of depression and anxiety (Cregg & Cheavens 2021, Journal of Happiness Studies, doi:10.1007/s10902-020-00236-6). Small is the honest word. It's a gentle habit, not a treatment, and it works best alongside other support.",
   breathe:

@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useWellbeings } from "@/hooks/useWellbeings";
 import { useHaven } from "@/hooks/useHaven";
 import { DEFAULT_REGION, HELPLINES } from "@/lib/helplines";
 import type { Region } from "@/lib/types";
 import { Header } from "./Header";
-import { ChatScreen } from "./ChatScreen";
-import { ResultsScreen } from "./ResultsScreen";
 import { HelpDialog, BreathDialog } from "./dialogs";
+import { ChatScreen, ResultsScreen, preloadParts } from "./lazyParts";
 import { SettingsDialog } from "./SettingsDialog";
 import { RonakHandoffBanner } from "./RonakHandoffBanner";
 import { HavenShell } from "./haven/HavenShell";
@@ -44,6 +43,8 @@ export function WellbeingsApp() {
   const wb = useWellbeings();
   const haven = useHaven();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  /* The parts not on the first screen arrive once the phone is idle. */
+  useEffect(() => preloadParts(), []);
   const [replayIntro, setReplayIntro] = useState(0);
 
   const regionKey: Region = haven.state.region ?? (wb.profile?.region as Region | undefined) ?? DEFAULT_REGION;

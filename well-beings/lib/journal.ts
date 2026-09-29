@@ -13,7 +13,7 @@
  *    it says so out loud, because a tool that over-promises gets abandoned
  *    the first evening it doesn't deliver.
  *
- *  · Short gaps beat long ones. Sessions 1–3 days apart produced
+ *  · Short gaps beat long ones. Sessions 1-3 days apart produced
  *    significantly stronger effects than weekly-or-longer (Guo, 2022). That
  *    single finding sets the app's whole cadence: it nudges toward every
  *    other day, never "journal daily or lose your streak".
@@ -174,7 +174,7 @@ export function readCadence(entries: JournalEntry[]): JournalCadence {
     return {
       daysSince,
       dueSoon: daysSince >= 2,
-      message: `${daysSince} day${daysSince === 1 ? "" : "s"} since your last entry. Every 1–3 days is the interval that worked best in trials.`,
+      message: `${daysSince} day${daysSince === 1 ? "" : "s"} since your last entry. Every 1-3 days is the interval that worked best in trials.`,
     };
   return {
     daysSince,

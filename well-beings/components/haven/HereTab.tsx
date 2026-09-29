@@ -425,7 +425,7 @@ export function HereTab({
                     <label htmlFor="good-one" className="sr-only">
                       {today?.prompt ?? "One good thing today"}
                     </label>
-                    <input
+                    <input name="good-one"
                       id="good-one"
                       className="input"
                       value={good}

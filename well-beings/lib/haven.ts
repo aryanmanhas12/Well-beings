@@ -50,7 +50,7 @@ export interface PlanContact {
 }
 
 /**
- * The Stanley–Brown Safety Planning Intervention, in its own order.
+ * The Stanley-Brown Safety Planning Intervention, in its own order.
  *
  * The order is the intervention, not a layout choice: start with what you
  * can do alone, then people who lift you without needing to know, then
@@ -271,7 +271,7 @@ export function newId(): string {
  * Shrinks a photo to something localStorage can hold.
  *
  * 720px on the long edge at JPEG quality 0.72 lands most phone photos at
- * 60–120 KB as a data URL, so eight of them fit comfortably inside the
+ * 60-120 KB as a data URL, so eight of them fit comfortably inside the
  * 5 MB most browsers allow per origin, alongside everything else. The
  * original never gets stored, and nothing is uploaded: the resize happens
  * on a canvas in this tab.
