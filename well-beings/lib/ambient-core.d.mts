@@ -7,4 +7,5 @@ export const CHORD_SECONDS: number;
 export function createAmbient(
   ctx: BaseAudioContext,
   destination?: AudioNode,
+  options?: { deferRoom?: boolean },
 ): { out: GainNode; chord(t: number, index: number): void; bell(t: number, midi: number, level?: number): void };

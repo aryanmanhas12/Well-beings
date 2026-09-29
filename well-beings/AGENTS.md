@@ -52,11 +52,17 @@ that bring up a keyboard count as typing: the iPhone haptic switch is a
 hidden checkbox, Safari focuses it on every tick, and when any <input>
 counted, the bar vanished mid-tap and "Go to Hope" did nothing on iPhone
 and iPad (lib/haptics.ts now hands focus straight back).
+Ooh is alive as in Ronak: it breathes, blinks, nods as its words come
+out, its sprout sways while it talks, and every few letters there is a
+blip of a voice pitched to its mood. Breathing and nodding are transforms
+on HTML wrappers, never animations inside the SVG.
 
 **The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
 major pads, bowl tones, a synthetic room. It pauses for videos, the
 microphone and hidden tabs. The speaker at the top turns it off, and that
-choice is remembered.
+choice is remembered. The tap sounds and Ooh's voice are separate
+(`lib/sfx.ts`): their own low-latency player, fetched on the first tap,
+off with "Sounds" in Settings.
 
 **The opening sunrise** is permanent, at the owner's request: it plays
 every time Arun is opened, and there is no switch to turn it off. Opened
@@ -164,11 +170,31 @@ someone is trying to read or tap. Since September 2026 the owner also
 asked for feedback that is visible and felt: a ripple where a finger
 lands, sections gliding in with a dawn glow, a sunrise line for scroll
 progress, rooms sliding in, Ooh leaning into a scroll, and a light
-vibration (`components/Feedback.tsx`, `lib/haptics.ts`). The rule for all
-of it: it only ever answers something the person just did (a tap, a
-scroll), never fires on its own to get attention, moves and glows but
-never fades text (contrast holds mid-animation), and every piece stops
-under `prefers-reduced-motion` or with "Vibration" off.
+vibration (`components/Feedback.tsx`, `lib/haptics.ts`). Later that
+month it became Ronak's feel, so the sister apps answer a touch the same
+way: a ring of light where a finger lands, a sweep of light on a room
+change, cards outlined in dawn light every time they arrive, interface
+sounds (`lib/sfx.ts`, the same CC0 files as Ronak) and Ooh's little voice.
+The rule for all of it: it only ever answers something the person just
+did (a tap, a scroll), never fires on its own to get attention, and never
+fades text (contrast holds mid-animation). Under `prefers-reduced-motion`
+nothing moves but the lights stay, fading in place, because the owner
+asked for them always to be there; fades are light, not motion, and none
+repeats faster than once a second. The global reduced-motion rule exempts
+them explicitly, as it does the breathing pacer. "Vibration" and "Sounds"
+turn their parts off. A helpline link and the urgent screen are silent
+and still, and Ooh does not talk over an open screen.
+
+**Fast means measured.** Everything that moves is transform or opacity on
+its own element; nothing animates `box-shadow`, a filter or layout. Put a
+filter on the drawing inside a moving wrapper, never on the wrapper. Do
+not read positions (`getBoundingClientRect`) in a scroll frame: Ooh reads
+them once and does arithmetic on the scroll position (reading them per
+frame forced a layout almost every frame while its words typed). Heavy
+work never runs inside a tap: the music's synthetic room is built when
+the phone is next idle (the first tap went from 656ms to 152ms on a phone
+slowed 4x). Check a change with a 4x-throttled trace before calling it
+smooth.
 
 **Safe messaging is not optional.** Never describe a method, anywhere, in
 copy, a video, a placeholder or a code comment. Stories are chosen for

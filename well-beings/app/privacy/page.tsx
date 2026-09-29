@@ -66,6 +66,10 @@ export default function PrivacyPage() {
             if you did.
           </li>
           <li>
+            <code>arun-sfx-v1</code>: &ldquo;off&rdquo; if you turned the tap sounds and Ooh&apos;s
+            voice off.
+          </li>
+          <li>
             <code>arun-haptics-v1</code>: &ldquo;off&rdquo; if you turned vibration off.
           </li>
           <li>
@@ -75,7 +79,9 @@ export default function PrivacyPage() {
         </ul>
         <p>
           The music is made on your phone as it plays, from a few tones and a synthetic room. There is
-          no audio file to download and nothing is streamed from anywhere. Ooh&apos;s lines are written
+          no audio file to download and nothing is streamed from anywhere. The tap sounds and
+          Ooh&apos;s voice are small files served with Arun itself, from this site, fetched on your
+          first tap. Ooh&apos;s lines are written
           into the app; Ooh does not read what you write and sends nothing.
         </p>
         <p>

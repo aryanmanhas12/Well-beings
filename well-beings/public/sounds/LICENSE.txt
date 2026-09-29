@@ -1,0 +1,16 @@
+Arun interface sounds (the same files as Ronak's)
+=================================================
+
+Every .mp3 in this folder is taken unchanged from the "soft" pack of uisfx
+0.4.0 (https://uisfx.com, npm package "uisfx"), by Yuki Capital.
+
+The uisfx audio files are dedicated to the public domain under the
+Creative Commons CC0 1.0 Universal Public Domain Dedication:
+https://creativecommons.org/publicdomain/zero/1.0/legalcode
+(SPDX: CC0-1.0). No attribution is required; this note is a courtesy.
+
+Why this pack: it is the one theme in uisfx described as "rounded, warm,
+reassuring" and meant for wellness apps, every cue is loudness-matched
+(peaks at about -8 dBFS), and the tap sounds are over in 0.15-0.3 s, which
+is short enough to feel like the app registering a touch rather than
+announcing one.

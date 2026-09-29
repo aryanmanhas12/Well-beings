@@ -20,11 +20,16 @@
  */
 export const HAPTICS_KEY = "arun-haptics-v1";
 
-export type TickKind = "light" | "select" | "success";
+/* The same vocabulary as Ronak's buzz(): a light tick for a tap, a
+   firmer one for picking an answer, a double for moving to another room,
+   the faintest for talking to Ooh, and a little rising pair for success. */
+export type TickKind = "light" | "select" | "success" | "nav" | "soft";
 const PATTERNS: Record<TickKind, number | number[]> = {
   light: 8,
   select: 12,
   success: [12, 70, 18],
+  nav: [6, 36, 6],
+  soft: 4,
 };
 const MIN_GAP_MS = 60;
 
@@ -103,16 +108,24 @@ function clickKeepingFocus(label: HTMLLabelElement) {
 /** A tick, if the person wants them and the device can. */
 export function tick(kind: TickKind = "select") {
   if (typeof window === "undefined" || !hapticsWanted()) return;
+  /* The urgent screen is still: nothing buzzes while someone reads a
+     helpline number. */
+  if (document.querySelector(".urgent")) return;
   const now = Date.now();
   if (now - lastAt < MIN_GAP_MS) return;
   lastAt = now;
   try {
+    const ua = (navigator as Navigator & { userActivation?: { isActive: boolean; hasBeenActive: boolean } }).userActivation;
     if (typeof navigator.vibrate === "function") {
+      /* Browsers refuse vibration until the page has been tapped once, and
+         Chrome logs an error for every refused call (a card arriving on the
+         first scroll would log one). So: not until the first tap. */
+      if (ua && !ua.hasBeenActive) return;
       navigator.vibrate(PATTERNS[kind]);
       return;
     }
     /* Apple: only inside a tap, or it does nothing (and costs nothing). */
-    const active = (navigator as Navigator & { userActivation?: { isActive: boolean } }).userActivation?.isActive;
+    const active = ua?.isActive;
     const sw = active ? appleSwitch() : null;
     if (sw) clickKeepingFocus(sw);
   } catch {

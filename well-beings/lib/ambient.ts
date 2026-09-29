@@ -123,7 +123,7 @@ function ensureContext(): boolean {
   } catch {
     return false;
   }
-  engine = createAmbient(ctx);
+  engine = createAmbient(ctx, ctx.destination, { deferRoom: true });
   return true;
 }
 

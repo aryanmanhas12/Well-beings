@@ -38,18 +38,35 @@ export const CHORD_SECONDS = 14;
 
 const mtof = (m) => 440 * 2 ** ((m - 69) / 12);
 
-/** A few seconds of stereo noise, decaying: the room. */
+/**
+ * A few seconds of stereo noise, decaying: the room.
+ *
+ * The decay curve is computed once every 64 samples and drawn straight
+ * between: the power function per sample (half a million of them) made
+ * the room take 149ms on a phone slowed 4x, inside the first tap. This
+ * takes 57ms, and differs from the exact curve by less than 1e-7.
+ */
 function room(ctx, seconds, decay) {
   const rate = ctx.sampleRate;
   const len = Math.floor(rate * seconds);
   const buf = ctx.createBuffer(2, len, rate);
+  const STEP = 64;
   for (let c = 0; c < 2; c++) {
     const d = buf.getChannelData(c);
+    /* A small fixed PRNG, so every render of the room is the same. */
     let seed = c ? 22222 : 11111;
-    for (let i = 0; i < len; i++) {
-      /* A small fixed PRNG, so every render of the room is the same. */
-      seed = (seed * 16807) % 2147483647;
-      d[i] = ((seed / 2147483647) * 2 - 1) * (1 - i / len) ** decay;
+    let e0 = 1;
+    for (let i = 0; i < len; i += STEP) {
+      const j = Math.min(len, i + STEP);
+      const e1 = (1 - j / len) ** decay;
+      const de = (e1 - e0) / STEP;
+      let e = e0;
+      for (let k = i; k < j; k++) {
+        seed = (seed * 16807) % 2147483647;
+        d[k] = ((seed / 2147483647) * 2 - 1) * e;
+        e += de;
+      }
+      e0 = e1;
     }
   }
   return buf;
@@ -59,7 +76,7 @@ function room(ctx, seconds, decay) {
  * Builds the graph on `ctx` and returns the controls.
  * `out` starts silent; the caller fades it in.
  */
-export function createAmbient(ctx, destination = ctx.destination) {
+export function createAmbient(ctx, destination = ctx.destination, { deferRoom = false } = {}) {
   const out = ctx.createGain();
   out.gain.value = 0;
   const comp = ctx.createDynamicsCompressor();
@@ -72,7 +89,16 @@ export function createAmbient(ctx, destination = ctx.destination) {
   const dry = ctx.createGain();
   dry.gain.value = 0.65;
   const reverb = ctx.createConvolver();
-  reverb.buffer = room(ctx, 5.2, 2.4);
+  /* Live, the room is built just after the tap that starts the music, not
+     inside it, so the screen answers the tap first (building it and handing
+     it to the convolver took ~150ms on a slowed phone), when the phone is
+     next idle and within 1.5s. The music starts silent and fades in, so
+     the room is in place long before it is heard.
+     An offline render (the loudness test) builds it at once. */
+  const build = () => (reverb.buffer = room(ctx, 5.2, 2.4));
+  if (!deferRoom) build();
+  else if (typeof requestIdleCallback === "function") requestIdleCallback(build, { timeout: 1500 });
+  else setTimeout(build, 60);
   const wet = ctx.createGain();
   wet.gain.value = 0.6;
 

@@ -16,6 +16,7 @@ import { UrgentCare } from "./UrgentCare";
 import { VideoSheet } from "./VideoSheet";
 import { WatchTab } from "./WatchTab";
 import { OohGuide } from "../OohGuide";
+import { ROOM_EVENT } from "../Feedback";
 import type { OohScene } from "@/lib/oohScript";
 import { planIsWritten } from "@/lib/haven";
 import { soundWanted } from "@/lib/ambient";
@@ -73,6 +74,8 @@ export function HavenShell({
     setView(v);
     setNav((n) => n + 1);
     window.scrollTo({ top: 0 });
+    /* The sweep of light, the page-turn and the double tick (Feedback). */
+    window.dispatchEvent(new Event(ROOM_EVENT));
   }, []);
 
   // Coming back from the wellbeing check lands on the plan it built.

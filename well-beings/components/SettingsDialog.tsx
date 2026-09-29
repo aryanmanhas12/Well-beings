@@ -2,6 +2,7 @@ import { useState, useSyncExternalStore } from "react";
 import { setSoundWanted, soundWanted, subscribeSound } from "@/lib/ambient";
 import { OOH_SERVER, readOoh, setOohHidden, subscribeOoh } from "@/lib/oohStore";
 import { hapticsWanted, setHapticsWanted, subscribeHaptics } from "@/lib/haptics";
+import { setSfxWanted, sfxWanted, subscribeSfx } from "@/lib/sfx";
 import { InstallRow } from "./InstallApp";
 import { PlanIntensity } from "@/lib/types";
 import { Theme } from "@/lib/storage";
@@ -57,6 +58,7 @@ export function SettingsDialog({
   const s = wb.s;
   const music = useSyncExternalStore(subscribeSound, soundWanted, () => true);
   const ooh = useSyncExternalStore(subscribeOoh, readOoh, () => OOH_SERVER);
+  const sounds = useSyncExternalStore(subscribeSfx, sfxWanted, () => true);
   const haptics = useSyncExternalStore(subscribeHaptics, hapticsWanted, () => true);
   const [confirming, setConfirming] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -197,6 +199,12 @@ export function SettingsDialog({
           hint="Soft, slow music made on this phone. It pauses for videos and the microphone."
           on={music}
           onChange={() => setSoundWanted(!music)}
+        />
+        <Toggle
+          label="Sounds"
+          hint="Soft clicks when you tap, and Ooh's little voice. Never on the helpline screen."
+          on={sounds}
+          onChange={() => setSfxWanted(!sounds)}
         />
         <Toggle
           label="Ooh, your guide"

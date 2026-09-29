@@ -5,6 +5,7 @@ import { SOUND_KEY } from "./ambient";
 import { OOH_KEY } from "./oohStore";
 import { HAPTICS_KEY } from "./haptics";
 import { INTRO_KEY } from "./intro";
+import { SFX_KEY } from "./sfx";
 import { VOICE_KEY } from "@/hooks/useSpeech";
 import { Lang } from "./i18n";
 import { CheckinEntry, PlanIntensity, Profile } from "./types";
@@ -105,7 +106,7 @@ export function saveState(state: PersistedState) {
 /* Everything else Arun keeps on the device, each in its own key so the
    listener and the microphone work before any check-in exists. "Delete
    everything" has to mean everything, so they are all listed here. */
-const OTHER_KEYS = [LISTENER_KEY, VOICE_KEY, INSTALL_KEY, SOUND_KEY, OOH_KEY, HAPTICS_KEY, INTRO_KEY];
+const OTHER_KEYS = [LISTENER_KEY, VOICE_KEY, INSTALL_KEY, SOUND_KEY, SFX_KEY, OOH_KEY, HAPTICS_KEY, INTRO_KEY];
 
 export function clearState() {
   if (typeof window === "undefined") return;
