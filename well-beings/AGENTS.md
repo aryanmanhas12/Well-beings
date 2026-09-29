@@ -158,6 +158,12 @@ worse than none.
    commits. Rebuild, load the real output, screenshot it, and check the thing
    you claim to have changed actually changed before saying it is done.
 
+   The routine is written down as the `arun-ship-check` skill and runs
+   from the repo: `npm run verify`, then `npm run e2e` (fourteen browser
+   suites in `e2e/` against the Pages build; a change in behaviour adds
+   its check there), then `npm run publish:root` to put the export at the
+   repository root, then push to main and watch the Pages run.
+
 ## The safe place: extra rules
 
 The home of the app is for people who may be in a very bad place. That

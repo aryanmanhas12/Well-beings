@@ -17,6 +17,8 @@ committed so they are always there: nothing to install per machine.
 | playwright-cli | microsoft/playwright-cli (npm `@playwright/cli` 0.1.21) | Apache-2.0 | opening, driving, snapshotting and recording the site |
 | animated-ui-libraries | written for Ronak and Arun (aryanmanhas12/Psych) | same as repo | Aceternity UI, Cult UI, Componentry: install in Arun, port to Ronak |
 | design-md | written for Ronak and Arun (aryanmanhas12/Psych) | same as repo | keeping `DESIGN.md` true; borrowing from VoltAgent/awesome-design-md |
+| arun-ship-check | written for Arun (aryanmanhas12/Well-beings) | same as repo | before every Arun commit: verify, the e2e suites, speed on a slowed phone, publish the export, confirm the deploy |
+| ronak-ship-check | written for Ronak (aryanmanhas12/Psych) | same as repo | before every Ronak commit: release number, suite, layout shift, idle cost, screenshots, safety invariants |
 
 Vendored skills are copied unchanged, each with its licence beside it. To
 update one, re-fetch its `SKILL.md` from the source above.

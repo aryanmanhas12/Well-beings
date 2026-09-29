@@ -18,6 +18,8 @@ in **`well-beings/AGENTS.md`**: read that first, every session.
 6. See it: `playwright-cli`.
 7. Long output: `full-output-enforcement`.
 8. Design tokens: `design-md`.
+9. Before every commit: `arun-ship-check` (verify, `npm run e2e`, speed
+   on a slowed phone, `npm run publish:root`, confirm the deploy).
 
 Ooh is shared with Ronak: `well-beings/lib/ooh.mjs` is the original, and
 Ronak keeps a byte-identical copy. Change it here, then copy it there.

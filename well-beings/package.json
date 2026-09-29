@@ -11,7 +11,10 @@
     "verify": "node --test scripts/test-care.mjs scripts/test-ooh.mjs && tsc --noEmit && eslint . && NEXT_PUBLIC_BASE_PATH=/Well-beings next build && node scripts/audit-site.mjs",
     "og": "node scripts/make-og-image.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "test:care": "node --test scripts/test-care.mjs"
+    "test:care": "node --test scripts/test-care.mjs",
+    "e2e": "node e2e/run.mjs",
+    "e2e:serve": "node e2e/serve.mjs",
+    "publish:root": "node scripts/publish-root.mjs"
   },
   "dependencies": {
     "next": "16.2.11",
@@ -22,8 +25,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "axe-core": "4.13.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
+    "playwright-core": "1.63.0",
     "typescript": "^5"
   }
 }
