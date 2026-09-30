@@ -9,7 +9,7 @@ const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, a
   browser.newContext = async (o = {}) => {
     const { __intro, ...rest } = o;
     const c = await __real(rest);
-    if (!__intro) await c.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "played"); } catch {} });
+    if (!__intro) await c.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "e2e"); } catch {} });
     return c;
   };
 }
@@ -46,8 +46,12 @@ console.log("1. first visit, intro, check-in");
   await p.fill("#good-one", "The bus was on time");
   await p.getByRole("button", { name: "Keep it" }).click(); await p.waitForTimeout(100);
   ok((await safe(p)).goodThings[0]?.items[0] === "The bus was on time", "good thing kept");
+  // Opening Arun again (a reload counts) plays the sunrise every time, and
+  // Skip lands back on the same day with nothing lost.
   await p.reload(); await p.waitForTimeout(300);
-  ok(!(await p.locator(".intro").isVisible()), "no intro on return");
+  ok(await p.locator(".intro").isVisible(), "the sunrise plays again on the next visit");
+  await p.getByRole("button", { name: "Skip" }).click(); await p.waitForTimeout(200);
+  ok(!(await p.locator(".intro").isVisible()) && (await safe(p)).goodThings[0]?.items[0] === "The bus was on time", "skip returns to the same day");
   await ctx.close();
 }
 

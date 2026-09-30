@@ -67,8 +67,24 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
   await p.waitForTimeout(700);
   ok(await attr(p, "data-intro") === null, "Come in lets you in");
   ok(await p.evaluate(() => window.__acs[0].state) === "running", "and the music carries on");
+  const first = await p.locator(".intro-motto").textContent();
   await p.reload({ waitUntil: "networkidle" });
-  ok(await attr(p, "data-intro") === null, "a reload does not replay it");
+  ok(await attr(p, "data-intro") === "pending", "opening Arun again (a reload counts) plays it again: every visit");
+  await p.waitForTimeout(300);
+  const second = await p.locator(".intro-motto").textContent();
+  ok(!!first && !!second && first !== second, `with a new line each time ("${first}" then "${second}")`);
+  ok(await p.getByRole("button", { name: "Skip" }).isVisible() && await p.getByRole("button", { name: "Need help now" }).isVisible(), "never forced: Skip and Need help now are there from the first frame");
+  await p.keyboard.press("Escape");
+  await p.waitForTimeout(700);
+  ok(await attr(p, "data-intro") === null, "and Escape leaves it too");
+  const seen = new Set([first, second]);
+  for (let i = 0; i < 3; i++) {
+    await p.reload({ waitUntil: "networkidle" });
+    await p.waitForTimeout(300);
+    seen.add(await p.locator(".intro-motto").textContent());
+  }
+  ok(seen.size === 5, `five visits, five different lines (${seen.size})`);
+  ok([...seen].every((l) => l && l.length <= 60 && !/—/.test(l)), "every line short and dash-free");
   ok(errs.length === 0, "no page errors " + errs.join("|"));
   await ctx.close();
 }
@@ -129,9 +145,10 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
 }
 {
   /* Coming back to the app. The page is told it went to the background
-     and returned; the note of when it left is backdated. */
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" } });
-  ok(await attr(p, "data-intro") === null, "inside a visit there is no sunrise on the way in");
+     and returned; the note of when it left is backdated. (The "e2e" note
+     only keeps the sunrise off the first load, so these start inside.) */
+  const { ctx, p } = await open({ safe: { introSeen: true, region: "in" }, session: { "arun-intro-session": "e2e" } });
+  ok(await attr(p, "data-intro") === null, "(tests start past the opening)");
   const away = (mins) => p.evaluate((mins) => {
     Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
     document.dispatchEvent(new Event("visibilitychange"));
@@ -139,24 +156,31 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
     Object.defineProperty(document, "hidden", { configurable: true, get: () => false });
     document.dispatchEvent(new Event("visibilitychange"));
   }, mins);
-  await away(5);
+  await away(1);
   await p.waitForTimeout(300);
-  ok(await attr(p, "data-intro") === null, "back after 5 minutes: carries on where it was");
-  await away(25);
+  ok(await attr(p, "data-intro") === null, "back after a minute (a quick look at a message): carries on where it was");
+  await away(3);
   await p.waitForTimeout(300);
-  ok(await attr(p, "data-intro") === "pending" && await attr(p, "data-intro-gate") === "1", "back after 25 minutes: that is opening Arun again, and the sunrise waits for its tap");
+  ok(await attr(p, "data-intro") === "pending" && await attr(p, "data-intro-gate") === "1", "back after three minutes: that is opening Arun again, and the sunrise waits for its tap");
   await p.getByRole("button", { name: "Wake the sun" }).click();
   await p.waitForTimeout(4600);
   await p.getByRole("button", { name: "Come in" }).click();
   await p.waitForTimeout(700);
   ok(await attr(p, "data-intro") === null, "and Come in lets you back in");
-  await p.evaluate(() => sessionStorage.setItem("arun-intro-left", String(Date.now() - 30 * 60000)));
-  await p.reload({ waitUntil: "networkidle" });
-  ok(await attr(p, "data-intro") === "pending", "a launch after 30 minutes away (the app reloaded by the phone) plays it too");
+  /* Leaving to call a helpline: Reach out's first tel: link. */
+  await p.locator(".tabbar button", { hasText: "Reach out" }).click();
+  await p.waitForTimeout(500);
+  await p.locator("a[href^='tel:']").first().evaluate((a) => { a.addEventListener("click", (e) => e.preventDefault(), { once: true }); a.click(); });
+  await away(20);
+  await p.waitForTimeout(300);
+  ok(await attr(p, "data-intro") === null, "back from a helpline call, however long: straight back where they were, no sunrise");
+  await away(3);
+  await p.waitForTimeout(300);
+  ok(await attr(p, "data-intro") === "pending", "and the next time Arun is opened, the sunrise is back");
   await ctx.close();
 }
 {
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" }, safe: { introSeen: true, arrivals: [{ at: new Date().toISOString(), mood: 1, hope: 1, safety: "unsafe" }] } });
+  const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" }, safe: { introSeen: true, arrivals: [{ at: new Date().toISOString(), mood: 1, hope: 1, safety: "unsafe" }] } });
   await p.evaluate(() => {
     sessionStorage.setItem("arun-intro-left", String(Date.now() - 60 * 60000));
     Object.defineProperty(document, "hidden", { configurable: true, get: () => false });
@@ -169,7 +193,7 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
 
 console.log("2. feedback you can feel");
 {
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" } });
+  const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" } });
   await p.getByRole("button", { name: /^Watch$/ }).first().click();
   await p.waitForTimeout(200);
   ok((await p.evaluate(() => window.__ticks)).some((t) => JSON.stringify(t) === "[6,36,6]"), "a double tick when the room changes");
@@ -191,7 +215,7 @@ console.log("2. feedback you can feel");
 }
 {
   const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
-  const { ctx, p } = await open({ vibrate: false, session: { "arun-intro-session": "played" } }, { userAgent: IPAD, hasTouch: true });
+  const { ctx, p } = await open({ vibrate: false, session: { "arun-intro-session": "e2e" } }, { userAgent: IPAD, hasTouch: true });
   const before = await p.evaluate(() => typeof navigator.vibrate);
   await p.getByRole("button", { name: /^Hope$/ }).first().click();
   await p.waitForTimeout(150);
@@ -202,7 +226,7 @@ console.log("2. feedback you can feel");
 
 console.log("3. feedback you can see");
 {
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" } });
+  const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" } });
   const lineScale = () => p.evaluate(() => { const m = getComputedStyle(document.querySelector(".scroll-dawn")).transform; return m === "none" ? 1 : new DOMMatrix(m).a; });
   ok(await lineScale() < 0.01, "the sunrise line is empty at the top");
   const below = await p.evaluate(() => [...document.querySelectorAll("[data-reveal='pending']")].length);
@@ -227,7 +251,7 @@ console.log("3. feedback you can see");
   await ctx.close();
 }
 {
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" } }, { reducedMotion: "reduce" });
+  const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" } }, { reducedMotion: "reduce" });
   ok(await p.evaluate(() => document.querySelectorAll("[data-reveal]").length) === 0, "reduced motion: nothing glides");
   const box = await p.getByRole("button", { name: "Settings" }).boundingBox();
   await p.mouse.move(box.x + 10, box.y + 10); await p.mouse.down();
@@ -246,13 +270,13 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
 {
   {
     /* The real vibrate(): a refused call shows up as a console error. */
-    const { ctx: c2, p: p2, errs: e2 } = await open({ vibrate: "real", session: { "arun-intro-session": "played" } });
+    const { ctx: c2, p: p2, errs: e2 } = await open({ vibrate: "real", session: { "arun-intro-session": "e2e" } });
     await p2.evaluate(() => window.scrollTo(0, 900));
     await p2.waitForTimeout(700);
     ok(!e2.some((e) => /vibrate/.test(e)), "no refused vibration as cards arrive before the first tap " + e2.join(" | "));
     await c2.close();
   }
-  const { ctx, p, errs } = await open({ session: { "arun-intro-session": "played" } });
+  const { ctx, p, errs } = await open({ session: { "arun-intro-session": "e2e" } });
   ok(await p.evaluate(() => window.__sfx.length) === 0, "and no sound player before the first tap");
   await p.evaluate(() => window.scrollTo(0, 0));
   await p.locator(".tabbar button", { hasText: "Watch" }).click();
@@ -306,7 +330,7 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
   await ctx.close();
 }
 {
-  const { ctx, p } = await open({ safe: { introSeen: true, region: "in" }, session: { "arun-intro-session": "played" } });
+  const { ctx, p } = await open({ safe: { introSeen: true, region: "in" }, session: { "arun-intro-session": "e2e" } });
   await p.locator(".tabbar button", { hasText: "Watch" }).click();
   await p.waitForTimeout(700);
   await p.getByRole("button", { name: /Help now/ }).first().click();
@@ -323,7 +347,7 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
   await ctx.close();
 }
 for (const w of [320, 390, 1280]) {
-  const { ctx, p } = await open({ session: { "arun-intro-session": "played" } }, { viewport: { width: w, height: 800 } });
+  const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" } }, { viewport: { width: w, height: 800 } });
   for (const y of [600, 1400, 99999]) { await p.evaluate((y) => window.scrollTo(0, y), y); await p.waitForTimeout(350); }
   const over = await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
   ok(!over, `${w}px: no sideways scroll with the bar and effects`);

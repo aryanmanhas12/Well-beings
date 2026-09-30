@@ -3,41 +3,52 @@
 /**
  * When the opening sunrise plays: every time someone opens Arun.
  *
- * The owner's rule, matching Ronak: the sunrise is permanent. There is no
- * switch to turn it off (the one that briefly existed is gone, and any
- * "off" it left on a device is cleared, so nobody is stuck without it);
- * "Skip" and "Without music" are on its first frame for anyone who wants
- * to be straight in.
+ * The owner's rule, matching Ronak: the sunrise is permanent and shows on
+ * every visit, each time with a new line (lib/introLines.ts). It is never
+ * forced on anyone: "Skip", "Need help now" and "Without music" are on its
+ * first frame, and Escape closes it. There is no switch to turn it off (the
+ * one that briefly existed is gone, and any "off" it left is cleared).
  *
- * "Opening" means a visit, and a visit is either of these:
- *   - a new tab or a fresh launch of the installed app (sessionStorage is
- *     empty), or
- *   - coming back after AWAY_MS or more away. An installed app on an
- *     iPhone or iPad is rarely closed, only sent to the background, so
- *     going by the tab alone meant the sunrise hardly ever played there.
- * A reload, or moving between rooms, does not replay it.
+ * A visit is either of these:
+ *   - loading the page at all: a new tab, a fresh launch of the installed
+ *     app, or a reload. (A reload used not to count; the owner kept opening
+ *     Arun that way and finding no sunrise, so now it counts.)
+ *   - coming back after AWAY_MS or more away. An installed app on an iPhone
+ *     or iPad is rarely closed, only sent to the background, so going by
+ *     loads alone meant the sunrise hardly ever played there. This was 20
+ *     minutes; "every time I open it" meant far sooner, so it is now two.
+ * Moving between rooms, or to a guide and back, does not replay it.
  *
- * Two notes in sessionStorage, gone when the tab or app is closed:
- *   arun-intro-session "played": the sunrise has run in this visit.
- *   arun-intro-left: when the page was last hidden (ms since 1970).
+ * Coming back does NOT replay it when the person left for something Arun
+ * sent them to: a helpline call or text (a tel: or sms: link), or the
+ * camera or photo picker for the hope box. Someone returning from a crisis
+ * call should land where they were, not on a sunrise with a button in
+ * front of it. Nor while the urgent screen is open.
  *
- * The one exception is safety, and it is deliberate: for three days after
+ * The other exception is safety, and it is deliberate: for three days after
  * a check-in reporting thoughts of suicide or not feeling safe, the plan
- * and the numbers come first, not an animation with a button in front of
- * them. The same rule is in INTRO_BOOTSTRAP in app/page.tsx, which makes
- * the first-paint decision from these same keys so nothing flashes.
+ * and the numbers come first, not an animation. The same rule is in
+ * INTRO_BOOTSTRAP in app/page.tsx, which decides before the first paint so
+ * nothing flashes.
+ *
+ * sessionStorage, gone when the tab or app is closed:
+ *   arun-intro-left: when the page was last hidden (ms since 1970).
+ *   arun-intro-hold: set when leaving for a call, a text or the camera.
+ *   arun-intro-session: only the end-to-end tests set it ("e2e"), so their
+ *     suites start past the sunrise; the app itself never reads another value.
  */
 export const INTRO_KEY = "arun-intro-v1";
 export const INTRO_SESSION_KEY = "arun-intro-session";
 export const INTRO_LEFT_KEY = "arun-intro-left";
-export const AWAY_MS = 20 * 60_000;
+export const INTRO_HOLD_KEY = "arun-intro-hold";
+export const AWAY_MS = 2 * 60_000;
 
 export function markIntroPlayed() {
   try {
-    window.sessionStorage.setItem(INTRO_SESSION_KEY, "played");
     window.sessionStorage.removeItem(INTRO_LEFT_KEY);
+    window.sessionStorage.removeItem(INTRO_HOLD_KEY);
   } catch {
-    // Private mode: the sunrise may play again on reload, which is harmless.
+    // Private mode: nothing to tidy.
   }
 }
 
@@ -58,6 +69,18 @@ export function introPausedForSafety(): boolean {
   return false;
 }
 
+/* Leaving for a call, a text or the camera: remember it, so coming back is
+   not treated as opening Arun again. */
+const LEAVES_FOR = "a[href^='tel:'], a[href^='sms:'], input[type='file']";
+function noteLeavingFor(e: Event) {
+  if (!(e.target as Element | null)?.closest?.(LEAVES_FOR)) return;
+  try {
+    window.sessionStorage.setItem(INTRO_HOLD_KEY, "1");
+  } catch {
+    // Not remembered: at worst the sunrise plays on the way back, with Skip.
+  }
+}
+
 /**
  * Coming back to the page. Records when it was hidden, and on the way back
  * says whether it was away long enough to count as opening Arun again.
@@ -70,17 +93,22 @@ export function watchReturns(onReturn: () => void): () => void {
         return;
       }
       const left = Number(window.sessionStorage.getItem(INTRO_LEFT_KEY));
-      if (!left || Date.now() - left < AWAY_MS) return;
-      window.sessionStorage.removeItem(INTRO_SESSION_KEY);
+      const held = window.sessionStorage.getItem(INTRO_HOLD_KEY) === "1";
+      window.sessionStorage.removeItem(INTRO_HOLD_KEY);
+      if (!left || Date.now() - left < AWAY_MS || held) return;
       window.sessionStorage.removeItem(INTRO_LEFT_KEY);
     } catch {
       return;
     }
-    if (document.documentElement.dataset.intro === "pending" || introPausedForSafety()) return;
+    if (document.documentElement.dataset.intro === "pending" || document.querySelector(".urgent") || introPausedForSafety()) return;
     onReturn();
   };
   document.addEventListener("visibilitychange", onChange);
-  return () => document.removeEventListener("visibilitychange", onChange);
+  document.addEventListener("click", noteLeavingFor, true);
+  return () => {
+    document.removeEventListener("visibilitychange", onChange);
+    document.removeEventListener("click", noteLeavingFor, true);
+  };
 }
 
 if (typeof window !== "undefined") {
@@ -92,8 +120,8 @@ if (typeof window !== "undefined") {
   }
   window.addEventListener("wellbeings:delete-all", () => {
     try {
-      window.sessionStorage.removeItem(INTRO_SESSION_KEY);
       window.sessionStorage.removeItem(INTRO_LEFT_KEY);
+      window.sessionStorage.removeItem(INTRO_HOLD_KEY);
     } catch {
       // Nothing to clear.
     }

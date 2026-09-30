@@ -6,6 +6,7 @@ import { Hills } from "./DawnSky";
 import { oohSvg } from "@/lib/ooh.mjs";
 import { playSunrise, setSoundWanted } from "@/lib/ambient";
 import { markIntroPlayed } from "@/lib/intro";
+import { introLine, introLineUsed } from "@/lib/introLines";
 import { HAVEN_KEY } from "@/lib/haven";
 
 /**
@@ -76,11 +77,24 @@ export function IntroDawn({
   const wakeRef = useRef<HTMLButtonElement | null>(null);
   const returning = useSyncExternalStore(noop, visitedBefore, () => false);
 
+  /* The line this sunrise leaves you with: a new one each time it plays
+     (lib/introLines.ts). Taken once the opening is really up, after the
+     shell has marked it (the shell's effect runs after this one, hence the
+     next tick), so a load where it does not play does not use a line up.
+     It arrives before the words rise at 2.3s, so nothing visibly swaps. */
+  const [line, setLine] = useState("");
+
   // Replaying restarts the opening from the top.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLeaving(false);
     setAwake(false);
+    const t = setTimeout(() => {
+      if (document.documentElement.dataset.intro !== "pending") return;
+      setLine(introLine());
+      introLineUsed();
+    }, 0);
+    return () => clearTimeout(t);
   }, [replayKey]);
 
   /* Focus follows the moment: the wake button while waiting, "Come in"
@@ -118,6 +132,19 @@ export function IntroDawn({
       reduce ? 0 : 480,
     );
   }
+
+  /* Never forced: Escape leaves the opening, as Skip does. */
+  const finishRef = useRef(finish);
+  useEffect(() => {
+    finishRef.current = finish;
+  });
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && document.documentElement.dataset.intro === "pending") finishRef.current();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <div
@@ -171,8 +198,8 @@ export function IntroDawn({
       <p className="intro-line" style={{ animationDelay: "1.3s" }}>
         {returning ? "Welcome back." : "You made it here."}
       </p>
-      <p className="intro-line" style={{ animationDelay: "2.3s" }}>
-        {returning ? "The sun came up for you again." : "That counts for something."}
+      <p className="intro-line intro-motto" style={{ animationDelay: "2.3s" }}>
+        {line || (returning ? "The sun came up for you again." : "That counts for something.")}
       </p>
       {/* After the gate the person has just read the privacy and cost, so
           the rise does not repeat them; with music off there was no gate,

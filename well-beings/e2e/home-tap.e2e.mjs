@@ -4,7 +4,7 @@ let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
 for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 800 }]) {
   const ctx = await b.newContext({ viewport: vp });
-  await ctx.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "played"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true })); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {} });
+  await ctx.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "e2e"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true })); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {} });
   const p = await ctx.newPage();
   const errs = []; p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(BASE, { waitUntil: "networkidle" });

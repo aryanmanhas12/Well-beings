@@ -73,6 +73,10 @@ export default function PrivacyPage() {
             <code>arun-haptics-v1</code>: &ldquo;off&rdquo; if you turned vibration off.
           </li>
           <li>
+            <code>arun-intro-line-v1</code>: a single number, which of the opening sunrise&apos;s lines
+            comes next, so each visit shows a new one.
+          </li>
+          <li>
             <code>arun-ooh-v1</code>: whether you turned Ooh, the guide, off, and which pages&apos;
             introductions you have already heard, so Ooh says one line instead of the whole tour.
           </li>
@@ -86,10 +90,11 @@ export default function PrivacyPage() {
         </p>
         <p>
           There is no cookie, no IndexedDB and no fingerprinting. There are two small notes in session
-          storage: <code>arun-intro-session</code>, which records that the opening sunrise has played
-          in this visit, so a reload does not play it again, and <code>arun-intro-left</code>, the time
-          the app was last put in the background, so coming back after twenty minutes or more brings
-          the sunrise back. Both disappear when the tab or the app is closed. Nothing is
+          storage: <code>arun-intro-left</code>, the time the app was last put in the background, so
+          coming back after two minutes or more brings the sunrise back, and{" "}
+          <code>arun-intro-hold</code>, which notes that you stepped away to call or text a helpline
+          or to take a photo, so coming back from that does not. Both disappear when the tab or the
+          app is closed. Nothing is
           loaded from anyone else&apos;s server when the app opens. The exceptions are ones you
           choose yourself, one tap at a time, covered below.
         </p>

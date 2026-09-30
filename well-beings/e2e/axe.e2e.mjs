@@ -8,7 +8,7 @@ const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, a
   browser.newContext = async (o = {}) => {
     const { __intro, ...rest } = o;
     const c = await __real(rest);
-    if (!__intro) await c.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "played"); } catch {} });
+    if (!__intro) await c.addInitScript(() => { try { sessionStorage.setItem("arun-intro-session", "e2e"); } catch {} });
     return c;
   };
 }

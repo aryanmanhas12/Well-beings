@@ -4,7 +4,7 @@ import { join } from "path";
 const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
-const seed = (extra) => { try { sessionStorage.setItem("arun-intro-session", "played"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify(Object.assign({ introSeen: true, region: "in" }, extra || {}))); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {} };
+const seed = (extra) => { try { sessionStorage.setItem("arun-intro-session", "e2e"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify(Object.assign({ introSeen: true, region: "in" }, extra || {}))); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {} };
 async function open(ctxOpts = {}, extra) {
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, ...ctxOpts });
   await ctx.addInitScript(seed, extra);

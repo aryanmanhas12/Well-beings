@@ -65,11 +65,14 @@ choice is remembered. The tap sounds and Ooh's voice are separate
 off with "Sounds" in Settings.
 
 **The opening sunrise** is permanent, at the owner's request: it plays
-every time Arun is opened, and there is no switch to turn it off. Opened
-means a new tab or launch, or coming back after 20 minutes or more away,
-because an installed app on a phone is mostly resumed, not relaunched; a
-reload does not replay it (`lib/intro.ts`, decided before paint in
-`app/page.tsx`). With
+every time Arun is opened, with a new line each time (`lib/introLines.ts`,
+forty lines in rotation, tested in `scripts/test-intro-lines.mjs`), and
+there is no switch to turn it off. It is never forced: Skip, Need help
+now and Escape leave it at once. Opened means any page load (a reload
+too) or coming back after two minutes or more away, because an installed
+app on a phone is mostly resumed, not relaunched; but not coming back
+from a helpline call or text, or from the camera for the hope box
+(`lib/intro.ts`, decided before paint in `app/page.tsx`). With
 music on it waits on a night sky for "Wake the sun", because browsers
 allow sound only after a tap. The waiting sky says only what the owner
 asked for: nothing you write leaves your phone, it is free, and a little

@@ -18,9 +18,10 @@ export const metadata: Metadata = metadataFor("/");
    scrolling while it is up, and a stale attribute on /guides/ would freeze
    a page that has no intro to dismiss. See lib/intro.ts for the rules:
 
-   - every time Arun is opened: a new tab or launch, or coming back after
-     20 minutes or more away (sessionStorage "arun-intro-left"; 12e5 ms is
-     AWAY_MS), but not on a reload (sessionStorage "arun-intro-session");
+   - every time the page loads (a new tab, a launch, a reload); coming
+     back after two minutes away is handled after load by watchReturns;
+     only the end-to-end tests skip it (sessionStorage "arun-intro-session"
+     = "e2e");
    - permanent: there is no off switch, and the "arun-intro-v1" = "off" an
      old Settings switch could leave is cleared here;
    - never on a day after a check-in in the last three days reported
@@ -32,8 +33,7 @@ export const metadata: Metadata = metadataFor("/");
 const INTRO_BOOTSTRAP = `(function(){try{
 var d=document.documentElement;
 try{localStorage.removeItem("arun-intro-v1");}catch(e){}
-var left=Number(sessionStorage.getItem("arun-intro-left"));
-if(sessionStorage.getItem("arun-intro-session")&&!(left&&Date.now()-left>=12e5))return;
+if(sessionStorage.getItem("arun-intro-session")==="e2e")return;
 var s=JSON.parse(localStorage.getItem("wellbeings-safe-v1")||"null");
 var a=s&&Array.isArray(s.arrivals)?s.arrivals:[];
 var cut=Date.now()-3*864e5;

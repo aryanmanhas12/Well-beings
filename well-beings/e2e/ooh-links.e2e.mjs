@@ -3,7 +3,7 @@ const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: [
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
 const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
-const seed = (apple) => { try { sessionStorage.setItem("arun-intro-session", "played"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true })); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {}
+const seed = (apple) => { try { sessionStorage.setItem("arun-intro-session", "e2e"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true })); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {}
   if (apple) { try { Object.defineProperty(Navigator.prototype, "vibrate", { value: undefined, configurable: true }); } catch {} } };
 const NEXT = { Here: "Hope", Watch: "Hope", Hope: "Plan", Plan: "Reach out", "Reach out": "Hope" };
 for (const [vp, apple, name] of [[{ width: 390, height: 844 }, true, "iPhone path"], [{ width: 1024, height: 1366 }, true, "iPad portrait, iPhone path"], [{ width: 1366, height: 1024 }, true, "iPad landscape"], [{ width: 390, height: 844 }, false, "Android path"], [{ width: 1280, height: 800 }, false, "desktop"]]) {
