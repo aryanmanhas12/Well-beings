@@ -82,10 +82,13 @@ export default function PrivacyPage() {
           </li>
         </ul>
         <p>
-          The music is made on your phone as it plays, from a few tones and a synthetic room. There is
+          The music is made on your phone as it plays: a piano, soft chords, water and birds, all
+          synthesised from a few tones and a little noise, in a version that follows your phone&apos;s
+          clock (morning, day or night). The time is read on your phone and goes nowhere. There is
           no audio file to download and nothing is streamed from anywhere. The tap sounds and
           Ooh&apos;s voice are small files served with Arun itself, from this site, fetched on your
-          first tap. Ooh&apos;s lines are written
+          first tap. The game in Watch, Scoops &amp; Snowballs, keeps nothing at all: no scores, no
+          names, no rounds played. Ooh&apos;s lines are written
           into the app; Ooh does not read what you write and sends nothing.
         </p>
         <p>

@@ -57,12 +57,43 @@ out, its sprout sways while it talks, and every few letters there is a
 blip of a voice pitched to its mood. Breathing and nodding are transforms
 on HTML wrappers, never animations inside the SVG.
 
-**The music** is generated on the phone (`lib/ambient-core.mjs`): slow D
-major pads, bowl tones, a synthetic room. It pauses for videos, the
-microphone and hidden tabs. The speaker at the top turns it off, and that
-choice is remembered. The tap sounds and Ooh's voice are separate
-(`lib/sfx.ts`): their own low-latency player, fetched on the first tap,
-off with "Sounds" in Settings.
+**The music** is generated on the phone (`lib/ambient-core.mjs`): a soft
+piano over slow D major chords, bowl tones and a synthetic room, in three
+versions that follow the phone's clock, at the owner's request (October
+2026): morning (5 am to noon) brighter, with birdsong and a lake lapping;
+day (noon to 6 pm) with slow sea waves and the odd bird; night (6 pm to
+5 am) low and sparse, deep waves, sometimes a far-off owl. Everything is
+synthesised: additive piano, filtered noise for water, sine whistles for
+birds. `e2e/music.e2e.mjs` renders each version offline and holds it to
+the same loudness as the drone it grew from (-36 to -24 dBFS RMS, peaks
+under -12). The game sets the version from its own sky while it is open
+(`setMusicMood`). It pauses for videos, the microphone and hidden tabs.
+The speaker at the top turns it off, and that choice is remembered. The
+tap sounds and Ooh's voice are separate (`lib/sfx.ts`): their own
+low-latency player, fetched on the first tap, off with "Sounds" in
+Settings. The game's splats and chimes are made on the spot through that
+same player (`lib/game/sound.ts`), so the same switch turns them off.
+
+**The game** is Scoops & Snowballs, at the owner's request (October 2026):
+dogs against cats with ice cream and snowballs in a city like New York, by
+day or by night, power-ups and two teammates each to find in the streets,
+a bar each, and an ending where nobody is hurt or destroyed: whoever runs
+out sits down laughing, the other walks over, and they hold hands under a
+rainbow with butterflies, hearts and cupcakes. It lives at the bottom of
+Watch (with a shortcut in Here's "If you need a minute"), because a few
+silly minutes are a real step in a safety plan (distraction), and it is
+its own lazy part. Rules in `lib/game/engine.ts` (no DOM, played to the
+end in Node by `scripts/test-game.mjs`, which also fails on any word about
+hurting anyone), drawing in `lib/game/render.ts` and `lib/game/art.ts`
+(comic ink like Ooh), the screen in `components/game/ScoopsGame.tsx`,
+tested in `e2e/game.e2e.mjs`. Rules for it: the crisis strip stays above
+it and "Help now" is in its own bar, opening the urgent screen over it;
+it keeps nothing (no scores, no streaks, no "come back tomorrow"); the
+words stay gentle (splat, giggle, make up); it is rendered into the body
+through a portal, because a room's slide-in transform otherwise traps a
+fixed layer inside the room. Measured at 390x844: 60 fps steady; slowed
+4x in a container with no GPU, 27 to 30 fps, of which the game's own work
+is about 4.5 ms a frame.
 
 **The opening sunrise** is permanent, at the owner's request: it plays
 every time Arun is opened, with a new line each time (`lib/introLines.ts`,
@@ -162,7 +193,7 @@ worse than none.
    you claim to have changed actually changed before saying it is done.
 
    The routine is written down as the `arun-ship-check` skill and runs
-   from the repo: `npm run verify`, then `npm run e2e` (fourteen browser
+   from the repo: `npm run verify`, then `npm run e2e` (fifteen browser
    suites in `e2e/` against the Pages build; a change in behaviour adds
    its check there), then `npm run publish:root` to put the export at the
    repository root, then push to main and watch the Pages run.

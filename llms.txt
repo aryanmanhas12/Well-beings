@@ -15,8 +15,13 @@ the person taps it and agrees. The microphone button uses the browser's own
 speech service only where the phone cannot transcribe on-device, and asks
 first. The listener ("Just sit with me for a minute") replies with lines
 written in advance and chosen on the device; nobody reads it and nothing is
-kept. Soft background music is synthesised in the browser (no audio is
-downloaded or streamed) and starts only after the person's first tap. Ooh,
+kept. Soft background music (piano, chords, water and birds, in a morning,
+day or night version that follows the phone's clock) is synthesised in the
+browser (no audio is downloaded or streamed) and starts only after the
+person's first tap. The Watch tab also has a short game, Scoops &
+Snowballs: dogs and cats throw ice cream and snowballs at each other in a
+cartoon city, and every round ends with the two of them making up. Nobody
+in it is hurt, and it keeps no scores or streaks. Ooh,
 a cartoon guide shared with the companion app Ronak, narrates each page and
 each section as it scrolls past with lines written in advance; it reads
 nothing the person writes. A short opening sunrise plays each time the app is

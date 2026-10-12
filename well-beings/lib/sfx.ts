@@ -161,6 +161,18 @@ export function sfx(n: Sfx, rate?: number, gain = 1) {
   }
 }
 
+/**
+ * The low-latency context itself, for sounds made on the spot rather than
+ * played from a file (the game's splats and chimes, lib/game/sound.ts).
+ * Null when "Sounds" is off, before the first tap, or while the urgent
+ * screen is open: the same rules as every other interface sound.
+ */
+export function sfxContext(): AudioContext | null {
+  if (typeof window === "undefined" || !sfxWanted() || !actx || crisisUp()) return null;
+  if (actx.state === "suspended") void actx.resume().catch(() => {});
+  return actx;
+}
+
 if (typeof window !== "undefined") {
   /* Not heard in the background: a hidden tab frees the audio hardware. */
   document.addEventListener("visibilitychange", () => {

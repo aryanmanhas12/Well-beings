@@ -8,6 +8,8 @@ import { Breathe } from "./Breathe";
 import { PlayIcon } from "./icons";
 import { SCENE_BG, SceneArt } from "./SceneArt";
 import { Why } from "./shared";
+import { GamePoster } from "../game/GamePoster";
+import { ScoopsGame } from "../lazyParts";
 
 /**
  * Videos first, because for a lot of people on a bad night a voice and a
@@ -25,12 +27,15 @@ export function WatchTab({
   view,
   lang,
   openVideo,
+  openUrgent,
 }: {
   haven: Haven;
   view?: string;
   lang: Lang;
   openVideo: (v: Video) => void;
+  openUrgent: () => void;
 }) {
+  const [playing, setPlaying] = useState(false);
   useEffect(() => {
     if (!view) return;
     document.getElementById(`watch-${view}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -129,6 +134,22 @@ export function WatchTab({
         </p>
         <Grounding onDone={() => haven.markStep("ground")} />
       </section>
+
+      {/* Distraction is a real step in a safety plan ("things that take my
+          mind off it"), and a few silly minutes can be exactly that. */}
+      <section className="panel panel-pink" id="watch-play" aria-labelledby="play-title">
+        <h2 id="play-title">Scoops &amp; Snowballs</h2>
+        <p className="panel-lede">
+          A silly game for a few minutes. Dogs vs cats, ice cream and snowballs, all over a city like New York, by day or
+          by night. Nobody gets hurt, and everyone makes up in the end.
+        </p>
+        <GamePoster />
+        <button type="button" className="btn btn-sun" onClick={() => setPlaying(true)}>
+          Play Scoops &amp; Snowballs
+        </button>
+        <p className="play-note">A round takes a few minutes. Nothing is scored or kept. It works offline once it has loaded.</p>
+      </section>
+      {playing && <ScoopsGame onClose={() => setPlaying(false)} openUrgent={openUrgent} />}
     </div>
   );
 }

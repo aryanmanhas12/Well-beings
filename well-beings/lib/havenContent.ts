@@ -157,7 +157,7 @@ export interface Video {
   /** When to reach for it. One line, in the app's voice, and only saying
       what could be checked about the video without watching it. */
   when: string;
-  group: "lift" | "heavy" | "understand" | "room" | "maker";
+  group: "lift" | "heavy" | "understand" | "room" | "talks" | "maker";
   lang?: "en" | "hi";
   /** Two stops from the dawn palette for the thumbnail. We draw our own
       thumbnails rather than load YouTube's, because loading theirs is a
@@ -323,6 +323,56 @@ export const VIDEOS: Video[] = [
     group: "room",
     tint: ["#C4A8FF", "#FF7AB0"],
   },
+  /* Four TED talks added in October 2026, at the owner's request for
+     "better TED talks". YouTube itself could not be reached from where they
+     were checked, so each ID was matched to its title on pages that quote
+     the official TED upload by ID: iCvmsMzlF7o ("The power of vulnerability
+     | Brené Brown | TED"), qzR62JJCMBQ ("All it takes is 10 mindful minutes
+     | Andy Puddicombe | TED"), RcGyVTAoXEU (Kelly McGonigal, "How to make
+     stress your friend") and y9Trdafp83U ("There's more to life than being
+     happy | Emily Esfahani Smith | TED"). Talks whose ID could not be tied
+     to the title that way (Guy Winch, Susan David, Sangu Delle) were left
+     out rather than guessed. None is a survival story. */
+  {
+    source: "youtube",
+    id: "iCvmsMzlF7o",
+    title: "The power of vulnerability",
+    by: "Brené Brown, TEDxHouston",
+    length: "About 20 min",
+    when: "A researcher on what she found about human connection, and why letting yourself be seen is where it starts.",
+    group: "talks",
+    tint: ["#FF7AB0", "#FFC857"],
+  },
+  {
+    source: "youtube",
+    id: "qzR62JJCMBQ",
+    title: "All it takes is 10 mindful minutes",
+    by: "Andy Puddicombe, TED",
+    length: "About 10 min",
+    when: "A former monk on giving your mind ten minutes a day to do nothing at all. No incense, no special way of sitting.",
+    group: "talks",
+    tint: ["#62D6A5", "#FFE3A1"],
+  },
+  {
+    source: "youtube",
+    id: "RcGyVTAoXEU",
+    title: "How to make stress your friend",
+    by: "Kelly McGonigal, TED",
+    length: "About 14 min",
+    when: "A health psychologist on what the research says about stress, and why reaching out to people is part of handling it.",
+    group: "talks",
+    tint: ["#FF9F80", "#B794FF"],
+  },
+  {
+    source: "youtube",
+    id: "y9Trdafp83U",
+    title: "There's more to life than being happy",
+    by: "Emily Esfahani Smith, TED",
+    length: "About 12 min",
+    when: "Why a sense of meaning carries people further than chasing happiness, and four places to look for it.",
+    group: "talks",
+    tint: ["#B794FF", "#62D6A5"],
+  },
 ];
 
 /**
@@ -345,6 +395,7 @@ export const VIDEO_GROUPS: { id: Video["group"]; title: string }[] = [
   { id: "heavy", title: "For when it's heavy" },
   { id: "understand", title: "Making sense of it" },
   { id: "room", title: "When there's a bit of room" },
+  { id: "talks", title: "TED talks worth the time" },
   { id: "maker", title: "From Aryan" },
 ];
 

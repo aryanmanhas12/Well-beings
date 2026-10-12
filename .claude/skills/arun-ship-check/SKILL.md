@@ -28,7 +28,7 @@ Pages serves, so `out/` is ready for the next steps.
 
 ## 3. Every end-to-end suite, in a real browser
 ```bash
-npm run e2e                 # all 14 suites; exits non-zero on any ✗
+npm run e2e                 # all 15 suites; exits non-zero on any ✗
 npm run e2e -- ooh feel     # just some
 ```
 The suites live in `well-beings/e2e/` and drive the real export in
@@ -37,7 +37,9 @@ the preinstalled one is found automatically). They cover: every flow
 (axe 0 violations across 54 scans), layout at 320/390/1280 with no
 sideways scroll, sky text contrast (worst pixel >= 6.8:1), the listener,
 install, voice, Ooh (greeting, narrator bar, links to the next room on the
-iPhone path), the opening sunrise and its music, feedback and sounds, the
+iPhone path), the opening sunrise and its music, the game (Scoops &
+Snowballs: over the screen but under the crisis strip, touch and keys,
+the ending, nothing kept), feedback and sounds, the
 home tap, the logo, the music's loudness, and the skills pass (undo,
 guidelines, offline fallback, zero em dashes on every page). A change to
 behaviour needs a check here in the same commit.

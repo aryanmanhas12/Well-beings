@@ -390,6 +390,15 @@ export function HereTab({
                   <small>Talks and stories chosen for hard days.</small>
                 </span>
               </button>
+              <button type="button" className="tool-row" onClick={() => goTo("watch", "play")}>
+                <span className="tool-glyph glyph-sun" aria-hidden="true">
+                  <PlayIcon />
+                </span>
+                <span>
+                  <strong>Play something silly</strong>
+                  <small>Dogs vs cats, ice cream and snowballs. Everyone makes up in the end.</small>
+                </span>
+              </button>
             </div>
           </section>
 

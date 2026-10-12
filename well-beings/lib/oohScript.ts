@@ -175,7 +175,7 @@ function here(s: Extract<OohScene, { kind: "here" }>): OohScript {
           l("hello", "Ooh, hello! I'm Ooh. I'll show you around this quiet place."),
           l("ooh", "Nothing here is a test. There are no wrong answers."),
           l("happy", "Start with how you're arriving. Two taps, that's all."),
-          l("listen", "Soft music plays while you're here. The speaker at the top turns it off."),
+          l("listen", "Soft piano plays while you're here, with birds by morning and waves by night. The speaker turns it off."),
         ],
         short: late
           ? l("sleepy", "It's late. Be gentle with yourself tonight.")
@@ -198,10 +198,12 @@ export function oohScript(s: OohScene): OohScript {
           b("heavy", "#shelf-heavy", "care", "For heavy days. Gentle ones, with no pressure to feel better."),
           b("understand", "#shelf-understand", "think", "These explain what's going on in a mind. Knowing helps."),
           b("room", "#shelf-room", "ooh", "For days with a bit of room. Big ideas about a good life."),
+          b("talks", "#shelf-talks", "think", "Some of the best TED talks on minds and meaning. Pick one with a cup of tea."),
           b("maker", "#shelf-maker", "hello", "Videos from Aryan, who made me!"),
           b("why", "#why-watch", "think", "Why stories? Hearing how someone got through can make it feel possible."),
           b("breathe", "#watch-breathe", "calm", "Breathe with the sun. In for four, out for six."),
           b("ground", "#watch-ground", "listen", "Five things you can see. It brings you back into the room."),
+          b("play", "#watch-play", "happy", "Ooh, a game! Dogs and cats, ice cream and snowballs, and everyone makes up in the end."),
           b("next", APP_BOTTOM, "happy", "Did something help? Keep it in your hope box for next time.", { room: "hope", view: "box", label: "Open my hope box" }),
         ],
         lines: [

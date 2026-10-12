@@ -1,6 +1,6 @@
 "use client";
 
-import { BELL_NOTES, CHORD_SECONDS, createAmbient } from "./ambient-core.mjs";
+import { BELL_NOTES, CHORD_SECONDS, PAD_LEVEL, createAmbient, moodForHour, type Mood } from "./ambient-core.mjs";
 
 /**
  * The music player: one AudioContext for the whole visit, and the rules
@@ -25,7 +25,10 @@ import { BELL_NOTES, CHORD_SECONDS, createAmbient } from "./ambient-core.mjs";
 
 export const SOUND_KEY = "arun-sound-v1";
 const VOLUME = 0.7;
-const LOOKAHEAD = 30;
+/* Sixteen seconds ahead: one chord queued past the one playing. It was 30,
+   but the music now follows the time of day (and the game's sky), and a
+   change waited up to 44s to be heard. */
+const LOOKAHEAD = 16;
 
 type Engine = ReturnType<typeof createAmbient>;
 
@@ -97,15 +100,33 @@ function shouldPlay() {
   return unlocked && soundWanted() && holds.size === 0 && typeof document !== "undefined" && !document.hidden;
 }
 
+/* Something that sets the time of day for a while (the game's chosen sky).
+   null: follow the clock. */
+let moodOverride: Mood | null = null;
+
+/** Which of the three versions is playing: morning, day or night. */
+export function musicMood(): Mood {
+  return moodOverride ?? moodForHour(new Date().getHours());
+}
+
+/** Play one version regardless of the clock, or null to follow it again. */
+export function setMusicMood(m: Mood | null) {
+  moodOverride = m;
+}
+
 function schedule() {
   if (!ctx || !engine) return;
   if (ctx.state === "running") {
     if (nextChord < ctx.currentTime) nextChord = ctx.currentTime + 0.1;
     while (nextChord < ctx.currentTime + LOOKAHEAD) {
-      engine.chord(nextChord, chordIndex++);
-      /* One or two bowl tones inside each chord, at unhurried moments. */
-      const bells = Math.random() < 0.55 ? 1 : 2;
-      for (let b = 0; b < bells; b++) {
+      /* Read the clock for every chord, so the music moves from morning to
+         day to night on its own, a chord at a time, never mid-phrase. */
+      const mood = musicMood();
+      engine.chord(nextChord, chordIndex, PAD_LEVEL[mood]);
+      engine.scene(nextChord, chordIndex, mood);
+      chordIndex++;
+      /* A bowl tone now and then: the piano carries the melody now. */
+      if (Math.random() < 0.4) {
         engine.bell(nextChord + 3 + Math.random() * (CHORD_SECONDS - 5), BELL_NOTES[Math.floor(Math.random() * BELL_NOTES.length)]);
       }
       nextChord += CHORD_SECONDS;

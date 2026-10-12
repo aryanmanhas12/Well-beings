@@ -183,7 +183,7 @@ export function HavenShell({
             onReplayIntro={onReplayIntro}
           />
         )}
-        {tab === "watch" && <WatchTab haven={haven} view={view} lang={wb.settings.lang} openVideo={setSheet} />}
+        {tab === "watch" && <WatchTab haven={haven} view={view} lang={wb.settings.lang} openVideo={setSheet} openUrgent={() => setUrgent(true)} />}
         {tab === "hope" && <HopeTab haven={haven} view={view} goTo={goTo} lang={wb.settings.lang} />}
         {tab === "plan" && <PlanTab wb={wb} haven={haven} region={region} view={view} goTo={goTo} />}
         {tab === "reach" && <ReachTab haven={haven} region={region} view={view} goTo={goTo} />}

@@ -98,6 +98,18 @@ move; nothing fades text. Under reduced motion nothing moves, but the
 lights stay, fading in place. The sky, its glow and the opening sunrise
 are the slow atmosphere; they never move anything someone is reading.
 
+## The game
+Scoops & Snowballs (components/game, lib/game) is a comic world inside
+Arun: Ooh's ink (#2A1636, about 2.2 units thick) round every character
+and treat, flat colour from the dawn palette pushed brighter for play
+(sun, pink, lilac, peach, leaf, plus sky blue for water and snow), and
+the game's sheets drawn like Ooh's bubbles: cream paper, a 3px ink line,
+a hard 6px offset shadow. Night is the day mixed toward the app's plum
+midnight, never toward black (mixed toward black, the yellow roofs came
+out olive). Its type is Fredoka for names and pop-up words, Karla for
+everything else. Its bars, chips and buttons keep the house contrast
+floor; the ratios are in the CSS.
+
 ## Do and don't
 - Do measure every new colour pair and write the ratio in the CSS.
 - Do check the full-page screenshot at 320, 390 and 1280 wide.

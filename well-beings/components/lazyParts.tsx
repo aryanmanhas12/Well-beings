@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { createPortal } from "react-dom";
 
 /**
  * The parts of Arun that are not on the first screen, loaded as their own
  * files (Vercel's bundle-dynamic-imports rule): the wellbeing check and its
- * results, the Watch and Hope rooms and the daily plan.
+ * results, the Watch and Hope rooms, the daily plan and the game.
  * Less script to read before the first screen answers a tap. (Settings
  * stays in: it is on every screen, holds "Delete all my data", and must
  * open the instant it is tapped. So does the video sheet: small, and it
@@ -29,6 +30,7 @@ const load = {
   watch: () => import("./haven/WatchTab"),
   hope: () => import("./haven/HopeTab"),
   daily: () => import("./AppScreen"),
+  game: () => import("./game/ScoopsGame"),
 };
 
 function Loading({ tall = false }: { tall?: boolean }) {
@@ -62,6 +64,38 @@ export const ResultsScreen = dynamic(() => or(load.results().then((m) => m.Resul
 export const WatchTab = dynamic(() => or(load.watch().then((m) => m.WatchTab)), { loading: () => <Loading tall /> });
 export const HopeTab = dynamic(() => or(load.hope().then((m) => m.HopeTab)), { loading: () => <Loading tall /> });
 export const AppScreen = dynamic(() => or(load.daily().then((m) => m.AppScreen)), { loading: () => <Loading tall /> });
+/* The game is the biggest part by far and only for those who tap Play;
+   it is fetched when idle like the rest, so it works offline once seen.
+   If it cannot arrive, the same honest message, over the screen. */
+function GameLoading() {
+  return createPortal(
+    <div className="game-loading" aria-busy="true">
+      <span>Loading the city…</span>
+    </div>,
+    document.body,
+  );
+}
+function GameOffline({ onClose }: { onClose: () => void; openUrgent: () => void }) {
+  return createPortal(
+    <div className="game-loading" role="status">
+      <div style={{ maxWidth: 360, padding: 20, textAlign: "center" }}>
+        <Unavailable />
+        <button type="button" className="btn btn-quiet" onClick={onClose} style={{ color: "#FFD98A" }}>
+          Back to Watch
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+export const ScoopsGame = dynamic(
+  () =>
+    load
+      .game()
+      .then((m) => m.ScoopsGame)
+      .catch(() => GameOffline),
+  { loading: () => <GameLoading /> },
+);
 
 let preloaded = false;
 /** Fetch every split part once the phone is idle (bundle-preload, js-request-idle-callback). */
