@@ -97,6 +97,42 @@ export interface Pose {
   scale: number;
   /** A per-character offset so they don't blink in unison. */
   seed: number;
+  /** A party hat, for the army's pups and kittens. */
+  hat?: string | null;
+  /** Cream pie on the face. */
+  pied?: boolean;
+}
+
+/* Hat and pie cream, on top of the head at height `hy`. */
+function topper(ctx: C, p: Pose, hy: number) {
+  if (p.pied) {
+    ctx.fillStyle = "#FFF1DA";
+    ctx.strokeStyle = "rgba(42,22,54,0.6)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.ellipse(13, hy + 1, 9, 7.5, 0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    for (const [x, y, r] of [[8, hy + 8, 2.2], [15, hy + 9, 2.6], [19, hy + 6, 1.8]]) {
+      circ(ctx, x, y, r);
+      ctx.fill();
+    }
+    circ(ctx, 16, hy - 4, 2.2);
+    ctx.fillStyle = "#E84E7A";
+    ctx.fill();
+  }
+  if (p.hat) {
+    ctx.save();
+    ctx.translate(7, hy - 10);
+    ctx.rotate(-0.25);
+    tri(ctx, [-6, 0], [6, 0], [0, -15]);
+    fillStroke(ctx, p.hat, 1.6);
+    ctx.fillStyle = "rgba(255,248,238,0.75)";
+    for (const y of [-4, -9]) ctx.fillRect(-3 + (y + 9) * 0.2, y, 6 - (y + 9) * 0.3, 1.6);
+    circ(ctx, 0, -15, 2.2);
+    fillStroke(ctx, CREAM, 1);
+    ctx.restore();
+  }
 }
 
 export function drawCritter(ctx: C, look: Look, p: Pose) {
@@ -125,7 +161,7 @@ export function drawCritter(ctx: C, look: Look, p: Pose) {
     ctx.stroke();
     circ(ctx, s.x + s.r * 0.5, s.y + s.r * 1.1, s.r * 0.42);
     ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.fillStyle = "rgba(255,248,238,0.55)";
     circ(ctx, s.x - s.r * 0.35, s.y - s.r * 0.35, s.r * 0.28);
     ctx.fill();
   }
@@ -302,6 +338,7 @@ function dog(ctx: C, c: Coat, p: Pose, bob: number) {
     fillStroke(ctx, "#FF8FA8", 1.2);
   }
   eyes(ctx, p, [[14, hy - 3.5], [7, hy - 4]], 2.1, null);
+  const dogHy = hy;
   /* Near ear. */
   if (c.kind === "corgi") {
     tri(ctx, [6, hy - 6], [12, hy - 21], [16, hy - 7]);
@@ -317,6 +354,7 @@ function dog(ctx: C, c: Coat, p: Pose, bob: number) {
     ell(ctx, 4, hy + 2, 4.6, 8.6, 0.25 + flop);
     fillStroke(ctx, c.ear);
   }
+  topper(ctx, p, dogHy);
   if (p.hold) holdPaw(ctx, c.fur);
 }
 
@@ -430,6 +468,7 @@ function cat(ctx: C, c: Coat, p: Pose, bob: number) {
     ctx.stroke();
   }
   eyes(ctx, p, [[14, hy - 3], [7.5, hy - 3.5]], 2.2, c.eye ?? LEAF);
+  topper(ctx, p, hy);
   if (p.hold) holdPaw(ctx, c.fur);
 }
 
@@ -488,7 +527,7 @@ export function drawCone(ctx: C, color: string, spin: number, s = 1) {
   circ(ctx, 0, -2.5, 6.4);
   fillStroke(ctx, color, 1.7);
   ell(ctx, -2, -4.5, 2, 1.4, -0.5);
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.fillStyle = "rgba(255,248,238,0.6)";
   ctx.fill();
   circ(ctx, 1.5, -8.6, 1.8);
   fillStroke(ctx, "#E84E7A", 1);
@@ -507,7 +546,7 @@ export function drawSnowball(ctx: C, r: number, spin = 0) {
   ctx.restore();
   ctx.save();
   ctx.rotate(spin);
-  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.fillStyle = "rgba(255,248,238,0.95)";
   circ(ctx, -r * 0.35, -r * 0.35, r * 0.26);
   ctx.fill();
   ctx.restore();
@@ -566,7 +605,7 @@ export function drawHeart(ctx: C, size: number, color: string, outline = true) {
   ctx.closePath();
   fillStroke(ctx, color, outline ? 1.6 / s : 0);
   ell(ctx, -3.6, -5.6, 1.6, 1.1, -0.6);
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.fillStyle = "rgba(255,248,238,0.6)";
   ctx.fill();
   ctx.restore();
 }
@@ -685,6 +724,52 @@ export function drawPowerIcon(ctx: C, kind: PowerKind, t: number) {
     ctx.translate(0, -6);
     drawUmbrella(ctx, t);
     ctx.restore();
+  } else if (kind === "army") {
+    /* Three paw prints and a flag: the army is coming. */
+    ctx.save();
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = INK;
+    ctx.beginPath();
+    ctx.moveTo(-9, 14);
+    ctx.lineTo(-9, -16);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-9, -16);
+    ctx.lineTo(9, -11);
+    ctx.lineTo(-9, -6);
+    ctx.closePath();
+    fillStroke(ctx, PINK, 1.6);
+    for (const [x, y, s] of [[2, 4, 0.8], [8, 11, 0.7], [-2, 12, 0.6]] as [number, number, number][]) drawPaw(ctx, x, y, s, SUN);
+    ctx.restore();
+  } else if (kind === "pie") {
+    ctx.save();
+    ctx.scale(0.95, 0.95);
+    drawPie(ctx, 0);
+    ctx.restore();
+  } else if (kind === "balloon") {
+    ctx.save();
+    ctx.translate(0, -3);
+    drawBalloon(ctx, "#8FD3FF", t, 1.15);
+    ctx.restore();
+  } else if (kind === "bubble") {
+    ctx.save();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = INK;
+    ctx.beginPath();
+    ctx.moveTo(-6, 14);
+    ctx.lineTo(1, 0);
+    ctx.stroke();
+    circ(ctx, 4, -5, 6.5);
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+    ctx.restore();
+    ctx.save();
+    ctx.translate(-5, -10);
+    drawBubble(ctx, 6, t);
+    ctx.restore();
+  } else if (kind === "giant") {
+    drawPaw(ctx, 0, 2, 1.7, PEACH);
+    star(ctx, 10, -12, 3.6, SUN, t * 2);
   } else {
     ctx.save();
     ctx.translate(0, 8);
@@ -784,7 +869,7 @@ export function drawTree(ctx: C, kind: number, r: number, night: boolean) {
   }
   for (const [x, y, rr] of blobs) {
     circ(ctx, x - rr * 0.3, y - rr * 0.3, rr * 0.35);
-    ctx.fillStyle = night ? "rgba(255,244,232,0.08)" : "rgba(255,255,255,0.22)";
+    ctx.fillStyle = night ? "rgba(255,244,232,0.08)" : "rgba(255,248,238,0.22)";
     ctx.fill();
   }
   if (kind === 2 && !night) {
@@ -868,7 +953,7 @@ export function drawSkyline(ctx: C, w: number, h: number, night: boolean, t = 0)
     for (let i = 0; i < 3; i++) {
       const cx = ((i * 0.37 + t * 0.006) % 1.2) * w - w * 0.1;
       const cy = h * (0.12 + i * 0.09);
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.fillStyle = "rgba(255,248,238,0.85)";
       for (const [dx, dy, r] of [[0, 0, 16], [18, -6, 20], [38, 0, 15]]) {
         circ(ctx, cx + dx, cy + dy, r * (w / 900 + 0.5));
         ctx.fill();
@@ -956,7 +1041,7 @@ export function drawSkyline(ctx: C, w: number, h: number, night: boolean, t = 0)
   /* The river and the bridge. */
   ctx.fillStyle = night ? "#1C2F5E" : "#6CC3EE";
   ctx.fillRect(0, ground, w, h - ground);
-  ctx.strokeStyle = night ? "rgba(255,217,138,0.35)" : "rgba(255,255,255,0.6)";
+  ctx.strokeStyle = night ? "rgba(255,217,138,0.35)" : "rgba(255,248,238,0.6)";
   ctx.lineWidth = 1.4;
   for (let i = 0; i < 14; i++) {
     const yy = ground + 6 + (i % 5) * ((h - ground) / 5);
@@ -1000,4 +1085,195 @@ export function drawSkyline(ctx: C, w: number, h: number, night: boolean, t = 0)
       ctx.fill();
     }
   }
+}
+
+/* ── version 2: new treats, the army, the streets ──────────────────── */
+
+export function drawPaw(ctx: C, x: number, y: number, s: number, color: string) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(s, s);
+  ell(ctx, 0, 2, 4.6, 3.8);
+  fillStroke(ctx, color, 1.4);
+  for (const [px, py] of [[-4.6, -3.2], [-1.6, -5.2], [1.8, -5.2], [4.8, -3.2]]) {
+    circ(ctx, px, py, 1.7);
+    fillStroke(ctx, color, 1.1);
+  }
+  ctx.restore();
+}
+
+/** A cream pie in a tin, centred. */
+export function drawPie(ctx: C, spin: number, s = 1) {
+  ctx.save();
+  ctx.scale(s, s);
+  ctx.rotate(Math.sin(spin) * 0.3);
+  ell(ctx, 0, 3, 11, 5);
+  fillStroke(ctx, "#C8CCE0", 1.6);
+  ell(ctx, 0, 0, 10, 5);
+  fillStroke(ctx, "#E8B26A", 1.4);
+  ell(ctx, 0, -2.5, 9, 4.6);
+  fillStroke(ctx, "#FFF1DA", 1.4);
+  for (const x of [-5, 0, 5]) {
+    circ(ctx, x, -5, 2.6);
+    fillStroke(ctx, "#FFF8EE", 1);
+  }
+  circ(ctx, 1, -8, 1.9);
+  fillStroke(ctx, "#E84E7A", 1);
+  ctx.restore();
+}
+
+/** A water balloon with its knot, wobbling. */
+export function drawBalloon(ctx: C, color: string, t: number, s = 1) {
+  const w = 1 + Math.sin(t * 9) * 0.06;
+  ctx.save();
+  ctx.scale(s * w, s / w);
+  ctx.beginPath();
+  ctx.moveTo(0, -9);
+  ctx.bezierCurveTo(8, -9, 8.5, 4, 0, 7.5);
+  ctx.bezierCurveTo(-8.5, 4, -8, -9, 0, -9);
+  fillStroke(ctx, color, 1.6);
+  tri(ctx, [-1.6, 7], [1.6, 7], [0, 10]);
+  fillStroke(ctx, color, 1);
+  ell(ctx, -2.6, -4.5, 1.8, 2.6, -0.4);
+  ctx.fillStyle = "rgba(255,248,238,0.75)";
+  ctx.fill();
+  ctx.restore();
+}
+
+/** A soap bubble: clear, with a rainbow sheen that turns. */
+export function drawBubble(ctx: C, r: number, t: number) {
+  ctx.save();
+  circ(ctx, 0, 0, r);
+  ctx.fillStyle = "rgba(214,230,255,0.22)";
+  ctx.fill();
+  ctx.lineWidth = Math.max(1, r * 0.1);
+  const grad = ctx.createLinearGradient(-r, -r, r, r);
+  const off = (Math.sin(t * 2) + 1) / 2;
+  grad.addColorStop(0, "#FFB3CF");
+  grad.addColorStop(0.3 + off * 0.2, "#8BB8E8");
+  grad.addColorStop(0.6 + off * 0.2, "#B794FF");
+  grad.addColorStop(1, "#62D6A5");
+  ctx.strokeStyle = grad;
+  ctx.stroke();
+  ell(ctx, -r * 0.38, -r * 0.42, r * 0.28, r * 0.16, -0.7);
+  ctx.fillStyle = "rgba(255,248,238,0.85)";
+  ctx.fill();
+  ctx.restore();
+}
+
+const CART_TOPS = [["#E8677E", CREAM], ["#62D6A5", CREAM], [PINK, CREAM], [SUN, "#E8677E"]];
+const CART_SIGNS = ["HOT DOGS", "PRETZELS", "ICE CREAM", "FLOWERS"];
+
+/** A street cart with a striped umbrella, foot at its bottom edge. */
+export function drawCart(ctx: C, kind: number, w: number, h: number, night: boolean, font: string) {
+  const top = CART_TOPS[kind % 4];
+  ctx.save();
+  ctx.translate(-w / 2, -h);
+  rrect(ctx, 0, h * 0.35, w, h * 0.65, 3);
+  fillStroke(ctx, night ? "#B9AFCB" : "#E9E1F2", 1.8);
+  ctx.fillStyle = INK;
+  circ(ctx, 4, h, 2.6);
+  ctx.fill();
+  circ(ctx, w - 4, h, 2.6);
+  ctx.fill();
+  /* The umbrella, striped. */
+  ctx.save();
+  ctx.translate(w / 2, h * 0.2);
+  ctx.beginPath();
+  ctx.arc(0, 0, w * 0.75, Math.PI, 0);
+  ctx.closePath();
+  ctx.fillStyle = night ? shade(top[0], -0.25) : top[0];
+  ctx.fill();
+  ctx.save();
+  ctx.clip();
+  ctx.fillStyle = night ? shade(top[1], -0.3) : top[1];
+  for (let i = -2; i <= 2; i += 2) {
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, w, Math.PI * 1.5 + i * 0.32 - 0.16, Math.PI * 1.5 + i * 0.32 + 0.16);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(0, 0, w * 0.75, Math.PI, 0);
+  ctx.closePath();
+  ctx.lineWidth = 1.6;
+  ctx.strokeStyle = INK;
+  ctx.stroke();
+  ctx.fillStyle = INK;
+  ctx.fillRect(-0.8, 0, 1.6, h * 0.2);
+  ctx.restore();
+  ctx.font = `700 5px ${font}`;
+  ctx.textAlign = "center";
+  ctx.fillStyle = INK;
+  ctx.fillText(CART_SIGNS[kind % 4], w / 2, h * 0.68);
+  ctx.restore();
+}
+
+/** A round paper lantern hanging from (0, 0). */
+export function drawLantern(ctx: C, color: string, lit: boolean) {
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = INK;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, 3);
+  ctx.stroke();
+  ell(ctx, 0, 8, 5.4, 6);
+  fillStroke(ctx, lit ? shade(color, 0.25) : color, 1.3);
+  ctx.strokeStyle = "rgba(42,22,54,0.45)";
+  ctx.lineWidth = 0.8;
+  for (const dx of [-2.4, 0, 2.4]) {
+    ctx.beginPath();
+    ctx.ellipse(0, 8, Math.abs(dx) + 0.3, 6, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.fillStyle = INK;
+  ctx.fillRect(-2.2, 2.4, 4.4, 1.2);
+  ctx.fillRect(-2.2, 13.4, 4.4, 1.2);
+}
+
+/** A cherry blossom tree, foot at (0, 0). */
+export function drawBlossomTree(ctx: C, night: boolean) {
+  rrect(ctx, -2.6, -14, 5.2, 14, 2);
+  fillStroke(ctx, night ? "#5A3F55" : "#8E5B4A", 1.6);
+  const pinks = night ? ["#B9739A", "#A6668C", "#C984AA"] : ["#FFB3CF", "#FF9FC0", "#FFC7DA"];
+  for (const [x, y, r, i] of [[-8, -20, 9, 0], [7, -22, 9, 1], [0, -30, 10, 2]] as [number, number, number, number][]) {
+    circ(ctx, x, y, r);
+    fillStroke(ctx, pinks[i], 1.8);
+  }
+  for (let i = 0; i < 6; i++) {
+    circ(ctx, Math.cos(i * 2.1) * 8, -24 + Math.sin(i * 1.9) * 7, 1.4);
+    ctx.fillStyle = night ? "#E8C6D8" : CREAM;
+    ctx.fill();
+  }
+}
+
+/** A café table under a little umbrella, foot at (0, 0). */
+export function drawTable(ctx: C, color: string, night: boolean) {
+  ell(ctx, 0, -6, 8, 3.6);
+  fillStroke(ctx, night ? "#B9AFCB" : CREAM, 1.4);
+  ctx.fillStyle = INK;
+  ctx.fillRect(-0.8, -6, 1.6, 6);
+  ctx.fillRect(-0.8, -24, 1.6, 18);
+  ctx.beginPath();
+  ctx.arc(0, -22, 11, Math.PI, 0);
+  ctx.closePath();
+  fillStroke(ctx, night ? shade(color, -0.3) : color, 1.4);
+}
+
+/** A gull, gliding. */
+export function drawGull(ctx: C, t: number) {
+  const f = Math.sin(t * 6) * 3;
+  ctx.lineWidth = 1.8;
+  ctx.strokeStyle = INK;
+  ctx.fillStyle = CREAM;
+  ctx.beginPath();
+  ctx.moveTo(-10, -f);
+  ctx.quadraticCurveTo(-5, -4 - f, 0, 0);
+  ctx.quadraticCurveTo(5, -4 - f, 10, -f);
+  ctx.stroke();
+  ell(ctx, 0, 0.5, 2.6, 1.6);
+  ctx.fill();
+  ctx.stroke();
 }

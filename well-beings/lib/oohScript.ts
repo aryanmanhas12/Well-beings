@@ -203,7 +203,7 @@ export function oohScript(s: OohScene): OohScript {
           b("why", "#why-watch", "think", "Why stories? Hearing how someone got through can make it feel possible."),
           b("breathe", "#watch-breathe", "calm", "Breathe with the sun. In for four, out for six."),
           b("ground", "#watch-ground", "listen", "Five things you can see. It brings you back into the room."),
-          b("play", "#watch-play", "happy", "Ooh, a game! Dogs and cats, ice cream and snowballs, and everyone makes up in the end."),
+          b("play", "#watch-play", "happy", "Ooh, a game! Dogs and cats, pies and snowballs, a whole army of friends, and everyone makes up in the end."),
           b("next", APP_BOTTOM, "happy", "Did something help? Keep it in your hope box for next time.", { room: "hope", view: "box", label: "Open my hope box" }),
         ],
         lines: [

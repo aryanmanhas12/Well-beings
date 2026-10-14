@@ -140,12 +140,18 @@ export function WatchTab({
       <section className="panel panel-pink" id="watch-play" aria-labelledby="play-title">
         <h2 id="play-title">Scoops &amp; Snowballs</h2>
         <p className="panel-lede">
-          A silly game for a few minutes. Dogs vs cats, ice cream and snowballs, all over a city like New York, by day or
-          by night. Nobody gets hurt, and everyone makes up in the end.
+          A silly game for a few minutes. Dogs vs cats, ice cream, snowballs and pies, all over a city like New York where
+          every street is its own, by day, at sunset or by night. Nobody gets hurt, and everyone makes up in the end.
         </p>
         <GamePoster />
-        <button type="button" className="btn btn-sun" onClick={() => setPlaying(true)}>
+        <button type="button" className="btn btn-sun play-cta fx-orbit-host" onClick={() => setPlaying(true)}>
+          <span className="fx-orbit" aria-hidden="true">
+            <span />
+          </span>
           Play Scoops &amp; Snowballs
+          <span className="play-dot" aria-hidden="true">
+            <PlayIcon width={12} height={12} />
+          </span>
         </button>
         <p className="play-note">A round takes a few minutes. Nothing is scored or kept. It works offline once it has loaded.</p>
       </section>

@@ -4443,6 +4443,43 @@ a.btn-quiet:hover {
   .fx-sweep.still {
     animation-duration: 0.9s !important;
   }
+  /* The new lights: the edge light glows in place instead of running, the
+     sparkles stay where they are and fade, the words are simply there. */
+  .fx-orbit > span {
+    animation: none;
+    transform: none;
+    background: radial-gradient(closest-side, rgba(255, 122, 176, 0.9), rgba(255, 200, 87, 0.6));
+  }
+  .fx-orbit {
+    animation: fxOrbitShow 2.4s ease-out 0.3s 1 both !important;
+    animation-duration: 2.4s !important;
+  }
+  .fx-sparkles > span {
+    transform: rotate(var(--a)) translateY(-70px) scale(0.8);
+    animation: fxFade 1.2s ease-out 0.3s both !important;
+    animation-duration: 1.2s !important;
+  }
+  .fx-rise-word > span {
+    animation: none;
+  }
+  [data-tilt] {
+    transform: none !important;
+  }
+  .fx-sparkles.at-tap > span {
+    transform: rotate(var(--a)) translateY(-30px) scale(0.8);
+  }
+  .fx-meteor > span:first-child {
+    transform: rotate(-32deg) translateX(-60px) scaleX(0.7);
+    animation: fxFade 1s ease-out both !important;
+    animation-duration: 1s !important;
+  }
+  .fx-meteor > span:last-child {
+    animation: fxFade 0.8s ease-out both !important;
+    animation-duration: 0.8s !important;
+  }
+  .tab-ico {
+    transform: none !important;
+  }
 }
 .fx-sweep.still {
   top: 0;
@@ -4600,6 +4637,243 @@ html {
   opacity: 1;
 }
 
+/* A light that runs once round the edge of the big sun buttons when they
+   arrive, and keeps running while a mouse rests on one or the keyboard is
+   on it (Aceternity's Moving Border, house-safe: it answers the person,
+   never loops on its own to get attention). Its own element, masked to a
+   3px band inside the ink line, so the words are never under it; the
+   streak is a conic gradient turned by transform only. */
+.fx-orbit-host {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.fx-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 3px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  animation: fxOrbitShow 2.4s ease-out 0.3s 1 both;
+  transition: opacity 0.3s ease;
+}
+.fx-orbit > span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(from 0deg, transparent 0 70%, #FF7AB0 82%, #FFF8EE 90%, transparent 97%);
+  animation: fxOrbit 2.4s linear 0.3s infinite;
+}
+.fx-orbit-host:hover > .fx-orbit,
+.fx-orbit-host:focus-visible > .fx-orbit {
+  opacity: 1;
+  animation: none;
+}
+@keyframes fxOrbit {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@keyframes fxOrbitShow {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Sparkles (Aceternity's Sparkles, kept to one burst): ten small stars
+   that fly out once from where something good just happened, then go.
+   Only ever in answer to the person (the end of a round, a kept thing). */
+.fx-sparkles {
+  position: absolute;
+  left: 50%;
+  top: 38px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.fx-sparkles > span {
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  background: #FFC857;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  --a: calc(var(--i) * 36deg + 8deg);
+  transform: rotate(var(--a)) translateY(0) scale(0.2);
+  opacity: 0;
+  animation: fxSpark 1.1s cubic-bezier(0.2, 0.7, 0.3, 1) calc(0.25s + var(--i) * 18ms) both;
+}
+.fx-sparkles > span:nth-child(3n) {
+  background: #FF7AB0;
+}
+.fx-sparkles > span:nth-child(3n + 1) {
+  background: #B794FF;
+}
+@keyframes fxSpark {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(0) scale(0.2);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(var(--d, -118px)) scale(1);
+  }
+}
+/* The small burst out of a button when something is kept: in the tap
+   layer, at the finger, eight stars, no wait. */
+.fx-sparkles.at-tap {
+  --d: -48px;
+  top: auto;
+  left: auto;
+}
+.fx-sparkles.at-tap > span {
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  --a: calc(var(--i) * 45deg + 22deg);
+  animation-duration: 0.9s;
+  animation-delay: calc(var(--i) * 14ms);
+}
+
+/* A shooting star from where a finger touched the night sky (Aceternity's
+   Meteors, one at a time and only when asked for). A streak whose bright
+   head is its left end, turned to point up and right, sliding back along
+   itself down to the left; and a twinkle where the finger was. */
+.fx-meteor {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.fx-meteor > span:first-child {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #FFF4E8, rgba(255, 217, 138, 0.7) 30%, rgba(255, 159, 128, 0));
+  transform-origin: 0 50%;
+  animation: fxMeteor 1.05s cubic-bezier(0.3, 0.5, 0.4, 1) both;
+}
+.fx-meteor > span:last-child {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  width: 18px;
+  height: 18px;
+  background: #FFE3A1;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  animation: fxTwinkle 0.8s ease-out both;
+}
+@keyframes fxMeteor {
+  0% {
+    opacity: 0;
+    transform: rotate(-32deg) translateX(0) scaleX(0.2);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-32deg) translateX(-190px) scaleX(1);
+  }
+}
+@keyframes fxTwinkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.1) rotate(20deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) rotate(45deg);
+  }
+}
+
+/* The magnetic dock: the tab icons sit in their own wrapper so the swell
+   (Feedback.tsx, inline transform) never fights the pop of the chosen
+   tab's icon, which animates the svg inside. */
+.tab-ico {
+  display: grid;
+  place-items: center;
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The game's call to action on Watch: a sun button with a play dot nested
+   at its end (button in button), and the edge light. */
+.play-cta {
+  min-height: 52px;
+  padding-right: 10px;
+  gap: 12px;
+  font-size: 16px;
+}
+.play-cta .play-dot {
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .play-cta:hover .play-dot {
+    transform: translateX(3px) scale(1.06);
+  }
+}
+
+/* Words that rise into place out of a slot, one after another
+   (Aceternity's Text Generate Effect, without the fade: each word slides
+   up from under a clip, so it is at full contrast the whole way). The
+   padding gives the comic offset shadow room inside the clip. */
+.fx-rise-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.14em 0.16em 0;
+  margin: 0 -0.14em -0.16em 0;
+}
+.fx-rise-word > span {
+  display: inline-block;
+  animation: fxRise 0.62s cubic-bezier(0.2, 0.8, 0.2, 1) calc(0.1s + var(--i) * 80ms) both;
+}
+@keyframes fxRise {
+  from {
+    transform: translateY(112%);
+  }
+}
+
+/* Tilt (Aceternity's 3D Card, Cult UI's tilt): a card leans a few
+   degrees toward a resting mouse. Mouse and trackpad only, transform only,
+   and never under reduced motion (Feedback.tsx sets the angles). */
+@media (hover: hover) and (pointer: fine) {
+  [data-tilt] {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  [data-tilt][data-tilting="true"] {
+    transition-duration: 0.08s;
+  }
+}
+
 /* ── Scoops & Snowballs (components/game) ────────────────────────────── */
 /* The game is its own small world over the safe place: night colours
    whatever the theme, because the canvas is night or day by its own
@@ -4696,6 +4970,7 @@ html.game-open {
   }
 }
 .game-bar {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-template-areas: "pic name num" "pic track track";
@@ -4718,46 +4993,167 @@ html.game-open {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* The rules' own number, whole points out of 100: what the bar shows is
+   what the game uses, never a rounded or eased stand-in. */
 .game-num {
   grid-area: num;
-  font: 700 12px/1 var(--font-body);
+  font: 700 11px/1 var(--font-body);
   font-variant-numeric: tabular-nums;
+  color: #E9DFF5;
+  white-space: nowrap;
+}
+.game-num b {
+  font: 600 16px/1 var(--font-display);
+  color: #FFF4E8;
 }
 .game-track {
   grid-area: track;
+  position: relative;
   display: block;
-  height: 10px;
+  height: 12px;
   border-radius: 999px;
-  background: rgba(255, 244, 232, 0.16);
+  background: rgba(255, 244, 232, 0.14);
   border: 1.5px solid #2A1636;
   overflow: hidden;
 }
-.game-fill {
+.game-fill,
+.game-chipfill,
+.game-ticks {
+  position: absolute;
+  inset: 0;
   display: block;
-  height: 100%;
-  width: 100%;
+}
+.game-fill,
+.game-chipfill {
   transform-origin: left center;
-  background: linear-gradient(90deg, #62D6A5, #FFC857);
-  transition: transform 0.25s var(--ease-out);
+}
+/* No easing on the fill: it moves the instant the number does. What was
+   just lost stays behind it as a pale chip for half a second, then
+   drains (ScoopsGame paints both), so a splat is read at a glance. */
+.game-fill {
+  background: linear-gradient(90deg, #62D6A5, #A8E07A);
+}
+.game-bar.is-mid .game-fill {
+  background: linear-gradient(90deg, #FFC857, #FFD98A);
+}
+.game-bar.is-low .game-fill {
+  background: linear-gradient(90deg, #FF9F80, #FFC857);
+}
+.game-chipfill {
+  background: #FFB3D1;
 }
 .game-bar.is-rival .game-fill {
   background: linear-gradient(90deg, #FF7AB0, #FF9F80);
 }
-.game-powers {
+.game-bar.is-rival .game-chipfill {
+  background: #FFF4E8;
+}
+/* Quarter marks, so 25, 50 and 75 can be read off the bar. */
+.game-ticks {
+  background:
+    linear-gradient(#2A1636 0 0) 25% 0 / 1.5px 100% no-repeat,
+    linear-gradient(#2A1636 0 0) 50% 0 / 1.5px 100% no-repeat,
+    linear-gradient(#2A1636 0 0) 75% 0 / 1.5px 100% no-repeat;
+  opacity: 0.55;
+}
+/* A light shake when splatted, a green glow when a cupcake or the
+   sprinklers top the bar up. Both answer the game, never fire on their
+   own, and the number does not move. */
+.game-bar.is-hit {
+  animation: game-bar-hit 0.32s var(--ease-out);
+}
+@keyframes game-bar-hit {
+  20% {
+    transform: translateX(-3px);
+  }
+  45% {
+    transform: translateX(3px);
+  }
+  70% {
+    transform: translateX(-1.5px);
+  }
+}
+.game-bar::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 15px;
+  border: 2px solid #62D6A5;
+  opacity: 0;
+  pointer-events: none;
+}
+.game-bar.is-heal::after {
+  animation: game-bar-heal 0.9s var(--ease-out);
+}
+@keyframes game-bar-heal {
+  15% {
+    opacity: 1;
+  }
+}
+/* Low: a slow beat of light over the fill, once every 1.2 s. */
+.game-bar.is-low .game-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #FFF4E8;
+  opacity: 0;
+  animation: game-low 1.2s ease-in-out infinite;
+}
+@keyframes game-low {
+  50% {
+    opacity: 0.32;
+  }
+}
+
+/* Under the bars, on the left: pals found, the army, and what is on you. */
+.game-side {
   position: absolute;
   left: max(12px, env(safe-area-inset-left));
   top: 112px;
   display: grid;
+  justify-items: start;
+  gap: 6px;
+  pointer-events: none;
+}
+@media (min-width: 621px) {
+  .game-side {
+    top: 72px;
+  }
+}
+.game-team-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(17, 9, 33, 0.78);
+  font: 700 12px/1 var(--font-body);
+}
+.game-paw {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 244, 232, 0.6);
+}
+.game-paw.is-on {
+  background: #62D6A5;
+  border-color: #2A1636;
+}
+.game-army {
+  margin-left: 2px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #FFC857;
+  color: #2A1636;
+}
+.game-powers {
+  display: grid;
+  justify-items: start;
   gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
-  pointer-events: none;
-}
-@media (min-width: 621px) {
-  .game-powers {
-    top: 64px;
-  }
 }
 .game-powers li {
   display: flex;
@@ -4768,6 +5164,120 @@ html.game-open {
   background: rgba(17, 9, 33, 0.78);
   font: 700 12px/1 var(--font-body);
   font-variant-numeric: tabular-nums;
+}
+/* A state, not a treat: berry, so it reads as "this is happening to me".
+   Cream #FFF4E8 on berry #9C2F6B is 6.38:1. */
+.game-powers li.is-state {
+  background: #9C2F6B;
+  padding: 5px 10px 5px 6px;
+}
+.game-state-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #FFF4E8;
+  border: 2px solid #2A1636;
+}
+
+/* Where you are: a green street sign that rises out of a slot under the
+   bars when you turn into a new street. Its words slide, never fade.
+   Cream #FFF4E8 on #1F6B4F is 5.91:1. */
+.game-place {
+  position: absolute;
+  left: 50%;
+  top: 112px;
+  transform: translateX(-50%);
+  max-width: min(320px, calc(100% - 150px));
+  overflow: hidden;
+  padding: 0 4px 4px 0;
+  pointer-events: none;
+}
+@media (min-width: 621px) {
+  .game-place {
+    top: 72px;
+  }
+}
+.game-place > * {
+  display: block;
+}
+.game-place strong,
+.game-place span {
+  background: #1F6B4F;
+  color: #FFF4E8;
+  border: 2px solid #2A1636;
+  text-align: center;
+}
+.game-place strong {
+  font: 600 16px/1.15 var(--font-display);
+  padding: 6px 12px 4px;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 0;
+  animation: game-place 2.8s var(--ease-out) both;
+}
+.game-place span {
+  font: 600 12px/1.3 var(--font-body);
+  padding: 2px 12px 6px;
+  border-radius: 0 0 10px 10px;
+  border-top: 0;
+  box-shadow: 3px 3px 0 #2A1636;
+  text-wrap: balance;
+  animation: game-place 2.8s var(--ease-out) 0.05s both;
+}
+@keyframes game-place {
+  0% {
+    transform: translateY(-130%);
+  }
+  12%,
+  86% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-260%);
+  }
+}
+
+/* The combo: how many splats in a row, and a ring that empties as the
+   time to keep it going runs out. */
+.game-combo {
+  position: absolute;
+  right: max(12px, env(safe-area-inset-right));
+  top: 112px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  background: rgba(17, 9, 33, 0.82);
+  pointer-events: none;
+  transition: transform 0.2s var(--ease-out), visibility 0s;
+}
+@media (min-width: 621px) {
+  .game-combo {
+    top: 72px;
+  }
+}
+.game-combo[data-on="false"] {
+  visibility: hidden;
+  transform: scale(0.6);
+  transition: transform 0.2s var(--ease-out), visibility 0s 0.2s;
+}
+.game-combo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(#FFC857 calc(var(--left, 1) * 1turn), rgba(255, 244, 232, 0.14) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+}
+.game-combo b {
+  font: 600 20px/1 var(--font-display);
+  color: #FFC857;
+}
+.game-combo span {
+  font: 700 10px/1 var(--font-body);
+  color: #E9DFF5;
 }
 .game-toast {
   position: absolute;
@@ -4913,8 +5423,13 @@ html.game-open {
 }
 .game-row {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 10px;
+  gap: 12px;
+}
+@media (min-width: 520px) {
+  .game-row {
+    grid-template-columns: 1.7fr 1fr;
+    gap: 10px;
+  }
 }
 .game-seg {
   display: flex;
@@ -5030,9 +5545,31 @@ html.game-open {
 }
 .game-throw {
   grid-area: throw;
+  position: relative;
   width: 86px;
   height: 86px;
   background: #FFC857;
+}
+/* Holding a pack of special treats: they go first, and the count shows.
+   Ink on #FFB3D1 is 9.97:1. */
+.game-throw.has-pack {
+  background: #FFB3D1;
+}
+.game-count {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #FFF4E8;
+  color: #2A1636;
+  border: 2.5px solid #2A1636;
+  font: 600 15px/1 var(--font-display);
+  font-variant-numeric: tabular-nums;
 }
 .game-swap {
   grid-area: swap;
@@ -5113,8 +5650,19 @@ html.game-open {
   color: #9C2F6B;
   font-weight: 700;
 }
+/* The card at the end is a double bezel (high-end-visual-design): an
+   outer cream tray holding an inner paper sheet. */
 .game-card {
+  padding: 8px;
+  background: #F3E3D3;
   animation: game-card-in 0.5s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both;
+}
+.game-card-in {
+  position: relative;
+  padding: 18px 16px 14px;
+  border-radius: 21px;
+  background: #FFF8EE;
+  border: 2px solid rgba(42, 22, 54, 0.18);
 }
 @keyframes game-card-in {
   from {
@@ -5164,15 +5712,45 @@ html.game-open {
   font-size: 13px;
 }
 @media (prefers-reduced-motion: reduce) {
+  /* The global reduced-motion rule cuts every animation to 0.01ms, which
+     made these words vanish the instant they appeared: they stand still
+     for their time instead (the !important durations), and the bar's
+     lights fade in place like the rest of the app's lights. */
   .game-toast.is-on {
-    animation: game-toast-still 1.5s steps(1, end) both;
+    animation: game-toast-still 1.5s steps(1, end) both !important;
+    animation-duration: 1.5s !important;
+  }
+  .game-bar.is-heal::after {
+    animation-duration: 0.9s !important;
+  }
+  .game-bar.is-low .game-track::after {
+    animation-duration: 1.2s !important;
+    animation-iteration-count: infinite !important;
   }
   .game-special.is-ready,
   .game-card {
     animation: none;
   }
-  .game-fill {
-    transition: none;
+  .game-bar.is-hit {
+    animation: none;
+  }
+  .game-place strong,
+  .game-place span {
+    animation: game-place-still 2.8s steps(1, end) both !important;
+    animation-duration: 2.8s !important;
+  }
+  .game-combo,
+  .game-combo[data-on="false"] {
+    transform: none;
+  }
+}
+@keyframes game-place-still {
+  0%,
+  99% {
+    transform: none;
+  }
+  100% {
+    transform: translateY(-260%);
   }
 }
 @keyframes game-toast-still {

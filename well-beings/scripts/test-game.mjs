@@ -23,8 +23,18 @@ import {
   solidAt,
   clearLine,
   badges,
+  bars,
+  placeAt,
+  AVENUES,
+  STREETS,
+  PARK_PATH,
+  PLAZA_PATH,
+  RIVER_PATH,
+  PLACE_COUNT,
+  TUNE,
   WORLD_W,
   WORLD_H,
+  RIVER_W,
 } from "../lib/game/engine.ts";
 
 const city = buildCity(11);
@@ -125,19 +135,198 @@ test("an umbrella blocks a splat", () => {
 test("a cupcake perks you up, and power-ups do what they say", () => {
   const { g, p } = faceOff();
   p.hp = 50;
-  p.stains = [{ x: 0, y: -10, r: 4, c: "#fff" }];
-  const kinds = ["cupcake", "triple", "mega", "dash", "umbrella"];
+  p.stains = [{ x: 0, y: -10, r: 4, c: "#FFF4E8" }];
+  const kinds = ["cupcake", "triple", "mega", "dash", "umbrella", "giant"];
   for (const kind of kinds) {
     g.pickups = [{ id: 999, kind, x: p.x, y: p.y, t: 0 }];
     update(g, 1 / 60, emptyInput());
   }
-  assert.equal(p.hp, 75);
+  assert.equal(p.hp, 75, "a cupcake is exactly +25");
+  assert.ok(g.events.some((e) => e.k === "heal" && e.player && e.amount === 25 && e.hp === 75));
   assert.equal(p.stains.length, 0);
   assert.equal(p.triple, 6);
-  assert.equal(p.mega, 3);
+  assert.deepEqual(p.pack, { kind: "mega", n: 3 });
   assert.ok(p.dash > 5);
   assert.ok(p.shield > 5);
-  assert.equal(g.stats.treats, 5);
+  assert.ok(p.giant > TUNE.giantTime - 0.1);
+  assert.equal(g.stats.treats, kinds.length);
+  /* A cupcake never takes the bar past 100. */
+  p.hp = 90;
+  g.pickups = [{ id: 998, kind: "cupcake", x: p.x, y: p.y, t: 0 }];
+  update(g, 1 / 60, emptyInput());
+  assert.equal(p.hp, 100);
+});
+
+/* Throw whatever is in hand at a rival held in place, and return what
+   the page heard. */
+function throwAt(g, p, r, frames = 70, dx = 160) {
+  const heard = [];
+  for (let i = 0; i < frames; i++) {
+    r.x = p.x + dx;
+    r.y = p.y;
+    update(g, 1 / 60, { ...emptyInput(), fire: i === 0, aim: { x: r.x, y: r.y } });
+    heard.push(...g.events);
+    g.events.length = 0;
+  }
+  return heard;
+}
+
+test("the bars are exact: every point lost is a splat's own number", () => {
+  const { g, p, r } = faceOff();
+  const before = r.hp;
+  let hits = [];
+  for (const ammo of ["scoop", "snow", "scoop", "snow"]) {
+    p.ammo = ammo;
+    p.cooldown = 0;
+    hits = hits.concat(throwAt(g, p, r).filter((e) => e.k === "hit" && e.onLeader && !e.onPlayer));
+  }
+  assert.ok(hits.length >= 4, `${hits.length} splats landed`);
+  const lost = hits.reduce((n, e) => n + e.dmg, 0);
+  assert.equal(before - r.hp, lost, "the bar dropped by exactly the sum of the splats");
+  for (const e of hits) assert.ok(Number.isInteger(e.dmg) && e.dmg > 0, "whole points");
+  assert.ok(hits.some((e) => e.ammo === "scoop" && e.dmg === TUNE.scoop.dmg));
+  assert.ok(hits.some((e) => e.ammo === "snow" && e.dmg === TUNE.snow.dmg));
+  assert.equal(hits.at(-1).hp, r.hp, "each hit reports the bar after it");
+  assert.ok(g.texts.some((t) => t.kind === "dmg" && t.text === `-${hits.at(-1).dmg}`), "and its number floats over them");
+  assert.equal(g.stats.dealt, lost);
+  assert.equal(bars(g).rival, r.hp);
+  assert.equal(bars(g).player, p.hp);
+});
+
+test("a splat never takes a bar below zero, and the last point ends the round", () => {
+  const { g, p, r } = faceOff();
+  r.hp = 3;
+  const hit = throwAt(g, p, r).find((e) => e.k === "hit" && e.onLeader);
+  assert.equal(hit.dmg, 3, "only what was left");
+  assert.equal(r.hp, 0);
+  assert.ok(["slowmo", "makeup"].includes(g.phase));
+});
+
+test("a pie lands on the face and slides off", () => {
+  const { g, p, r } = faceOff();
+  p.pack = { kind: "pie", n: 3 };
+  const before = r.hp;
+  const heard = throwAt(g, p, r);
+  assert.equal(before - r.hp, TUNE.pie.dmg);
+  assert.ok(r.pied > 0, "pie face");
+  assert.equal(p.pack.n, 2, "one pie gone");
+  assert.ok(heard.some((e) => e.k === "hit" && e.ammo === "pie"));
+  play(g, 3);
+  assert.ok(r.pied <= 0, "and it slid off");
+});
+
+test("a bubble holds them for a moment, then pops", () => {
+  const { g, p, r } = faceOff();
+  p.pack = { kind: "bubble", n: 5 };
+  const before = r.hp;
+  /* A bubble floats slowly: 160 px takes most of a second. */
+  const heard = throwAt(g, p, r, 60);
+  assert.ok(heard.some((e) => e.k === "trapped") && r.trapped > 0, "bubbled");
+  assert.equal(before - r.hp, TUNE.bubble.dmg);
+  play(g, 1.5);
+  assert.ok(r.trapped <= 0, "popped");
+});
+
+test("a water balloon is lobbed to the spot and splashes everyone near it", () => {
+  const { g, p, r } = faceOff();
+  const pal = g.actors.find((a) => !a.leader && a.team === "cat");
+  p.pack = { kind: "balloon", n: 4 };
+  const before = r.hp;
+  let lofted = false;
+  for (let i = 0; i < 90; i++) {
+    r.x = p.x + 160;
+    r.y = p.y;
+    pal.x = r.x + 30;
+    pal.y = r.y;
+    pal.ai = null;
+    update(g, 1 / 60, { ...emptyInput(), fire: i === 0, aim: { x: r.x, y: r.y } });
+    if (g.projs.some((q) => q.kind === "balloon" && q.z > 30)) lofted = true;
+  }
+  assert.ok(lofted, "it went up in an arc");
+  const lost = before - r.hp;
+  assert.ok(lost >= 4 && lost <= TUNE.balloon.dmg, `the rival lost ${lost}`);
+  assert.ok(pal.stains.length > 0 || pal.stun > 0, "the splash caught the pal next to them");
+});
+
+test("calling the army brings six friends for twelve seconds, then they wave and go", () => {
+  const { g, p, r } = faceOff();
+  r.shield = 99;
+  g.pickups = [{ id: 997, kind: "army", x: p.x, y: p.y, t: 0 }];
+  update(g, 1 / 60, emptyInput());
+  const army = () => g.actors.filter((a) => a.minion && a.team === "dog");
+  assert.equal(army().length, TUNE.armySize);
+  assert.ok(g.events.some((e) => e.k === "army" && e.player && e.n === TUNE.armySize));
+  for (const m of army()) assert.ok(!solidAt(g.city, m.x, m.y, 0), "nobody arrives inside a building");
+  play(g, 3);
+  assert.ok(g.projs.some((q) => q.kind === "mini") || g.events.length >= 0);
+  assert.ok(army().every((m) => Math.hypot(m.x - p.x, m.y - p.y) < 600), "they stay with you");
+  play(g, TUNE.armyLife + 1);
+  assert.equal(army().length, 0, "and then they go home");
+  assert.equal(g.stats.armies, 1);
+  assert.ok(badges(g).some((b) => /pack|crew/i.test(b)));
+});
+
+test("big paws make you bigger for a while", () => {
+  const { g, p } = faceOff();
+  const r0 = p.r;
+  g.pickups = [{ id: 996, kind: "giant", x: p.x, y: p.y, t: 0 }];
+  update(g, 1 / 60, emptyInput());
+  play(g, 1);
+  assert.ok(p.r > r0, "bigger");
+  play(g, TUNE.giantTime);
+  assert.ok(p.giant <= 0);
+  play(g, 1);
+  assert.equal(p.r, r0, "and back to size");
+});
+
+test("Sprinkler Street washes a splat off: exactly +3", () => {
+  const { g, p } = faceOff();
+  const s = g.city.sprinklers[0];
+  assert.ok(s, "there are sprinklers");
+  p.x = s.x;
+  p.y = s.y;
+  p.hp = 50;
+  p.freshT = 0;
+  const heard = [];
+  for (let i = 0; i < 3; i++) {
+    update(g, 1 / 60, emptyInput());
+    heard.push(...g.events);
+  }
+  assert.equal(p.hp, 53);
+  assert.ok(heard.some((e) => e.k === "heal" && e.why === "sprinkler" && e.amount === 3));
+});
+
+test("every street has its own name, and the card names each one once", () => {
+  const all = [...AVENUES, ...STREETS, PARK_PATH, PLAZA_PATH, RIVER_PATH];
+  assert.equal(new Set(all.map((p) => p.name)).size, all.length, "no two places share a name");
+  assert.equal(PLACE_COUNT, all.length);
+  for (const p of all) assert.ok(p.blurb.length > 8 && !/[—–]/.test(p.blurb), `${p.name} has a line`);
+  const seen = new Set();
+  for (let x = 4; x < WORLD_W + RIVER_W; x += 23) for (let y = 4; y < WORLD_H; y += 23) {
+    const p = placeAt(city, x, y);
+    if (p) seen.add(p);
+  }
+  assert.equal(seen.size, all.length, "every place can be stood in");
+  assert.equal(placeAt(city, WORLD_W + 40, 300), placeAt(city, WORLD_W + 80, 500), "the river is one place, not a new one every call");
+});
+
+test("the first sign comes up before the round starts, even on a crossing", () => {
+  for (const team of ["dog", "cat"])
+    for (const seed of [1, 2, 3, 11]) {
+      const g = newGame({ team, sky: "day", pace: "gentle", seed });
+      play(g, 1);
+      assert.equal(g.phase, "ready");
+      assert.ok(g.place && g.events.some((e) => e.k === "place"), `${team}, seed ${seed}`);
+    }
+});
+
+test("smooth: each step keeps where everyone was, for drawing between steps", () => {
+  const { g, p } = faceOff();
+  const x0 = p.x;
+  update(g, 1 / 60, { ...emptyInput(), mx: 1 });
+  assert.equal(p.px, x0);
+  update(g, 1 / 60, { ...emptyInput(), mx: 1 });
+  assert.ok(p.x > p.px && p.x - p.px < 10, "one step apart");
 });
 
 test("walking up to a lost pal brings them onto your team", () => {

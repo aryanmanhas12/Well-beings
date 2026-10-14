@@ -21,6 +21,17 @@ import { sfx, unlockSfx, type Sfx } from "@/lib/sfx";
  *   card is outlined in dawn light as it arrives. The first time a card
  *   below the fold arrives it also glides up into place.
  *
+ *   Something kept (a "Keep it", "Save", "Add", "I did it"): eight small
+ *   stars fly out of the button once (Aceternity's Sparkles, one burst).
+ *
+ *   The night sky on Here: a tap on the sky itself sends a shooting star
+ *   from where the finger landed (Aceternity's Meteors, but only ever one,
+ *   and only when asked for with a tap).
+ *
+ *   A mouse: the tab bar's icons swell toward it like a dock (Componentry's
+ *   Magnetic Dock), and a picture marked data-tilt leans a few degrees
+ *   toward it (Aceternity's 3D Card). Neither runs under reduced motion.
+ *
  * WHAT IT COSTS. Everything that moves here is transform or opacity on
  * its own element, so the graphics chip does the work and the page is not
  * repainted. The first version drew the arrival glow as an animated
@@ -54,6 +65,10 @@ const SCROLL_WINDOW_MS = 450;
 const GLOW_AGAIN_MS = 5000;
 const MAX_GLOWS = 3;
 const MAX_RINGS = 5;
+/* Never more than this many bursts or shooting stars at once, however fast
+   someone taps. */
+const MAX_BURSTS = 2;
+const MAX_METEORS = 2;
 
 function reduced() {
   return !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -121,9 +136,52 @@ export function Feedback() {
       r.addEventListener("animationend", end, { once: true });
       setTimeout(end, 900);
     };
+    let bursts = 0;
+    let meteors = 0;
+    /* A light made of several parts goes when its longest part is done. */
+    const light = (el: HTMLElement, ms: number, done: () => void) => {
+      setTimeout(() => {
+        el.remove();
+        done();
+      }, ms);
+    };
+    const sparkle = (x: number, y: number) => {
+      const layer = layerRef.current;
+      if (!layer || bursts >= MAX_BURSTS) return;
+      const s = document.createElement("span");
+      s.className = "fx-sparkles at-tap";
+      s.style.left = `${x}px`;
+      s.style.top = `${y}px`;
+      for (let i = 0; i < 8; i++) {
+        const k = document.createElement("span");
+        k.style.setProperty("--i", String(i));
+        s.append(k);
+      }
+      layer.append(s);
+      bursts++;
+      light(s, 1400, () => bursts--);
+    };
+    const meteor = (x: number, y: number) => {
+      const layer = layerRef.current;
+      if (!layer || meteors >= MAX_METEORS) return;
+      const m = document.createElement("span");
+      m.className = "fx-meteor";
+      m.style.left = `${x}px`;
+      m.style.top = `${y}px`;
+      m.append(document.createElement("span"), document.createElement("span"));
+      layer.append(m);
+      meteors++;
+      light(m, 1300, () => meteors--);
+    };
     const onDown = (e: PointerEvent) => {
       if (e.button > 0) return;
-      const t = (e.target as Element | null)?.closest?.(TAPPABLE);
+      const el = e.target as Element | null;
+      const t = el?.closest?.(TAPPABLE);
+      /* The sky itself, not a button on it: a shooting star. */
+      if (!t && el?.closest?.(".sky")) {
+        meteor(e.clientX, e.clientY);
+        return;
+      }
       if (!t || t.closest(".haptic-switch, .urgent")) return;
       ring(e.clientX, e.clientY, !!t.closest(STRONG));
     };
@@ -134,6 +192,13 @@ export function Feedback() {
       if (!a) return;
       if (a.feel) tick(a.feel);
       if (a.sound) sfx(a.sound);
+      if (a.sound === "success") {
+        /* A click from the keyboard has no position: use the button's middle. */
+        if (e.detail === 0) {
+          const r = t.getBoundingClientRect();
+          sparkle(r.left + r.width / 2, r.top + r.height / 2);
+        } else sparkle(e.clientX, e.clientY);
+      }
     };
     /* The first touch anywhere is the permission to make sound at all. */
     const unlock = (e: Event) => {
@@ -200,6 +265,91 @@ export function Feedback() {
       window.removeEventListener(ROOM_EVENT, onLeave);
       if (raf) cancelAnimationFrame(raf);
       spot?.remove();
+    };
+  }, []);
+
+  /* A mouse on a desktop: the tab bar swells toward it like a dock, and a
+     picture marked data-tilt leans toward it. One frame of work per frame
+     at most; one position read for the bar and one for the picture. Off
+     under reduced motion, and the moment the mouse leaves. */
+  useEffect(() => {
+    if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return;
+    let raf = 0;
+    let last: PointerEvent | null = null;
+    let bar: HTMLElement | null = null;
+    let icons: { el: HTMLElement; x: number }[] = [];
+    let tilted: HTMLElement | null = null;
+    const dropBar = () => {
+      for (const i of icons) i.el.style.transform = "";
+      icons = [];
+      bar = null;
+    };
+    const dropTilt = () => {
+      if (tilted) {
+        tilted.style.removeProperty("--rx");
+        tilted.style.removeProperty("--ry");
+        tilted.dataset.tilting = "false";
+      }
+      tilted = null;
+    };
+    const frame = () => {
+      raf = 0;
+      const e = last;
+      if (!e || reduced()) return;
+      const t = e.target as Element | null;
+      /* The dock: only where the bar is a row of icons with words (720px
+         and up); on a phone the bar is under a thumb, not a mouse. */
+      const nb = window.innerWidth >= 720 ? (t?.closest?.<HTMLElement>(".tabbar") ?? null) : null;
+      if (nb !== bar) {
+        dropBar();
+        if (nb) {
+          bar = nb;
+          const left = nb.getBoundingClientRect().left;
+          icons = [...nb.querySelectorAll<HTMLElement>(".tab-ico")].map((el) => {
+            const r = el.getBoundingClientRect();
+            return { el, x: r.left + r.width / 2 - left };
+          });
+        }
+      }
+      if (bar) {
+        const left = bar.getBoundingClientRect().left;
+        for (const i of icons) {
+          const d = Math.abs(e.clientX - (left + i.x));
+          const s = 1 + 0.3 * Math.max(0, 1 - d / 130) ** 2;
+          i.el.style.transform = s > 1.002 ? `translateY(${(-(s - 1) * 5).toFixed(2)}px) scale(${s.toFixed(3)})` : "";
+        }
+      }
+      const nt = t?.closest?.<HTMLElement>("[data-tilt]") ?? null;
+      if (nt !== tilted) dropTilt();
+      tilted = nt;
+      if (nt) {
+        const r = nt.getBoundingClientRect();
+        const px = Math.max(-0.5, Math.min(0.5, (e.clientX - r.left) / r.width - 0.5));
+        const py = Math.max(-0.5, Math.min(0.5, (e.clientY - r.top) / r.height - 0.5));
+        nt.style.setProperty("--ry", `${(px * 8).toFixed(2)}deg`);
+        nt.style.setProperty("--rx", `${(-py * 8).toFixed(2)}deg`);
+        nt.dataset.tilting = "true";
+      }
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      last = e;
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const onLeave = () => {
+      last = null;
+      dropBar();
+      dropTilt();
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    window.addEventListener(ROOM_EVENT, onLeave);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener(ROOM_EVENT, onLeave);
+      if (raf) cancelAnimationFrame(raf);
+      onLeave();
     };
   }, []);
 
@@ -331,7 +481,7 @@ export function Feedback() {
     let timer: ReturnType<typeof setTimeout> | null = null;
     const mo = new MutationObserver((records) => {
       /* Its own lights coming and going are not new cards. */
-      const fx = (n: Node) => n instanceof Element && n.matches(".fx-glow, .fx-ring, .fx-sweep, .fx-spot");
+      const fx = (n: Node) => n instanceof Element && n.matches(".fx-glow, .fx-ring, .fx-sweep, .fx-spot, .fx-sparkles, .fx-meteor");
       if (records.every((r) => [...r.addedNodes, ...r.removedNodes].every(fx))) return;
       if (timer) return;
       timer = setTimeout(() => {

@@ -178,5 +178,58 @@ console.log("7. zero em dashes anywhere a reader can see");
   ok(found.length === 0, `no em dash in the text of any of ${pages.length} pages${found.length ? ": " + found.join(", ") : ""}`);
 }
 
+console.log("8. the effects from the skills answer the person, and never fire on their own");
+{
+  const { ctx, p, errs } = await open({ viewport: { width: 1280, height: 800 } });
+  await p.waitForTimeout(2500);
+  ok(await p.locator(".fx-meteor, .fx-sparkles").count() === 0, "left alone, nothing streaks or sparkles");
+  /* Magnetic dock. */
+  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
+  await p.mouse.move(watch.x + 24, watch.y + watch.height / 2); await p.waitForTimeout(350);
+  const dock = await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].map((e) => Number((/scale\(([\d.]+)\)/.exec(e.style.transform) || [0, 1])[1])));
+  ok(dock[1] > 1.2 && dock[1] === Math.max(...dock) && dock[4] === 1, `the tab icon under the mouse swells most, far ones not at all (${dock.join(", ")})`);
+  await p.mouse.move(640, 600); await p.waitForTimeout(350);
+  ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => !e.style.transform)), "and they settle when the mouse leaves");
+  /* A shooting star, only from a tap on the sky. */
+  const sky = await p.locator(".sky").boundingBox();
+  await p.mouse.click(sky.x + sky.width * 0.8, sky.y + 40); await p.waitForTimeout(150);
+  ok(await p.locator(".fx-meteor").count() === 1, "a tap on the night sky sends one shooting star");
+  ok(await p.evaluate(() => getComputedStyle(document.querySelector(".fx-meteor > span")).animationName) === "fxMeteor", "which travels");
+  await p.waitForTimeout(1400);
+  ok(await p.locator(".fx-meteor").count() === 0, "and is gone after a second");
+  /* Tilt and the edge light on Watch. */
+  await tab(p, "Watch"); await p.waitForTimeout(900);
+  await p.locator("#watch-play").scrollIntoViewIfNeeded(); await p.waitForTimeout(500);
+  const poster = await p.locator(".play-poster").boundingBox();
+  await p.mouse.move(poster.x + poster.width * 0.9, poster.y + poster.height * 0.5); await p.waitForTimeout(250);
+  const ry = await p.evaluate(() => parseFloat(document.querySelector(".play-poster").style.getPropertyValue("--ry")));
+  ok(ry > 2 && ry <= 4, `the game's poster leans toward the mouse (${ry} degrees)`);
+  await p.mouse.move(poster.x + poster.width * 0.5, poster.y - 120); await p.waitForTimeout(250);
+  ok(await p.evaluate(() => document.querySelector(".play-poster").style.getPropertyValue("--ry") === ""), "and straightens when it leaves");
+  const orbit = await p.evaluate(() => { const o = document.querySelector(".play-cta .fx-orbit"); const cs = getComputedStyle(o); return { name: cs.animationName, n: cs.animationIterationCount, pe: cs.pointerEvents, dot: !!document.querySelector(".play-cta .play-dot") }; });
+  ok(orbit.name === "fxOrbitShow" && orbit.n === "1" && orbit.pe === "none", `the light round the Play button runs once when it arrives (${orbit.name} x${orbit.n})`);
+  ok(orbit.dot, "and the button carries its play dot inside (button in button)");
+  ok(errs.length === 0, "no page errors " + errs.join(" | "));
+  await ctx.close();
+}
+{
+  const { ctx, p } = await open({ viewport: { width: 1280, height: 800 }, reducedMotion: "reduce" });
+  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
+  await p.mouse.move(watch.x + 24, watch.y + watch.height / 2); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => getComputedStyle(e).transform === "none")), "reduced motion: the dock stays still");
+  const sky = await p.locator(".sky").boundingBox();
+  await p.mouse.click(sky.x + sky.width * 0.8, sky.y + 40); await p.waitForTimeout(100);
+  ok(await p.evaluate(() => getComputedStyle(document.querySelector(".fx-meteor > span")).animationName) === "fxFade", "and the shooting star glows in place instead of travelling");
+  await ctx.close();
+}
+{
+  const { ctx, p } = await open({ hasTouch: true, isMobile: true });
+  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
+  await p.touchscreen.tap(watch.x + 20, watch.y + 10).catch(() => {});
+  await p.waitForTimeout(300);
+  ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => !e.style.transform)), "on a phone the tab bar does not swell (it is under a thumb, not a mouse)");
+  await ctx.close();
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 await b.close();

@@ -161,7 +161,9 @@ export function HavenShell({
             onFocus={() => preloadRoom(id)}
             onClick={() => goTo(id)}
           >
-            <Icon />
+            <span className="tab-ico" aria-hidden="true">
+              <Icon />
+            </span>
             <span>{label}</span>
           </button>
         ))}

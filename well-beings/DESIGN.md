@@ -98,6 +98,19 @@ move; nothing fades text. Under reduced motion nothing moves, but the
 lights stay, fading in place. The sky, its glow and the opening sunrise
 are the slow atmosphere; they never move anything someone is reading.
 
+From the skills (October 2026), each house-safe: a light that runs once
+round the edge of the big sun buttons when they arrive and while a mouse
+or the keyboard is on them (Moving Border); words that rise out of a slot
+on the game's title and its last card, at full contrast the whole way
+(Text Generate, without the fade); eight stars out of a button when
+something is kept (Sparkles, one burst); a shooting star when someone
+taps the night sky on Here, only then (Meteors); the tab bar's icons
+swelling toward a mouse on a desktop (Magnetic Dock); the game's poster
+leaning toward a mouse (3D Card); numbers that count up once on the
+game's last card (Number Ticker); a double bezel round that card and a
+play dot nested in the game's sun button (high-end-visual-design). Under
+reduced motion the lights fade in place and nothing travels.
+
 ## The game
 Scoops & Snowballs (components/game, lib/game) is a comic world inside
 Arun: Ooh's ink (#2A1636, about 2.2 units thick) round every character
@@ -109,6 +122,18 @@ midnight, never toward black (mixed toward black, the yellow roofs came
 out olive). Its type is Fredoka for names and pop-up words, Karla for
 everything else. Its bars, chips and buttons keep the house contrast
 floor; the ratios are in the CSS.
+
+Version 2 gives each street its own paint and furniture (blossom on
+Cherry Lane, murals, marquee bulbs and searchlights on Broadway, flower
+beds, paper lanterns, market carts, a boardwalk; cobbles and café lights
+on Bleecker, rainbow crossings, sprinklers, autumn leaves) and a green
+street sign at every crossing (cream on #27774E, 5.05:1). A third sky,
+sunset, sits between day and night. The bars: green to sun to peach as
+they fall, the rival's pink, a pale chip for what was just lost, quarter
+marks, a slow beat of light when low. A state on you (bubbled, pie face,
+chilly) is a berry chip (cream on #9C2F6B, 6.38:1); where you are is a
+green sign that slides down from under the bars (cream on #1F6B4F,
+5.91:1).
 
 ## Do and don't
 - Do measure every new colour pair and write the ratio in the CSS.

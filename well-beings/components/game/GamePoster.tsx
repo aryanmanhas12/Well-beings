@@ -50,5 +50,5 @@ export function GamePoster() {
     ro.observe(c);
     return () => ro.disconnect();
   }, []);
-  return <canvas ref={ref} className="play-poster" aria-hidden="true" />;
+  return <canvas ref={ref} className="play-poster" aria-hidden="true" data-tilt="" />;
 }

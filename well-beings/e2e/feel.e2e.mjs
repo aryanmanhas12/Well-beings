@@ -261,8 +261,12 @@ console.log("3. feedback you can see");
   await p.keyboard.press("Escape");
   await p.locator(".tabbar button", { hasText: "Watch" }).click();
   ok(await p.evaluate(() => document.querySelector(".fx-sweep")?.className) === "fx-sweep still", "a room change is a soft wash of light, not a sweep");
+  /* Watch is its own part: wait for it to be there, or the scroll lands
+     on a page still too short to reach 1400 (on a slow day, the same
+     check failed against the live build too). */
+  await p.locator("#watch-play").waitFor({ timeout: 6000 }).catch(() => {});
   await p.evaluate(() => window.scrollTo(0, 1400));
-  await p.waitForTimeout(250);
+  await p.waitForFunction(() => !!document.querySelector(".fx-glow"), null, { timeout: 1500 }).catch(() => {});
   ok(await p.evaluate(() => { const g = document.querySelector(".fx-glow"); return !!g && !g.classList.contains("gliding"); }), "and cards still light up as they arrive, in place");
   await ctx.close();
 }

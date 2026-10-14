@@ -91,9 +91,30 @@ it and "Help now" is in its own bar, opening the urgent screen over it;
 it keeps nothing (no scores, no streaks, no "come back tomorrow"); the
 words stay gentle (splat, giggle, make up); it is rendered into the body
 through a portal, because a room's slide-in transform otherwise traps a
-fixed layer inside the room. Measured at 390x844: 60 fps steady; slowed
-4x in a container with no GPU, 27 to 30 fps, of which the game's own work
-is about 4.5 ms a frame.
+fixed layer inside the room.
+Version 2 (October 2026, at the owner's request: "make each path
+unique", armies, better and more accurate bars, new effects). Every
+avenue and street has a name, a look and a rule (`AVENUES`, `STREETS` in
+the engine): Market Row has carts to hide behind and more treats,
+Broadway charges the special faster, Lantern Avenue slows bubbles, the
+breeze on Harbor Walk pushes throws south, Sprinkler Street washes a
+splat off (+3), Rainbow Street makes a dash last, Bleecker has café
+tables; a green sign names the street as you turn into it. New treats:
+cream pies, water balloons (lobbed, they splash), a bubble wand, big
+paws, and "Call the army", six pups or kittens in party hats who help for
+twelve seconds and wave goodbye. The bars are exact: whole points out of
+100, the number beside each bar is the rules' own, every splat floats
+its number ("-5"), what was just lost shows as a pale chip that drains,
+quarter marks, and a slim bar over each leader's head. The rules run in
+fixed 1/60 s steps with the drawing interpolated between them; a phone
+that falls behind catches up in 1/30 s steps and, after a second and a
+half under 30 fps, draws the canvas at 1x (dynamic resolution). A grid
+over the city's solids made the rules 2.7x cheaper (0.35 to 0.13 ms a
+step in Node), and city tiles reuse evicted canvases. Measured at
+390x844: 58 fps day and night (the same as v1 on this machine); slowed
+4x in a container with no GPU, day 22, sunset 16 to 19, night 18 fps,
+against v1's 19.6 and 15.0 on the same machine that day. The camera
+keeps the player between the bars and the buttons (`setInsets`).
 
 **The opening sunrise** is permanent, at the owner's request: it plays
 every time Arun is opened, with a new line each time (`lib/introLines.ts`,
@@ -224,6 +245,13 @@ repeats faster than once a second. The global reduced-motion rule exempts
 them explicitly, as it does the breathing pacer. "Vibration" and "Sounds"
 turn their parts off. A helpline link and the urgent screen are silent
 and still, and Ooh does not talk over an open screen.
+In October 2026 the owner asked for the effects in every skill to be
+used; they are listed in `DESIGN.md` (Motion) and follow the same rule:
+the edge light on a sun button runs once when it arrives, then only
+under a mouse or the keyboard; the shooting star in Here's sky comes
+only from a tap on the sky; sparkles only for something kept; the dock
+and the tilt only for a mouse, never under reduced motion. Nothing loops
+on its own to get attention, and none of it is on the crisis parts.
 
 **Loaded in parts, never the safety parts.** The wellbeing check, its
 results, the Watch and Hope rooms and the daily plan are their own files

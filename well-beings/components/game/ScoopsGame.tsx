@@ -1,19 +1,25 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
+  ARMY_NAMES,
   CAST,
   LEADER,
+  POWER_HINTS,
   POWER_NAMES,
   SPECIAL_NAMES,
+  PLACE_COUNT,
   badges,
+  clearLine,
   emptyInput,
   newGame,
   playerOf,
   rivalOf,
+  solidAt,
   update,
   type Ammo,
+  type Actor,
   type Game,
   type GameEvent,
   type Look,
@@ -45,20 +51,35 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
  *
  * The rules live in lib/game/engine.ts, the drawing in lib/game/render.ts.
  * This file is the screen round them: the choices, the controls, the bars,
- * the sounds and the card at the end. Bars and timers are written straight
- * to the page once a frame, never through React state.
+ * the sounds and the card at the end.
+ *
+ * SMOOTH. The rules move in fixed steps of 1/60 s, however fast the screen
+ * refreshes, and the drawing goes between steps (`alpha`): on a 120 Hz
+ * phone every other frame is drawn halfway between two steps, and an
+ * uneven frame no longer makes anyone jump. Bars and timers are written
+ * straight to the page once a frame, never through React state; the few
+ * things React does draw (the power-up chips) change at most four times a
+ * second.
+ *
+ * EXACT. The big bars show the rules' own number, whole points out of 100,
+ * the instant it changes: no easing on the bar itself. What was just lost
+ * shows behind it in pink for half a second, then drains away, so a splat
+ * can be read at a glance, and every splat also puts its number ("-5") in
+ * the city over whoever took it.
  */
 
-type SkyChoice = "clock" | "day" | "night";
+type SkyChoice = "clock" | Sky;
 const TEAM_COPY: Record<Team, { title: string; who: string }> = {
   dog: { title: "Team Dog", who: "Biscuit, with Pip and Bao" },
   cat: { title: "Team Cat", who: "Miso, with Inky and Mochi" },
 };
+const STEP = 1 / 60;
 
 function skyFor(choice: SkyChoice): Sky {
   if (choice !== "clock") return choice;
   const h = new Date().getHours();
-  return h >= 6 && h < 18 ? "day" : "night";
+  if (h >= 17 && h < 19) return "sunset";
+  return h >= 6 && h < 17 ? "day" : "night";
 }
 
 /** Small portraits for the bars and the team choice. */
@@ -82,33 +103,57 @@ function Portrait({ looks, size, face = 1 }: { looks: Look[]; size: number; face
       const y = size * (looks.length > 1 && i > 0 ? 0.95 : 0.98);
       ctx.translate(x - 4 * s * face, y);
       ctx.scale(s * (i > 0 ? 0.8 : 1), s * (i > 0 ? 0.8 : 1));
-      drawCritter(ctx, look, { t: 1 + i, walk: 0, moving: false, face: i === 2 ? -face : face, hitT: 0, throwT: 0, sit: false, stains: [], happy: false, hold: false, hop: 0, chilly: false, scale: 1, seed: i });
+      drawCritter(ctx, look, {
+        t: 1 + i,
+        walk: 0,
+        moving: false,
+        face: i === 2 ? -face : face,
+        hitT: 0,
+        throwT: 0,
+        sit: false,
+        stains: [],
+        happy: false,
+        hold: false,
+        hop: 0,
+        chilly: false,
+        scale: 1,
+        seed: i,
+      });
       ctx.restore();
     });
   }, [key, size, face]);
   return <canvas ref={ref} aria-hidden="true" style={{ width: size * (looks.length > 1 ? 2.2 : 1), height: size }} />;
 }
 
-function PowerChip({ kind }: { kind: PowerKind }) {
+function PowerChip({ kind, size = 22 }: { kind: PowerKind; size?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    c.width = 22 * dpr;
-    c.height = 22 * dpr;
+    c.width = size * dpr;
+    c.height = size * dpr;
     const ctx = c.getContext("2d")!;
-    ctx.scale(dpr * 0.7, dpr * 0.7);
-    ctx.translate(15.7, 17);
+    const s = size / 32;
+    ctx.scale(dpr * s, dpr * s);
+    ctx.translate(16, 19);
     drawPowerIcon(ctx, kind, 0);
-  }, [kind]);
-  return <canvas ref={ref} aria-hidden="true" style={{ width: 22, height: 22 }} />;
+  }, [kind, size]);
+  return <canvas ref={ref} aria-hidden="true" style={{ width: size, height: size }} />;
+}
+
+interface Chip {
+  kind: PowerKind | "trapped" | "pied" | "chilly";
+  label: string;
 }
 
 interface Hud {
   ammo: Ammo;
+  pack: { kind: PowerKind; n: number } | null;
   ready: boolean;
-  powers: { kind: PowerKind; left: string }[];
+  chips: Chip[];
+  pals: number;
+  army: number;
 }
 
 interface Card {
@@ -118,8 +163,19 @@ interface Card {
   hits: number;
   treats: number;
   pals: number;
+  dealt: number;
+  taken: number;
+  places: number;
   badges: string[];
 }
+
+/** One big bar, kept between frames: what it shows and the pink chip. */
+interface BarState {
+  hp: number;
+  chip: number;
+  hold: number;
+}
+
 
 export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openUrgent: () => void }) {
   const reduced = useReducedMotion();
@@ -130,11 +186,23 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
   const [round, setRound] = useState(0);
   const [paused, setPaused] = useState(false);
   const [card, setCard] = useState<Card | null>(null);
-  const [hud, setHud] = useState<Hud>({ ammo: "scoop", ready: false, powers: [] });
+  const [hud, setHud] = useState<Hud>({
+    ammo: "scoop",
+    pack: null,
+    ready: false,
+    chips: [],
+    pals: 0,
+    army: 0,
+  });
   const [say, setSay] = useState("");
-  /* Only ever rendered after a tap on Play, so the window is there. */
+  const [place, setPlace] = useState<{
+    name: string;
+    blurb: string;
+    n: number;
+  } | null>(null);
   /* The round is over (someone is splatted out): the controls go away. */
   const [over, setOver] = useState(false);
+  /* Only ever rendered after a tap on Play, so the window is there. */
   const [touch] = useState(() => typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse)").matches);
   const [top, setTop] = useState(0);
 
@@ -144,13 +212,31 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
   const rendRef = useRef<Renderer | null>(null);
   const input = useRef(emptyInput());
   const keys = useRef(new Set<string>());
-  const stick = useRef<{ id: number; ox: number; oy: number; x: number; y: number } | null>(null);
+  const stick = useRef<{
+    id: number;
+    ox: number;
+    oy: number;
+    x: number;
+    y: number;
+  } | null>(null);
   const pausedRef = useRef(false);
-  const meBar = useRef<HTMLSpanElement>(null);
-  const rivalBar = useRef<HTMLSpanElement>(null);
-  const meBarLabel = useRef<HTMLSpanElement>(null);
-  const rivalBarLabel = useRef<HTMLSpanElement>(null);
+  const bars = useRef<
+    Record<
+      "me" | "rival",
+      {
+        wrap: HTMLDivElement | null;
+        track: HTMLSpanElement | null;
+        fill: HTMLSpanElement | null;
+        chip: HTMLSpanElement | null;
+        num: HTMLElement | null;
+      }
+    >
+  >({
+    me: { wrap: null, track: null, fill: null, chip: null, num: null },
+    rival: { wrap: null, track: null, fill: null, chip: null, num: null },
+  });
   const specialBtn = useRef<HTMLButtonElement>(null);
+  const comboRef = useRef<HTMLDivElement>(null);
   const toast = useRef<HTMLDivElement>(null);
   const knob = useRef<HTMLDivElement>(null);
   const base = useRef<HTMLDivElement>(null);
@@ -174,13 +260,14 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
     };
   }, []);
 
-  const showToast = useCallback((text: string) => {
+  const showToast = useCallback((text: string, big = false) => {
     const el = toast.current;
     if (!el) return;
     el.textContent = text;
-    el.classList.remove("is-on");
+    el.classList.remove("is-on", "is-big");
     void el.offsetWidth;
     el.classList.add("is-on");
+    if (big) el.classList.add("is-big");
   }, []);
 
   /* ── the title card: the skyline, with the two of them mid-throw ── */
@@ -206,6 +293,13 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
         const s = sky.getContext("2d")!;
         s.scale(dpr, dpr);
         drawSkyline(s, w, h, night, 0);
+        if (skyFor(skyChoice) === "sunset") {
+          /* Sunset: the day's skyline, washed in peach. */
+          s.globalCompositeOperation = "multiply";
+          s.fillStyle = "#FFB89A";
+          s.fillRect(0, 0, w, h);
+          s.globalCompositeOperation = "source-over";
+        }
       }
       const ctx = c.getContext("2d")!;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -217,15 +311,36 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
       const lx = w * 0.18;
       const rx = w * 0.82;
       const loop = (t % 2.4) / 2.4;
-      for (const [x, look, face] of [[lx, "biscuit", 1], [rx, "miso", -1]] as [number, Look, number][]) {
+      for (const [x, look, face] of [
+        [lx, "biscuit", 1],
+        [rx, "miso", -1],
+      ] as [number, Look, number][]) {
         ctx.save();
         ctx.translate(x, gy);
         ctx.scale(sc, sc);
-        drawCritter(ctx, look, { t, walk: 0, moving: false, face, hitT: 0, throwT: (look === "biscuit" ? loop < 0.12 : loop > 0.5 && loop < 0.62) ? 0.14 : 0, sit: false, stains: [], happy: false, hold: false, hop: 0, chilly: false, scale: 1, seed: face });
+        drawCritter(ctx, look, {
+          t,
+          walk: 0,
+          moving: false,
+          face,
+          hitT: 0,
+          throwT: (look === "biscuit" ? loop < 0.12 : loop > 0.5 && loop < 0.62) ? 0.14 : 0,
+          sit: false,
+          stains: [],
+          happy: false,
+          hold: false,
+          hop: 0,
+          chilly: false,
+          scale: 1,
+          seed: face,
+        });
         ctx.restore();
       }
       /* A cone flies right, a snowball flies left, forever, gently. */
-      const arc = (k: number, a: number, b: number) => ({ x: a + (b - a) * k, y: gy - 30 * sc - Math.sin(k * Math.PI) * h * 0.18 });
+      const arc = (k: number, a: number, b: number) => ({
+        x: a + (b - a) * k,
+        y: gy - 30 * sc - Math.sin(k * Math.PI) * h * 0.18,
+      });
       const k1 = Math.min(1, loop / 0.5);
       const k2 = Math.max(0, Math.min(1, (loop - 0.5) / 0.5));
       if (loop < 0.5) {
@@ -263,10 +378,11 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
     if (!c) return;
     const sky = skyFor(skyChoice);
     /* The music follows the game's sky: the morning or day version under
-       the sun, the night version under the snow. */
-    setMusicMood(sky === "night" ? "night" : moodForHour(new Date().getHours()) === "night" ? "day" : moodForHour(new Date().getHours()));
+       the sun and at sunset, the night version under the snow. */
+    const hourMood = moodForHour(new Date().getHours());
+    setMusicMood(sky === "night" ? "night" : hourMood === "night" ? "day" : hourMood);
     const g = newGame({ team, sky, pace, reduced });
-    const r = new Renderer(c, sky === "night", reduced);
+    const r = new Renderer(c, sky, reduced);
     r.setCity(g);
     const cs = getComputedStyle(document.documentElement);
     r.font = cs.getPropertyValue("--font-display").trim() || r.font;
@@ -275,7 +391,12 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
     /* The end-to-end tests (and only they, by the same session flag that
        skips the sunrise) reach the game's state to skip to the ending. */
     try {
-      if (sessionStorage.getItem("arun-intro-session") === "e2e") Object.assign(window, { __scoops: g, __scoopsTime: { update: [] as number[], draw: [] as number[] } });
+      if (sessionStorage.getItem("arun-intro-session") === "e2e")
+        Object.assign(window, {
+          __scoops: g,
+          __scoopsKit: { clearLine, solidAt },
+          __scoopsTime: { update: [] as number[], draw: [] as number[] },
+        });
     } catch {
       // No session storage: no hook.
     }
@@ -283,9 +404,13 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
     setCard(null);
     setPaused(false);
     setOver(false);
+    setPlace(null);
     const fit = () => {
       const rect = c.getBoundingClientRect();
       r.resize(rect.width, rect.height, window.devicePixelRatio || 1);
+      const bars = root.current?.querySelector(".game-top")?.getBoundingClientRect();
+      const pad = root.current?.querySelector(".game-pad")?.getBoundingClientRect();
+      r.setInsets(bars ? bars.bottom - rect.top : 0, pad ? rect.bottom - pad.top : 0);
     };
     fit();
     const ro = new ResizeObserver(fit);
@@ -293,11 +418,25 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
 
     let raf = 0;
     let last = performance.now();
+    let acc = 0;
+    let slowT = 0;
     let hudT = 0;
     let shown = false;
+    let placeN = 0;
     const pads = { a: false, b: false, x: false, start: false };
     const me = playerOf(g);
     const rival = rivalOf(g);
+    const shownBars: Record<"me" | "rival", BarState> = {
+      me: { hp: me.hp, chip: me.hp, hold: 0 },
+      rival: { hp: rival.hp, chip: rival.hp, hold: 0 },
+    };
+
+    const restart = (el: Element | null, cls: string) => {
+      if (!el) return;
+      el.classList.remove(cls);
+      void (el as HTMLElement).offsetWidth;
+      el.classList.add(cls);
+    };
 
     const onEvent = (e: GameEvent) => {
       switch (e.k) {
@@ -315,23 +454,41 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
           break;
         case "hit":
           if (e.onPlayer) {
-            sound("gotHit");
+            sound(e.ammo === "pie" ? "scoop" : e.ammo === "bubble" ? "bubble" : "gotHit", e.ammo === "pie" ? 0.7 : 1);
             tick("light");
           } else if (e.byPlayer) {
-            sound(e.ammo === "mega" ? "mega" : e.ammo === "snow" ? "snow" : "scoop", 1 + Math.min(4, e.combo - 1) * 0.08);
+            sound(
+              e.ammo === "mega" ? "mega" : e.ammo === "snow" ? "snow" : e.ammo === "bubble" ? "bubble" : e.ammo === "balloon" ? "mega" : "scoop",
+              1 + Math.min(4, e.combo - 1) * 0.08,
+            );
             tick("soft");
           }
           break;
+        case "heal":
+          if (e.player && e.amount > 0) {
+            sound("heal");
+            restart(bars.current.me.wrap, "is-heal");
+            if (e.why === "sprinkler") setSay(`Fresh. Plus ${e.amount}, your bar is at ${e.hp}.`);
+          }
+          break;
         case "wall":
-          if (e.near) sound("wall", e.ammo === "scoop" ? 1 : 1.3);
+          if (e.near) sound(e.ammo === "balloon" ? "mega" : "wall", e.ammo === "scoop" ? 1 : 1.3);
           break;
         case "pickup":
           if (e.player) {
             sound("pickup");
             tick("success");
-            showToast(`${POWER_NAMES[e.kind]}!`);
-            setSay(`${POWER_NAMES[e.kind]}.`);
+            /* The army has its own, bigger call (the "army" event). */
+            if (e.kind !== "army") showToast(`${POWER_NAMES[e.kind]}!`);
+            setSay(`${POWER_NAMES[e.kind]}. ${POWER_HINTS[e.kind]}`);
           }
+          break;
+        case "army":
+          sound("fanfare");
+          r.kick(0.06);
+          if (e.player) tick("success");
+          showToast(`${ARMY_NAMES[e.team]} is here!`, true);
+          setSay(e.player ? `${ARMY_NAMES[e.team]} came to help: ${e.n} friends, for twelve seconds.` : `${ARMY_NAMES[e.team]} came to help ${rival.name}.`);
           break;
         case "recruit":
           sound(team === "dog" ? (e.player ? "woof" : "mew") : e.player ? "mew" : "woof");
@@ -346,34 +503,76 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
           break;
         case "special":
           sound("special");
+          r.kick(0.07);
           if (e.player) tick("success");
-          showToast(`${SPECIAL_NAMES[e.team]}!`);
+          showToast(`${SPECIAL_NAMES[e.team]}!`, true);
           setSay(`${e.player ? "Your" : `${rival.name}'s`} ${SPECIAL_NAMES[e.team]}.`);
           break;
+        case "pied":
+          tick("select");
+          setSay("Pie face! It will slide off in a moment.");
+          break;
+        case "trapped":
+          if (e.player) setSay("You're in a bubble. It pops in a second.");
+          break;
+        case "stomp":
+          sound("stomp");
+          break;
+        case "place":
+          placeN++;
+          setPlace({ name: e.path.name, blurb: e.path.blurb, n: placeN });
+          if (placeN > 1) sound("place");
+          setSay(`${e.path.name}. ${e.path.blurb}`);
+          break;
         case "low":
-          setSay(e.player ? "Your bar is getting low. A cupcake would help." : `${e.name} is nearly all splatted out.`);
+          setSay(e.player ? "Your bar is getting low. A cupcake or the sprinklers would help." : `${e.name} is nearly all splatted out.`);
           break;
         case "honk":
           if (e.near) sound("honk");
           break;
+        case "firework":
+          sound("firework");
+          break;
         case "out":
           setOver(true);
           sound("out");
-          showToast(`${e.name} is all splatted out!`);
+          showToast(`${e.name} is all splatted out!`, true);
           setSay(`${e.name} is all splatted out. Nobody gets hurt. Watch what happens next.`);
           break;
         case "hands":
           sound("hands");
           tick("success");
-          showToast("Friends again");
+          showToast("Friends again", true);
           setSay("They're holding hands. Friends again.");
           for (let i = 0; i < 8; i++) setTimeout(() => sound("pop", 1 + i * 0.08), 500 + i * 160);
           break;
       }
     };
 
+    /** One big bar: the exact number, the pink chip of what was just lost. */
+    const paintBar = (who: "me" | "rival", a: Actor, dt: number) => {
+      const s = shownBars[who];
+      const el = bars.current[who];
+      if (a.hp < s.hp) {
+        s.hold = 0.5;
+        restart(el.wrap, "is-hit");
+      }
+      if (a.hp > s.chip) s.chip = a.hp;
+      if (s.hold > 0) s.hold -= dt;
+      else if (s.chip > a.hp) s.chip = Math.max(a.hp, s.chip - dt * 45);
+      if (a.hp !== s.hp) {
+        if (el.num) el.num.textContent = String(a.hp);
+        el.track?.setAttribute("aria-valuenow", String(a.hp));
+        el.wrap?.classList.toggle("is-low", a.hp <= 30);
+        el.wrap?.classList.toggle("is-mid", a.hp > 30 && a.hp <= 60);
+        s.hp = a.hp;
+      }
+      if (el.fill) el.fill.style.transform = `scaleX(${a.hp / a.maxHp})`;
+      if (el.chip) el.chip.style.transform = `scaleX(${s.chip / a.maxHp})`;
+    };
+
     const loop = (now: number) => {
-      const dt = Math.min(0.05, (now - last) / 1000);
+      const frame = Math.min(0.1, (now - last) / 1000);
       last = now;
       const inp = input.current;
       /* Keys and the on-screen stick become one movement. */
@@ -393,7 +592,8 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
         const dx = st.x - st.ox;
         const dy = st.y - st.oy;
         const len = Math.hypot(dx, dy);
-        const m = Math.min(1, len / 46);
+        /* A soft start: small pushes walk, a full push runs. */
+        const m = Math.min(1, Math.max(0, (len - 6) / 40)) ** 0.8;
         if (len > 6) {
           mx = (dx / len) * m;
           my = (dy / len) * m;
@@ -421,15 +621,45 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
       }
       inp.mx = mx;
       inp.my = my;
-      const timing = (window as unknown as { __scoopsTime?: { update: number[]; draw: number[] } }).__scoopsTime;
+      const timing = (
+        window as unknown as {
+          __scoopsTime?: { update: number[]; draw: number[]; low?: boolean };
+        }
+      ).__scoopsTime;
+      /* Dynamic resolution: after about a second and a half of frames
+         slower than 30 a second (not counting the first second, when the
+         city's tiles are being painted), the canvas drops to 1x for the
+         rest of the round. Measured on a 4x-slowed phone with no GPU: 15
+         frames a second at 1.5x, see AGENTS.md for the number after. */
+      if (!pausedRef.current && !document.hidden && g.t > 1 && !r.lowRes) {
+        slowT = frame > 1 / 34 ? slowT + frame : Math.max(0, slowT - frame * 0.5);
+        if (slowT > 1.5) {
+          r.setLowRes(true);
+          if (timing) timing.low = true;
+        }
+      }
       const t0 = timing ? performance.now() : 0;
+      /* The rules, in fixed steps; at most five a frame, so a long pause
+         (a slow phone, a tab coming back) never fast-forwards the game.
+         A phone that has fallen three steps behind catches up in double
+         steps (1/30 s, the most the rules take at once): at 15 fps that
+         is two steps a frame instead of four, and the rules' share of a
+         4x-slowed frame halved. At 60 fps nothing changes. */
       if (!pausedRef.current) {
-        update(g, dt, inp);
+        acc += frame;
+        let n = 0;
+        while (acc >= STEP && n < 5) {
+          const h = acc >= STEP * 3 ? STEP * 2 : STEP;
+          update(g, h, inp);
+          acc -= h;
+          n++;
+        }
+        if (n === 5) acc = 0;
+        if (n > 0) inp.aim = null;
         if (gp && !gp.buttons[0]?.pressed && !keys.current.has(" ")) inp.holdFire = false;
       }
-      inp.aim = null;
       const t1 = timing ? performance.now() : 0;
-      r.draw(g, pausedRef.current ? 0 : dt);
+      r.draw(g, pausedRef.current ? 0 : frame, pausedRef.current ? 1 : acc / STEP);
       if (timing && timing.draw.length < 2000) {
         timing.update.push(t1 - t0);
         timing.draw.push(performance.now() - t1);
@@ -438,30 +668,63 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
       g.events.length = 0;
 
       /* The bars, written straight to the page. */
-      const mp = Math.max(0, me.hp / me.maxHp);
-      const rp = Math.max(0, rival.hp / rival.maxHp);
-      if (meBar.current) meBar.current.style.transform = `scaleX(${mp})`;
-      if (rivalBar.current) rivalBar.current.style.transform = `scaleX(${rp})`;
-      specialBtn.current?.style.setProperty("--charge", String(me.special));
-      hudT -= dt;
+      paintBar("me", me, pausedRef.current ? 0 : frame);
+      paintBar("rival", rival, pausedRef.current ? 0 : frame);
+      specialBtn.current?.style.setProperty("--charge", me.special.toFixed(3));
+      /* The combo meter: its ring is the time left to keep it going. */
+      const cb = comboRef.current;
+      if (cb) {
+        const left = 2.6 - (g.t - me.lastHitT);
+        const on = me.combo >= 2 && left > 0 && g.phase === "play";
+        cb.dataset.on = on ? "true" : "false";
+        if (on) {
+          cb.style.setProperty("--left", (left / 2.6).toFixed(3));
+          const b = cb.firstElementChild as HTMLElement | null;
+          if (b && b.textContent !== `x${me.combo}`) b.textContent = `x${me.combo}`;
+        }
+      }
+      hudT -= frame;
       if (hudT <= 0) {
         hudT = 0.25;
-        if (meBarLabel.current) meBarLabel.current.textContent = `${Math.ceil(mp * 100)}`;
-        if (rivalBarLabel.current) rivalBarLabel.current.textContent = `${Math.ceil(rp * 100)}`;
-        const powers: Hud["powers"] = [];
-        if (me.triple > 0) powers.push({ kind: "triple", left: `×${me.triple}` });
-        if (me.mega > 0) powers.push({ kind: "mega", left: `×${me.mega}` });
-        if (me.dash > 0) powers.push({ kind: "dash", left: `${Math.ceil(me.dash)}s` });
-        if (me.shield > 0) powers.push({ kind: "umbrella", left: `${Math.ceil(me.shield)}s` });
+        const chips: Chip[] = [];
+        if (me.triple > 0) chips.push({ kind: "triple", label: `×${me.triple}` });
+        if (me.dash > 0) chips.push({ kind: "dash", label: `${Math.ceil(me.dash)}s` });
+        if (me.shield > 0) chips.push({ kind: "umbrella", label: `${Math.ceil(me.shield)}s` });
+        if (me.giant > 0) chips.push({ kind: "giant", label: `${Math.ceil(me.giant)}s` });
+        if (me.trapped > 0) chips.push({ kind: "trapped", label: "Bubbled" });
+        if (me.pied > 0) chips.push({ kind: "pied", label: "Pie face" });
+        if (me.slow > 0) chips.push({ kind: "chilly", label: "Chilly" });
+        const army = g.actors.filter((a) => a.minion && a.team === me.team && !a.leaving).length;
+        const pals = g.actors.filter((a) => !a.leader && !a.minion && a.team === me.team && a.found).length;
+        const pack = me.pack ? { kind: me.pack.kind as PowerKind, n: me.pack.n } : null;
         setHud((h) => {
           const ready = me.special >= 1;
-          const same = h.ammo === me.ammo && h.ready === ready && h.powers.length === powers.length && h.powers.every((p, i) => p.kind === powers[i].kind && p.left === powers[i].left);
-          return same ? h : { ammo: me.ammo, ready, powers };
+          const same =
+            h.ammo === me.ammo &&
+            h.ready === ready &&
+            h.pals === pals &&
+            h.army === army &&
+            h.pack?.kind === pack?.kind &&
+            h.pack?.n === pack?.n &&
+            h.chips.length === chips.length &&
+            h.chips.every((p, i) => p.kind === chips[i].kind && p.label === chips[i].label);
+          return same ? h : { ammo: me.ammo, pack, ready, chips, pals, army };
         });
       }
       if (g.phase === "done" && !shown) {
         shown = true;
-        setCard({ won: g.winner === g.playerTeam, rival: rival.name, me: me.name, hits: g.stats.hits, treats: g.stats.treats, pals: g.stats.pals, badges: badges(g) });
+        setCard({
+          won: g.winner === g.playerTeam,
+          rival: rival.name,
+          me: me.name,
+          hits: g.stats.hits,
+          treats: g.stats.treats,
+          pals: g.stats.pals,
+          dealt: g.stats.dealt,
+          taken: g.stats.taken,
+          places: g.stats.places.length,
+          badges: badges(g),
+        });
       }
       raf = requestAnimationFrame(loop);
     };
@@ -599,24 +862,67 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
   const rivalTeam: Team = team === "dog" ? "cat" : "dog";
   const rival = CAST[LEADER[rivalTeam]];
 
+  const bar = (who: "me" | "rival", name: string, look: Look, face: number) => (
+    <div
+      className={`game-bar ${who === "me" ? "is-me" : "is-rival"}`}
+      ref={(el) => {
+        bars.current[who].wrap = el;
+      }}
+    >
+      <Portrait looks={[look]} size={30} face={face} />
+      <span className="game-bar-name">{name}</span>
+      <span className="game-num">
+        <b
+          ref={(el) => {
+            bars.current[who].num = el;
+          }}
+        >
+          100
+        </b>
+        <small>/100</small>
+      </span>
+      <span
+        className="game-track"
+        role="meter"
+        aria-label={`${name}'s bar`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={100}
+        ref={(el) => {
+          bars.current[who].track = el;
+        }}
+      >
+        <span
+          className="game-chipfill"
+          ref={(el) => {
+            bars.current[who].chip = el;
+          }}
+        />
+        <span
+          className="game-fill"
+          ref={(el) => {
+            bars.current[who].fill = el;
+          }}
+        />
+        <span className="game-ticks" aria-hidden="true" />
+      </span>
+    </div>
+  );
+
   /* Into the body, not the room: a room slides in on a transform, and a
      transform makes a fixed layer fixed to the room instead of the screen
      (the first build showed the game boxed inside the Watch column). */
   return createPortal(
-    <div
-      className={`game${screen === "play" ? " is-playing" : ""}`}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Scoops and Snowballs"
-      ref={root}
-      tabIndex={-1}
-      style={{ top }}
-    >
+    <div className={`game${screen === "play" ? " is-playing" : ""}`} role="dialog" aria-modal="true" aria-label="Scoops and Snowballs" ref={root} tabIndex={-1} style={{ top }}>
       <canvas
         ref={canvas}
         className="game-canvas"
         role="img"
-        aria-label={screen === "menu" ? "A city skyline. A dog and a cat throw an ice cream and a snowball at each other." : `The city. ${me.name} and ${rival.name} are splatting each other with ice cream and snowballs.`}
+        aria-label={
+          screen === "menu"
+            ? "A city skyline. A dog and a cat throw an ice cream and a snowball at each other."
+            : `The city. ${me.name} and ${rival.name} are splatting each other with ice cream and snowballs.`
+        }
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -630,26 +936,8 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
         </button>
         {screen === "play" && (
           <div className="game-bars">
-            <div className="game-bar is-me">
-              <Portrait looks={[LEADER[team]]} size={30} />
-              <span className="game-bar-name">{me.name}</span>
-              <span className="game-track" role="img" aria-label={`${me.name}'s bar`}>
-                <span className="game-fill" ref={meBar} />
-              </span>
-              <span className="game-num" ref={meBarLabel}>
-                100
-              </span>
-            </div>
-            <div className="game-bar is-rival">
-              <Portrait looks={[LEADER[rivalTeam]]} size={30} face={-1} />
-              <span className="game-bar-name">{rival.name}</span>
-              <span className="game-track" role="img" aria-label={`${rival.name}'s bar`}>
-                <span className="game-fill" ref={rivalBar} />
-              </span>
-              <span className="game-num" ref={rivalBarLabel}>
-                100
-              </span>
-            </div>
+            {bar("me", me.name, LEADER[team], 1)}
+            {bar("rival", rival.name, LEADER[rivalTeam], -1)}
           </div>
         )}
         <div className="game-top-end">
@@ -664,28 +952,58 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
         </div>
       </div>
 
-      {screen === "play" && hud.powers.length > 0 && (
-        <ul className="game-powers" aria-label="Power-ups you have">
-          {hud.powers.map((p) => (
-            <li key={p.kind}>
-              <PowerChip kind={p.kind} />
-              <span>
-                {POWER_NAMES[p.kind]} {p.left}
+      {/* Gone once someone is splatted out: at the ending everybody comes
+          over, pals included, and the row lit up as if they had been found
+          in play while the card said "0 of 2 pals". */}
+      {screen === "play" && !over && (
+        <div className="game-side">
+          <p className="game-team-row">
+            <span className="sr-only">{`Pals found: ${hud.pals} of 2.${hud.army ? ` ${hud.army} friends from the army with you.` : ""}`}</span>
+            <span aria-hidden="true">Pals</span>
+            {[0, 1].map((i) => (
+              <span key={i} className={`game-paw${i < hud.pals ? " is-on" : ""}`} aria-hidden="true" />
+            ))}
+            {hud.army > 0 && (
+              <span className="game-army" aria-hidden="true">
+                +{hud.army}
               </span>
-            </li>
-          ))}
-        </ul>
+            )}
+          </p>
+          {hud.chips.length > 0 && (
+            <ul className="game-powers" aria-label="What's on you">
+              {hud.chips.map((p) => (
+                <li key={p.kind} className={p.kind === "trapped" || p.kind === "pied" || p.kind === "chilly" ? "is-state" : undefined}>
+                  {p.kind === "trapped" || p.kind === "pied" || p.kind === "chilly" ? <span className="game-state-dot" aria-hidden="true" /> : <PowerChip kind={p.kind} />}
+                  <span>{p.kind === "trapped" || p.kind === "pied" || p.kind === "chilly" ? p.label : `${POWER_NAMES[p.kind]} ${p.label}`}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {place && screen === "play" && (
+        <div className="game-place" key={place.n} aria-hidden="true">
+          <strong>{place.name}</strong>
+          <span>{place.blurb}</span>
+        </div>
       )}
 
       <div className="game-toast" ref={toast} aria-hidden="true" />
+      <div className="game-combo" ref={comboRef} data-on="false" aria-hidden="true">
+        <b>x2</b>
+        <span>combo</span>
+      </div>
       <p className="sr-only" aria-live="polite">
         {say}
       </p>
 
       {screen === "menu" && (
         <div className="game-menu">
-          <h2 className="game-title">Scoops &amp; Snowballs</h2>
-          <p className="game-sub">Dogs vs cats, all over the city. Nobody gets hurt, and everyone makes up in the end.</p>
+          <h2 className="game-title">
+            <RiseWords text="Scoops & Snowballs" />
+          </h2>
+          <p className="game-sub">Dogs vs cats, all over a city where every street is its own. Nobody gets hurt, and everyone makes up in the end.</p>
           <fieldset className="game-pick">
             <legend>Play as</legend>
             <div className="game-teams">
@@ -709,6 +1027,7 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
                   [
                     ["clock", "My clock"],
                     ["day", "Day"],
+                    ["sunset", "Sunset"],
                     ["night", "Night"],
                   ] as [SkyChoice, string][]
                 ).map(([v, label]) => (
@@ -736,17 +1055,33 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
               </div>
             </fieldset>
           </div>
-          <button type="button" className="btn btn-sun game-play" onClick={start}>
+          <button type="button" className="btn btn-sun game-play fx-orbit-host" onClick={start}>
+            <span className="fx-orbit" aria-hidden="true">
+              <span />
+            </span>
             Play
           </button>
           <details className="game-how">
             <summary>How to play</summary>
             <ul>
-              <li>Splat {rival.name} with ice cream and snowballs until their bar runs out. Snowballs are slower and leave them chilly.</li>
+              <li>
+                Splat {rival.name} until their bar runs out. Each bar is out of 100, exact: a scoop takes 5, a snowball 8 and leaves them chilly, and every splat shows its number.
+              </li>
               <li>Find your two pals in the streets: walk up to them and they join in. Green arrows point the way, pink ones to {rival.name}.</li>
-              <li>Treats in the street: a triple scoop, a mega snowball, sprinkle dash, an umbrella that blocks, and a cupcake that perks you up.</li>
+              <li>
+                Treats in the street:{" "}
+                {(["triple", "mega", "pie", "balloon", "bubble", "dash", "umbrella", "giant", "cupcake"] as PowerKind[]).map((k) => POWER_NAMES[k].toLowerCase()).join(", ")}, and
+                the rarest: call the army, six friends who run in to help for twelve seconds.
+              </li>
+              <li>
+                Every street is its own. Market Row has carts to duck behind, Sprinkler Street washes a splat off, Broadway charges your special faster, the breeze on Harbor Walk
+                pushes throws south. The card at the top tells you where you are.
+              </li>
               <li>Land splats to charge your special: {SPECIAL_NAMES[team]}.</li>
-              <li>On a phone: a stick under your left thumb, tap the right side to throw there, or hold Throw. On a keyboard: WASD or arrows, Space to throw, Q to swap, E for the special, P to pause.</li>
+              <li>
+                On a phone: a stick under your left thumb, tap the right side to throw there, or hold Throw. On a keyboard: WASD or arrows, Space to throw, Q to swap, E for the
+                special, P to pause.
+              </li>
             </ul>
           </details>
         </div>
@@ -779,8 +1114,8 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
             </button>
             <button
               type="button"
-              className="game-btn game-throw"
-              aria-label={hud.ammo === "scoop" ? "Throw an ice cream" : "Throw a snowball"}
+              className={`game-btn game-throw${hud.pack ? " has-pack" : ""}`}
+              aria-label={hud.pack ? `Throw: ${POWER_NAMES[hud.pack.kind]}, ${hud.pack.n} left` : hud.ammo === "scoop" ? "Throw an ice cream" : "Throw a snowball"}
               onPointerDown={(e) => {
                 e.preventDefault();
                 input.current.fire = true;
@@ -796,7 +1131,8 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
                 }
               }}
             >
-              <AmmoIcon ammo={hud.ammo} big />
+              {hud.pack ? <PowerChip kind={hud.pack.kind} size={40} /> : <AmmoIcon ammo={hud.ammo} big />}
+              {hud.pack && <span className="game-count">{hud.pack.n}</span>}
             </button>
           </div>
         </>
@@ -824,42 +1160,61 @@ export function ScoopsGame({ onClose, openUrgent }: { onClose: () => void; openU
 
       {card && (
         <div className="game-sheet game-card" role="dialog" aria-modal="true" aria-labelledby="game-card-title">
-          <p className="game-card-emoji" aria-hidden="true">
-            {team === "dog" ? "🐶" : "🐱"} 🤝 {team === "dog" ? "🐱" : "🐶"} 💕
-          </p>
-          <h2 id="game-card-title">Friends again</h2>
-          <p className="game-card-line">
-            {card.won ? `You splatted ${card.rival} out, and then you made up.` : `${card.rival} splatted you out, and then you made up.`} Nobody gets hurt in this
-            city. Everybody gets ice cream.
-          </p>
-          <ul className="game-stats">
-            <li>
-              <strong>{card.hits}</strong> {card.hits === 1 ? "splat" : "splats"} landed
-            </li>
-            <li>
-              <strong>{card.treats}</strong> {card.treats === 1 ? "treat" : "treats"} found
-            </li>
-            <li>
-              <strong>{card.pals}</strong> of 2 pals found
-            </li>
-          </ul>
-          {card.badges.length > 0 && (
-            <ul className="game-badges" aria-label="This round">
-              {card.badges.map((b) => (
-                <li key={b}>{b}</li>
+          <div className="game-card-in">
+            <span className="fx-sparkles" aria-hidden="true">
+              {Array.from({ length: 10 }, (_, i) => (
+                <span key={i} style={{ "--i": i } as React.CSSProperties} />
               ))}
+            </span>
+            <p className="game-card-emoji" aria-hidden="true">
+              {team === "dog" ? "🐶" : "🐱"} 🤝 {team === "dog" ? "🐱" : "🐶"} 💕
+            </p>
+            <h2 id="game-card-title">
+              <RiseWords text="Friends again" />
+            </h2>
+            <p className="game-card-line">
+              {card.won ? `You splatted ${card.rival} out, and then you made up.` : `${card.rival} splatted you out, and then you made up.`} Nobody gets hurt in this city.
+              Everybody gets ice cream.
+            </p>
+            <ul className="game-stats">
+              <li>
+                <Ticker to={card.hits} reduced={reduced} /> {card.hits === 1 ? "splat" : "splats"} landed
+              </li>
+              <li>
+                <Ticker to={card.dealt} reduced={reduced} /> off {card.rival}
+                &apos;s bar
+              </li>
+              <li>
+                <Ticker to={card.taken} reduced={reduced} /> off yours
+              </li>
+              <li>
+                <Ticker to={card.treats} reduced={reduced} /> {card.treats === 1 ? "treat" : "treats"} found
+              </li>
+              <li>
+                <Ticker to={card.pals} reduced={reduced} /> of 2 pals
+              </li>
+              <li>
+                <Ticker to={card.places} reduced={reduced} /> of {PLACE_COUNT} streets
+              </li>
             </ul>
-          )}
-          <div className="game-sheet-row">
-            <button type="button" className="btn btn-sun" onClick={() => setRound((n) => n + 1)} autoFocus>
-              Play again
-            </button>
-            <button type="button" className="btn btn-quiet" onClick={() => setScreen("menu")}>
-              Change team or sky
-            </button>
-            <button type="button" className="btn btn-quiet" onClick={leave}>
-              Back to Watch
-            </button>
+            {card.badges.length > 0 && (
+              <ul className="game-badges" aria-label="This round">
+                {card.badges.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
+            )}
+            <div className="game-sheet-row">
+              <button type="button" className="btn btn-sun" onClick={() => setRound((n) => n + 1)} autoFocus>
+                Play again
+              </button>
+              <button type="button" className="btn btn-quiet" onClick={() => setScreen("menu")}>
+                Change team or sky
+              </button>
+              <button type="button" className="btn btn-quiet" onClick={leave}>
+                Back to Watch
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -886,4 +1241,61 @@ function AmmoIcon({ ammo, big = false }: { ammo: Ammo; big?: boolean }) {
     } else drawSnowball(ctx, size * 0.3, 0);
   }, [ammo, size]);
   return <canvas ref={ref} aria-hidden="true" style={{ width: size, height: size }} />;
+}
+
+/**
+ * Words that rise into place one after another, out of a mask (Aceternity's
+ * text generate effect, made house-safe): each word slides up from below a
+ * clip, so it is always at full contrast, never faded. Still under reduced
+ * motion. The whole text is read once by screen readers.
+ */
+export function RiseWords({ text }: { text: string }) {
+  const words = text.split(" ");
+  return (
+    <>
+      <span className="sr-only">{text}</span>
+      <span className="fx-rise" aria-hidden="true">
+        {words.map((w, i) => (
+          <Fragment key={i}>
+            {/* The space stays outside the clip: trailing white space inside
+                an inline-block is dropped, and the words ran together. */}
+            <span className="fx-rise-word">
+              <span style={{ "--i": i } as React.CSSProperties}>{w}</span>
+            </span>
+            {i < words.length - 1 ? " " : null}
+          </Fragment>
+        ))}
+      </span>
+    </>
+  );
+}
+
+/** A number that counts up once, over 0.7 s (Cult UI's number ticker). */
+function Ticker({ to, reduced }: { to: number; reduced: boolean }) {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (reduced || to <= 0) {
+      el.textContent = String(to);
+      return;
+    }
+    const t0 = performance.now();
+    let raf = 0;
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / 700);
+      el.textContent = String(Math.round(to * (1 - (1 - k) ** 3)));
+      if (k < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [to, reduced]);
+  return (
+    <>
+      <strong ref={ref} aria-hidden="true">
+        {reduced ? to : 0}
+      </strong>
+      <span className="sr-only">{to}</span>
+    </>
+  );
 }

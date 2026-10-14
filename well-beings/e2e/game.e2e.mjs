@@ -11,6 +11,19 @@ let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
 const seed = () => { try { sessionStorage.setItem("arun-intro-session", "e2e"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true })); localStorage.setItem("arun-install-v1", JSON.stringify({ notNowAt: new Date().toISOString() })); } catch {} };
 const G = (p, f) => p.evaluate(f);
+/* Stand the rival 140 px from the player in a direction with nothing in
+   between: straight east was sometimes through a building, wherever the
+   stick had walked to. Holds it still. */
+const faceRival = (p) => p.evaluate(() => {
+  const g = window.__scoops, k = window.__scoopsKit;
+  const me = g.actors.find((a) => a.player), r = g.actors.find((a) => a.leader && !a.player);
+  r.ai = null;
+  for (const [dx, dy] of [[140, 0], [-140, 0], [0, 140], [0, -140], [100, 100], [-100, 100], [100, -100], [-100, -100]]) {
+    const at = { x: me.x + dx, y: me.y + dy };
+    if (!k.solidAt(g.city, at.x, at.y, 16) && k.clearLine(g.city, me, at, 8)) { r.x = at.x; r.y = at.y; return true; }
+  }
+  return false;
+});
 /* A press on Throw, if Throw is still there: a splat already in the air can
    end the round, and the controls go with it. */
 async function press(p, id, ms = 200) {
@@ -81,6 +94,9 @@ async function axe(p, label) {
   ok(await G(p, () => window.__scoops.playerTeam === "cat" && window.__scoops.sky === "night"), "as the cat, at night, as chosen");
   ok(!(await blank(p, ".game-canvas")), "the city is drawn");
   ok(await p.locator(".game-bar.is-me .game-bar-name").textContent() === "Miso" && (await p.locator(".game-bar.is-rival .game-bar-name").textContent()) === "Biscuit", "the bars name Miso and Biscuit");
+  ok((await p.locator(".game-bar.is-me .game-num").textContent()) === "100/100" && (await p.locator(".game-bar.is-me [role='meter']").getAttribute("aria-valuenow")) === "100", "each bar shows its exact number, 100 of 100, and is a meter");
+  const place = await G(p, () => document.querySelector(".game-place strong")?.textContent);
+  ok(!!place && (await G(p, () => window.__scoops.stats.places.includes(document.querySelector(".game-place strong").textContent))), `a street sign names where Miso is (${place})`);
 
   /* A stick under the left thumb. */
   const before = await G(p, () => { const a = window.__scoops.actors.find((x) => x.player); return { x: a.x, y: a.y }; });
@@ -107,15 +123,17 @@ async function axe(p, label) {
   ok(await G(p, () => window.__scoops.actors.find((x) => x.player).ammo) === "snow", "Swap switches to snowballs");
 
   /* A splat lowers the rival's bar, on the page as well. */
-  await G(p, () => { const g = window.__scoops; const me = g.actors.find((a) => a.player); const r = g.actors.find((a) => a.leader && !a.player); r.ai = null; r.x = me.x + 140; r.y = me.y; });
+  ok(await faceRival(p), "there is a clear line to stand Biscuit on");
   for (let i = 0; i < 6; i++) {
-    await G(p, () => { const g = window.__scoops; const me = g.actors.find((a) => a.player); const r = g.actors.find((a) => a.leader && !a.player); r.x = me.x + 140; r.y = me.y; });
+    await faceRival(p);
     await press(p, 10, 250);
   }
   await p.waitForTimeout(500);
   const hp = await G(p, () => window.__scoops.actors.find((a) => a.leader && !a.player).hp);
   const bar = await G(p, () => document.querySelector(".game-bar.is-rival .game-fill").style.transform);
   ok(hp < 100 && /scaleX\(0\.\d+\)/.test(bar), `the rival's bar goes down (${hp}, ${bar})`);
+  const shown = await G(p, () => ({ n: document.querySelector(".game-bar.is-rival .game-num b").textContent, v: document.querySelector(".game-bar.is-rival [role='meter']").getAttribute("aria-valuenow"), hp: window.__scoops.actors.find((a) => a.leader && !a.player).hp, fill: document.querySelector(".game-bar.is-rival .game-fill").style.transform }));
+  ok(shown.n === String(shown.hp) && shown.v === String(shown.hp) && shown.fill === `scaleX(${shown.hp / 100})`, `the number, the meter and the fill all say exactly ${shown.hp}`);
   ok(await G(p, () => window.__scoops.actors.find((a) => a.leader && !a.player).stains.length > 0), "and there is snow on Biscuit's fur");
 
   /* Pausing stops the clock. */
@@ -126,13 +144,24 @@ async function axe(p, label) {
   ok(await p.getByRole("heading", { name: "Paused" }).isVisible() && (await G(p, () => window.__scoops.t)) === t0, "Pause stops the game");
   await axe(p, "paused");
   await p.getByRole("button", { name: "Keep playing" }).click();
+  ok((await p.locator(".fx-sparkles.at-tap").count()) === 1, "“Keep playing” sends a little burst of stars");
   await p.waitForTimeout(300);
   ok((await G(p, () => window.__scoops.t)) > t0, "and Keep playing starts it again");
+
+  /* The army, and a pack of pies. */
+  await G(p, () => { const g = window.__scoops; const me = g.actors.find((a) => a.player); g.pickups.push({ id: 9001, kind: "army", x: me.x, y: me.y, t: 0 }); });
+  await p.waitForTimeout(500);
+  ok(await G(p, () => window.__scoops.actors.filter((a) => a.minion && a.team === "cat").length) === 6, "calling the army brings six kittens");
+  ok((await p.locator(".game-army").textContent()) === "+6", "and the team row counts them");
+  await G(p, () => { const g = window.__scoops; const me = g.actors.find((a) => a.player); g.pickups.push({ id: 9002, kind: "pie", x: me.x, y: me.y, t: 0 }); });
+  await p.waitForTimeout(500);
+  ok((await p.locator(".game-throw").getAttribute("aria-label")) === "Throw: Cream pies, 3 left" && (await p.locator(".game-count").textContent()) === "3", "a pack of pies goes on the Throw button, with how many are left");
 
   /* The end. */
   await G(p, () => { const g = window.__scoops; const r = g.actors.find((a) => a.leader && !a.player); r.hp = 1; });
   for (let i = 0; i < 20 && (await G(p, () => window.__scoops.phase)) === "play"; i++) {
-    await G(p, () => { const g = window.__scoops; const me = g.actors.find((a) => a.player); const r = g.actors.find((a) => a.leader && !a.player); r.x = me.x + 140; r.y = me.y; r.shield = 0; });
+    await faceRival(p);
+    await G(p, () => { window.__scoops.actors.find((a) => a.leader && !a.player).shield = 0; });
     await press(p, 11);
   }
   await p.waitForTimeout(900);
@@ -144,6 +173,9 @@ async function axe(p, label) {
   await p.waitForSelector(".game-card", { timeout: 12000 }).catch(() => {});
   ok(await p.getByRole("heading", { name: "Friends again" }).isVisible(), "and the card says “Friends again”");
   ok(/Nobody gets hurt/.test(await p.locator(".game-card").textContent()), "and that nobody gets hurt");
+  await p.waitForTimeout(900);
+  const card = await p.locator(".game-stats").textContent();
+  ok(/off Biscuit's bar/.test(card) && /of 16 streets/.test(card), "the card counts what came off each bar and the streets explored");
   await axe(p, "the end card");
   ok((await G(p, () => Object.keys(localStorage).sort().join(","))) === keysBefore, "a round saves nothing: no scores, no streaks");
 
@@ -169,9 +201,10 @@ async function axe(p, label) {
   await p.waitForTimeout(600);
   await p.getByRole("button", { name: "Play Scoops & Snowballs" }).click();
   await p.waitForSelector(".game-menu", { timeout: 8000 });
-  await p.locator(".game-seg label", { hasText: "Day" }).click();
+  await p.locator(".game-seg label", { hasText: "Sunset" }).click();
   await p.getByRole("button", { name: "Play", exact: true }).click();
   await p.waitForTimeout(2200);
+  ok(await G(p, () => window.__scoops.sky === "sunset"), "a sunset sky, as chosen");
   const at = await G(p, () => { const a = window.__scoops.actors.find((x) => x.player); return { x: a.x, y: a.y }; });
   await p.keyboard.down("ArrowUp");
   await p.keyboard.down("d");

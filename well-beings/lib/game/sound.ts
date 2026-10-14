@@ -30,7 +30,13 @@ export type GameSound =
   | "honk"
   | "out"
   | "hands"
-  | "pop";
+  | "pop"
+  | "stomp"
+  | "fanfare"
+  | "bubble"
+  | "heal"
+  | "place"
+  | "firework";
 
 let noise: AudioBuffer | null = null;
 const last = new Map<GameSound, number>();
@@ -227,6 +233,34 @@ export function play(kind: GameSound, pitch = 1) {
       break;
     case "pop":
       tone(ctx, out, t, "sine", 500 * p, 1200 * p, 0.08, 0.08);
+      break;
+    case "stomp":
+      /* Big paws: a soft, low thump. */
+      tone(ctx, out, t, "sine", 110, 48, 0.2, 0.22);
+      whoosh(ctx, out, t, "lowpass", 400, 120, 0.7, 0.12, 0.08);
+      break;
+    case "fanfare":
+      /* The army arrives: a little rising call on the pentatonic. */
+      [587.33, 739.99, 880, 1174.66].forEach((f, i) => {
+        tone(ctx, out, t + i * 0.09, "triangle", f, f, 0.16, 0.07);
+        chime(ctx, out, t + i * 0.09, f * 2, 0.025, 0.4);
+      });
+      break;
+    case "bubble":
+      tone(ctx, out, t, "sine", 380 * p, 900 * p, 0.12, 0.09);
+      tone(ctx, out, t + 0.05, "sine", 700 * p, 1300 * p, 0.08, 0.05);
+      break;
+    case "heal":
+      chime(ctx, out, t, 1174.66, 0.06, 0.7);
+      chime(ctx, out, t + 0.08, 1479.98, 0.05, 0.8);
+      break;
+    case "place":
+      whoosh(ctx, out, t, "bandpass", 500, 1400, 1.1, 0.35, 0.04);
+      chime(ctx, out, t + 0.12, 880, 0.03, 0.6);
+      break;
+    case "firework":
+      tone(ctx, out, t, "sine", 200, 900, 0.3, 0.03);
+      whoosh(ctx, out, t + 0.3, "highpass", 3000, 1500, 0.8, 0.35, 0.06);
       break;
   }
 }
