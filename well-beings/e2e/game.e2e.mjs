@@ -20,7 +20,13 @@ const faceRival = (p) => p.evaluate(() => {
   r.ai = null;
   for (const [dx, dy] of [[140, 0], [-140, 0], [0, 140], [0, -140], [100, 100], [-100, 100], [100, -100], [-100, -100]]) {
     const at = { x: me.x + dx, y: me.y + dy };
-    if (!k.solidAt(g.city, at.x, at.y, 16) && k.clearLine(g.city, me, at, 8)) { r.x = at.x; r.y = at.y; return true; }
+    if (!k.solidAt(g.city, at.x, at.y, 16) && k.clearLine(g.city, me, at, 8)) {
+      r.x = at.x; r.y = at.y; r.vx = r.vy = 0;
+      /* Throw aims at the nearest one on the other side; Biscuit's pals
+         go and stand well behind Biscuit, so the splat is Biscuit's. */
+      for (const o of g.actors) if (!o.leader && o.team === r.team) { o.x = r.x + dx * 1.6; o.y = r.y + dy * 1.6; o.vx = o.vy = 0; }
+      return true;
+    }
   }
   return false;
 });
