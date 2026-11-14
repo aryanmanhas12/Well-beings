@@ -16,10 +16,17 @@
  * `STRINGS`, and the type checker names every string still missing.
  */
 
-export type Lang = "en" | "hi";
+export type Lang = "en" | "hinglish" | "hi";
 
+/* Hinglish (Hindi in Roman letters, the way it is typed on a phone) was
+   added in November 2026 at the owner's request, for the minute and the
+   reel: naming a feeling works mainly in a person's own language (Vives et
+   al. 2021), and for a great many people here that language is this mix,
+   not either of its halves. It sits between the two so the switcher reads
+   English, Hinglish, हिन्दी. */
 export const LANGS: { value: Lang; label: string; native: string }[] = [
   { value: "en", label: "English", native: "English" },
+  { value: "hinglish", label: "Hinglish", native: "Hinglish" },
   { value: "hi", label: "Hindi", native: "हिन्दी" },
 ];
 
@@ -285,7 +292,33 @@ const hi: Strings = {
     "नेविगेशन और आपका ब्यौरा हिन्दी में हैं। इन टैब के अंदर की दैनिक योजना अभी अंग्रेज़ी में है, और उसका ठीक से अनुवाद किया जा रहा है, मशीनी अनुवाद नहीं, क्योंकि शोध के मुताबिक़ यही फ़र्क़ तय करता है कि लोग टिकते हैं या छोड़ देते हैं।",
 };
 
-export const STRINGS: Record<Lang, Strings> = { en, hi };
+/* Hinglish: the words a person reaches for in a hurry (help, the crisis
+   screen, the tabs) are written; everything else falls back to English,
+   which a Hinglish reader reads. The minute and the reel are written in
+   full in lib/minute.ts and lib/reel.ts. */
+const hinglish: Strings = {
+  ...en,
+  helpNow: "Abhi help",
+  language: "Bhasha",
+  helpTitle: "Help, abhi",
+  helpSub: "Free, confidential, 24/7. Thoda sa bhi “theek nahi” lage, tab bhi.",
+  helpClose: "Band karo",
+  callAction: "Call",
+  textAction: "Message",
+  visitAction: "Website",
+  hoursLabel: "Samay",
+  checkinEnglishOnly: "Home, ek minute aur aaj ke paanch Hinglish mein hain. Lambi wellbeing check-in abhi English mein hai, kyunki uske sawaal tested wording mein hi sahi kaam karte hain.",
+  appContentEnglish: "Home, ek minute aur aaj ke paanch Hinglish mein hain. In tabs ke andar ka daily plan abhi English mein hai.",
+};
+
+export const STRINGS: Record<Lang, Strings> = { en, hinglish, hi };
+
+/** The value for the html lang attribute. Hinglish is Hindi in Latin
+    script, which has its own tag; "hinglish" is not a language code, and a
+    screen reader given one falls back to guessing. */
+export function htmlLang(lang: Lang): string {
+  return lang === "hinglish" ? "hi-Latn" : lang;
+}
 
 export function t(lang: Lang): Strings {
   return STRINGS[lang] ?? STRINGS.en;

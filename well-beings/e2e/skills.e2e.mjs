@@ -1,4 +1,4 @@
-import { chromium, BASE, OUT, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, OUT, LAUNCH, goRoom } from "./lib.mjs";
 import { readFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
@@ -13,13 +13,16 @@ async function open(ctxOpts = {}, extra) {
   await p.goto(BASE, { waitUntil: "networkidle" });
   return { ctx, p, errs };
 }
-const tab = (p, name) => p.locator(".tabbar button", { hasText: name }).first().click();
+/* Rooms by id (here, watch, me, hope, plan, reach), reached the way a
+   person reaches them; tabTo is a plain tap on one of the three tabs. */
+const tab = (p, room) => goRoom(p, room);
+const tabTo = (p, name) => p.locator(".tabbar").getByRole("button", { name, exact: true }).click();
 
 console.log("1. a removal can be taken back (web interface guidelines: undo)");
 {
   const { ctx, p, errs } = await open({}, { hope: [{ id: "a1", kind: "people", text: "Didi", at: "2026-09-20T10:00:00Z" }, { id: "a2", kind: "people", text: "Kabir from the hostel", at: "2026-09-21T10:00:00Z" }] });
-  await tab(p, "Hope");
-  await p.getByRole("button", { name: /Hope box/i }).first().click().catch(() => {});
+  await tab(p, "hope");
+  await p.getByRole("group", { name: "Hope sections" }).getByRole("button", { name: "Hope box" }).click().catch(() => {});
   await p.locator("#hope-people-title").waitFor({ timeout: 4000 });
   const sec = p.locator("section[aria-labelledby='hope-people-title']");
   await sec.getByRole("button", { name: "Remove: Didi" }).click();
@@ -51,7 +54,7 @@ console.log("2. rooms opened by a tap: parts step in, the name is drawn in by th
 {
   const { ctx, p } = await open();
   ok(await p.evaluate(() => document.querySelector("main.haven").hasAttribute("data-moved")) === false, "not on first load: the page opens still");
-  await tab(p, "Plan");
+  await tabTo(p, "Me");
   await p.waitForTimeout(60);
   const info = await p.evaluate(() => {
     const h = document.querySelector("main.haven h1");
@@ -66,7 +69,7 @@ console.log("2. rooms opened by a tap: parts step in, the name is drawn in by th
 }
 {
   const { ctx, p } = await open({ reducedMotion: "reduce" });
-  await tab(p, "Plan"); await p.waitForTimeout(60);
+  await tabTo(p, "Me"); await p.waitForTimeout(60);
   ok(await p.evaluate(() => (document.querySelector("main.haven h1")?.getAnimations() ?? []).length) === 0, "reduced motion: the name is simply there");
   await ctx.close();
 }
@@ -119,9 +122,9 @@ console.log("5. web interface guidelines, applied");
   ok(/tabular-nums/.test(g.num), "helpline numbers sit on even columns");
   ok(g.brand === "no" && g.ooh === "no", "the wordmark and Ooh's name are never machine-translated");
   const fields = [];
-  for (const room of ["Here", "Hope", "Plan", "Reach out"]) {
+  for (const room of ["here", "me", "hope", "plan", "reach"]) {
     await tab(p, room); await p.waitForTimeout(700);
-    if (room === "Hope") { await p.getByRole("button", { name: /Hope box/i }).first().click().catch(() => {}); await p.waitForTimeout(300); }
+    if (room === "hope") { await p.getByRole("group", { name: "Hope sections" }).getByRole("button", { name: "Hope box" }).click().catch(() => {}); await p.waitForTimeout(300); }
     fields.push(...(await p.evaluate(() => [...document.querySelectorAll("main input:not([type=hidden]), main textarea")].map((f) => ({ id: f.id || f.name, name: f.name, ac: f.getAttribute("autocomplete"), type: f.type, ph: f.placeholder })))));
   }
   const noName = fields.filter((f) => !f.name);
@@ -151,17 +154,35 @@ console.log("6. split into parts, loaded before they are needed, honest when the
   const errs = []; p2.on("pageerror", (e) => errs.push(e.message));
   await p2.goto(BASE, { waitUntil: "load" });
   await p2.waitForTimeout(800);
-  await tab(p2, "Watch");
+  await tab(p2, "watch");
   await p2.locator(".part-offline").waitFor({ timeout: 4000 }).catch(() => {});
   const t = await p2.locator(".part-offline").innerText().catch(() => "");
   ok(/needs a connection the first time/.test(t) && /safety plan, your people and the helpline numbers work offline/.test(t), "a part that cannot arrive says so, and where the offline help is");
   ok(await p2.locator(".part-offline").getByRole("button", { name: "Try again" }).count() === 1, "with a way to try again");
-  await tab(p2, "Plan"); await p2.waitForTimeout(500);
+  await tabTo(p2, "Me"); await p2.waitForTimeout(400);
+  ok(await p2.locator("main h1").innerText() === "Me" && (await p2.locator(".me .tool-row").first().innerText()).includes("My safety plan"), "Me still opens, with the way to the plan: it is never split off");
+  await tab(p2, "plan"); await p2.waitForTimeout(500);
   ok(await p2.locator("main h1").innerText() === "Plan", "the Plan room still opens: it is never split off");
-  await tab(p2, "Reach out"); await p2.waitForTimeout(500);
-  ok(await p2.locator("a[href^='tel:']").count() > 0, "and Reach out's numbers are there too");
+  await tab(p2, "reach"); await p2.waitForTimeout(500);
+  ok(await p2.locator("a[href^='tel:']").count() > 0, "and Talk's numbers are there too");
   ok(errs.length === 0, "no page errors " + errs.join(" | "));
   await ctx2.close();
+  /* The minute and the reel are parts too. Their tiles and door are on
+     Home, which is never split; if the stage cannot arrive it says so
+     over the screen, and the way back is one tap. */
+  const ctx3 = await b.newContext({ viewport: { width: 390, height: 844 } });
+  await ctx3.addInitScript(seed, { arrivals: [{ at: new Date().toISOString(), mood: 4, hope: 4 }] });
+  await ctx3.route("**/_next/static/chunks/*.js", (r) => ([...initial].some((i) => r.request().url().endsWith(i)) ? r.continue() : r.abort()));
+  const p3 = await ctx3.newPage();
+  await p3.goto(BASE, { waitUntil: "load" });
+  await p3.waitForTimeout(800);
+  ok(await p3.locator("main .tension").count() === 8, "offline before anything else arrived, Home still asks its question");
+  await p3.locator('main .tension[data-topic="work"]').click();
+  await p3.locator(".game-loading[role=status]").waitFor({ timeout: 5000 }).catch(() => {});
+  ok(/needs a connection the first time/.test(await p3.locator(".game-loading[role=status]").innerText().catch(() => "")), "a minute that cannot arrive says so honestly");
+  await p3.getByRole("button", { name: "Back to Home" }).click(); await p3.waitForTimeout(300);
+  ok(await p3.locator(".game-loading").count() === 0 && await p3.locator("main .tension").count() === 8, "and one tap goes back to Home");
+  await ctx3.close();
 }
 
 console.log("7. zero em dashes anywhere a reader can see");
@@ -184,10 +205,10 @@ console.log("8. the effects from the skills answer the person, and never fire on
   await p.waitForTimeout(2500);
   ok(await p.locator(".fx-meteor, .fx-sparkles").count() === 0, "left alone, nothing streaks or sparkles");
   /* Magnetic dock. */
-  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
-  await p.mouse.move(watch.x + 24, watch.y + watch.height / 2); await p.waitForTimeout(350);
+  const home = await p.locator(".tabbar button", { hasText: "Home" }).boundingBox();
+  await p.mouse.move(home.x + 12, home.y + home.height / 2); await p.waitForTimeout(350);
   const dock = await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].map((e) => Number((/scale\(([\d.]+)\)/.exec(e.style.transform) || [0, 1])[1])));
-  ok(dock[1] > 1.2 && dock[1] === Math.max(...dock) && dock[4] === 1, `the tab icon under the mouse swells most, far ones not at all (${dock.join(", ")})`);
+  ok(dock.length === 3 && dock[0] > 1.2 && dock[0] === Math.max(...dock) && dock[1] < dock[0] && dock[2] === 1, `the tab icon under the mouse swells most, the far one not at all (${dock.join(", ")})`);
   await p.mouse.move(640, 600); await p.waitForTimeout(350);
   ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => !e.style.transform)), "and they settle when the mouse leaves");
   /* A shooting star, only from a tap on the sky. */
@@ -198,7 +219,7 @@ console.log("8. the effects from the skills answer the person, and never fire on
   await p.waitForTimeout(1400);
   ok(await p.locator(".fx-meteor").count() === 0, "and is gone after a second");
   /* Tilt and the edge light on Watch. */
-  await tab(p, "Watch"); await p.waitForTimeout(900);
+  await tab(p, "watch"); await p.waitForTimeout(900);
   await p.locator("#watch-play").scrollIntoViewIfNeeded(); await p.waitForTimeout(500);
   const poster = await p.locator(".play-poster").boundingBox();
   await p.mouse.move(poster.x + poster.width * 0.9, poster.y + poster.height * 0.5); await p.waitForTimeout(250);
@@ -214,8 +235,8 @@ console.log("8. the effects from the skills answer the person, and never fire on
 }
 {
   const { ctx, p } = await open({ viewport: { width: 1280, height: 800 }, reducedMotion: "reduce" });
-  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
-  await p.mouse.move(watch.x + 24, watch.y + watch.height / 2); await p.waitForTimeout(300);
+  const watch = await p.locator(".tabbar button", { hasText: "Home" }).boundingBox();
+  await p.mouse.move(watch.x + 12, watch.y + watch.height / 2); await p.waitForTimeout(300);
   ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => getComputedStyle(e).transform === "none")), "reduced motion: the dock stays still");
   const sky = await p.locator(".sky").boundingBox();
   await p.mouse.click(sky.x + sky.width * 0.8, sky.y + 40); await p.waitForTimeout(100);
@@ -224,7 +245,7 @@ console.log("8. the effects from the skills answer the person, and never fire on
 }
 {
   const { ctx, p } = await open({ hasTouch: true, isMobile: true });
-  const watch = await p.locator(".tabbar button", { hasText: "Watch" }).boundingBox();
+  const watch = await p.locator(".tabbar").getByRole("button", { name: "Me", exact: true }).boundingBox();
   await p.touchscreen.tap(watch.x + 20, watch.y + 10).catch(() => {});
   await p.waitForTimeout(300);
   ok(await p.evaluate(() => [...document.querySelectorAll(".tab-ico")].every((e) => !e.style.transform)), "on a phone the tab bar does not swell (it is under a thumb, not a mouse)");

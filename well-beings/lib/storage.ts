@@ -8,7 +8,7 @@ import { INTRO_KEY } from "./intro";
 import { SFX_KEY } from "./sfx";
 import { INTRO_LINE_KEY } from "./introLines";
 import { VOICE_KEY } from "@/hooks/useSpeech";
-import { Lang } from "./i18n";
+import { htmlLang, Lang } from "./i18n";
 import { CheckinEntry, PlanIntensity, Profile } from "./types";
 
 const KEY = "wellbeings-v1";
@@ -73,7 +73,7 @@ export function applyDisplayPrefs(s: Settings) {
   /* data-lang drives the Devanagari font stack in globals.css; lang= is what
      screen readers and hyphenation actually read. Both, or neither works. */
   root.setAttribute("data-lang", s.lang);
-  root.setAttribute("lang", s.lang);
+  root.setAttribute("lang", htmlLang(s.lang));
 }
 
 export function loadState(): PersistedState | null {

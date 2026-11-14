@@ -141,9 +141,15 @@ function GoodThings({ haven, check, lang }: { haven: Haven; check: (t: string) =
               <VoiceButton
                 appLang={lang}
                 onText={(t) => {
-                  const next = [...items];
-                  next[i] = next[i].trim() ? `${next[i].trim()} ${t}` : t;
-                  setItems(next);
+                  /* From what is in the box now, not from what was there
+                     when this was drawn: two phrases can land in one tick
+                     ("hello", then "world"), and the second was replacing
+                     the first instead of joining it. */
+                  setItems((prev) => {
+                    const next = [...prev];
+                    next[i] = next[i].trim() ? `${next[i].trim()} ${t}` : t;
+                    return next;
+                  });
                   setSaved(false);
                 }}
               />

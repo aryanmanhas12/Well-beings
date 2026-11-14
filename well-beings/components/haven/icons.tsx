@@ -102,3 +102,42 @@ export function PhoneIcon(p: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/** Me: a person with head and shoulders. */
+export function MeIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <circle cx="12" cy="8.5" r="3.6" />
+      <path d="M4.5 20.5c.6-4.2 3.6-6.4 7.5-6.4s6.9 2.2 7.5 6.4" />
+    </svg>
+  );
+}
+
+/** The eight tensions of One minute (lib/minute.ts), one small idea each. */
+export function TopicIcon({ id, ...p }: SVGProps<SVGSVGElement> & { id: string }) {
+  const d: Record<string, string[]> = {
+    /* an open book */
+    studies: ["M12 6.5c-2-1.4-4.6-1.8-7.5-1.5v13c2.9-.3 5.5.1 7.5 1.5 2-1.4 4.6-1.8 7.5-1.5V5c-2.9-.3-5.5.1-7.5 1.5Z", "M12 6.5v13"],
+    /* a bag with a clasp */
+    work: ["M4 8.5h16v10.5H4z", "M9 8.5V6.2h6v2.3", "M4 13h16", "M12 12v2"],
+    /* a house */
+    family: ["M4 11.5 12 5l8 6.5", "M6.5 10v9h11v-9", "M10.5 19v-5h3v5"],
+    /* a heart */
+    love: ["M12 19.5c-4.6-3-7.5-5.7-7.5-9.2A4 4 0 0 1 12 8a4 4 0 0 1 7.5 2.3c0 3.5-2.9 6.2-7.5 9.2Z"],
+    /* a pulse */
+    health: ["M3 12.5h4l2-5 3.5 10 2.5-7 1.5 2H21"],
+    /* a moon and one star */
+    alone: ["M17.5 14.5A7 7 0 0 1 9.5 5a7 7 0 1 0 8 9.5Z", "M17 5.5v2.5M15.8 6.7h2.5"],
+    /* a hand mirror */
+    self: ["M12 13.5a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z", "M12 13.5V21", "M9.5 17.5h5"],
+    /* a cloud */
+    unsure: ["M7.5 18.5h9.5a3.5 3.5 0 0 0 .4-7 5.5 5.5 0 0 0-10.6-1.3A4.2 4.2 0 0 0 7.5 18.5Z"],
+  };
+  return (
+    <svg {...base} {...p}>
+      {(d[id] ?? d.unsure).map((path, i) => (
+        <path key={i} d={path} />
+      ))}
+    </svg>
+  );
+}

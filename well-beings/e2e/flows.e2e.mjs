@@ -1,4 +1,4 @@
-import { chromium, BASE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, goRoom } from "./lib.mjs";
 import { readFileSync } from "node:fs";
 const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 
@@ -24,7 +24,9 @@ async function fresh(opts = {}) {
   return { ctx, p };
 }
 const safe = (p) => p.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1") || "null"));
-const tab = (p, name) => p.locator(".tabbar").getByRole("button", { name, exact: true }).click();
+/* Rooms by their ids (here, watch, me, hope, plan, reach), reached the way
+   a person reaches them now that there are three tabs. */
+const tab = (p, room) => goRoom(p, room);
 
 console.log("1. first visit, intro, check-in");
 {
@@ -41,11 +43,14 @@ console.log("1. first visit, intro, check-in");
   ok(s.arrivals.length === 1 && s.arrivals[0].mood === 4 && s.arrivals[0].hope === 4 && !s.arrivals[0].safety, "okay/some light saved without asking the safety question");
   ok((await p.locator("h1").innerText()).includes("Good to have you here"), "steady reply in the sky");
   ok(s.dawn.steps.includes("arrive"), "check-in lifts the sun");
-  await p.getByRole("button", { name: "I did it" }).click();
-  ok((await safe(p)).dawn.steps.includes("tiny"), "one small thing lifts the sun");
-  await p.fill("#good-one", "The bus was on time");
-  await p.getByRole("button", { name: "Keep it" }).click(); await p.waitForTimeout(100);
-  ok((await safe(p)).goodThings[0]?.items[0] === "The bus was on time", "good thing kept");
+  ok((await p.locator("main .tension").count()) === 8, "and the one question follows: what's the tension, with eight answers");
+  /* Good things live in Me now, with everything else a person keeps. */
+  await tab(p, "me");
+  await p.locator(".me .tool-row", { hasText: "Good things" }).click();
+  await p.fill("#good-0", "The bus was on time");
+  await p.getByRole("button", { name: "Keep them" }).click(); await p.waitForTimeout(150);
+  ok((await safe(p)).goodThings[0]?.items[0] === "The bus was on time", "good thing kept, from Me");
+  ok((await safe(p)).dawn.steps.includes("grateful"), "and it lifts the sun");
   // Opening Arun again (a reload counts) plays the sunrise every time, and
   // Skip lands back on the same day with nothing lost.
   await p.reload(); await p.waitForTimeout(300);
@@ -85,7 +90,7 @@ console.log("3. hope box, photo, note");
   const { ctx, p } = await fresh();
   await p.addInitScript(() => localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true, region: "in" })));
   await p.goto(BASE); await p.waitForTimeout(300);
-  await tab(p, "Hope"); await p.getByRole("button", { name: "Hope box" }).click();
+  await tab(p, "hope"); await p.getByRole("button", { name: "Hope box" }).click();
   await p.fill("#hope-people-text", "Didi");
   await p.locator("#hope-people-text").press("Enter"); await p.waitForTimeout(100);
   await p.fill("#hope-sounds-text", "Road trip song");
@@ -113,7 +118,7 @@ console.log("3. hope box, photo, note");
   await p.getByRole("button", { name: "Keep them" }).click(); await p.waitForTimeout(200);
   ok(await p.getByRole("heading", { name: "That sounded really hard" }).isVisible(), "crisis words offer help instead of filing silently");
   // low check-in surfaces the note
-  await tab(p, "Here");
+  await tab(p, "here");
   await p.getByRole("button", { name: "Low", exact: true }).click();
   await p.getByRole("button", { name: "Not sure" }).click();
   await p.getByRole("button", { name: "No", exact: true }).click(); await p.waitForTimeout(300);
@@ -126,7 +131,7 @@ console.log("4. safety plan");
   const { ctx, p } = await fresh();
   await p.addInitScript(() => localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true, region: "in" })));
   await p.goto(BASE); await p.waitForTimeout(300);
-  await tab(p, "Plan");
+  await tab(p, "plan");
   await p.fill("#plan-warningSigns", "Not replying to anyone");
   await p.fill("#plan-coping", "Cold water on my face");
   await p.getByRole("button", { name: "+ Add someone" }).first().click();
@@ -139,7 +144,7 @@ console.log("4. safety plan");
   ok(await p.getByRole("heading", { name: "Take it one step at a time" }).isVisible(), "saving switches to use-it-now");
   ok(await p.locator('a[href="tel:+919876543210"]').isVisible(), "a helper's number is a tap-to-call link");
   ok((await p.locator(".quote-line").first().innerText()).includes("My sister"), "reason for staying leads the plan");
-  await tab(p, "Here"); await tab(p, "Plan"); await p.waitForTimeout(200);
+  await tab(p, "here"); await tab(p, "plan"); await p.waitForTimeout(200);
   ok(await p.getByRole("heading", { name: "Take it one step at a time" }).isVisible(), "a written plan reopens ready to use");
   await ctx.close();
 }
@@ -151,7 +156,7 @@ console.log("5. care team and summary");
   await p.addInitScript((n) => localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true, region: "in", arrivals: [{ at: new Date(n - 86400000 * 3).toISOString(), mood: 2, hope: 2 }, { at: new Date(n - 86400000).toISOString(), mood: 1, hope: 1, safety: "thoughts" }, { at: new Date(n - 3600000 * 8).toISOString(), mood: 2, hope: 2, safety: "no" }] })), now);
   await p.goto(BASE); await p.waitForTimeout(300);
   ok(await p.getByRole("heading", { name: /keep you safe/ }).isVisible(), "thoughts yesterday keep the plan pinned today");
-  await tab(p, "Reach out");
+  await tab(p, "reach");
   const save = p.getByRole("button", { name: "Save", exact: true });
   ok(await save.isDisabled(), "cannot save a care contact without agreeing");
   await p.fill("#care-name", "Dr Rao"); await p.fill("#care-phone", "+91 99999 99999");
@@ -166,8 +171,9 @@ console.log("5. care team and summary");
   const [dl] = await Promise.all([p.waitForEvent("download"), p.getByRole("button", { name: "Save as a file" }).click()]);
   const json = JSON.parse(readFileSync(await dl.path(), "utf8"));
   ok(json.schema === "wellbeings.care-summary/1" && json.checkins === 3 && json.thoughtsReported === 1, "JSON file matches the documented schema");
-  await tab(p, "Here");
+  await tab(p, "here");
   ok(await p.getByRole("heading", { name: /keep you safe/ }).isVisible(), "home still leads with safety");
+  ok((await p.locator("main .tension").count()) === 0 && (await p.locator(".reel-door").count()) === 0, "and offers no cards to sort or swipe above or below it");
   await ctx.close();
 }
 
@@ -182,7 +188,7 @@ console.log("6. delete everything from settings");
   const keys = await p.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith("wellbeings")));
   ok(keys.length === 0, `every wellbeings key removed (left: ${keys.join(",") || "none"})`);
   await p.getByRole("button", { name: "Close" }).last().click().catch(() => {});
-  await tab(p, "Hope"); await p.getByRole("button", { name: "Hope box" }).click();
+  await tab(p, "hope"); await p.getByRole("button", { name: "Hope box" }).click();
   ok(!(await p.getByText("x", { exact: true }).count()), "in-memory hope box cleared too");
   await ctx.close();
 }
@@ -192,7 +198,9 @@ console.log("7. wellbeing check to daily plan");
   const { ctx, p } = await fresh();
   await p.addInitScript(() => localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true, region: "in" })));
   await p.goto(BASE); await p.waitForTimeout(300);
-  await p.getByRole("button", { name: /Quick check/ }).first().click();
+  /* The wellbeing check moved to Me with the daily plan it builds. */
+  await tab(p, "me");
+  await p.locator(".me .tool-row", { hasText: "A wellbeing check" }).click();
   let guard = 0;
   while (guard++ < 80) {
     await p.waitForTimeout(650);
@@ -222,10 +230,26 @@ console.log("8. handoff from Ronak and offline");
   await ctx.setOffline(true);
   await p.reload(); await p.waitForTimeout(600);
   ok(await p.locator(".sky").isVisible(), "the safe place opens offline");
-  await tab(p, "Watch"); await p.getByRole("button", { name: "Watch: I See Something" }).click();
+  await tab(p, "watch"); await p.getByRole("button", { name: "Watch: I See Something" }).click();
   ok(await p.getByText(/offline, so this can.t load/).isVisible(), "offline videos say so honestly");
   await p.goto(BASE + "resources/").catch(() => {}); await p.waitForTimeout(400);
   ok(await p.getByText("Tele-MANAS").first().isVisible().catch(() => false), "support lines open offline");
+  await ctx.close();
+}
+
+console.log("9. delete everything takes the minutes too");
+{
+  const { ctx, p } = await fresh();
+  await p.addInitScript(() => { if (!sessionStorage.getItem("seeded")) { sessionStorage.setItem("seeded", "1"); localStorage.setItem("wellbeings-safe-v1", JSON.stringify({ introSeen: true, region: "in", reelSeen: "2026-11-12-night", minutes: [{ at: new Date(Date.now() - 86400e3).toISOString(), topic: "family", mine: ["f-talk"], notMine: ["f-expect", "f-fights"], move: { id: "m-10talk", cue: "now", status: "open" } }] })); } });
+  await p.goto(BASE); await p.waitForTimeout(300);
+  ok((await safe(p)).minutes.length === 1, "(a minute is stored, under the same key as the rest)");
+  await p.getByRole("button", { name: "Settings" }).click();
+  await p.getByRole("button", { name: "Delete all my data" }).click();
+  await p.getByRole("button", { name: "Delete everything" }).click(); await p.waitForTimeout(300);
+  ok((await safe(p)) === null, "the minutes, the move and the reel mark go with everything else");
+  await p.getByRole("button", { name: "Close" }).last().click().catch(() => {});
+  await p.getByRole("button", { name: "Not right now" }).click().catch(() => {}); await p.waitForTimeout(200);
+  ok((await p.locator(".follow").count()) === 0, "and nothing asks about a move that no longer exists");
   await ctx.close();
 }
 await browser.close();

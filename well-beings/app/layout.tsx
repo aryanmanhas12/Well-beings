@@ -120,7 +120,7 @@ const PREFS_BOOTSTRAP = `
   if(s.theme&&s.theme!=="auto")r.setAttribute("data-theme",s.theme);
   if(s.contrast)r.setAttribute("data-contrast","high");
   if(s.scale&&s.scale!==1)r.style.setProperty("--scale",String(s.scale));
-  if(s.lang){r.setAttribute("data-lang",s.lang);r.setAttribute("lang",s.lang);}
+  if(s.lang){r.setAttribute("data-lang",s.lang);r.setAttribute("lang",s.lang==="hinglish"?"hi-Latn":s.lang);}
 }catch(e){}})();
 `;
 

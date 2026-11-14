@@ -41,7 +41,7 @@ export const HOPE_OPTIONS: { v: Score; label: string }[] = [
 export const RESPONSES: Record<CareLevel, { title: string; body: string }> = {
   steady: {
     title: "Good to have you here.",
-    body: "Days like this are worth keeping a little of. Bank one good thing, or leave a note for a harder day.",
+    body: "Days like this are worth keeping a little of. If something is still nagging, give it one minute.",
   },
   low: {
     title: "Thank you for telling me.",
@@ -131,6 +131,12 @@ export const HOPE_KINDS: { kind: HopeKind; title: string; prompt: string; placeh
     title: "Things I've got through",
     prompt: "Proof, from your own life, that hard stretches end.",
     placeholder: "e.g. The year I moved cities alone…",
+  },
+  {
+    kind: "words",
+    title: "Words I want to keep",
+    prompt: "A line that helped. From a person, a song, a book, or one you kept from today's five.",
+    placeholder: "e.g. A bad day is a day, not a forecast…",
   },
   {
     kind: "sounds",

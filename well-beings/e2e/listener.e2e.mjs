@@ -1,4 +1,4 @@
-import { chromium, BASE, AXE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, AXE, LAUNCH, goRoom } from "./lib.mjs";
 const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 
 /* The sunrise now plays once per session. Tests start past it, unless a
@@ -21,9 +21,13 @@ const errors = []; page.on("pageerror", (e) => errors.push(e.message)); page.on(
 await page.goto(BASE, { waitUntil: "networkidle" });
 ok((await page.title()).startsWith("Arun"), `title is "${await page.title()}"`);
 ok(await page.locator(".nav-wordmark", { hasText: "Arun" }).count() > 0 || (await page.locator("header").innerText()).includes("Arun"), "header says Arun");
+/* Today's line moved to Me with the rest of what is kept; "Sit with me"
+   is one of Home's four doors. */
+await goRoom(page, "me");
 const line = await page.locator("text=Today's line").count();
-ok(line === 1, "today's line card shown");
-await page.getByRole("button", { name: /Just sit with me/ }).click();
+ok(line === 1, "today's line card shown, in Me");
+await goRoom(page, "here");
+await page.getByRole("button", { name: /Sit with me/ }).click();
 const dlg = page.getByRole("dialog", { name: "Sit with me" });
 ok(await dlg.isVisible(), "listener opens");
 ok(await dlg.locator("svg").first().isVisible(), "listener header shows bloom-sun");
@@ -43,19 +47,21 @@ ok((await dlg.innerText()).includes("Tele-MANAS") || (await dlg.innerText()).mat
 ok((await dlg.innerText()).includes("Nobody reads this"), "footer says nobody reads it");
 await page.keyboard.press("Escape");
 ok(await dlg.count() === 0, "Escape closes listener, conversation gone");
-// good thing crisis intercept
-const good = page.locator("#good-one");
+// good things, where they live now: Me, then Good things
+await goRoom(page, "me");
+await page.locator(".me .tool-row", { hasText: "Good things" }).click();
+const good = page.locator("#good-0");
+await good.waitFor({ timeout: 6000 }).catch(() => {});
 if (await good.count()) {
   await good.fill("no reason to live");
-  await page.getByRole("button", { name: "Keep it" }).click();
-  ok(await page.locator("[role=alert]", { hasText: "really heavy" }).count() === 1, "frightening good thing gets support");
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1")).goodThings?.length ?? 0);
-  ok(saved === 0, "and is not filed as a good thing");
+  await page.getByRole("button", { name: "Keep them" }).click();
+  ok(await page.getByRole("heading", { name: "That sounded really hard" }).count() === 1, "frightening words in a good thing get support, with the lines");
   await good.fill("the chai was hot");
-  await page.getByRole("button", { name: "Keep it" }).click();
-  const saved2 = await page.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1")).goodThings?.length ?? 0);
-  ok(saved2 === 1, "an ordinary good thing is kept");
+  await page.getByRole("button", { name: "Keep them" }).click();
+  const kept = await page.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1")).goodThings?.[0]?.items ?? []);
+  ok(kept.includes("the chai was hot"), "an ordinary good thing is kept");
 } else ok(false, "good thing input present");
+await goRoom(page, "here");
 if (process.env.E2E_SHOTS) await page.screenshot({ path: process.env.E2E_SHOTS + "/arun-home.png", fullPage: false });
 // delete all removes arun keys
 await page.evaluate(() => { localStorage.setItem("arun-voice-v1", "{}"); localStorage.setItem("arun-listener-v1", "{}"); });

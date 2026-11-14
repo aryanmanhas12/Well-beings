@@ -6,7 +6,8 @@ import { createPortal } from "react-dom";
 /**
  * The parts of Arun that are not on the first screen, loaded as their own
  * files (Vercel's bundle-dynamic-imports rule): the wellbeing check and its
- * results, the Watch and Hope rooms, the daily plan and the game.
+ * results, the Watch and Hope rooms, the daily plan, the game, and the
+ * stage for One minute and the reel.
  * Less script to read before the first screen answers a tap. (Settings
  * stays in: it is on every screen, holds "Delete all my data", and must
  * open the instant it is tapped. So does the video sheet: small, and it
@@ -31,6 +32,8 @@ const load = {
   hope: () => import("./haven/HopeTab"),
   daily: () => import("./AppScreen"),
   game: () => import("./game/ScoopsGame"),
+  minute: () => import("./minute/MinuteFlow"),
+  reel: () => import("./minute/ReelFlow"),
 };
 
 function Loading({ tall = false }: { tall?: boolean }) {
@@ -97,20 +100,80 @@ export const ScoopsGame = dynamic(
   { loading: () => <GameLoading /> },
 );
 
+/* One minute and the reel. Their tiles and door are on Home, which is
+   never split; what is split is the stage they open (and GSAP with it).
+   Fetched when idle and again on a finger touching a tile, so a tap
+   almost never waits. If it cannot arrive, the stage says so and the way
+   back is one tap. */
+function StageLoading() {
+  return createPortal(
+    <div className="game-loading stage-loading" aria-busy="true">
+      <span className="sr-only">Loading…</span>
+    </div>,
+    document.body,
+  );
+}
+function StageOffline({ onClose }: { onClose: () => void }) {
+  return createPortal(
+    <div className="game-loading" role="status">
+      <div style={{ maxWidth: 360, padding: 20, textAlign: "center" }}>
+        <Unavailable />
+        <button type="button" className="btn btn-quiet" onClick={onClose} style={{ color: "#FFD98A" }}>
+          Back to Home
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+export const MinuteFlow = dynamic(
+  () =>
+    load
+      .minute()
+      .then((m) => m.MinuteFlow)
+      .catch(() => StageOffline as unknown as typeof import("./minute/MinuteFlow").MinuteFlow),
+  { loading: () => <StageLoading /> },
+);
+export const ReelFlow = dynamic(
+  () =>
+    load
+      .reel()
+      .then((m) => m.ReelFlow)
+      .catch(() => StageOffline as unknown as typeof import("./minute/ReelFlow").ReelFlow),
+  { loading: () => <StageLoading /> },
+);
+
 let preloaded = false;
 /** Fetch every split part once the phone is idle (bundle-preload, js-request-idle-callback). */
 export function preloadParts() {
   if (preloaded || typeof window === "undefined") return;
   preloaded = true;
-  const go = () => {
-    for (const f of Object.values(load)) void f().catch(() => {});
+  const idle = (fn: () => void, timeout: number) => {
+    if ("requestIdleCallback" in window) window.requestIdleCallback(fn, { timeout });
+    else setTimeout(fn, 600);
   };
-  if ("requestIdleCallback" in window) window.requestIdleCallback(go, { timeout: 1000 });
-  else setTimeout(go, 600);
+  /* The stage for One minute and the reel brings GSAP with it (123 KB
+     before compression). Fetched with the rest, it added about 80 ms of
+     script on a phone slowed 4x to the second in which the page is still
+     waking up (measured: 329 ms of script at load before it, 409 ms
+     with). Nobody can tap a tension tile in that second, so it waits for
+     a later idle moment, and a finger on a tile or the door fetches it at
+     once anyway (preloadRoom). It is still here within a few seconds of a
+     first visit, which is what makes it work offline afterwards. */
+  const stage = () => {
+    void load.minute().catch(() => {});
+    void load.reel().catch(() => {});
+  };
+  idle(() => {
+    for (const [name, f] of Object.entries(load)) if (name !== "minute" && name !== "reel") void f().catch(() => {});
+  }, 1000);
+  setTimeout(() => idle(stage, 3000), 3500);
 }
 
 /** A finger on a room's tab: fetch that room now (bundle-preload, on intent). */
 export function preloadRoom(room: string) {
   if (room === "watch") void load.watch().catch(() => {});
   else if (room === "hope") void load.hope().catch(() => {});
+  else if (room === "minute") void load.minute().catch(() => {});
+  else if (room === "reel") void load.reel().catch(() => {});
 }

@@ -1,4 +1,4 @@
-import { chromium, BASE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, goRoom } from "./lib.mjs";
 const IPAD = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15";
 const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 
@@ -38,15 +38,23 @@ const fake = () => {
   window.SpeechRecognition = FakeRec;
 };
 
-async function page(ua = IPAD) {
+/* The microphone's everyday place is "Good things" (Me, then Good things)
+   since Home stopped carrying a text box: the minute needs no typing. */
+const toGood = async (p) => {
+  await goRoom(p, "me");
+  await p.locator(".me .tool-row", { hasText: "Good things" }).click();
+  await p.locator("#good-0").waitFor({ timeout: 8000 });
+};
+async function page(ua = IPAD, { home = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 1000, height: 700 }, userAgent: ua, hasTouch: true });
   await ctx.addInitScript(fake);
   const p = await ctx.newPage();
   const errs = []; p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(BASE, { waitUntil: "networkidle" });
+  if (!home) await toGood(p);
   return { ctx, p, errs };
 }
-const mic = (p) => p.locator("#good-one").locator("xpath=..").locator(".voice-btn");
+const mic = (p) => p.locator("#good-0").locator("xpath=..").locator(".voice-btn");
 const pressed = async (p) => (await mic(p).getAttribute("aria-pressed")) === "true";
 
 console.log("1. Safari never finalises and ignores stop (the reported freeze)");
@@ -60,15 +68,15 @@ console.log("1. Safari never finalises and ignores stop (the reported freeze)");
   ok(await p.getByText("the chai was hot").count() > 0, "interim words shown while speaking");
   const t0 = Date.now();
   await mic(p).click();
-  await p.waitForFunction(() => document.querySelector("#good-one").closest("form").querySelector(".voice-btn").getAttribute("aria-pressed") === "false", null, { timeout: 3000 });
+  await p.waitForFunction(() => document.querySelector("#good-0").closest(".input-voice-row").querySelector(".voice-btn").getAttribute("aria-pressed") === "false", null, { timeout: 3000 });
   ok(Date.now() - t0 < 2500, `button released ${Date.now() - t0}ms after stop, with no end event`);
   ok(await p.evaluate(() => window.__rec.aborted === true), "engine aborted after the grace period");
-  ok((await p.inputValue("#good-one")) === "the chai was hot", "unfinalised words still land, once");
-  await p.fill("#good-one", "typing works");
-  ok((await p.inputValue("#good-one")) === "typing works", "page responsive: typing works");
-  await p.getByRole("button", { name: /^Hope$/ }).first().click();
-  await p.getByRole("group", { name: "Hope sections" }).waitFor({ timeout: 3000 }).catch(() => {});
-  ok(await p.getByRole("group", { name: "Hope sections" }).count() === 1, "page responsive: tabs work");
+  ok((await p.inputValue("#good-0")) === "the chai was hot", "unfinalised words still land, once");
+  await p.fill("#good-0", "typing works");
+  ok((await p.inputValue("#good-0")) === "typing works", "page responsive: typing works");
+  await goRoom(p, "reach");
+  await p.locator("#lines-title").waitFor({ timeout: 3000 }).catch(() => {});
+  ok(await p.locator("#lines-title").count() === 1, "page responsive: tabs work");
   ok(errs.length === 0, "no page errors " + errs.join("|"));
   await ctx.close();
 }
@@ -85,7 +93,7 @@ console.log("2. results replayed from index 0");
     r.onend?.();
   });
   await p.waitForTimeout(100);
-  ok((await p.inputValue("#good-one")) === "hello world", `each phrase once: "${await p.inputValue("#good-one")}"`);
+  ok((await p.inputValue("#good-0")) === "hello world", `each phrase once: "${await p.inputValue("#good-0")}"`);
   ok(!(await pressed(p)), "idle after end");
   await ctx.close();
 }
@@ -116,14 +124,15 @@ console.log("5. Chrome keeps continuous mode; a second tap mid-session never sta
   await ctx.addInitScript(fake);
   const p = await ctx.newPage();
   await p.goto(BASE, { waitUntil: "networkidle" });
+  await toGood(p);
   await mic(p).click();
   ok(await p.evaluate(() => window.__rec.continuous === true), "continuous on Chrome");
   await ctx.close();
 }
 console.log("6. the listener's microphone");
 {
-  const { ctx, p } = await page();
-  await p.getByRole("button", { name: /Just sit with me/ }).click();
+  const { ctx, p } = await page(IPAD, { home: true });
+  await p.getByRole("button", { name: /Sit with me/ }).click();
   const dmic = p.getByRole("dialog").locator(".voice-btn");
   await dmic.click();
   await p.evaluate(() => window.__rec.emit([["I feel tired", false]]));

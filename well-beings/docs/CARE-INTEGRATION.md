@@ -18,7 +18,7 @@ only way they sit together is if the person is the one holding the switch.
 3. **Consent is specific and removable.** It is recorded as a date against one named contact on
    this device (`care.agreedAt` in `wellbeings-safe-v1`). Removing the contact removes the offer
    to send. A broader consent (for example, a clinic receiving summaries directly) must be asked
-   for separately, on the Reach out screen, and described on the privacy page before it ships.
+   for separately, on the Talk screen, and described on the privacy page before it ships.
 4. **The app never implies someone is watching.** The crisis screen says nobody has been alerted.
    If an integration ever does alert someone, that sentence must change in the same release, and
    the person must have agreed to exactly that in advance.
@@ -27,7 +27,7 @@ only way they sit together is if the person is the one holding the switch.
 
 ## What exists today
 
-The Reach out screen has a single care-team contact: a name, a role (therapist or counsellor,
+The Talk screen has a single care-team contact: a name, a role (therapist or counsellor,
 doctor or psychiatrist, someone I trust), and optionally a phone number and email. From it the
 person can:
 
@@ -89,7 +89,7 @@ In order, and none of it before the one above it:
 3. A transport the person triggers. The simplest honest version is still the share sheet, with the
    JSON attached. Any server-side receiver belongs to Ronak or the clinic, never to Arun, and
    carries its own privacy policy.
-4. A clear way to stop: revoking consent on the Reach out screen ends any further sending, and the
+4. A clear way to stop: revoking consent on the Talk screen ends any further sending, and the
    screen says what the receiving side keeps.
 5. A change to the crisis screen's "nobody has been alerted" sentence only if, and exactly when,
    that stops being true for this person.

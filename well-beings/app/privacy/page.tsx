@@ -31,7 +31,11 @@ export default function PrivacyPage() {
             the days ahead looked, and your answer to the question about thoughts of suicide when it
             was asked), your good things, your hope box, your note for a heavier day, your safety plan,
             a care-team contact if you added one, the region used to choose helplines, and whether you
-            have seen the opening sunrise.
+            have seen the opening sunrise. For One minute it also holds which tension you picked,
+            which of the app&apos;s ready-made cards you put in which pile, the small move you chose
+            with its time, and whether you marked it done. Those are names from the app&apos;s own
+            list, never anything you typed. And it holds which of today&apos;s five you last finished,
+            so the door can say you have seen them.
           </li>
           <li>
             <code>wellbeings-photos-v1</code>: photos you added to your hope box. They are shrunk on
@@ -104,7 +108,15 @@ export default function PrivacyPage() {
         <p>
           The region used to show you helplines is first guessed from your device&apos;s time zone.
           That guess is made on your device and never sent anywhere, and you can change it on the
-          Reach out screen.
+          Talk screen.
+        </p>
+        <p>
+          In today&apos;s five, the question is answered with a tap and the answer is not stored at
+          all. &ldquo;What your minutes show&rdquo;, in Me, is worked out on your phone from your own
+          taps each time you open it; it is not saved as a result and it goes nowhere. A message that
+          the minute or the five suggest is shown to you in full and sent by you, through your
+          phone&apos;s own share sheet, to whoever you choose. Arun does not learn whether you sent
+          it, or to whom.
         </p>
 
         <h2>What is never sent anywhere</h2>
@@ -132,7 +144,7 @@ export default function PrivacyPage() {
 
         <h2>Sharing with a care team</h2>
         <p>
-          On the Reach out screen you can add one person: a therapist, a doctor, or someone you trust.
+          On the Talk screen you can add one person: a therapist, a doctor, or someone you trust.
           Their name and, if you give them, their phone number and email are stored in{" "}
           <code>wellbeings-safe-v1</code> on your device, together with the date you agreed to how
           sharing works.

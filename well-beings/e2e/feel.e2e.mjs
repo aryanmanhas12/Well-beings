@@ -1,4 +1,5 @@
-import { chromium, BASE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, goRoom } from "./lib.mjs";
+const tabTo = (p, name) => p.locator(".tabbar").getByRole("button", { name, exact: true }).click();
 const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
@@ -167,8 +168,8 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
   await p.getByRole("button", { name: "Come in" }).click();
   await p.waitForTimeout(700);
   ok(await attr(p, "data-intro") === null, "and Come in lets you back in");
-  /* Leaving to call a helpline: Reach out's first tel: link. */
-  await p.locator(".tabbar button", { hasText: "Reach out" }).click();
+  /* Leaving to call a helpline: Talk's first tel: link. */
+  await tabTo(p, "Talk");
   await p.waitForTimeout(500);
   await p.locator("a[href^='tel:']").first().evaluate((a) => { a.addEventListener("click", (e) => e.preventDefault(), { once: true }); a.click(); });
   await away(20);
@@ -194,7 +195,7 @@ console.log("1. the sunrise, every time Arun is opened, with the music in step")
 console.log("2. feedback you can feel");
 {
   const { ctx, p } = await open({ session: { "arun-intro-session": "e2e" } });
-  await p.getByRole("button", { name: /^Watch$/ }).first().click();
+  await tabTo(p, "Me");
   await p.waitForTimeout(200);
   ok((await p.evaluate(() => window.__ticks)).some((t) => JSON.stringify(t) === "[6,36,6]"), "a double tick when the room changes");
   await p.evaluate(() => (window.__ticks = []));
@@ -206,7 +207,7 @@ console.log("2. feedback you can feel");
   await p.getByRole("dialog", { name: "Settings" }).getByRole("switch", { name: /Vibration/ }).click();
   await p.keyboard.press("Escape");
   await p.evaluate(() => (window.__ticks = []));
-  await p.getByRole("button", { name: /^Hope$/ }).first().click();
+  await tabTo(p, "Talk");
   await p.evaluate(() => window.scrollTo(0, 1200));
   await p.waitForTimeout(700);
   ok((await p.evaluate(() => window.__ticks)).length === 0, "Vibration off: no ticks at all");
@@ -217,7 +218,7 @@ console.log("2. feedback you can feel");
   const IPAD = "Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
   const { ctx, p } = await open({ vibrate: false, session: { "arun-intro-session": "e2e" } }, { userAgent: IPAD, hasTouch: true });
   const before = await p.evaluate(() => typeof navigator.vibrate);
-  await p.getByRole("button", { name: /^Hope$/ }).first().click();
+  await tabTo(p, "Me");
   await p.waitForTimeout(150);
   const sw = await p.evaluate(() => { const i = document.getElementById("arun-haptic-switch"); return i ? { checked: i.checked, sw: i.hasAttribute("switch") } : null; });
   ok(before !== "function" && sw?.sw && sw.checked === true, "no vibrate() (iPhone, iPad): the system switch ticks on a tap instead");
@@ -259,7 +260,7 @@ console.log("3. feedback you can see");
   ok(ring === "fxFade", `but the lights stay: the ring is there and fades in place, without growing (${ring})`);
   await p.mouse.up();
   await p.keyboard.press("Escape");
-  await p.locator(".tabbar button", { hasText: "Watch" }).click();
+  await goRoom(p, "watch");
   ok(await p.evaluate(() => document.querySelector(".fx-sweep")?.className) === "fx-sweep still", "a room change is a soft wash of light, not a sweep");
   /* Watch is its own part: wait for it to be there, or the scroll lands
      on a page still too short to reach 1400 (on a slow day, the same
@@ -283,7 +284,7 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
   const { ctx, p, errs } = await open({ session: { "arun-intro-session": "e2e" } });
   ok(await p.evaluate(() => window.__sfx.length) === 0, "and no sound player before the first tap");
   await p.evaluate(() => window.scrollTo(0, 0));
-  await p.locator(".tabbar button", { hasText: "Watch" }).click();
+  await tabTo(p, "Me");
   ok(await p.locator(".fx-sweep").count() === 1, "another room: a sweep of light down the screen");
   await p.waitForTimeout(1500);
   ok(await p.locator(".fx-sweep").count() === 0, "which clears itself away");
@@ -291,11 +292,11 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
   const fetched = await p.evaluate(() => performance.getEntriesByType("resource").filter((e) => e.name.includes("/sounds/")).map((e) => e.name.split("/").pop().split("?")[0]));
   ok(["press.mp3", "typing.mp3", "forward.mp3", "wake.mp3"].every((f) => fetched.includes(f)), `the everyday sounds load after that tap, from Arun itself (${fetched.length})`);
   await p.evaluate(() => (window.__plays = []));
-  await p.locator(".tabbar button", { hasText: "Hope" }).click();
+  await tabTo(p, "Talk");
   await p.waitForTimeout(250);
   ok(await p.evaluate(() => window.__plays.length) >= 1, "a room change makes a page-turn sound");
   /* Ooh talking */
-  await p.locator(".tabbar button", { hasText: "Here" }).click();
+  await tabTo(p, "Home");
   await p.evaluate(() => (window.__plays = []));
   await p.waitForTimeout(250);
   const talking = await p.evaluate(() => !!document.querySelector(".ooh-strip .ooh-talkw.ooh-talking"));
@@ -326,7 +327,7 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
   await p.keyboard.press("Escape");
   await p.waitForTimeout(300);
   await p.evaluate(() => (window.__plays = []));
-  await p.locator(".tabbar button", { hasText: "Plan" }).click();
+  await tabTo(p, "Me");
   await p.waitForTimeout(1200);
   ok(await p.evaluate(() => window.__plays.length) === 0, "Sounds off: silent, Ooh's voice included");
   ok(await p.evaluate(() => localStorage.getItem("arun-sfx-v1")) === "off", "and it is remembered");
@@ -335,7 +336,7 @@ console.log("4. Ronak's feel: sounds, sweep, glow, and Ooh alive");
 }
 {
   const { ctx, p } = await open({ safe: { introSeen: true, region: "in" }, session: { "arun-intro-session": "e2e" } });
-  await p.locator(".tabbar button", { hasText: "Watch" }).click();
+  await goRoom(p, "watch");
   await p.waitForTimeout(700);
   await p.getByRole("button", { name: /Help now/ }).first().click();
   await p.waitForTimeout(500);

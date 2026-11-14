@@ -6,6 +6,7 @@ import { CrisisStrip } from "../CrisisStrip";
 import { ArunMark } from "../ArunMark";
 import { SoundToggle } from "../SoundToggle";
 import { OohGuide } from "../OohGuide";
+import { SmoothScroll } from "./SmoothScroll";
 
 /**
  * The frame every content page sits in.
@@ -24,6 +25,11 @@ import { OohGuide } from "../OohGuide";
  * is a fair price for the right phone number; everything else here stays
  * static.
  *
+ * A second, smaller one since November 2026: on the guides and About, a
+ * mouse wheel scrolls with an ease (components/site/SmoothScroll.tsx).
+ * Reading pages only; Support lines, Privacy and Terms are left exactly
+ * as the browser scrolls them.
+ *
  * Landmarks are explicit rather than implied: a skip link, then <header>,
  * <nav aria-label>, <main id="main">, <footer>. Screen-reader users get the
  * same three-jump navigation on every page.
@@ -39,6 +45,8 @@ export function PageShell({
 }) {
   const page = PAGE_BY_PATH[path];
   const trail = breadcrumbsFor(path);
+  /* The long reads. Not Support lines (helplines), not the small print. */
+  const longRead = path.startsWith("/guides/") || path === "/about/";
 
   return (
     <div className="site">
@@ -83,6 +91,7 @@ export function PageShell({
       </main>
 
       <SiteFooter />
+      {longRead && <SmoothScroll />}
     </div>
   );
 }

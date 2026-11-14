@@ -18,8 +18,10 @@ import {
   buildCareSummary,
   dailyPattern,
   dawnLevel,
+  energyFor,
   hopeTrend,
   isSustainedLow,
+  minuteOffer,
   shouldAskSafety,
 } from "../lib/care.ts";
 
@@ -127,4 +129,24 @@ test("the dawn only rises and caps at a full sunrise", () => {
   assert.equal(dawnLevel(0), 0);
   assert.equal(dawnLevel(3), 0.6);
   assert.equal(dawnLevel(12), 1);
+});
+
+/* ── what a level changes ──────────────────────────────────────────── */
+
+test("the minute is held back after thoughts of suicide or 'I don't feel safe', and gentle on a heavy stretch", () => {
+  assert.equal(minuteOffer(null), "open");
+  assert.equal(minuteOffer("steady"), "open");
+  assert.equal(minuteOffer("low"), "open");
+  assert.equal(minuteOffer("heavy"), "gentle");
+  assert.equal(minuteOffer("thoughts"), "held");
+  assert.equal(minuteOffer("urgent"), "held");
+});
+
+test("the page is bright only on an okay day, and still when the plan is pinned", () => {
+  assert.equal(energyFor(null), "bright");
+  assert.equal(energyFor("steady"), "bright");
+  assert.equal(energyFor("low"), "calm");
+  assert.equal(energyFor("heavy"), "calm");
+  assert.equal(energyFor("thoughts"), "still");
+  assert.equal(energyFor("urgent"), "still");
 });

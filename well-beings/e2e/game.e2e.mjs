@@ -5,7 +5,7 @@
  * them holding hands, keeps nothing, and has no accessibility violations.
  * The game's rules themselves are tested in scripts/test-game.mjs.
  */
-import { chromium, BASE, LAUNCH, AXE } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, AXE, goRoom } from "./lib.mjs";
 const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) pass++; else fail++; console.log(`  ${c ? "✓" : "✗"} ${m}`); };
@@ -61,10 +61,10 @@ async function axe(p, label) {
   p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(BASE, { waitUntil: "networkidle" });
 
-  /* From Here, the shortcut lands on the game in Watch. */
-  await p.getByRole("button", { name: /Play something silly/ }).click();
+  /* From Home, the Play door lands on the game in Watch. */
+  await p.locator(".door", { hasText: "Dogs vs cats" }).click();
   await p.waitForTimeout(1200);
-  ok(await G(p, () => document.querySelector(".tabbar [aria-current='page']")?.textContent?.trim()) === "Watch", "Here's “Play something silly” opens Watch");
+  ok(await G(p, () => document.querySelector("main.haven")?.classList.contains("haven-watch") && document.querySelector(".tabbar [aria-current='page']")?.textContent?.trim() === "Home"), "Home's Play door opens Watch");
   ok(await G(p, () => { const r = document.querySelector("#watch-play")?.getBoundingClientRect(); return !!r && r.top < innerHeight && r.bottom > 0; }), "and scrolls to the game");
   ok(!(await blank(p, ".play-poster")), "the poster of the city is drawn");
   ok(await p.locator("#shelf-talks").isVisible() && (await p.locator("#shelf-talks + .shelf-row li").count()) === 4, "Watch has the four new TED talks on their own shelf");
@@ -203,7 +203,7 @@ async function axe(p, label) {
   const errs = [];
   p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(BASE, { waitUntil: "networkidle" });
-  await p.locator(".tabbar button", { hasText: "Watch" }).click();
+  await goRoom(p, "watch");
   await p.waitForTimeout(600);
   await p.getByRole("button", { name: "Play Scoops & Snowballs" }).click();
   await p.waitForSelector(".game-menu", { timeout: 8000 });

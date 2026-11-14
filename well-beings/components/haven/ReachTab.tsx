@@ -50,7 +50,7 @@ export function ReachTab({
 
   return (
     <div className="haven-stack">
-      <h1 style={{ fontSize: 28, margin: "6px 0 0" }}>Reach out</h1>
+      <h1 style={{ fontSize: 28, margin: "6px 0 0" }}>Talk</h1>
       <p className="panel-lede" style={{ marginTop: -8 }}>
         You don&apos;t have to explain yourself to anyone here. These are people who want to hear from you.
       </p>

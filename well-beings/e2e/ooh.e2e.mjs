@@ -1,4 +1,4 @@
-import { chromium, BASE, AXE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, AXE, LAUNCH, goRoom, roomOf } from "./lib.mjs";
 const b = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 
 /* The sunrise now plays once per session. Tests start past it, unless a
@@ -71,8 +71,11 @@ console.log("1. first visit: narration in the page, then tucked");
   await p.reload({ waitUntil: "networkidle" });
   ok(/Hello again|late/.test(await strip(p).textContent()), "next visit: one short line");
   ok((await p.locator(".ooh-next").innerText()).startsWith("Got it"), "and only one");
-  await p.getByRole("button", { name: /^Watch$/ }).first().click();
+  await goRoom(p, "watch");
+  await strip(p).waitFor({ timeout: 6000 }).catch(() => {});
   ok(/stories/.test(await strip(p).textContent()), "Watch has its own narration");
+  await goRoom(p, "me");
+  ok(/This is Me/.test(await strip(p).textContent()), "and so does Me");
   ok(errs.length === 0, "no page errors " + errs.join("|"));
   await ctx.close();
 }
@@ -132,7 +135,7 @@ console.log("4. music");
   await p.locator("text=How are you arriving?").click();
   await p.waitForTimeout(400);
   ok(await p.evaluate(() => window.__acs.length === 1 && window.__acs[0].state === "running"), "first tap starts it");
-  await p.getByRole("button", { name: /^Watch$/ }).first().click();
+  await goRoom(p, "watch");
   await p.locator(".deck .scene-play, .deck button").first().click();
   await p.waitForTimeout(3200);
   ok(await p.evaluate(() => window.__acs[0].state === "suspended"), "pauses while a video sheet is open");
@@ -163,38 +166,30 @@ console.log("5. delete all");
 }
 console.log("6. all the way down the page: the narrator bar");
 const dockText = (p) => p.evaluate(() => document.querySelector(".ooh-dock .ooh-dock-text")?.textContent ?? "");
-async function scrollTo(p, sel) {
-  await p.evaluate((sel) => { const el = document.querySelector(sel); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.4); }, sel);
+async function scrollTo(p, sel, at = 0.4) {
+  await p.evaluate(([sel, at]) => { const el = document.querySelector(sel); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - window.innerHeight * at); }, [sel, at]);
   await p.waitForTimeout(700);
 }
 {
+  /* Home is short now: the check-in, today's five, four doors. The bar
+     reads whichever is at reading height, and at the bottom offers Me. */
   const { ctx, p, errs } = await open();
   ok(await p.locator(".ooh-dock").count() === 0, "no bar while the greeting is on screen");
-  await scrollTo(p, "#tiny-title");
-  ok(/Tiny counts/.test(await dockText(p)), `the bar describes the part being read: "${await dockText(p)}"`);
-  await scrollTo(p, "#good-title");
-  ok(/good thing/.test(await dockText(p)), `and changes as the page moves: "${await dockText(p)}"`);
-  await scrollTo(p, "#calm-now");
-  ok(/Breathe with the sun/.test(await dockText(p)), "back up, back to that part's line");
+  /* Just above the reading line (55% down), so the doors under it are
+     still below it. */
+  await scrollTo(p, "#reel-title", 0.5);
+  ok(/today's five/.test(await dockText(p)), `the bar describes the part being read: "${await dockText(p)}"`);
+  await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await p.waitForTimeout(900);
+  ok(/That's Home/.test(await dockText(p)), `and changes as the page moves: "${await dockText(p)}"`);
+  await scrollTo(p, "#reel-title", 0.5);
+  ok(/today's five/.test(await dockText(p)), "back up, back to that part's line");
   const tb = await p.locator(".tabbar").boundingBox(), db = await p.locator(".ooh-dock").boundingBox();
   ok(db.y + db.height <= tb.y + 1, "the bar sits above the tab bar");
   await p.waitForTimeout(900);
   await p.addScriptTag({ content: AXE });
   const v = await p.evaluate(async () => (await axe.run(document.querySelector(".ooh-dock"))).violations.map((x) => x.id));
   ok(v.length === 0, `axe on the bar: ${v.join(",") || "clean"}`);
-  await p.locator("#good-one").focus();
-  await p.waitForTimeout(150);
-  ok(await p.locator(".ooh-dock, .ooh-guide").count() === 0, "Ooh steps aside while someone is typing");
-  await p.locator("#good-one").blur();
-  await p.waitForTimeout(250);
-  ok(await p.locator(".ooh-dock").count() === 0, "not straight away, so it cannot land under a tap");
-  await p.waitForTimeout(1000);
-  ok(await p.locator(".ooh-dock").count() === 1, "and comes back a moment later");
-  await scrollTo(p, "#good-title");
-  await p.locator("#good-one").fill("the bus came on time");
-  await p.getByRole("button", { name: "Keep it" }).click();
-  await p.waitForTimeout(200);
-  ok(await p.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1")).goodThings?.[0]?.items?.[0]) === "the bus came on time", "typing then tapping “Keep it” always reaches the button");
   await p.locator(".ooh-dock .ooh-x").click();
   ok(await p.locator(".ooh-dock").count() === 0 && (await corner(p).count()) === 1, "× puts the bar away; Ooh waits in the corner");
   await corner(p).click();
@@ -203,13 +198,39 @@ async function scrollTo(p, sel) {
   await ctx.close();
 }
 {
+  /* Typing. Home has no text box any more (the minute needs none), so
+     this is checked where people do type: Good things, in Me. */
+  const { ctx, p, errs } = await open();
+  await goRoom(p, "me");
+  await p.locator(".me .tool-row", { hasText: "Good things" }).click();
+  await p.locator("#good-0").waitFor({ timeout: 8000 });
+  await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await p.waitForTimeout(900);
+  ok(await p.locator(".ooh-dock").count() === 1, `in a room with a form, the bar is there: "${await dockText(p)}"`);
+  await p.locator("#good-0").focus();
+  await p.waitForTimeout(150);
+  ok(await p.locator(".ooh-dock, .ooh-guide").count() === 0, "Ooh steps aside while someone is typing");
+  await p.locator("#good-0").blur();
+  await p.waitForTimeout(250);
+  ok(await p.locator(".ooh-dock").count() === 0, "not straight away, so it cannot land under a tap");
+  await p.waitForTimeout(1000);
+  ok(await p.locator(".ooh-dock").count() === 1, "and comes back a moment later");
+  await p.locator("#good-0").fill("the bus came on time");
+  await p.getByRole("button", { name: "Keep them" }).click();
+  await p.waitForTimeout(200);
+  ok(await p.evaluate(() => JSON.parse(localStorage.getItem("wellbeings-safe-v1")).goodThings?.[0]?.items?.[0]) === "the bus came on time", "typing then tapping “Keep them” always reaches the button");
+  ok(errs.length === 0, "no page errors " + errs.join("|"));
+  await ctx.close();
+}
+{
   const { ctx, p } = await open();
   await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await p.waitForTimeout(900);
-  const go = p.locator(".ooh-dock").getByRole("button", { name: /Go to Hope/ });
+  const go = p.locator(".ooh-dock").getByRole("button", { name: /Go to Me/ });
   ok(await go.count() === 1, "at the bottom, the bar offers the next room");
   await go.click();
-  ok((await p.locator(".tabbar [aria-current=page]").innerText()).includes("Hope"), "and takes you there");
+  await p.waitForTimeout(300);
+  ok((await roomOf(p)) === "me" && (await p.locator(".tabbar [aria-current=page]").innerText()).includes("Me"), "and takes you there");
   await ctx.close();
 }
 {
@@ -225,7 +246,7 @@ async function scrollTo(p, sel) {
   await go.click();
   await p.waitForURL(/Well-beings\/($|\?)/, { timeout: 8000 }).catch(() => {});
   await p.waitForTimeout(800);
-  ok((await p.locator(".tabbar [aria-current=page]").innerText().catch(() => "")).includes("Plan"), "landing in the Plan room");
+  ok((await roomOf(p)) === "plan" && (await p.locator(".tabbar [aria-current=page]").innerText().catch(() => "")).includes("Me"), "landing in the Plan room, under Me");
   ok(!/room=/.test(p.url()), `and the address bar is tidied (${p.url().replace(BASE, "/")})`);
   await ctx.close();
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { CareLevel, Safety, Score } from "@/lib/care";
 import { shouldAskSafety } from "@/lib/care";
-import { HOPE_OPTIONS, MOOD_OPTIONS } from "@/lib/havenContent";
+import { HOME_STRINGS, type HomeStrings } from "@/lib/homeWords";
 
 /**
  * "How are you arriving?"
@@ -21,14 +21,20 @@ import { HOPE_OPTIONS, MOOD_OPTIONS } from "@/lib/havenContent";
  */
 type Step = "mood" | "hope" | "safety";
 
+const SCORES: Score[] = [1, 2, 3, 4, 5];
+
 export function CheckIn({
   onSubmit,
   onSkip,
   greeting,
+  words: w = HOME_STRINGS.en,
 }: {
   onSubmit: (mood: Score, hope: Score, safety?: Safety) => CareLevel;
   onSkip?: () => void;
   greeting?: string;
+  /** English or Hinglish (lib/homeWords.ts). The three answers to the
+      direct question mean the same in both. */
+  words?: HomeStrings;
 }) {
   const [step, setStep] = useState<Step>("mood");
   const [mood, setMood] = useState<Score | null>(null);
@@ -67,17 +73,17 @@ export function CheckIn({
       {step === "mood" && (
         <fieldset className="choices checkin-step" key="mood">
           <legend className="checkin-q" ref={headingRef} tabIndex={-1}>
-            {greeting ?? "How are you arriving?"}
+            {greeting ?? w.arriving}
           </legend>
-          {MOOD_OPTIONS.map((o) => (
-            <button key={o.v} type="button" className="choice" aria-pressed={mood === o.v} onClick={() => pickMood(o.v)}>
-              <span className="choice-dot" data-v={o.v} aria-hidden="true" />
-              {o.label}
+          {SCORES.map((v) => (
+            <button key={v} type="button" className="choice" aria-pressed={mood === v} onClick={() => pickMood(v)}>
+              <span className="choice-dot" data-v={v} aria-hidden="true" />
+              {w.mood[v]}
             </button>
           ))}
           {onSkip && (
             <button type="button" className="btn btn-quiet" onClick={onSkip} style={{ justifySelf: "start" }}>
-              Not right now
+              {w.notNow}
             </button>
           )}
         </fieldset>
@@ -86,16 +92,16 @@ export function CheckIn({
       {step === "hope" && (
         <fieldset className="choices checkin-step" key="hope">
           <legend className="checkin-q" ref={headingRef} tabIndex={-1}>
-            And the days ahead. How do they look from here?
+            {w.days}
           </legend>
-          {HOPE_OPTIONS.map((o) => (
-            <button key={o.v} type="button" className="choice" aria-pressed={hope === o.v} onClick={() => pickHope(o.v)}>
-              <span className="choice-dot" data-v={o.v} aria-hidden="true" />
-              {o.label}
+          {SCORES.map((v) => (
+            <button key={v} type="button" className="choice" aria-pressed={hope === v} onClick={() => pickHope(v)}>
+              <span className="choice-dot" data-v={v} aria-hidden="true" />
+              {w.hope[v]}
             </button>
           ))}
           <button type="button" className="btn btn-quiet" onClick={() => setStep("mood")} style={{ justifySelf: "start" }}>
-            Back
+            {w.back}
           </button>
         </fieldset>
       )}
@@ -103,23 +109,20 @@ export function CheckIn({
       {step === "safety" && (
         <fieldset className="choices checkin-step" key="safety">
           <legend className="checkin-q" ref={headingRef} tabIndex={-1}>
-            When things feel like this, some people have thoughts of ending their life. Has that been on your mind?
+            {w.safetyQ}
           </legend>
           <button type="button" className="choice" onClick={() => pickSafety("no")}>
-            No
+            {w.safetyNo}
           </button>
           <button type="button" className="choice" onClick={() => pickSafety("thoughts")}>
-            Yes, but I&apos;m safe right now
+            {w.safetyThoughts}
           </button>
           <button type="button" className="choice" onClick={() => pickSafety("unsafe")}>
-            Yes, and I don&apos;t feel safe
+            {w.safetyUnsafe}
           </button>
-          <p className="reassure">
-            Asking doesn&apos;t put the idea there; the research on this is consistent. Your answer stays on this
-            phone and is only used to decide what to show you next.
-          </p>
+          <p className="reassure">{w.safetyNote}</p>
           <button type="button" className="btn btn-quiet" onClick={() => setStep("hope")} style={{ justifySelf: "start" }}>
-            Back
+            {w.back}
           </button>
         </fieldset>
       )}

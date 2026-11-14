@@ -26,14 +26,15 @@ export interface OohLine {
 }
 
 /** A room Ooh can take someone to. */
-export type OohRoom = "here" | "watch" | "hope" | "plan" | "reach";
+export type OohRoom = "here" | "watch" | "me" | "hope" | "plan" | "reach";
 
 /**
  * What Ooh says about one part of a page. As someone scrolls, the narrator
  * bar describes whichever part they are reading: the element `at` (a CSS
  * selector; `nth` picks one of several, -1 the last). `go` offers a way to
  * another room, which is how Ooh walks someone round the whole place:
- * Here to Hope, Hope to Plan, Plan to Reach out, Reach out back to Hope.
+ * Home to Me, Me to Talk, Talk back to a good thing; and from the rooms
+ * behind a door, Watch to the hope box, Hope to the plan, the plan to Talk.
  */
 export interface OohBeat {
   id: string;
@@ -67,6 +68,7 @@ export interface OohScript {
 export type OohScene =
   | { kind: "here"; level: CareLevel | null; returning: boolean; hour: number | null }
   | { kind: "watch" }
+  | { kind: "me" }
   | { kind: "hope" }
   | { kind: "plan"; written: boolean }
   | { kind: "reach" }
@@ -90,21 +92,16 @@ const b = (id: string, at: string, mood: OohMood, text: string, go?: OohBeat["go
 const APP_BOTTOM = ".app-foot-tabbed";
 const SITE_BOTTOM = ".site-foot";
 
+/* Home, top to bottom (components/haven/HereTab.tsx). */
 const HERE_BEATS: OohBeat[] = [
   b("checkin", ".checkin-q", "listen", "Two taps, that's all. Pick whatever's closest. There's no wrong answer."),
   b("keep", "#keep-title", "care", "You saved this for a day like today. Read it slowly."),
-  b("video", "#now-video", "ooh", "Ooh, a video picked for right now. It asks before anything loads."),
-  b("path", "#path-here", "think", "Your hope path. One small step this week is plenty."),
-  b("tiny", "#tiny-title", "happy", "Tiny counts! Tap “I did it” and watch the sky lift a little."),
-  b("calm", "#calm-now", "calm", "Breathe with the sun, come back to the room, or just sit with me a minute."),
-  b("good", "#good-title", "ooh", "Ooh, a good thing! Even “the chai was hot” counts."),
-  b("words", "section[aria-label='Words for right now']", "listen", "Today's line. A new one arrives every morning."),
-  b("pattern", "#pattern-title", "listen", "Here's how your days have looked. Just noticing, no judging."),
-  b("resume", "#resume-title", "think", "Your wellbeing check is half done. It waited for you."),
-  b("daily", "#daily-title", "happy", "Your daily plan, built from your wellbeing check."),
-  b("check", "#check-title", "think", "When there's more room, a gentle look at sleep, food and rest."),
+  b("follow", "#follow-title", "listen", "Did it happen? “Not yet” is a real answer here."),
+  b("tension", "#tension-title", "think", "Pick what the tension is about. Three cards, one small move, no typing."),
+  b("reel", "#reel-title", "ooh", "Ooh, today's five! Five cards, about a minute, and then they stop."),
+  b("doors", "#doors-title", "calm", "Or breathe, watch something kind, say the heavy thing, or play a silly game."),
   b("install", "#install-title", "happy", "Keep me on your home screen? Then I'm one tap away."),
-  b("next", APP_BOTTOM, "hello", "That's everything here. Want somewhere to keep hope?", { room: "hope", label: "Go to Hope" }),
+  b("next", APP_BOTTOM, "hello", "That's Home. Everything you keep lives in Me.", { room: "me", label: "Go to Me" }),
 ];
 
 function here(s: Extract<OohScene, { kind: "here" }>): OohScript {
@@ -145,19 +142,19 @@ function here(s: Extract<OohScene, { kind: "here" }>): OohScript {
         beats: HERE_BEATS,
         lines: [
           l("care", "Thanks for telling me. Low days count too."),
-          l("calm", "Try one small thing below. Just one is plenty."),
+          l("calm", "Pick what the tension is about, just below. One minute, and no typing."),
         ],
-        short: l("calm", "One small thing below. Just one is plenty today."),
+        short: l("calm", "One tension, one minute. Or today's five, if that's easier."),
       };
     case "steady":
       return {
         id: "here-steady",
         beats: HERE_BEATS,
         lines: [
-          l("happy", "Lovely. Keep one good thing from today and watch the sky lift."),
-          l("ooh", "Ooh, and there's a video just for right now, if you'd like one."),
+          l("happy", "Lovely. If something is still nagging, tap it below and give it one minute."),
+          l("ooh", "Ooh, and today's five are ready. Five cards, then they stop."),
         ],
-        short: l("happy", "Keep one good thing from today. The sky lifts a little each time."),
+        short: l("happy", "One tension, one minute. The sky lifts a little each time."),
       };
     default: {
       const late = s.hour !== null && (s.hour >= 22 || s.hour < 5);
@@ -213,6 +210,20 @@ export function oohScript(s: OohScene): OohScript {
         ],
         short: l("ooh", "Pick whichever story feels right today."),
       };
+    case "me":
+      return {
+        id: "me",
+        beats: [
+          b("hard", "#me-hard", "care", "For a hard moment: your plan, your hope box and a note from you."),
+          b("grow", "#me-grow", "happy", "For steadier days. Small things that add up."),
+          b("notice", "#notice-title", "think", "What your minutes show. Made only from your own taps."),
+          b("pattern", "#pattern-title", "listen", "Here's how your days have looked. Just noticing, no judging."),
+          b("words", "section[aria-label='Words for right now']", "listen", "Today's line. A new one arrives every morning."),
+          b("next", APP_BOTTOM, "listen", "Want someone to talk to? Talk has free lines and words you can borrow.", { room: "reach", label: "Go to Talk" }),
+        ],
+        lines: [l("hello", "This is Me. Everything you keep lives here."), l("calm", "Your safety plan is the first row. It works with no signal.")],
+        short: l("hello", "Everything you keep lives here. Your plan is the first row."),
+      };
     case "hope":
       return {
         id: "hope",
@@ -230,7 +241,7 @@ export function oohScript(s: OohScene): OohScript {
           b("sounds", "#hope-sounds-title", "ooh", "Songs that help. Ooh, I love this part."),
           b("photos", "#photos-title", "happy", "Photos that help. They stay on this phone."),
           b("letter", "#letter-title", "listen", "A note from a calmer you to a heavier day. It shows up when it's needed."),
-          b("next", APP_BOTTOM, "think", "Hope and a plan go well together. Shall we write yours?", { room: "plan", label: "Go to Plan" }),
+          b("next", APP_BOTTOM, "think", "Hope and a plan go well together. Shall we write yours?", { room: "plan", label: "Go to my plan" }),
         ],
         lines: [
           l("happy", "This is where your hope lives."),
@@ -253,7 +264,7 @@ export function oohScript(s: OohScene): OohScript {
           b("reason-card", "section[aria-label='Most worth staying for']", "happy", "Most worth staying for. Read it slowly."),
           b("use", "#use-title", "calm", "One step at a time. Every number here is one tap."),
           b("lines", "#lines-title", "care", "If it's still too much, these lines are free and a real person answers."),
-          b("next", APP_BOTTOM, "listen", "People belong in a plan too. Reach out has words you can borrow.", { room: "reach", label: "Go to Reach out" }),
+          b("next", APP_BOTTOM, "listen", "People belong in a plan too. Talk has words you can borrow.", { room: "reach", label: "Go to Talk" }),
         ],
             lines: [l("happy", "Your plan is ready. Every number in it is one tap.")],
             short: l("happy", "Your plan is ready. Every number in it is one tap."),
@@ -271,7 +282,7 @@ export function oohScript(s: OohScene): OohScript {
           b("reason-card", "section[aria-label='Most worth staying for']", "happy", "Most worth staying for. Read it slowly."),
           b("use", "#use-title", "calm", "One step at a time. Every number here is one tap."),
           b("lines", "#lines-title", "care", "If it's still too much, these lines are free and a real person answers."),
-          b("next", APP_BOTTOM, "listen", "People belong in a plan too. Reach out has words you can borrow.", { room: "reach", label: "Go to Reach out" }),
+          b("next", APP_BOTTOM, "listen", "People belong in a plan too. Talk has words you can borrow.", { room: "reach", label: "Go to Talk" }),
         ],
             lines: [
               l("think", "A plan written on a calmer day helps on a harder one."),
@@ -318,19 +329,19 @@ function page(path: string): OohScript {
     ]);
   if (path === "/resources/")
     return one("p-resources", l("care", "Every line here is free. If today is hard, calling one is a good idea."), [
-      b("next", SITE_BOTTOM, "listen", "Want words for messaging someone? Reach out has some.", { room: "reach", label: "Go to Reach out" }),
+      b("next", SITE_BOTTOM, "listen", "Want words for messaging someone? Talk has some.", { room: "reach", label: "Go to Talk" }),
     ]);
   if (path === "/about/")
     return one("p-about", l("hello", "Here's what Arun is, and what it isn't."), [
-      b("next", SITE_BOTTOM, "happy", "Come and see the quiet place?", { room: "here", label: "Go to Here" }),
+      b("next", SITE_BOTTOM, "happy", "Come and see the quiet place?", { room: "here", label: "Go to Home" }),
     ]);
   if (path === "/privacy/")
     return one("p-privacy", l("calm", "What you write stays on this phone. This page shows exactly where."), [
-      b("next", SITE_BOTTOM, "hello", "Back to the quiet place?", { room: "here", label: "Go to Here" }),
+      b("next", SITE_BOTTOM, "hello", "Back to the quiet place?", { room: "here", label: "Go to Home" }),
     ]);
   if (path === "/terms/")
     return one("p-terms", l("think", "The small print, kept short."), [
-      b("next", SITE_BOTTOM, "hello", "That's all of it. Short, as promised.", { room: "here", label: "Back to Here" }),
+      b("next", SITE_BOTTOM, "hello", "That's all of it. Short, as promised.", { room: "here", label: "Back to Home" }),
     ]);
   return { id: "p-404", lines: [l("ooh", "Ooh, this page wandered off. The links below know the way home.")], short: l("ooh", "Ooh, this page wandered off. The links below know the way home.") };
 }
@@ -388,6 +399,7 @@ export function allScripts(): OohScript[] {
   for (const level of levels) for (const returning of [false, true]) out.push(oohScript({ kind: "here", level, returning, hour: 23 }), oohScript({ kind: "here", level, returning, hour: 10 }));
   out.push(
     oohScript({ kind: "watch" }),
+    oohScript({ kind: "me" }),
     oohScript({ kind: "hope" }),
     oohScript({ kind: "plan", written: false }),
     oohScript({ kind: "plan", written: true }),

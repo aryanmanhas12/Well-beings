@@ -5789,3 +5789,1114 @@ html.game-open {
   color: #FFF4E8;
   font: 600 20px/1.2 var(--font-display);
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   November 2026: three tabs, One minute, and the reel that ends
+   ═════════════════════════════════════════════════════════════════════
+   Home asks one question and answers it in a minute; Me holds what a
+   person keeps; Talk is people. The minute and the reel play on a stage
+   over the page (components/minute), built like the game's layer.
+
+   Colour, measured (WCAG, scripts in the session that wrote this):
+     ink #2A1636 on the tiles: sun #FFC857 10.78, peach #FF9F80 8.31,
+       pink #FF7AB0 6.84, #FFB3D1 9.97, #FFE08A 12.86, #FFC2A8 10.69,
+       leaf #62D6A5 9.22, cream #FFF4E8 15.28.
+     the bright stage runs pink to peach to sun to paper, top to bottom;
+       ink on its darkest point (pink) is 6.84 and rises from there. The
+       softer plum #4A3560 is 4.40 on that pink, under the line, so it is
+       used only on the cream cards (10.11), never on the page.
+     berry #9C2F6B is 4.50 on sun, so it too is for cream cards (6.57).
+     the calm stage is dusk: cream #FFF4E8 on #150B2E 17.30, on #26164A
+       14.94, on #5A2470 10.08; the softer #E7D9EE 13.90 / 12.00 / 8.10.
+     the fact card and the reel's door: cream on #26164A 14.94, sun
+       #FFC857 on it 10.53.
+   Why bright at all: saturated, light colours are rated as more
+   arousing and more pleasant (Wilms & Oberfeld 2017). That suits a
+   person who is okay. On a low or heavy day the same page is a step
+   quieter (lib/care.ts, energyFor), and no colour "releases" anything:
+   what a person feels in the first minute is the work of the words.
+
+   Motion: transform only, each on its own element; nothing here animates
+   opacity on words, box-shadow, a filter or layout. The stage's cards
+   are moved by GSAP (components/minute/gsap.ts) inside
+   prefers-reduced-motion: no-preference; the two CSS animations below
+   (a star landing, the sun stepping up) are cut by the global
+   reduced-motion rule like every other. */
+
+/* ── the tab bar: three ─────────────────────────────────────────────── */
+.tabbar {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 719px) {
+  /* Three fit side by side with their words beside the pictures, so the
+     word is as large as the picture and nobody has to learn an icon. */
+  .tabbar button {
+    flex-direction: row;
+    gap: 8px;
+    font-size: 14.5px;
+    min-height: 52px;
+  }
+}
+
+/* A room behind a door says how to get back. */
+.back-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px 6px 12px;
+  margin: 0 0 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
+  color: var(--color-text);
+  font: 700 14px/1 var(--font-body);
+  cursor: pointer;
+}
+.back-chip:hover {
+  background: color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+.room-title {
+  font-size: 28px;
+  margin: 6px 0 0;
+}
+.room-lede {
+  margin-top: -8px;
+}
+
+/* ── Home: the tension tiles ─────────────────────────────────────────── */
+.tension-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tension-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tension-ask h2,
+.minute-pick .stage-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(24px, 6.6vw, 30px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+.tension-sub {
+  margin: 0 0 4px;
+  font-size: 14.5px;
+  color: var(--color-neutral-500);
+}
+.lang-flip {
+  flex: none;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+}
+.lang-flip button {
+  min-height: 40px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--color-neutral-500);
+  font: 700 12.5px/1 var(--font-body);
+  cursor: pointer;
+}
+.lang-flip button[aria-pressed="true"] {
+  background: var(--color-raised);
+  color: var(--color-text);
+}
+.tension-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 10px;
+}
+@media (min-width: 560px) and (max-width: 979px) {
+  .home .tension-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+/* Comic like Ooh: a flat sunrise colour, an ink line, a hard offset
+   shadow. The shadow is a tint of the text colour, so it is a soft light
+   edge on the night page and a soft dark one on dawn paper. */
+.tension {
+  --tile: #FFC857;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 72px;
+  padding: 8px 12px;
+  border-radius: 22px;
+  border: 2.5px solid var(--color-ink);
+  background: var(--tile);
+  color: var(--color-ink);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--color-text) 30%, transparent);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16.5px;
+  line-height: 1.1;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tension svg {
+  flex: none;
+}
+.tension:hover {
+  transform: translate(-1px, -2px);
+}
+.tension:active {
+  transform: translate(3px, 3px);
+}
+.tension[data-topic="work"] { --tile: #FF9F80; }
+.tension[data-topic="family"] { --tile: #FF7AB0; }
+.tension[data-topic="love"] { --tile: #FFB3D1; }
+.tension[data-topic="health"] { --tile: #FFE08A; }
+.tension[data-topic="alone"] { --tile: #FFC2A8; }
+.tension[data-topic="self"] { --tile: #62D6A5; }
+.tension[data-topic="unsure"] { --tile: #FFF4E8; }
+/* A low or heavy day: the same eight, a step quieter. The colour moves
+   from the whole tile to its edge. */
+[data-energy="calm"] .tension {
+  background: var(--color-raised);
+  color: var(--color-text);
+  /* Mixed with the text colour, so the edge is a deeper shade of the
+     tile's colour on dawn paper and a paler one on the night page; the
+     plain tint vanished on paper, cream on cream. */
+  border: 2px solid color-mix(in srgb, var(--tile) 68%, var(--color-text));
+  box-shadow: none;
+  transition-timing-function: ease-out;
+}
+[data-energy="calm"] .tension:hover {
+  transform: none;
+}
+
+/* ── Home: the reel's door ───────────────────────────────────────────── */
+.reel-door {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #26164A, #5A2470);
+  color: #FFF4E8;
+}
+.reel-door h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 0 0 2px;
+}
+.reel-door p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.35;
+  color: #E7D9EE;
+}
+.reel-door .btn-soft {
+  background: rgba(255, 244, 232, 0.12);
+  color: #FFF4E8;
+  border: 1px solid rgba(255, 244, 232, 0.3);
+}
+/* Three small cards, fanned: what is behind the door. */
+.reel-door-stack {
+  position: relative;
+  width: 44px;
+  height: 56px;
+}
+.reel-door-stack i {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  border: 2px solid #2A1636;
+  background: #FFC857;
+}
+.reel-door-stack i:nth-child(1) {
+  background: #FF7AB0;
+  transform: rotate(-12deg) translate(-5px, 2px);
+}
+.reel-door-stack i:nth-child(2) {
+  background: #FF9F80;
+  transform: rotate(8deg) translate(5px, 1px);
+}
+.reel-door[data-seen="true"] .reel-door-stack i {
+  background: #5A2470;
+  border-color: rgba(255, 244, 232, 0.35);
+}
+@media (max-width: 380px) {
+  .reel-door {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .reel-door .btn {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+}
+
+/* ── Home: four doors ────────────────────────────────────────────────── */
+.doors-title {
+  font: 700 12.5px/1.2 var(--font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  margin: 4px 0 10px;
+}
+.door-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.door {
+  display: grid;
+  gap: 3px;
+  align-content: start;
+  padding: 14px 12px 13px;
+  min-height: 118px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.16s ease-out;
+}
+.door:hover {
+  border-color: color-mix(in oklab, var(--color-divider), var(--color-sun) 55%);
+}
+.door:active {
+  transform: scale(0.97);
+}
+.door .tool-glyph {
+  margin-bottom: 6px;
+}
+.door strong {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+}
+.door small {
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--color-neutral-600);
+}
+
+/* ── Home: did it happen? ────────────────────────────────────────────── */
+.follow {
+  background: color-mix(in oklab, var(--color-surface), var(--color-sun) 12%);
+}
+.follow-plan {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+  text-wrap: pretty;
+}
+.panel.follow h2 {
+  font-size: 15px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ── Me ──────────────────────────────────────────────────────────────── */
+.notice-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.notice-list li {
+  position: relative;
+  padding-left: 20px;
+  text-wrap: pretty;
+}
+.notice-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.5em;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-sun);
+}
+
+/* ── the stage ───────────────────────────────────────────────────────── */
+/* Over the tab bar (60) and Ooh (55), under the crisis strip (70), which
+   stays on screen above it, and under the urgent screen (150), which
+   "Help now" opens over it. The same places as the game's layer. */
+.stage {
+  --st-ink: #2A1636;
+  --st-soft: #2A1636;
+  --st-card: #FFF8EE;
+  --st-line: #2A1636;
+  --st-shadow: #2A1636;
+  position: fixed;
+  inset: 0;
+  z-index: 66;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  outline: none;
+  overscroll-behavior: contain;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--st-ink);
+  background: linear-gradient(180deg, #FF7AB0 0px, #FF9F80 70px, #FFC857 170px, #FFE08A 45%, #FFE9CF 75%, #FFF5EC 100%);
+  font-family: var(--font-body);
+}
+.stage[data-energy="calm"] {
+  --st-ink: #FFF4E8;
+  --st-soft: #E7D9EE;
+  --st-line: rgba(255, 244, 232, 0.34);
+  --st-shadow: transparent;
+  background: linear-gradient(180deg, #150B2E 0%, #26164A 52%, #5A2470 100%);
+}
+.stage-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px max(14px, env(safe-area-inset-right)) 6px max(14px, env(safe-area-inset-left));
+}
+.stage-chip {
+  flex: none;
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid #2A1636;
+  background: #FFF4E8;
+  color: #2A1636;
+  font: 700 14px/1 var(--font-body);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.stage-progress {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+}
+.stage-progress i {
+  flex: 0 1 26px;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--st-ink) 32%, transparent);
+}
+.stage-progress i[data-on="true"] {
+  background: var(--st-ink);
+}
+.stage-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px max(16px, env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left));
+}
+.stage-loading {
+  background: #26164A;
+}
+.stage-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 7.2vw, 34px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-wrap: balance;
+  outline: none;
+}
+.stage-sub {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: var(--st-soft);
+  text-wrap: pretty;
+  outline: none;
+}
+/* The stage's buttons: cream pills with an ink line; the one to press
+   last is sun, with the comic shadow. */
+.stage-btn {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 2px solid #2A1636;
+  background: #FFF4E8;
+  color: #2A1636;
+  font: 700 14.5px/1.1 var(--font-body);
+  cursor: pointer;
+  transition: transform 0.14s ease-out;
+}
+.stage-btn:active,
+.stage-cta:active,
+.move-opt:active {
+  transform: translate(2px, 2px);
+}
+.stage-btn:disabled {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--st-ink) 30%, transparent);
+  color: color-mix(in srgb, var(--st-ink) 62%, transparent);
+  cursor: default;
+}
+.stage-cta {
+  min-height: 56px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 2.5px solid #2A1636;
+  background: #FFC857;
+  color: #2A1636;
+  box-shadow: 4px 4px 0 var(--st-shadow);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: transform 0.14s ease-out;
+}
+.stage-link {
+  min-height: 44px;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  color: var(--st-ink);
+  font: 700 14.5px/1.2 var(--font-body);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.stage :focus-visible {
+  outline: 3px solid var(--st-ink);
+  outline-offset: 3px;
+}
+.stage[data-energy="calm"] :focus-visible {
+  outline-color: #FFC857;
+}
+.stage-why {
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--st-ink);
+}
+.stage-why summary {
+  cursor: pointer;
+  width: fit-content;
+  min-height: 32px;
+  font-weight: 700;
+}
+.stage-why p {
+  margin: 6px 0 0;
+  text-wrap: pretty;
+}
+/* SplitText's mask clips each word; Fredoka's descenders need the room. */
+.rise-word-mask {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+/* ── the minute ──────────────────────────────────────────────────────── */
+.minute,
+.reel {
+  max-width: 520px;
+  min-height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+/* In the middle of the screen, where a thumb reaches, not hung from the
+   top with half a phone of nothing under it. */
+.minute-pick,
+.minute-move {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-block: auto;
+  padding: 14px 0 24px;
+}
+.minute-pick .tension-grid {
+  margin-top: 6px;
+}
+.stage .tension {
+  box-shadow: 4px 4px 0 var(--st-shadow);
+}
+.stage[data-energy="calm"] .tension {
+  background: #FFF8EE;
+  color: #2A1636;
+  border: 2px solid var(--tile);
+}
+
+/* Sorting: the sky above, the card on the table, the sun below. */
+.sort {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sort-ask {
+  align-self: center;
+  margin: 2px 0 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #FFF8EE;
+  border: 2px solid #2A1636;
+  color: #2A1636;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.15;
+  text-align: center;
+}
+.sort-zone {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: grid;
+  gap: 2px;
+  align-content: center;
+  min-height: 86px;
+  padding: 12px 104px 12px 18px;
+  border-radius: 26px;
+  overflow: hidden;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.16s ease-out;
+}
+.sort-zone strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.1;
+}
+.sort-zone small {
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+.sort-zone:active {
+  transform: scale(0.98);
+}
+/* The sky: night, with a dashed edge where things are set down. */
+.sort-sky {
+  background: #1B0F33;
+  color: #FFF4E8;
+  border: 2.5px dashed rgba(255, 244, 232, 0.55);
+}
+.sort-sky small {
+  color: #E7D9EE;
+}
+/* The sun: paper, with the bloom-sun stepping up behind the words. */
+.sort-sun {
+  background: #FFF8EE;
+  color: #2A1636;
+  border: 2.5px solid #2A1636;
+  box-shadow: 4px 4px 0 var(--st-shadow);
+}
+.sort-sun small {
+  color: #4A3560;
+}
+/* Where a dragged card is heading. */
+.sort:has(.sort-card-wrap[data-toward="sky"]) .sort-sky,
+.sort:has(.sort-card-wrap[data-toward="sun"]) .sort-sun {
+  transform: scale(1.03);
+}
+.sort-stars {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  display: flex;
+  gap: 2px;
+  transform: translateY(-50%);
+}
+.sort-star {
+  animation: starLand 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes starLand {
+  from {
+    transform: scale(0) rotate(-40deg);
+  }
+}
+.sort-rise {
+  position: absolute;
+  right: 12px;
+  bottom: -58px;
+  transform: translateY(calc(var(--up, 0) * -15px));
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sort-table {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+}
+.sort-pile {
+  position: relative;
+  width: min(100%, 330px);
+}
+/* The cards still to come: two flat ones fanned underneath. They are the
+   table's, not the card's, so they stay put while the card is thrown. */
+.sort-deck i {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  border: 3px solid #2A1636;
+  background: #FFB3D1;
+  transform: rotate(-4deg) translate(-6px, 6px);
+}
+.sort-deck i:first-child {
+  background: #FFE08A;
+  transform: rotate(5deg) translate(8px, 10px);
+}
+.sort-deck[data-left="1"] i:first-child,
+.sort-deck[data-left="0"] i {
+  display: none;
+}
+.sort-card-wrap {
+  position: relative;
+  touch-action: none;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.sort-card-wrap:active {
+  cursor: grabbing;
+}
+.sort-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  min-height: clamp(128px, 25vh, 210px);
+  padding: 16px 20px 20px;
+  border-radius: 26px;
+  background: var(--st-card);
+  border: 3px solid #2A1636;
+  box-shadow: 6px 6px 0 var(--st-shadow);
+  color: #2A1636;
+}
+.sort-kicker {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9C2F6B;
+}
+.sort-card p {
+  align-self: center;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 6.6vw, 29px);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.sort-hint,
+.sort-unsafe {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--st-ink);
+  text-wrap: pretty;
+}
+.sort-unsafe {
+  min-height: 44px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sort-unsafe u {
+  font-weight: 700;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+/* The drag hint is for a finger; a keyboard has the arrows and the two
+   buttons, which say what they do. */
+@media (hover: hover) and (pointer: fine) {
+  .sort-how {
+    display: none;
+  }
+}
+
+/* One small move, and when. */
+.move-list,
+.cue-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+.cue-list {
+  grid-template-columns: 1fr 1fr;
+}
+.move-opt {
+  min-height: 58px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  border: 2.5px solid #2A1636;
+  background: #FFF8EE;
+  color: #2A1636;
+  box-shadow: 4px 4px 0 var(--st-shadow);
+  font: 600 16px/1.3 var(--font-body);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.14s ease-out;
+}
+.move-opt[aria-pressed="true"] {
+  background: #FFC857;
+}
+.cue-opt {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.15;
+}
+.move-picked {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border-left: 5px solid var(--st-ink);
+  background: color-mix(in srgb, var(--st-ink) 9%, transparent);
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* That's your minute. */
+.minute-done,
+.reel-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 10px;
+  text-align: center;
+}
+.done-sun {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: -6px;
+}
+.done-sun::before {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 244, 232, 0.9), rgba(255, 227, 161, 0.4) 60%, transparent);
+}
+.stage[data-energy="calm"] .done-sun::before {
+  background: radial-gradient(closest-side, rgba(255, 200, 87, 0.34), rgba(255, 122, 176, 0.14) 60%, transparent);
+}
+.done-sun svg {
+  position: relative;
+}
+.plan-card {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 26px;
+  background: #FFF8EE;
+  border: 3px solid #2A1636;
+  box-shadow: 6px 6px 0 var(--st-shadow);
+  color: #2A1636;
+  text-align: left;
+}
+.plan-kicker,
+.reel-kicker {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.plan-kicker {
+  color: #9C2F6B;
+}
+.plan-when {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.plan-what {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.16;
+  text-wrap: pretty;
+}
+.plan-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.plan-row:empty {
+  display: none;
+}
+.plan-note,
+.send-note {
+  margin: 0;
+  min-height: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.done-wait {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--st-ink);
+  text-wrap: pretty;
+}
+.minute-done .stage-cta,
+.reel-end .stage-cta {
+  align-self: stretch;
+  margin-top: 4px;
+}
+.minute-done .stage-why,
+.reel-end .stage-why {
+  text-align: left;
+}
+
+/* A message to send, shown in full. */
+.send {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+.send-text {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border-left: 5px solid #2A1636;
+  background: rgba(42, 22, 54, 0.08);
+  font-size: 15.5px;
+  line-height: 1.4;
+  color: #2A1636;
+}
+.send-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── the reel ────────────────────────────────────────────────────────── */
+.reel {
+  gap: 10px;
+}
+.reel-card {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  touch-action: pan-x;
+}
+/* One card, the size of the screen. Each kind has its own colour, and
+   every one of them carries plum ink or cream at 9:1 or better. */
+.reel-face {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 4px 6px 8px 0;
+  padding: 22px 22px 24px;
+  border-radius: 30px;
+  border: 3px solid #2A1636;
+  box-shadow: 6px 6px 0 var(--st-shadow);
+  background: #FFF8EE;
+  color: #2A1636;
+  overflow: hidden;
+}
+.reel-face [data-focus] {
+  outline: none;
+}
+/* The first card of an okay day is the loud one: sun, with the bloom-sun
+   coming up in its corner. On a low or heavy day the line stays on paper. */
+.reel-spark {
+  position: relative;
+}
+.stage[data-energy="bright"] .reel-spark {
+  background: #FFC857;
+}
+.spark-sun {
+  position: absolute;
+  right: -30px;
+  bottom: -46px;
+}
+.reel-spark > :not(.spark-sun) {
+  position: relative;
+}
+.reel-now {
+  background: #FFB3D1;
+}
+.reel-person {
+  background: #FFC2A8;
+}
+.reel-fact,
+.reel-breath {
+  background: #26164A;
+  color: #FFF4E8;
+}
+.reel-breath {
+  align-items: center;
+  text-align: center;
+}
+.reel-breath .breath-cue {
+  color: #FFF4E8;
+}
+.spark-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(27px, 7.6vw, 36px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.fact-figure {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(46px, 15vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: #FFC857;
+}
+.fact-text {
+  margin: 0;
+  font-size: clamp(16px, 4.4vw, 18px);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.fact-cite {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #E7D9EE;
+}
+.ask-q,
+.now-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(23px, 6.4vw, 30px);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.ask-opts {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ask-opt {
+  min-height: 52px;
+  padding: 8px 12px;
+  font-size: 15px;
+  line-height: 1.2;
+  box-shadow: none;
+  border-width: 2px;
+}
+.reel-reply {
+  margin: 0;
+  min-height: 2.9em;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.reel-nav {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.reel-next {
+  flex: 1;
+}
+.reel-hint {
+  margin: -2px 0 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--st-ink);
+}
+.reel-end {
+  align-self: center;
+  justify-content: center;
+  padding: 10px 2px;
+}
+
+/* A short screen (a small phone, or one on its side): everything a step
+   smaller so the three cards, both zones and the hint still fit. */
+@media (max-height: 640px) {
+  .sort-zone {
+    min-height: 70px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .sort-card {
+    min-height: 104px;
+    padding: 10px 16px 12px;
+    gap: 4px;
+  }
+  .sort-table {
+    min-height: 124px;
+  }
+  .reel-face {
+    gap: 10px;
+    padding: 16px 18px;
+  }
+  .done-sun svg {
+    width: 104px;
+    height: 104px;
+  }
+}
+
+:root[data-contrast="high"] .stage {
+  background: #FFF5EC;
+}
+:root[data-contrast="high"] .stage[data-energy="calm"] {
+  background: #150B2E;
+}
+
+/* ── Lenis (components/site/SmoothScroll.tsx) ────────────────────────── */
+/* The rules from lenis/dist/lenis.css, 1.3.27, copied here so the reading
+   pages do not fetch a second stylesheet for four declarations. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}

@@ -251,6 +251,9 @@ function OohRun({
   useEffect(() => {
     if (script.quiet) return;
     let parts: Part[] = [];
+    /* How tall the page is, read with the positions and for the same
+       reason: a scroll frame does arithmetic, never a layout. */
+    let pageH = 0;
     let raf = 0;
     let settle: ReturnType<typeof setTimeout> | null = null;
     let collectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -283,6 +286,7 @@ function OohRun({
        into place, the page resizing. */
     const place = () => {
       const y = window.scrollY;
+      pageH = document.documentElement.scrollHeight;
       for (const p of parts) {
         const r = p.el.getBoundingClientRect();
         p.shown = !!(r.width || r.height);
@@ -310,9 +314,15 @@ function OohRun({
           bestTop = top;
         }
       }
-      /* At the very bottom, the way onward. */
+      /* At the very bottom, the way onward. "Bottom" used to mean "any of
+         the footer shows", which was the same thing on the long pages this
+         was written for. Home, Me and the rooms' single views are short
+         now, the footer shows from half way down them, and the bar offered
+         the next room while someone was still reading this one (it never
+         said a word about today's five). So: the end of the page, or
+         nothing else to read. */
       const edge = parts.find((p) => p.edge);
-      if (edge && edge.shown && edge.top - y < vh - 24) best = edge;
+      if (edge && edge.shown && edge.top - y < vh - 24 && (!best || y + vh >= pageH - 48)) best = edge;
       const next: Current | null = best ? { key: best.key, line: best.line, go: best.go, edge: best.edge } : null;
       /* Already on its way to this part: let it land rather than starting
          the quarter-second over (repeated measures kept pushing it back). */

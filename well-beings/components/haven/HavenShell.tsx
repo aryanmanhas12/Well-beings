@@ -6,13 +6,14 @@ import type { Haven } from "@/hooks/useHaven";
 import type { HelplineRegion } from "@/lib/types";
 import type { Video } from "@/lib/havenContent";
 import { HereTab } from "./HereTab";
-import { HereIcon, HopeIcon, PlanIcon, ReachIcon, WatchIcon } from "./icons";
+import { HereIcon, MeIcon, ReachIcon } from "./icons";
 import { IntroDawn } from "./IntroDawn";
+import { MeTab } from "./MeTab";
 import { PlanTab } from "./PlanTab";
 import { ReachTab } from "./ReachTab";
-import { HOME_EVENT, useNow, type HavenTab } from "./shared";
+import { HOME_EVENT, sectionOf, useNow, type HavenSection, type HavenTab } from "./shared";
 import { UrgentCare } from "./UrgentCare";
-import { HopeTab, WatchTab, preloadRoom } from "../lazyParts";
+import { HopeTab, MinuteFlow, ReelFlow, WatchTab } from "../lazyParts";
 import { VideoSheet } from "./VideoSheet";
 import { OohGuide } from "../OohGuide";
 import { ROOM_EVENT } from "../Feedback";
@@ -20,23 +21,42 @@ import type { OohScene } from "@/lib/oohScript";
 import { planIsWritten } from "@/lib/haven";
 import { soundWanted } from "@/lib/ambient";
 import { watchReturns } from "@/lib/intro";
+import { energyFor, minuteOffer } from "@/lib/care";
+import { minuteLang, type TopicId } from "@/lib/minute";
+import { t } from "@/lib/i18n";
 
-const TABS: { id: HavenTab; label: string; Icon: typeof HereIcon }[] = [
-  { id: "here", label: "Here", Icon: HereIcon },
-  { id: "watch", label: "Watch", Icon: WatchIcon },
-  { id: "hope", label: "Hope", Icon: HopeIcon },
-  { id: "plan", label: "Plan", Icon: PlanIcon },
-  { id: "reach", label: "Reach out", Icon: ReachIcon },
+const TABS: { id: HavenSection; label: string; Icon: typeof HereIcon }[] = [
+  { id: "here", label: "Home", Icon: HereIcon },
+  { id: "me", label: "Me", Icon: MeIcon },
+  { id: "reach", label: "Talk", Icon: ReachIcon },
 ];
 
+const ROOMS: HavenTab[] = ["here", "watch", "me", "hope", "plan", "reach"];
+
+/** The rooms behind a door, and the tab the back chip returns to. */
+const BACK: Partial<Record<HavenTab, { to: HavenSection; label: string }>> = {
+  watch: { to: "here", label: "Home" },
+  hope: { to: "me", label: "Me" },
+  plan: { to: "me", label: "Me" },
+};
+
 /**
- * The safe place: five rooms and a way between them.
+ * The safe place: three tabs, and the rooms behind them.
  *
- * Labels are wellness words rather than feature names. "Here" is where you
- * land and check in; "Watch" is talks and stories for hard days, with
- * breathing and grounding under them; "Hope" holds what is worth keeping;
- * "Plan" is the safety plan and the daily plan; "Reach out" is people. On a phone they sit at the bottom where a thumb is; on a
- * wider screen they move up under the header.
+ * Home, Me, Talk, at the owner's request (November 2026: "it's hard to
+ * navigate through the app"). There were five tabs with poetic names
+ * (Here, Watch, Hope, Plan, Reach out), and a person in a hurry had to
+ * learn which word hid the safety plan. Now the three answer three plain
+ * questions: what can I do right now (Home), what is mine (Me), who can I
+ * talk to (Talk). Watch is a door on Home; Hope and Plan are rows in Me,
+ * each with a chip that leads back. The room ids did not change, so every
+ * link written before this still lands where it did. On a phone the tabs
+ * sit at the bottom where a thumb is; on a wider screen they move up
+ * under the header.
+ *
+ * One minute and the reel open as a stage over whichever room is showing
+ * (components/minute), owned here like the urgent screen, which "Help now"
+ * on the stage opens over it.
  *
  * The urgent screen and the intro sit above everything and are owned here,
  * so any tab can raise the urgent screen and the intro can be replayed from
@@ -67,6 +87,9 @@ export function HavenShell({
      screen share it. Never persisted: tomorrow's visit asks again. */
   const [sheet, setSheet] = useState<Video | null>(null);
   const [videoConsent, setVideoConsent] = useState(false);
+  /* One minute or the reel, on its stage. `n` remounts it, so "Take one
+     minute" at the end of the reel starts clean. */
+  const [stage, setStage] = useState<{ kind: "minute"; topic: TopicId | null; n: number } | { kind: "reel"; n: number } | null>(null);
 
   const goTo = useCallback((t: HavenTab, v?: string) => {
     setTab(t);
@@ -93,7 +116,7 @@ export function HavenShell({
   useEffect(() => {
     const u = new URL(window.location.href);
     const room = u.searchParams.get("room");
-    if (!room || !TABS.some((t) => t.id === room)) return;
+    if (!room || !ROOMS.includes(room as HavenTab)) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     goTo(room as HavenTab, u.searchParams.get("view") ?? undefined);
     u.searchParams.delete("room");
@@ -148,19 +171,22 @@ export function HavenShell({
         ? { kind: "plan", written: planIsWritten(haven.state.plan) }
         : { kind: tab };
 
+  const section = sectionOf(tab);
+  const back = BACK[tab];
+  /* Held back after a report of thoughts of suicide or of not feeling
+     safe (lib/care.ts). Home does not show the tiles then; this is the
+     second lock, for a stage that was already open when that was said. */
+  const offer = minuteOffer(haven.level);
+  const energy = energyFor(haven.level);
+  const stageEnergy = energy === "bright" ? "bright" : "calm";
+  const lang = minuteLang(wb.settings.lang);
+  const helpLabel = t(wb.settings.lang).helpNow;
+
   return (
     <>
       <nav className="tabbar" aria-label="Safe place">
         {TABS.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            aria-current={tab === id ? "page" : undefined}
-            onPointerDown={() => preloadRoom(id)}
-            onPointerEnter={() => preloadRoom(id)}
-            onFocus={() => preloadRoom(id)}
-            onClick={() => goTo(id)}
-          >
+          <button key={id} type="button" aria-current={section === id ? "page" : undefined} onClick={() => goTo(id)}>
             <span className="tab-ico" aria-hidden="true">
               <Icon />
             </span>
@@ -169,7 +195,13 @@ export function HavenShell({
         ))}
       </nav>
 
-      <main className={`haven haven-${tab}`} key={nav} id="main" data-moved={nav > 0 ? "true" : undefined}>
+      <main className={`haven haven-${tab}`} key={nav} id="main" data-moved={nav > 0 ? "true" : undefined} data-energy={energy}>
+        {/* A room behind a door says where it is and how to get back. */}
+        {back && (
+          <button type="button" className="back-chip" onClick={() => goTo(back.to)}>
+            <span aria-hidden="true">←</span> {back.label}
+          </button>
+        )}
         {/* Ooh speaks at the top of each room; on Here, just under the sky,
             which HereTab places itself. */}
         {tab !== "here" && <OohGuide scene={scene} dock="tabbar" onGo={goTo} />}
@@ -181,15 +213,48 @@ export function HavenShell({
             region={region}
             goTo={goTo}
             openUrgent={() => setUrgent(true)}
-            openVideo={setSheet}
+            openMinute={(topic) => setStage({ kind: "minute", topic, n: Date.now() })}
+            openReel={() => setStage({ kind: "reel", n: Date.now() })}
             onReplayIntro={onReplayIntro}
           />
         )}
+        {tab === "me" && <MeTab wb={wb} haven={haven} goTo={goTo} />}
         {tab === "watch" && <WatchTab haven={haven} view={view} lang={wb.settings.lang} openVideo={setSheet} openUrgent={() => setUrgent(true)} />}
         {tab === "hope" && <HopeTab haven={haven} view={view} goTo={goTo} lang={wb.settings.lang} />}
         {tab === "plan" && <PlanTab wb={wb} haven={haven} region={region} view={view} goTo={goTo} />}
         {tab === "reach" && <ReachTab haven={haven} region={region} view={view} goTo={goTo} />}
       </main>
+
+      {stage?.kind === "minute" && offer !== "held" && (
+        <MinuteFlow
+          key={stage.n}
+          haven={haven}
+          lang={lang}
+          topic={stage.topic}
+          gentle={offer === "gentle"}
+          energy={stageEnergy}
+          helpLabel={helpLabel}
+          onClose={() => setStage(null)}
+          openUrgent={() => setUrgent(true)}
+          goTo={goTo}
+        />
+      )}
+      {stage?.kind === "reel" && offer !== "held" && (
+        <ReelFlow
+          key={stage.n}
+          haven={haven}
+          lang={lang}
+          level={haven.level}
+          india={(haven.state.region ?? "in") === "in"}
+          energy={stageEnergy}
+          helpLabel={helpLabel}
+          backLabel="Home"
+          canMinute
+          onClose={() => setStage(null)}
+          onMinute={() => setStage({ kind: "minute", topic: null, n: Date.now() })}
+          openUrgent={() => setUrgent(true)}
+        />
+      )}
 
       {urgent && (
         <UrgentCare

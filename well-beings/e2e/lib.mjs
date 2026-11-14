@@ -31,3 +31,31 @@ export const LAUNCH = { executablePath: EXE, args: ["--no-sandbox"] };
 
 const require = createRequire(import.meta.url);
 export const AXE = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
+
+/**
+ * Go to a room the way a person does.
+ *
+ * Three tabs since November 2026: Home, Me, Talk. Watch is a door on Home;
+ * Hope and Plan are rows in Me. The suites were written when each room had
+ * its own tab, and they still say which room they want; this takes the
+ * real path there, so every suite also proves the path exists.
+ */
+export async function goRoom(p, room) {
+  const tab = (name) => p.locator(".tabbar").getByRole("button", { name, exact: true }).click();
+  if (room === "here") await tab("Home");
+  else if (room === "me") await tab("Me");
+  else if (room === "reach") await tab("Talk");
+  else if (room === "watch") {
+    await tab("Home");
+    await p.locator(".door", { hasText: "Talks and stories" }).click();
+  } else if (room === "hope") {
+    await tab("Me");
+    await p.locator(".me .tool-row", { hasText: "My hope path" }).click();
+  } else if (room === "plan") {
+    await tab("Me");
+    await p.locator(".me .tool-row", { hasText: "My safety plan" }).click();
+  } else throw new Error(`no such room: ${room}`);
+}
+
+/** Which room is on screen: here, watch, me, hope, plan or reach. */
+export const roomOf = (p) => p.evaluate(() => document.querySelector("main.haven")?.className.match(/haven-(\w+)/)?.[1] ?? null);

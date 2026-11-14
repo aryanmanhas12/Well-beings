@@ -18,7 +18,18 @@ import { BloomSun } from "./BloomSun";
 const IN_MS = 4000;
 const OUT_MS = 6000;
 
-export function Breathe({ onDone, rounds = 6 }: { onDone?: () => void; rounds?: number }) {
+export interface BreatheWords {
+  in: string;
+  out: string;
+  done: string;
+  start: string;
+  stop: string;
+  again: string;
+}
+
+const WORDS: BreatheWords = { in: "Breathe in…", out: "…and slowly out", done: "That's a minute. Well done.", start: "Start breathing", stop: "Stop", again: "Again" };
+
+export function Breathe({ onDone, rounds = 6, words = WORDS }: { onDone?: () => void; rounds?: number; words?: BreatheWords }) {
   const [running, setRunning] = useState(false);
   const [phase, setPhase] = useState<"in" | "out" | "rest">("rest");
   const [count, setCount] = useState(0);
@@ -60,7 +71,7 @@ export function Breathe({ onDone, rounds = 6 }: { onDone?: () => void; rounds?: 
   const scale = phase === "in" ? 1 : 0.6;
   const dur = phase === "in" ? IN_MS : phase === "out" ? OUT_MS : 600;
   const cue =
-    phase === "in" ? "Breathe in…" : phase === "out" ? "…and slowly out" : count >= rounds ? "That's a minute. Well done." : "";
+    phase === "in" ? words.in : phase === "out" ? words.out : count >= rounds ? words.done : "";
 
   return (
     <div>
@@ -79,11 +90,11 @@ export function Breathe({ onDone, rounds = 6 }: { onDone?: () => void; rounds?: 
       <div className="btn-row" style={{ justifyContent: "center" }}>
         {running ? (
           <button type="button" className="btn btn-secondary" onClick={stop} style={{ minHeight: 44 }}>
-            Stop
+            {words.stop}
           </button>
         ) : (
           <button type="button" className="btn btn-sun" onClick={start}>
-            {count >= rounds ? "Again" : "Start breathing"}
+            {count >= rounds ? words.again : words.start}
           </button>
         )}
       </div>

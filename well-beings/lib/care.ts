@@ -359,3 +359,52 @@ export const DAWN_STEPS = 5;
 export function dawnLevel(stepsToday: number): number {
   return Math.max(0, Math.min(DAWN_STEPS, stepsToday)) / DAWN_STEPS;
 }
+
+/* ── what a level changes about the minute, the reel and the room ──── */
+
+/**
+ * Whether "One minute" (lib/minute.ts) is offered, and how.
+ *
+ *   open    the tension tiles are the first thing on Home after a check-in
+ *   gentle  still offered, lower on the page, and whatever is sorted, a way
+ *           to tell one person is always among the moves: a stretch of low
+ *           days is a reason to lean on someone, and the minute must not
+ *           read as "sort it out yourself"
+ *   held    not offered. After a recent report of thoughts of suicide, or
+ *           of not feeling safe, the plan, the people and the numbers have
+ *           the screen. Sorting tensions into piles would be glib there,
+ *           and a card game above a safety plan is a safety bug.
+ *
+ * The same answer decides the reel (lib/reel.ts builds none when held).
+ */
+export type MinuteOffer = "open" | "gentle" | "held";
+
+export function minuteOffer(level: CareLevel | null): MinuteOffer {
+  if (level === "thoughts" || level === "urgent") return "held";
+  if (level === "heavy") return "gentle";
+  return "open";
+}
+
+/**
+ * How lively the page is allowed to be, at the owner's request (November
+ * 2026): "vivid sunrise colours and lively motion on okay days; calmer
+ * automatically when someone checks in heavy or unsafe; crisis screens stay
+ * still".
+ *
+ *   bright  saturated dawn colours, springy motion. Saturated, light colours
+ *           are rated as more arousing and more pleasant (Wilms & Oberfeld
+ *           2017, Psychological Research), which is right for a person who
+ *           is okay and wrong for one who is flooded.
+ *   calm    the same palette a step quieter, motion slower and shorter
+ *   still   nothing moves but the sky, as before this feature existed
+ *
+ * Fails toward quiet: a low check-in today is already "calm", and anything
+ * unknown is treated as calm rather than bright.
+ */
+export type Energy = "bright" | "calm" | "still";
+
+export function energyFor(level: CareLevel | null): Energy {
+  if (level === null || level === "steady") return "bright";
+  if (level === "thoughts" || level === "urgent") return "still";
+  return "calm";
+}

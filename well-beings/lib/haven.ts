@@ -22,12 +22,13 @@
  * anything itself, because there is nowhere for it to send to.
  */
 import type { Arrival } from "./care";
+import type { MinuteRecord } from "./minute";
 import type { Region } from "./types";
 
 export const HAVEN_KEY = "wellbeings-safe-v1";
 export const PHOTOS_KEY = "wellbeings-photos-v1";
 
-export type HopeKind = "people" | "ahead" | "moments" | "through" | "sounds";
+export type HopeKind = "people" | "ahead" | "moments" | "through" | "sounds" | "words";
 
 export interface HopeItem {
   id: string;
@@ -124,6 +125,12 @@ export interface HavenState {
   region: Region | null;
   introSeen: boolean;
   lastVisit: string | null;
+  /** One minute (lib/minute.ts): what was sorted into which pile, and the
+      move chosen. Card and move ids only, never anything typed. */
+  minutes: MinuteRecord[];
+  /** The reel last swiped to its end (lib/reel.ts, reelKey), so the door
+      on Home can say "seen" instead of offering the same five as new. */
+  reelSeen: string | null;
 }
 
 export const EMPTY_PLAN: SafetyPlan = {
@@ -149,11 +156,29 @@ export const EMPTY_HAVEN: HavenState = {
   region: null,
   introSeen: false,
   lastVisit: null,
+  minutes: [],
+  reelSeen: null,
 };
 
 /** How many check-ins are kept. A year of several a day is still small;
     the cap exists so a stuck finger can never fill the storage quota. */
 const MAX_ARRIVALS = 1200;
+
+/** How many minutes are kept. "What your minutes show" reads thirty days;
+    a year of one a day is the most anyone needs behind that. */
+const MAX_MINUTES = 365;
+
+const TOPIC_IDS = ["studies", "work", "family", "love", "health", "alone", "self", "unsure"];
+
+/** Only records this version can read. A stored minute with a topic that
+    no longer exists is dropped rather than crashing the page it is on. */
+function readMinutes(raw: unknown): MinuteRecord[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(
+    (r): r is MinuteRecord =>
+      !!r && typeof r === "object" && typeof r.at === "string" && TOPIC_IDS.includes(r.topic) && Array.isArray(r.mine) && Array.isArray(r.notMine) && (r.move === null || (typeof r.move === "object" && typeof r.move.id === "string")),
+  );
+}
 
 export function planIsWritten(p: SafetyPlan): boolean {
   const filled = [p.warningSigns, p.coping, p.distractions, p.saferSurroundings, p.reason].filter((s) => s.trim()).length;
@@ -178,6 +203,8 @@ export function loadHaven(): HavenState {
       region: raw.region ?? null,
       introSeen: !!raw.introSeen,
       lastVisit: raw.lastVisit ?? null,
+      minutes: readMinutes(raw.minutes),
+      reelSeen: typeof raw.reelSeen === "string" ? raw.reelSeen : null,
     };
   } catch {
     return EMPTY_HAVEN;
@@ -187,7 +214,8 @@ export function loadHaven(): HavenState {
 export function saveHaven(s: HavenState) {
   if (typeof window === "undefined") return;
   try {
-    const trimmed = s.arrivals.length > MAX_ARRIVALS ? { ...s, arrivals: s.arrivals.slice(-MAX_ARRIVALS) } : s;
+    const trimmed =
+      s.arrivals.length > MAX_ARRIVALS || s.minutes.length > MAX_MINUTES ? { ...s, arrivals: s.arrivals.slice(-MAX_ARRIVALS), minutes: s.minutes.slice(-MAX_MINUTES) } : s;
     window.localStorage.setItem(HAVEN_KEY, JSON.stringify(trimmed));
   } catch {
     // Storage full or blocked. Nothing to fall back to without a server;

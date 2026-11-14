@@ -48,7 +48,7 @@ test("no remarks while scrolling on heavy days: nothing competes with the plan",
 });
 
 test("every room's walk ends by pointing somewhere else", () => {
-  const rooms = new Set(["here", "watch", "hope", "plan", "reach"]);
+  const rooms = new Set(["here", "watch", "me", "hope", "plan", "reach"]);
   for (const s of allScripts().filter((x) => !x.quiet && x.id !== "p-404" && x.id !== "results")) {
     const next = (s.beats ?? []).find((b) => b.go);
     assert.ok(next && rooms.has(next.go.room), `${s.id} has a way onward`);

@@ -54,12 +54,12 @@ const TAPPABLE =
   "button, a[href], [role='switch'], [role='tab'], [role='radio'], summary, label.choice, .choice, input[type='checkbox'], input[type='radio']";
 /* The big targets: the check-in answers, the choices, Ooh's bubble and
    the sun's own buttons get the bigger ring. */
-const STRONG = ".choice, .tile, [role='radio'], .ooh-say, .ooh-go, .intro-wake, .btn-sun";
+const STRONG = ".choice, .tile, .tension, .sort-zone, .move-opt, .stage-cta, [role='radio'], .ooh-say, .ooh-go, .intro-wake, .btn-sun";
 const SECTIONS =
-  ".panel, .scene, .shelf, .deck, .hope-hero, .card, .install-panel, .sky, .site-main .prose > h2, .site-main .prose > .callout";
+  ".panel, .scene, .shelf, .deck, .hope-hero, .card, .install-panel, .sky, .reel-door, .door, .site-main .prose > h2, .site-main .prose > .callout";
 const NEVER = ".intro, .dialog, .urgent, .ooh-strip, .ooh-dock, .ooh-guide, .tabbar";
 /* What the mouse spotlight follows. */
-const SPOT = ".panel, .card, .scene, .shelf, .deck, .tile, .choice, .install-panel, .sky";
+const SPOT = ".panel, .card, .scene, .shelf, .deck, .tile, .choice, .install-panel, .sky, .door";
 /* Only while scrolling: what is on screen when a page opens stays still. */
 const SCROLL_WINDOW_MS = 450;
 const GLOW_AGAIN_MS = 5000;
@@ -98,6 +98,11 @@ function answer(t: Element): { sound: Sfx | null; feel: TickKind | null } | null
   if (t.matches("[role='switch']") || pressed !== null) {
     return { sound: pressed === "true" ? "toggle-off" : "toggle-on", feel: "select" };
   }
+  /* Said outright, for buttons whose words are not English ("Kar liya",
+     "Bhej do") or do not start with one of the verbs below. */
+  const said = t.getAttribute("data-answer");
+  if (said === "success") return { sound: "success", feel: "success" };
+  if (said === "select") return { sound: "select", feel: "select" };
   const words = label(t);
   if (/^(delete|remove|clear|forget|erase)\b/.test(words)) return { sound: "delete", feel: "select" };
   if (/^(keep|save|add|done|i did it|set )/.test(words) || t.matches("[type='submit']")) return { sound: "success", feel: "success" };

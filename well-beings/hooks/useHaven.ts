@@ -20,6 +20,7 @@ import {
   savePhotos,
 } from "@/lib/haven";
 import type { Region } from "@/lib/types";
+import type { MinuteRecord, MoveStatus } from "@/lib/minute";
 
 /** A photo cap, not a storage estimate: eight is enough faces to scroll
     through in a bad minute and small enough to never crowd out the rest. */
@@ -28,7 +29,7 @@ export const MAX_PHOTOS = 8;
 /** Six hours away counts as coming back rather than still being here. */
 const RETURN_GAP_MS = 6 * 3_600_000;
 
-export type DawnStep = "arrive" | "breathe" | "ground" | "grateful" | "hope" | "watch" | "plan" | "reach" | "tiny" | "letter";
+export type DawnStep = "arrive" | "breathe" | "ground" | "grateful" | "hope" | "watch" | "plan" | "reach" | "tiny" | "letter" | "minute" | "move" | "reel";
 
 export function useHaven() {
   const [state, setState] = useState<HavenState>(EMPTY_HAVEN);
@@ -165,6 +166,43 @@ export function useHaven() {
     [update, markStep]
   );
 
+  /* One minute. The record holds ids of ready-made cards, so nothing a
+     person typed is ever in it. */
+  const addMinute = useCallback(
+    (record: Omit<MinuteRecord, "at">) => {
+      update((s) => ({ ...s, minutes: [...s.minutes, { ...record, at: new Date().toISOString() }] }));
+      markStep("minute");
+    },
+    [update, markStep]
+  );
+
+  /** "Did it happen?" Answered once; "Not yet" leaves it open. */
+  const setMoveStatus = useCallback(
+    (index: number, status: MoveStatus) => {
+      update((s) => ({
+        ...s,
+        minutes: s.minutes.map((r, i) => (i === index && r.move ? { ...r, move: { ...r.move, status, ...(status === "open" ? {} : { closedAt: new Date().toISOString() }) } } : r)),
+      }));
+      if (status === "done") markStep("move");
+    },
+    [update, markStep]
+  );
+
+  /** "Make it smaller": the same minute, a smaller move. */
+  const swapMove = useCallback(
+    (index: number, moveId: string) =>
+      update((s) => ({ ...s, minutes: s.minutes.map((r, i) => (i === index && r.move ? { ...r, move: { ...r.move, id: moveId, status: "open" as const } } : r)) })),
+    [update]
+  );
+
+  const markReelSeen = useCallback(
+    (key: string) => {
+      update((s) => (s.reelSeen === key ? s : { ...s, reelSeen: key }));
+      markStep("reel");
+    },
+    [update, markStep]
+  );
+
   const setCare = useCallback((care: CareTeam | null) => update((s) => ({ ...s, care })), [update]);
   const setRegion = useCallback((region: Region) => update((s) => ({ ...s, region })), [update]);
   const markIntroSeen = useCallback(() => update((s) => ({ ...s, introSeen: true })), [update]);
@@ -258,6 +296,10 @@ export function useHaven() {
     setRegion,
     markIntroSeen,
     markStep,
+    addMinute,
+    setMoveStatus,
+    swapMove,
+    markReelSeen,
     addPhoto,
     removePhoto,
     restorePhoto,

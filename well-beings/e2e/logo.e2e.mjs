@@ -1,4 +1,4 @@
-import { chromium, BASE, LAUNCH } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, goRoom } from "./lib.mjs";
 import { mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -33,8 +33,8 @@ for (const scheme of ["dark", "light"]) {
   console.log(scheme, "frame", frame, "wordmark", JSON.stringify(word));
   if (word !== "arun") fail++;
   await p.locator("header").screenshot({ path: `${SHOTS}/logo-header-${scheme}.png` });
-  await p.getByRole("button", { name: /^Hope$/ }).first().click();
-  await p.getByRole("button", { name: /Good things/ }).first().click();
+  await goRoom(p, "hope");
+  await p.getByRole("group", { name: "Hope sections" }).getByRole("button", { name: "Good things" }).click();
   const note = await p.locator(".rays-note").innerText();
   console.log(" rays:", note);
   if (!note.startsWith("3 of 5")) fail++;

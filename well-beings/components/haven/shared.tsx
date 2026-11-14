@@ -3,7 +3,23 @@
 import { useEffect, useState } from "react";
 import { localDateKey } from "@/lib/care";
 
-export type HavenTab = "here" | "watch" | "hope" | "plan" | "reach";
+/**
+ * The rooms. Three of them are in the tab bar: Home ("here"), Me and Talk
+ * ("reach"). The other three are reached through a door: Watch from Home,
+ * Hope and Plan from Me. The ids are older than the three tabs and stay as
+ * they are, because Ooh's links, the guides' ?room= links and every goTo in
+ * the app are written in them.
+ */
+export type HavenTab = "here" | "watch" | "me" | "hope" | "plan" | "reach";
+
+export type HavenSection = "here" | "me" | "reach";
+
+/** Which of the three tabs a room belongs to. */
+export function sectionOf(tab: HavenTab): HavenSection {
+  if (tab === "here" || tab === "watch") return "here";
+  if (tab === "reach") return "reach";
+  return "me";
+}
 
 /** Where a button elsewhere in the app can send someone. */
 export type GoTo = (tab: HavenTab, view?: string) => void;

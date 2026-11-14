@@ -41,7 +41,7 @@ export function WatchTab({
     document.getElementById(`watch-${view}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [view]);
 
-  const showHindi = lang === "hi" || haven.state.region === "in";
+  const showHindi = lang !== "en" || haven.state.region === "in";
   const all = [...VIDEOS, ...MAKER_VIDEOS].filter((v) => !v.lang || v.lang === "en" || showHindi);
   const featured = all.filter((v) => v.scene);
 

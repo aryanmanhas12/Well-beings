@@ -27,7 +27,15 @@ const FAQ = [
   },
   {
     q: "Where do my answers go?",
-    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit. Two things can reach outside the phone, and both only after you tap and agree: a video on the Watch tab loads from YouTube, and the microphone button, in browsers that cannot turn speech into text on the phone itself, uses the browser's own speech service (Google in Chrome, Apple in Safari). Arun never receives the audio. Deleting your data removes everything from that browser permanently.",
+    a: "Nowhere. They are held in your own browser's local storage on the device you used. There is no account, no server, no database and no analytics, so there is nothing to transmit. Two things can reach outside the phone, and both only after you tap and agree: a video in Watch loads from YouTube, and the microphone button, in browsers that cannot turn speech into text on the phone itself, uses the browser's own speech service (Google in Chrome, Apple in Safari). Arun never receives the audio. Deleting your data removes everything from that browser permanently.",
+  },
+  {
+    q: "What is One minute?",
+    a: "After the two-tap check-in, Home asks one thing: what the tension is about. You pick one of eight, sort three ready-made pieces of it into what is in your hands and what is not, and leave with one small move and a time for it. There is nothing to type. Very short exercises like this ease distress for a while and do not last on their own, which is why it ends with a small plan and asks, next time, whether it happened. It is not a treatment and it has not been tested in a trial.",
+  },
+  {
+    q: "Which languages does it speak?",
+    a: "Home, One minute and Today's five are written in English and in Hinglish, which is Hindi in Roman letters, the way it is typed on a phone. The menus and the help screens are also in Hindi. The longer wellbeing check stays in English, because its questions only measure what they claim to in the wording they were tested in.",
   },
   {
     q: "Why is it called Arun?",
@@ -58,11 +66,32 @@ export default function AboutPage() {
         <h2>The safe place</h2>
         <p>
           Opening the app lands you in the safe place, not in a questionnaire. It asks how you are
-          arriving in two taps, answers in a way that fits what you said, and keeps a handful of tools
-          within reach. Each one is adapted from a published approach, and the size of the evidence is
-          stated as it is:
+          arriving in two taps, answers in a way that fits what you said, and then asks one thing:
+          what the tension is about. Three tabs hold the rest: Home for what you can do right now, Me
+          for what you keep, Talk for people. Each tool is adapted from a published approach, and the
+          size of the evidence is stated as it is:
         </p>
         <ul>
+          <li>
+            <strong>One minute</strong>: pick what the tension is about, sort three ready-made pieces
+            of it into what is in your hands and what is not, and leave with one small move and a time
+            for it, with nothing to type. Very short exercises ease distress there and then and do not
+            last on their own (Elefant et al. 2017, Internet Interventions). What helps one hold is a
+            small plan with its &ldquo;when&rdquo; attached, which is far more likely to happen across
+            94 tests (Gollwitzer &amp; Sheeran 2006), so the minute ends with one and asks next time
+            whether it happened. The sorting is the first step of the problem-solving approach tested
+            with students in Delhi government schools (Michelson et al. 2020, Lancet Child &amp;
+            Adolescent Health). Arun&apos;s version has not been tested in a trial.
+          </li>
+          <li>
+            <strong>Today&apos;s five</strong>: five cards to swipe, about a minute, and then it stops.
+            A line, one finding about the mind with its source on the card, one question answered in a
+            tap, one thing to do, one person. It is shaped like the feeds people reach for and built
+            to end. Across 71 studies and 98,299 people, heavier short-video use went along with
+            weaker attention and more stress (Nguyen et al. 2025, Psychological Bulletin); those
+            studies cannot say which causes which, and nobody has tested whether a reel that ends
+            helps.
+          </li>
           <li>
             <strong>A safety plan</strong>, following the Stanley-Brown Safety Planning Intervention:
             warning signs, things you can do alone, people and places that lift you, people to ask for
@@ -101,11 +130,13 @@ export default function AboutPage() {
           thoughts of suicide. If you are, your safety plan and free helplines move to the top and stay
           there for three days. If you say you do not feel safe, everything else leaves the screen and
           the numbers to call become the buttons. If the days have been heavy for a while, it says so
-          and offers to help you tell someone.
+          and offers to help you tell someone. On the days the plan is pinned, One minute and
+          today&apos;s five are put away: a set of cards to sort or swipe is not what belongs in front
+          of someone who has said they are not safe.
         </p>
         <p>
           None of that alerts anyone. There is no server and nobody watching. If you add a therapist,
-          doctor or someone you trust on the Reach out screen, the app can write a summary of your last
+          doctor or someone you trust on the Talk screen, the app can write a summary of your last
           two weeks for you to send them, and you see every word first. Ronak is working toward
           connecting people with professionals directly; if that ever reaches this app, it will ask you
           first and say exactly what it would share.
