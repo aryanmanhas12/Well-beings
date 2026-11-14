@@ -8,7 +8,8 @@ The Next.js app behind https://aryanmanhas12.github.io/Well-beings/. See the rep
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run verify     # care tests, types, lint, production build, static audit
+npm run verify     # care, Ooh, game and minute tests, types, lint, production build, static audit
+npm run e2e        # sixteen browser suites against the build (see e2e/run.mjs)
 npm run test:care  # just the rules that decide what the safe place shows
 ```
 
@@ -21,11 +22,15 @@ the export.
 
 | Path | What it holds |
 | --- | --- |
-| `lib/care.ts` | The care levels, the direct question, the 14-day pattern and the care-team summary. No imports, no React, tested with Node alone. |
+| `lib/care.ts` | The care levels, the direct question, the 14-day pattern, the care-team summary, and what a level changes about the minute, the reel and how lively the page is. No imports, no React, tested with Node alone. |
+| `lib/minute.ts` | One minute: the eight tensions, their cards and moves in English and Hinglish, the deal, "did it happen?", and what the minutes show. Tested by `scripts/test-minute.mjs`. |
+| `lib/reel.ts`, `lib/reel-clock.mjs` | Today's five: the cards, which five, and the door's words. |
+| `lib/homeWords.ts` | What Home says (the check-in and the sky's replies) in English and Hinglish. |
 | `lib/haven.ts` | Safe-place storage (`wellbeings-safe-v1`, `wellbeings-photos-v1`), region guess, photo downscaling. |
 | `lib/havenContent.ts` | Every line the safe place says, the verified video list, and the evidence behind each tool. |
 | `hooks/useHaven.ts` | Safe-place state and the dawn. |
-| `components/haven/` | The shell, the five tabs, the check-in, the urgent screen, the intro, the sky and the bloom-sun. |
+| `components/haven/` | The shell and its three tabs (Home, Me, Talk), the rooms behind them, the check-in, the urgent screen, the intro, the sky and the bloom-sun. |
+| `components/minute/` | The stage for One minute and the reel, with GSAP for the cards. Its own lazy part. |
 | `hooks/useWellbeings.ts` | The wellbeing check, its results and the daily plan (`wellbeings-v1`). |
 | `app/globals.css` | Tokens (night-to-dawn palette, every pair contrast-measured) and all styles. |
 | `docs/CARE-INTEGRATION.md` | The consent rules and data contract for any future professional integration. |

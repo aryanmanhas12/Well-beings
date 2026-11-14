@@ -22,21 +22,41 @@ reads its own keys.
 
 ### The safe place
 
-Five rooms, on a bottom tab bar on phones and a top bar on wider screens:
+Three tabs, on a bottom tab bar on phones and a top bar on wider screens: what you can do right
+now, what is yours, and who you can talk to.
 
 | Tab | What is in it |
 | --- | --- |
-| **Here** | The dawn sky, the check-in ("How are you arriving?", "And the days ahead?"), a reply fitted to the answers, one small thing to do, and something you saved yourself on a low day. |
-| **Watch** | Talks and stories chosen for hard days (I See Something, Leading with Lollipops, Fred Rogers and more), loaded from YouTube only after you agree, with breathing and 5-4-3-2-1 grounding underneath for when you can't watch. An Instagram shelf for Aryan's own videos is ready and appears once it has reels. |
-| **Hope** | Three good things, a hope box (people, things ahead, good moments, hard times survived, songs, photos) and a note written on a steadier day for a heavier one. |
-| **Plan** | A Stanley–Brown safety plan, with a calm-day editor and a "use it now" view where every number is a button; plus the daily plan from the wellbeing check. |
-| **Reach out** | Helplines for your region, words to borrow for messaging someone, an opt-in care-team contact, and the way to Ronak. |
+| **Home** | The dawn sky, the check-in ("How are you arriving?", "And the days ahead?"), a reply fitted to the answers, then one question: "What's the tension right now?" Eight answers each open **One minute**. Under it, **Today's five** and four doors: Breathe, Watch, Sit with me, Play. |
+| **Me** | Everything you keep. For a hard moment: the Stanley–Brown safety plan (a calm-day editor and a "use it now" view where every number is a button), the hope box (people, things ahead, good moments, hard times survived, songs, photos, words) and a note written on a steadier day for a heavier one. For steadier days: a hope path, three good things, and the daily plan from the wellbeing check. Then what your minutes and your check-ins show, which only you can see. |
+| **Talk** | Helplines for your region, words to borrow for messaging someone, an opt-in care-team contact, and the way to Ronak. |
 
-**Just sit with me for a minute** opens a quiet listener from anywhere on Here: replies written in
+**One minute.** Pick what the tension is about, sort three ready-made pieces of it into "in my
+hands" or "not in my hands" (drag the card, tap, or use the arrow keys), and leave with one small
+move and a time for it. Nothing to type. Next time, once the move's time has passed, Arun asks one
+thing: did it happen? "Not yet" is a full answer. When nothing is in your hands, the moves are a
+person, a free line, a breath or rest. The rules are in `well-beings/lib/minute.ts`, with the
+studies behind the shape.
+
+**Today's five.** A reel that ends: five full-screen cards (a line, one finding about the mind with
+its source on the card, one question answered in a tap, one thing to do, one person), then it stops
+and says so. One for the morning, the day and the night. It never moves by itself and keeps no
+answer (`well-beings/lib/reel.ts`).
+
+Both are written in English and in Hinglish (one tap on Home), are quieter on a low day, and are
+not shown at all after a check-in that reports thoughts of suicide or not feeling safe: the plan,
+the people and the numbers have the screen then.
+
+**Watch**, behind its door on Home: talks and stories chosen for hard days (I See Something,
+Leading with Lollipops, Fred Rogers and more), loaded from YouTube only after you agree, with
+breathing, 5-4-3-2-1 grounding and the game underneath. An Instagram shelf for Aryan's own videos
+is ready and appears once it has reels.
+
+**Sit with me** opens a quiet listener from Home: replies written in
 advance and chosen on the phone, helplines the moment something sounds dangerous, and nothing kept
 when it closes. An optional AI mode exists behind a relay (`listener-relay/`) and is off unless the
 site is built with `NEXT_PUBLIC_LISTENER_ENDPOINT`. Text boxes for good things and the note have a
-microphone that asks before any browser speech service is used. **Today's line** on Here is edited
+microphone that asks before any browser speech service is used. **Today's line**, in Me, is edited
 by hand each week in `well-beings/lib/daily-lines.ts`.
 
 **The opening, every time.** Each time Arun is opened, a short sunrise plays. With music on it
@@ -53,12 +73,12 @@ stops under reduced motion, and "Vibration" in Settings turns the ticks off.
 **Ooh and the music.** Ooh, a small sunrise-coloured character shared with Ronak, narrates
 each page in a comic speech bubble the first time you visit it, then says one line after that.
 Further down, a narrator bar above the tab bar describes whatever you are looking at, section by
-section, and at the bottom offers the next room (Here to Hope, Hope to Plan, Plan to Reach out).
+section, and at the bottom offers the next room (Home to Me, Me to Talk).
 On heavy days Ooh stays quietly in the corner so the safety plan and helplines come first. Soft
 music, made on the phone as it plays (no audio files), starts with your first tap; the speaker
 at the top turns it off.
 
-**Install it as an app.** A quiet card on Here (one tap puts it away for a month) and a row in
+**Install it as an app.** A quiet card on Home (one tap puts it away for a month) and a row in
 Settings install Arun to the home screen: one tap where the browser offers a prompt, and plain
 steps for iPhone, for Brave, Edge and Firefox, and for Instagram's in-app browser, which cannot
 install and has to hand over to Chrome or Safari first.

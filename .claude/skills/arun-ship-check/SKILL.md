@@ -28,7 +28,7 @@ Pages serves, so `out/` is ready for the next steps.
 
 ## 3. Every end-to-end suite, in a real browser
 ```bash
-npm run e2e                 # all 15 suites; exits non-zero on any ✗
+npm run e2e                 # all 16 suites; exits non-zero on any ✗
 npm run e2e -- ooh feel     # just some
 ```
 The suites live in `well-beings/e2e/` and drive the real export in
@@ -40,8 +40,14 @@ install, voice, Ooh (greeting, narrator bar, links to the next room on the
 iPhone path), the opening sunrise and its music, the game (Scoops &
 Snowballs: over the screen but under the crisis strip, touch and keys,
 the ending, nothing kept), feedback and sounds, the
-home tap, the logo, the music's loudness, and the skills pass (undo,
-guidelines, offline fallback, zero em dashes on every page). A change to
+home tap, the logo, the music's loudness, the skills pass (undo,
+guidelines, offline fallback, zero em dashes on every page), and One
+minute with the reel (`minute`: the three tabs and the way to the plan
+offline, a minute by tap, key and throw, "did it happen?" waiting for its
+time, Hinglish, the reel ending and keeping no answer, both withheld
+after thoughts of suicide, Lenis on reading pages only). The suites say
+which room they want and `goRoom` in `e2e/lib.mjs` takes the real path
+there. A change to
 behaviour needs a check here in the same commit.
 
 ## 4. Speed, on a phone slowed 4x
@@ -56,8 +62,10 @@ heavy work never inside a tap (build it when idle); filters sit on the
 drawing inside a moving wrapper, never on the wrapper.
 
 ## 5. Look at it
-Screenshot Here, Watch, Hope, Plan and Reach out at 390x844 and 1280x800,
-dark and light, and the opening sunrise's waiting screen. Look at the whole
+Screenshot Home (before and after a check-in), Me, Talk, Watch, Hope and
+Plan at 390x844 and 1280x800, dark and light, a minute on its stage
+(sorting, the move, done) on an okay day and a low one, a card of the
+reel, and the opening sunrise's waiting screen. Look at the whole
 page, not just the part you changed (`E2E_SHOTS=/some/dir npm run e2e --
 install logo listener` also writes screenshots).
 
@@ -66,8 +74,17 @@ install logo listener` also writes screenshots).
   helpline numbers are `tel:` links; the urgent screen and phone-number
   taps are silent and still.
 - Nothing implies anyone is watching, waiting or coming. Ooh says so too.
-- Here, the safety plan, Reach out, the urgent screen, Help and Settings
+- Home, Me, the safety plan, Talk, the urgent screen, Help and Settings
   are never split into lazily loaded parts (they must work offline).
+- One minute and the reel are not shown after a report of thoughts of
+  suicide or of not feeling safe (`minuteOffer` in `lib/care.ts`). The
+  minute never ends in "let it go", never has a card about being hurt,
+  keeps only ids, and asks "did it happen?" only once the move's time has
+  passed. The reel never advances by itself, stores no answer, and has no
+  streak or count of days.
+- Every Hinglish line has an English twin and guesses nobody's gender;
+  every figure on a reel card is on the checked list in
+  `scripts/test-minute.mjs`.
 - No sunrise, and Ooh starts tucked away, after a check-in reporting
   thoughts of suicide or not feeling safe (three days).
 - Storage keys (`wellbeings-*`, `arun-*`) and `ref=wellbeings` never change.

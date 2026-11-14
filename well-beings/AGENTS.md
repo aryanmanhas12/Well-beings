@@ -29,8 +29,8 @@ app's illustration (the sun in the sky, the intro, breathing), not the
 logo. Never draw either by hand a second time.
 Ronak sets its name the same way (lowercase "ronak", Karla 700, -0.03em),
 at the owner's request, so the two sister apps read as one family. The
-wordmark in the header is the way home: from any room it goes to Here,
-and on Here it glides back to the top.
+wordmark in the header is the way home: from any room it goes to Home,
+and on Home it glides back to the top.
 
 **Ooh** is the companion character, shared with Ronak: a round sunrise-gold
 creature with the bloom-sun's two petals sprouting from its head, drawn in
@@ -41,8 +41,14 @@ watching, only gentle moods on heavy days, and on heavy days and worse Ooh
 starts tucked in the corner so nothing pushes the safety plan down. Ooh
 speaks in the page at the top; further down, a narrator bar above the tab
 bar describes whichever part is being read, changing as the page moves,
-and at the bottom offers the next room. Every section of every room has a
-line; site pages narrate their headings (`pageHeadingLine`). The bar steps
+and at the bottom offers the next room. Bottom means the end of the page,
+or nothing else left to read: since November 2026 the rooms are short,
+the footer shows from half way down them, and the bar was offering the
+next room while this one was still being read. Its walk is Home to Me,
+Me to Talk, Talk back to a good thing; and from the rooms behind a door,
+Watch to the hope box, Hope to the plan, the plan to Talk. Every section
+of every room has a line; site pages narrate their headings
+(`pageHeadingLine`). The bar steps
 aside while typing and comes back only 0.9 s later, and never appears or
 changes under a finger that is down: coming back at once once put it
 under a thumb tapping "Keep it". No bar on a heavy day. The bar's link to
@@ -80,7 +86,7 @@ day or by night, power-ups and two teammates each to find in the streets,
 a bar each, and an ending where nobody is hurt or destroyed: whoever runs
 out sits down laughing, the other walks over, and they hold hands under a
 rainbow with butterflies, hearts and cupcakes. It lives at the bottom of
-Watch (with a shortcut in Here's "If you need a minute"), because a few
+Watch (the Play door on Home goes straight to it), because a few
 silly minutes are a real step in a safety plan (distraction), and it is
 its own lazy part. Rules in `lib/game/engine.ts` (no DOM, played to the
 end in Node by `scripts/test-game.mjs`, which also fails on any word about
@@ -115,6 +121,121 @@ step in Node), and city tiles reuse evicted canvases. Measured at
 4x in a container with no GPU, day 22, sunset 16 to 19, night 18 fps,
 against v1's 19.6 and 15.0 on the same machine that day. The camera
 keeps the player between the bars and the buttons (`setInsets`).
+
+**Three tabs: Home, Me, Talk**, at the owner's request (November 2026:
+"it's hard to navigate through the app"). There were five, with poetic
+names (Here, Watch, Hope, Plan, Reach out), and a person in a hurry had
+to learn which word hid the safety plan. The three answer three plain
+questions: what can I do right now (Home), what is mine (Me), who can I
+talk to (Talk). Watch is a door on Home; Hope and Plan are rows in Me,
+and the safety plan is Me's first row. A room behind a door carries a
+chip that leads back. The room ids did not change (`here`, `watch`, `me`,
+`hope`, `plan`, `reach`), so every `goTo`, Ooh's links and the guides'
+`?room=` links land where they always did; `sectionOf` in
+`components/haven/shared.tsx` says which tab a room lights. Home is one
+question at a time: the sky, the two-tap check-in, then "What's the
+tension right now?" with eight tiles, today's five, and four doors
+(Breathe, Watch, Sit with me, Play). Everything else it used to carry
+(the pattern, good things, the hope path, today's line, the wellbeing
+check) is in Me. The tests reach rooms the way a person does
+(`goRoom` in `e2e/lib.mjs`).
+
+**One minute** is what Home is for (`lib/minute.ts`, the screen in
+`components/minute/MinuteFlow.tsx`, tested in `scripts/test-minute.mjs`
+and `e2e/minute.e2e.mjs`). Pick what the tension is about, sort three
+ready-made pieces of it into "in my hands" or "not in my hands", leave
+with one small move and its when, and next time one question: did it
+happen? No typing anywhere. Why this shape is in the file's header, with
+the studies; the short version is that very short exercises ease distress
+and do not last (Elefant et al. 2017), that what makes brief help hold
+is a goal and a follow-up while logs and homework make it worse (Opie et
+al. 2024), that a plan with its "when" is far more likely to happen
+(Gollwitzer & Sheeran 2006), and that "tension" is the word across South
+Asia (Weaver et al. 2022). The rules that must not bend:
+- It never ends in "let it go". When nothing is in a person's hands the
+  moves are a person, a free line, a breath or rest.
+- Being hurt by someone is not a card. Family and Love carry one line
+  saying so, which is a button to Talk.
+- No right answers. `lean` on a card only deals a mixed hand; nothing on
+  screen reacts as if a pile were wrong.
+- Nothing is kept from a minute left half way; a finished one keeps the
+  ids of the app's own cards and moves, never words anyone typed.
+- "Did it happen?" waits until the move's time has passed (`moveDueAt`:
+  the first build asked seconds after the minute ended), is asked for a
+  week, is only ever about the newest move, and "Not yet" is a full
+  answer. No count of moves not done, anywhere.
+- "What your minutes show" (Me) says nothing until there are three
+  minutes, is made only of the person's taps, and says only they can
+  see it.
+- It is held back entirely after a report of thoughts of suicide or of
+  not feeling safe, and gentler on a heavy stretch (`minuteOffer` in
+  `lib/care.ts`): sorting cards above a safety plan is a safety bug.
+
+**Today's five** is the reel that ends (`lib/reel.ts`,
+`components/minute/ReelFlow.tsx`): five full-screen cards to swipe, then
+an end said in words, with nothing loading behind it. A line, one thing
+known about the mind with its source printed on the card, one question
+answered in a tap, one thing to do now, one person. One reel each for
+the morning, the day and the night (the music's hours); opening it again
+shows the same five. It exists because people reach for a phone when
+they feel bad and what is waiting is a feed with no end; it takes that
+shape and gives it one. Rules: it never advances by itself; the answer
+to its question is not stored; every figure on a fact card is on the
+checked list in `scripts/test-minute.mjs` and a correlation is reported
+as one; nothing counts days, keeps a streak or says "come back"; on a
+heavy day it starts with three breaths and asks nothing; after thoughts
+of suicide there is no reel at all.
+
+**Hinglish** (Hindi in Roman letters, the way it is typed on a phone) is
+a language of its own in Settings and one tap from Home, at the owner's
+request: naming a feeling works mainly in a person's own language (Vives
+et al. 2021). Home (`lib/homeWords.ts`), the minute and the reel are
+written in full in both; the rest falls back to English, and Hindi in
+Devanagari gets the Hinglish wording inside them. The direct question is
+translated as plainly as it is asked, and its three answers mean exactly
+what the English ones do, because `lib/care.ts` acts on them. Hinglish
+lines never guess anyone's gender (no karoge/karogi, sakta/sakti: tested).
+The page's `lang` is `hi-Latn`.
+
+**Bright on an okay day, quiet on a hard one** (`energyFor` in
+`lib/care.ts`, `data-energy` on `<main>` and on the stage), the owner's
+choice. Bright is saturated sunrise colour with plum ink and springy
+motion; calm is the same page a step quieter (tiles outlined, the stage
+at dusk, slower eases); still is how the page was before any of this.
+Saturated, light colours are rated more arousing and more pleasant
+(Wilms & Oberfeld 2017), which suits someone who is okay and not someone
+who is flooded. No colour "releases dopamine", and the copy never says
+so: what a person feels in the first minute is the work of the words.
+
+**GSAP, Lenis, React Bits, and not Vanta** (November 2026, the owner
+asked for the new tools to be used). GSAP drives the cards in the minute
+and the reel: Draggable with InertiaPlugin, so a card follows a finger,
+can be thrown, and lands where the throw was going
+(`components/minute/gsap.ts` has the rules). It is in the stage's own
+lazy file (123 KB before compression), never in the first screen's
+script; every card also has buttons and arrow keys, which are plain
+React; it animates transforms only and runs only inside
+`prefers-reduced-motion: no-preference`. Lenis eases the mouse wheel on
+the guides and About and nowhere else (`components/site/SmoothScroll.tsx`):
+never the app, never Support lines, never under reduced motion, never on
+a phone, and in-page links are left to the browser so the skip link
+still moves focus. React Bits could not be fetched (its registry is
+outside this container's network); its SplitText is ported by hand as
+`components/minute/RiseText.tsx`, changed so words rise from under a
+mask at full contrast instead of fading in. Most of what React Bits
+offers (click sparks, dock, tilt, number ticker) Arun already had from
+October's pass, lighter and to house rules, so nothing else was taken.
+Vanta was left out: it is 120 KB of unmaintained code pinned to an old
+three.js, its own skill says to prefer a CSS gradient for a health
+audience on low-end phones, and the sky here is already a drawn one.
+Measured on a phone slowed 4x, against the release before: script at
+load 325 to 330 ms, blocking time 209 to 217 ms, first tap 152 to 144
+ms, a room switch 168 to 120 ms, a scroll of Home 56.3 to 58.7 fps with
+the worst frame 49 to 36 ms; a card dragged at 60 fps with a worst
+frame of 29 ms; a tile to the sort screen in about half a second. The
+first build read the time zone with `Intl.DateTimeFormat` on every
+render of Home, which a load profile showed costing 52 ms there; it is
+read once now, and only for a phone outside India.
 
 **The opening sunrise** is permanent, at the owner's request: it plays
 every time Arun is opened, with a new line each time (`lib/introLines.ts`,
@@ -214,7 +335,7 @@ worse than none.
    you claim to have changed actually changed before saying it is done.
 
    The routine is written down as the `arun-ship-check` skill and runs
-   from the repo: `npm run verify`, then `npm run e2e` (fifteen browser
+   from the repo: `npm run verify`, then `npm run e2e` (sixteen browser
    suites in `e2e/` against the Pages build; a change in behaviour adds
    its check there), then `npm run publish:root` to put the export at the
    repository root, then push to main and watch the Pages run.
@@ -248,18 +369,20 @@ and still, and Ooh does not talk over an open screen.
 In October 2026 the owner asked for the effects in every skill to be
 used; they are listed in `DESIGN.md` (Motion) and follow the same rule:
 the edge light on a sun button runs once when it arrives, then only
-under a mouse or the keyboard; the shooting star in Here's sky comes
+under a mouse or the keyboard; the shooting star in Home's sky comes
 only from a tap on the sky; sparkles only for something kept; the dock
 and the tilt only for a mouse, never under reduced motion. Nothing loops
 on its own to get attention, and none of it is on the crisis parts.
 
 **Loaded in parts, never the safety parts.** The wellbeing check, its
-results, the Watch and Hope rooms and the daily plan are their own files
+results, the Watch and Hope rooms, the daily plan, the game and the
+stage for One minute and the reel are their own files
 (`components/lazyParts.tsx`), fetched when the phone is idle and on a
-finger touching a tab. Here, the safety plan, Reach out, the urgent
-screen, Help, Settings and the video sheet are never split off: they
-hold the plan, the people and the numbers and must not wait on a network.
-A part that cannot arrive offline says so and offers "Try again".
+finger touching a door or a tile. Home, Me, the safety plan, Talk, the
+urgent screen, Help, Settings and the video sheet are never split off:
+they hold the plan, the people and the numbers and must not wait on a
+network. A part that cannot arrive offline says so and offers "Try
+again"; the stage says so over the screen, with one tap back to Home.
 
 **Design source of truth.** `DESIGN.md` holds the tokens (copied from
 `app/globals.css`; drift is a bug) and how Arun looks. The skills in

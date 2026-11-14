@@ -159,6 +159,9 @@ interface Part {
   edge?: boolean;
   /** Where it starts on the page (not the screen), measured at collect. */
   top: number;
+  /** Where it ends, the same way. Read for the footer, to know the end
+      of the page. */
+  bottom: number;
   shown: boolean;
 }
 
@@ -251,9 +254,6 @@ function OohRun({
   useEffect(() => {
     if (script.quiet) return;
     let parts: Part[] = [];
-    /* How tall the page is, read with the positions and for the same
-       reason: a scroll frame does arithmetic, never a layout. */
-    let pageH = 0;
     let raf = 0;
     let settle: ReturnType<typeof setTimeout> | null = null;
     let collectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -265,12 +265,12 @@ function OohRun({
       for (const beat of script.beats ?? []) {
         const all = document.querySelectorAll(beat.at);
         const el = all[beat.nth === undefined ? 0 : beat.nth < 0 ? all.length + beat.nth : beat.nth];
-        if (el) next.push({ key: beat.id, el, line: beat, go: beat.go, edge: beat.edge, top: 0, shown: false });
+        if (el) next.push({ key: beat.id, el, line: beat, go: beat.go, edge: beat.edge, top: 0, bottom: 0, shown: false });
       }
       if (script.headings) {
         document.querySelectorAll("main h2").forEach((h, i) => {
           if (h.closest(".ooh-strip")) return;
-          next.push({ key: `h${i}`, el: h, line: pageHeadingLine(h.textContent ?? "", i), top: 0, shown: false });
+          next.push({ key: `h${i}`, el: h, line: pageHeadingLine(h.textContent ?? "", i), top: 0, bottom: 0, shown: false });
         });
       }
       parts = next;
@@ -286,13 +286,13 @@ function OohRun({
        into place, the page resizing. */
     const place = () => {
       const y = window.scrollY;
-      pageH = document.documentElement.scrollHeight;
       for (const p of parts) {
         const r = p.el.getBoundingClientRect();
         p.shown = !!(r.width || r.height);
         /* A card still waiting to glide in sits 26px low (Feedback.tsx). */
         const waiting = p.el.closest("[data-reveal='pending']") ? 26 : 0;
         p.top = r.top + y - waiting;
+        p.bottom = r.bottom + y - waiting;
       }
     };
 
@@ -320,9 +320,13 @@ function OohRun({
          now, the footer shows from half way down them, and the bar offered
          the next room while someone was still reading this one (it never
          said a word about today's five). So: the end of the page, or
-         nothing else to read. */
+         nothing else to read. The end of the page is where the footer
+         ends, not the document's height: the lights that outline a card
+         as it arrives (Feedback.tsx) hang past the last card for a second
+         and make the document taller, and a height read in that second
+         kept the bar from ever offering the next room on a tall iPad. */
       const edge = parts.find((p) => p.edge);
-      if (edge && edge.shown && edge.top - y < vh - 24 && (!best || y + vh >= pageH - 48)) best = edge;
+      if (edge && edge.shown && edge.top - y < vh - 24 && (!best || edge.bottom - y <= vh + 48)) best = edge;
       const next: Current | null = best ? { key: best.key, line: best.line, go: best.go, edge: best.edge } : null;
       /* Already on its way to this part: let it land rather than starting
          the quarter-second over (repeated measures kept pushing it back). */

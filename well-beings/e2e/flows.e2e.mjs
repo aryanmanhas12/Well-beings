@@ -227,6 +227,11 @@ console.log("8. handoff from Ronak and offline");
   ok(await p.getByRole("button", { name: "Talk to someone" }).isVisible(), "band 3 arrival offers people first");
   ok(!p.url().includes("band="), "band stripped from the URL after reading");
   await p.reload(); await p.waitForTimeout(1200);
+  /* Wait for the service worker to have the support page, not for a
+     fixed moment: on a busy machine 1.2 s was not always enough, and
+     the check below then failed for a reason that had nothing to do
+     with the page. */
+  await p.waitForFunction(async () => !!(await caches.match(new URL("resources/", location.href).href)), null, { timeout: 10000 }).catch(() => {});
   await ctx.setOffline(true);
   await p.reload(); await p.waitForTimeout(600);
   ok(await p.locator(".sky").isVisible(), "the safe place opens offline");

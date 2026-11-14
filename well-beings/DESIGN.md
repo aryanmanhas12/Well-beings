@@ -35,7 +35,21 @@ shadow:
   sm: "0 0 0 1px #2E1F4E"
   md: "0 0 0 1px #463A60, 0 3px 10px rgba(6, 2, 16, 0.5)"
   lg: "0 0 0 1px #6F6388, 0 6px 20px rgba(6, 2, 16, 0.55)"
-  comic: "4px 4px 0 #2A1636"   # Ooh's bubbles and buttons only
+  comic: "4px 4px 0 #2A1636"   # Ooh's bubbles and buttons, the tension tiles, the stage's cards
+tiles:                         # the eight tensions on Home; ink #2A1636 on each, measured
+  studies: "#FFC857"           # 10.78:1
+  work: "#FF9F80"              # 8.31:1
+  family: "#FF7AB0"            # 6.84:1
+  love: "#FFB3D1"              # 9.97:1
+  health: "#FFE08A"            # 12.86:1
+  alone: "#FFC2A8"             # 10.69:1
+  self: "#62D6A5"              # 9.22:1 (leaf: the one tile about growing)
+  unsure: "#FFF4E8"            # 15.28:1
+stage:                         # One minute and the reel (components/minute)
+  bright: "linear-gradient(180deg, #FF7AB0 0, #FF9F80 70px, #FFC857 170px, #FFE08A 45%, #FFE9CF 75%, #FFF5EC 100%)"   # ink on its darkest point 6.84:1
+  calm: "linear-gradient(180deg, #150B2E 0%, #26164A 52%, #5A2470 100%)"   # cream 17.30 / 14.94 / 10.08:1
+  card: "#FFF8EE"              # ink 15.72:1, berry 6.57:1, soft plum #4A3560 10.11:1
+  night-card: "#26164A"        # the fact card and the reel's door: cream 14.94:1, sun 10.53:1
 motion:
   ease-out: "cubic-bezier(0.2, 0.8, 0.2, 1)"
   ease-spring: "cubic-bezier(0.34, 1.56, 0.64, 1)"
@@ -44,6 +58,8 @@ motion:
   room-in: 420-500ms, staggered 45ms
   glow: 1200ms
   sunrise: 3.2s
+  card-throw: "GSAP Draggable + Inertia, 180-450ms, snaps to the sky, the sun or back"
+  card-in: "bright 400ms back.out(1.7); calm 550ms power2.out"
   properties: [transform, opacity]   # nothing else animates
 contrast_floor: { body: "4.5:1 on surface, not just bg", sky_text: "6.94:1 worst measured pixel" }
 ---
@@ -83,6 +99,35 @@ sky). Ooh and its bubbles are the one comic element: cream paper, a 3px
 ink outline, a hard 4px offset shadow. A whisper of film grain lives on
 the fixed atmosphere layer behind everything, never over text.
 
+## Home, one question at a time
+Home is the sky, the two-tap check-in, then one question set in Fredoka
+("What's the tension right now?") over eight tiles. The tiles are the
+loudest thing in Arun on purpose: flat sunrise colour, a 2.5px ink line,
+a hard 4px offset shadow, comic like Ooh. They are buttons and they are
+not all sun: this is the one place where a pressable thing takes the
+other dawn colours, because eight identical yellow tiles cannot be told
+apart at a glance, and the choice between them is the point. Lilac is
+still not among them. Under the tiles sits today's five (a night card
+with three small cards fanned on it) and four quiet doors.
+
+The page has three energies, set by the last check-in (`energyFor` in
+`lib/care.ts`). **Bright**: as above. **Calm** (a low or heavy day): the
+same eight tiles on the surface colour with the colour moved to their
+edge, no offset shadow, no hover lift, slower eases; the stage is dusk
+with cream type. **Still** (the plan is pinned): no tiles and no reel.
+
+## The stage
+One minute and the reel play over the page on a stage built like the
+game's layer: under the crisis strip, with "Help now" in its own bar.
+Everything on it is a card with an ink line: cream for words to read,
+night plum for a fact, sun for the first line of an okay day, soft pink
+and peach for something to do and someone to tell. Sorting has the sky
+above (a night panel with a dashed edge, where a star lands for each
+thing set down) and the sun below (paper, with the bloom-sun stepping
+up). One sun button per screen, with the comic shadow; everything else
+is a cream pill. Ink never sits on the pink at the top of the bright
+stage in the softer plum (4.40:1): that plum is for cream cards only.
+
 ## The brand
 The logo is the sun rising out of a square window beside a lowercase
 "arun" (`lib/mark-geometry.mjs`, never redrawn by hand). The bloom-sun is
@@ -98,13 +143,22 @@ move; nothing fades text. Under reduced motion nothing moves, but the
 lights stay, fading in place. The sky, its glow and the opening sunrise
 are the slow atmosphere; they never move anything someone is reading.
 
+On the stage (November 2026) a card follows a finger and can be thrown:
+GSAP's Draggable with inertia, which carries a throw on to the sky or
+the sun and springs a short one back. The same card answers a tap and
+the arrow keys. Words on the done screens rise from under a mask, word
+by word, at full contrast (React Bits' SplitText, without its fade).
+All of it is transform only, inside `prefers-reduced-motion:
+no-preference`; under reduced motion cards change in place. Lenis eases
+a mouse wheel on the guides and About, and nowhere else.
+
 From the skills (October 2026), each house-safe: a light that runs once
 round the edge of the big sun buttons when they arrive and while a mouse
 or the keyboard is on them (Moving Border); words that rise out of a slot
 on the game's title and its last card, at full contrast the whole way
 (Text Generate, without the fade); eight stars out of a button when
 something is kept (Sparkles, one burst); a shooting star when someone
-taps the night sky on Here, only then (Meteors); the tab bar's icons
+taps the night sky on Home, only then (Meteors); the tab bar's icons
 swelling toward a mouse on a desktop (Magnetic Dock); the game's poster
 leaning toward a mouse (3D Card); numbers that count up once on the
 game's last card (Number Ticker); a double bezel round that card and a
@@ -141,6 +195,9 @@ green sign that slides down from under the bars (cream on #1F6B4F,
 - Don't use a hero plus three equal cards; bands that each carry one idea.
 - Don't add a second display face, a new accent, or a shadow that is not
   plum-tinted.
+- Don't put a text box on Home or in the minute. Its whole promise is
+  that there is nothing to type.
+- Don't add a count of days, a streak, or a card that moves by itself.
 - Don't let anything cover the crisis strip, "Help now" or the first
   answer on a screen.
 

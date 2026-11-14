@@ -160,9 +160,13 @@ export function preloadParts() {
      a later idle moment, and a finger on a tile or the door fetches it at
      once anyway (preloadRoom). It is still here within a few seconds of a
      first visit, which is what makes it work offline afterwards. */
+  /* One at a time, each in its own idle moment: together they were a
+     single task of about 100 ms on that slowed phone. */
   const stage = () => {
-    void load.minute().catch(() => {});
-    void load.reel().catch(() => {});
+    void load
+      .minute()
+      .catch(() => {})
+      .then(() => idle(() => void load.reel().catch(() => {}), 2000));
   };
   idle(() => {
     for (const [name, f] of Object.entries(load)) if (name !== "minute" && name !== "reel") void f().catch(() => {});

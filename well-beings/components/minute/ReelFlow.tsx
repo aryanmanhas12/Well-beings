@@ -63,6 +63,11 @@ export function ReelFlow({
   const from = useRef<1 | -1>(1);
   const total = cards.length;
   const ended = i >= total;
+  /* The function, not `haven`: that object is new on every render, and a
+     hook that depended on it re-ran each time anything was kept, which
+     slid the card in again under the finger that had just tapped "Keep
+     this line". The function itself never changes. */
+  const markSeen = haven.markReelSeen;
 
   const show = useCallback(
     (next: number) => {
@@ -70,12 +75,12 @@ export function ReelFlow({
       setI(next);
       busy.current = false;
       if (next >= total) {
-        haven.markReelSeen(reelKey(opened));
+        markSeen(reelKey(opened));
         sfx("complete");
         tick("success");
       }
     },
-    [i, total, haven, opened],
+    [i, total, markSeen, opened],
   );
 
   /** One card on or one back. `thrown`: the card has already left under

@@ -377,6 +377,25 @@ console.log("9. the reel that ends");
   await p.mouse.up(); await p.waitForTimeout(1200);
   ok((await p.locator(".reel").getAttribute("data-kind")) === "fact", "a swipe up turns the card");
   await ctx.close();
+
+  /* With motion on, keeping a line must not send the card round again:
+     the first build re-ran the card's entrance whenever anything was kept. */
+  ({ ctx, p } = await fresh(steady(), { reducedMotion: "no-preference" }));
+  await p.locator(".reel-door .btn").click(); await p.locator(".stage .reel").waitFor(); await p.waitForTimeout(1000);
+  const rest = (await p.locator(".reel-card").boundingBox()).y;
+  await p.getByRole("button", { name: "Keep this line" }).click();
+  const moved = [];
+  for (let k = 0; k < 6; k++) { await p.waitForTimeout(50); moved.push(Math.abs((await p.locator(".reel-card").boundingBox()).y - rest)); }
+  ok(Math.max(...moved) < 2, `keeping a line leaves the card where it is (moved ${Math.round(Math.max(...moved))}px)`);
+  await p.locator(".reel-next").click(); await p.waitForTimeout(900);
+  await p.locator(".reel-next").click(); await p.waitForTimeout(900);
+  await p.locator(".reel-next").click(); await p.waitForTimeout(900);
+  const rest2 = (await p.locator(".reel-card").boundingBox()).y;
+  await p.getByRole("button", { name: "Did it", exact: true }).click();
+  const moved2 = [];
+  for (let k = 0; k < 6; k++) { await p.waitForTimeout(50); moved2.push(Math.abs((await p.locator(".reel-card").boundingBox()).y - rest2)); }
+  ok(Math.max(...moved2) < 2, `and so does "Did it" (moved ${Math.round(Math.max(...moved2))}px)`);
+  await ctx.close();
 }
 
 console.log("10. what the minutes show");
