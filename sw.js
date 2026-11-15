@@ -6,7 +6,7 @@
 
    Bump CACHE on any release that changes a precached file. A stale name
    means an installed copy serves the version it first saw, forever. */
-const CACHE = "wellbeings-v19";
+const CACHE = "wellbeings-v20";
 
 /* Resolved against the SW's own scope, so this works identically at the
    root in development and under /Well-beings/ on GitHub Pages. */
@@ -24,15 +24,44 @@ const SHELL = [
   "./resources/",
 ];
 
+/* The pages that must open offline with everything they run on. */
+const WHOLE = ["./", "./resources/"];
+
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches
       .open(CACHE)
       // Individually, so one 404 can't fail the whole install.
-      .then((c) => Promise.allSettled(SHELL.map((u) => c.add(u))))
+      .then((c) => Promise.allSettled(SHELL.map((u) => c.add(u))).then(() => c))
+      .then((c) => Promise.allSettled(WHOLE.map((page) => cacheAssetsOf(c, page))))
       .then(() => self.skipWaiting())
   );
 });
+
+/* The scripts, styles and fonts a precached page names, cached with it.
+   A page's HTML alone does not open it offline. In November 2026 the
+   support page, opened offline on a phone that had never opened it, came
+   out of this cache without the scripts it names: React stopped at the
+   first missing one and Next replaced the page, helplines and all, with
+   its own "This page couldn't load", in 6 of 8 tries (3 of 8 on the
+   release before). Home had the same gap: after a first visit none of its
+   scripts were here (14 of 14 missing), because they load before this
+   worker takes over, so offline it drew but answered no tap until a
+   second visit online. The names are hashed per build, so they are read
+   from the cached page. noModule scripts are for browsers too old to run
+   this worker. */
+async function cacheAssetsOf(cache, page) {
+  const res = await cache.match(page);
+  if (!res) return;
+  const html = await res.text();
+  const urls = new Set();
+  for (const tag of html.match(/<(?:script|link)\b[^>]*>/gi) || []) {
+    if (/\bnomodule\b/i.test(tag)) continue;
+    const m = tag.match(/\b(?:src|href)="([^"]*\/_next\/static\/[^"]+)"/);
+    if (m) urls.add(m[1]);
+  }
+  await Promise.allSettled([...urls].map((u) => cache.match(u).then((hit) => hit || cache.add(u))));
+}
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(

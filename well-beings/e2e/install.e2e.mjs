@@ -102,7 +102,10 @@ console.log("6. manifest");
 {
   const ctx = await browser.newContext(); const p = await ctx.newPage();
   const r = await p.goto(BASE + "manifest.webmanifest"); const m = await r.json();
-  ok(m.id && m.screenshots?.length === 4 && m.icons.some((i) => i.purpose === "maskable"), "id, 4 screenshots, maskable icon");
+  /* Five since November 2026 (Home, a minute, Me, Watch, and a computer).
+     Chrome's richer install sheet wants at least one of each form factor. */
+  const shots = m.screenshots || [];
+  ok(m.id && shots.length === 5 && ["narrow", "wide"].every((f) => shots.some((s) => s.form_factor === f)) && m.icons.some((i) => i.purpose === "maskable"), "id, 5 screenshots (phone and computer), maskable icon");
   for (const s of m.screenshots) { const rr = await p.goto(BASE + s.src); ok(rr.status() === 200, `${s.src} served`); }
   await ctx.close();
 }

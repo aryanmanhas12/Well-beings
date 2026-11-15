@@ -6900,3 +6900,18 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* The crash screen (app/global-error.tsx): the crisis strip, then one card
+   with the way back. Nothing on it moves. */
+.crash {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+.crash h1 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}

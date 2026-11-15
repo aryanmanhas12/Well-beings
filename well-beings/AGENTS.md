@@ -384,6 +384,22 @@ they hold the plan, the people and the numbers and must not wait on a
 network. A part that cannot arrive offline says so and offers "Try
 again"; the stage says so over the screen, with one tap back to Home.
 
+**Offline from the first visit, and a crash keeps the strip.** The
+worker caches Home and the support page whole while it installs: the
+page, then every script, style and font it names, read from the page
+because the names change each build (`cacheAssetsOf` in `public/sw.js`).
+Caching the HTML alone was not enough, and the last full browser run of
+November 2026 caught it: opened offline on a phone that had never opened
+it, the support page lost its helplines to Next's "This page couldn't
+load" in 6 of 8 tries (3 of 8 on the release before), and after a first
+visit none of Home's scripts were cached, so offline it drew but answered
+no tap. Both now open whole offline after one visit (0 of 8 lost). A
+crash anywhere shows `app/global-error.tsx` instead of Next's screen: the
+crisis strip, one card, "Try again" (a reload; Next's retry asked for the
+same failed script), all support lines, Home. It is one 10 KB file every
+page names, so it is cached with Home. Section 10 of `e2e/flows.e2e.mjs`
+makes the page crash on purpose and holds all of this.
+
 **Design source of truth.** `DESIGN.md` holds the tokens (copied from
 `app/globals.css`; drift is a bug) and how Arun looks. The skills in
 `/.claude/skills` (design taste, redesign audit, high-end visual design,

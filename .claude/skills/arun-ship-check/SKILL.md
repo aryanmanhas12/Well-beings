@@ -72,7 +72,12 @@ install logo listener` also writes screenshots).
 ## 6. Safety invariants (read each one against the diff)
 - The crisis strip and "Help now" are on every screen and never covered;
   helpline numbers are `tel:` links; the urgent screen and phone-number
-  taps are silent and still.
+  taps are silent and still. A crash shows `app/global-error.tsx` (the
+  strip, then the way back), never Next's own error screen.
+- After one visit online, Home, the safety plan and the support page open
+  offline whole (the worker caches every script they name; flows suite,
+  sections 8 and 10). A new page that must work offline goes in `WHOLE`
+  in `public/sw.js`.
 - Nothing implies anyone is watching, waiting or coming. Ooh says so too.
 - Home, Me, the safety plan, Talk, the urgent screen, Help and Settings
   are never split into lazily loaded parts (they must work offline).

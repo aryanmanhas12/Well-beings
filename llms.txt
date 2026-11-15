@@ -2,15 +2,16 @@
 
 > A private safe place for hard days, and a broad wellbeing check for steadier
 > ones. It opens on a two-tap check-in, responds to what the person reports,
-> and keeps a safety plan, a hope box, breathing and grounding, and free
-> helplines within one tap. It runs entirely in the browser and does not
-> diagnose anything.
+> then asks one question: what the tension is about. A one-minute exercise
+> with no typing follows, and a safety plan, a hope box, breathing and
+> grounding, and free helplines stay within one tap. It runs entirely in the
+> browser and does not diagnose anything.
 
 Arun is a static web application. It has no account, no server, no
 database and no analytics. Everything a person enters is held in their own
 browser storage and is never transmitted by the app, so there is no user
 data of any kind available at any URL on this site. The only third-party
-content it can load is a YouTube video on the Watch tab, and only after
+content it can load is a YouTube video in Watch, and only after
 the person taps it and agrees. The microphone button uses the browser's own
 speech service only where the phone cannot transcribe on-device, and asks
 first. The listener ("Just sit with me for a minute") replies with lines
@@ -18,7 +19,7 @@ written in advance and chosen on the device; nobody reads it and nothing is
 kept. Soft background music (piano, chords, water and birds, in a morning,
 day or night version that follows the phone's clock) is synthesised in the
 browser (no audio is downloaded or streamed) and starts only after the
-person's first tap. The Watch tab also has a short game, Scoops &
+person's first tap. Watch also has a short game, Scoops &
 Snowballs: dogs and cats throw ice cream, snowballs, pies and water
 balloons at each other in a cartoon city where every street has its own
 look and rule, can call in a little army of friends, and every round ends
@@ -29,6 +30,37 @@ each section as it scrolls past with lines written in advance; it reads
 nothing the person writes. A short opening sunrise plays each time the app is
 opened, except after a recent check-in that reported thoughts of suicide. Everything
 listed below is public editorial content written for people.
+
+## How it is laid out
+
+Three tabs. Home is what a person can do right now: the check-in, One
+minute, a five-card reel called Today's five, and doors to breathing,
+videos, the listener and the game. Me is what a person keeps: the safety
+plan, the hope box, a note to themselves, good things, a daily plan, and a
+few plain sentences about what their minutes show. Talk is people: free
+helplines, words to borrow for a message, and an optional care-team
+contact.
+
+One minute: the person picks one of eight tensions (studies, work and
+money, family, love and friends, health, feeling alone, themselves, or
+"can't say yet"), sorts three ready-made cards into "in my hands" or "not
+in my hands", and chooses one small move and a time for it. On a later
+visit the app asks once whether it happened; "not yet" is a full answer.
+Nothing is typed, nothing is scored, and when nothing is in the person's
+hands the suggested moves are a person, a free helpline, a breath or rest.
+It is written in English and in Hinglish (Hindi in Roman letters). It is
+not a treatment and has not been tested in a trial; the studies it cites
+are evidence for brief exercises, if-then planning and problem solving in
+general.
+
+Today's five: five full-screen cards to swipe (a line, one research
+finding with its source, one question answered with a tap, one thing to
+do, one person to message), after which it ends and says so. It never
+advances by itself and the answer to its question is not stored.
+
+After a check-in that reports thoughts of suicide or not feeling safe,
+neither One minute nor Today's five is shown: the safety plan, people and
+helplines take the screen.
 
 ## What Arun is, and is not
 

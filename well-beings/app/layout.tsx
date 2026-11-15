@@ -1,54 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Fredoka, Karla, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
+import { fontVariables } from "./fonts";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { Feedback } from "@/components/Feedback";
 import { PAGE_BY_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/* Karla carries the whole app — copy, headings, buttons and the big display
-   figures alike, separated by weight rather than by family. Loaded as the
-   variable font (no `weight` array) because 400, 500 and 600 are all in use
-   and one variable file is smaller than three static cuts of the same face.
-
-   There was briefly a second face here, Fraunces, for the display slot. It
-   was too much: its WONK axis cants the letterforms on purpose, and a
-   statement card is not the place for type that draws attention to itself.
-   One family, three weights, no second download. */
-const karla = Karla({
-  subsets: ["latin"],
-  variable: "--font-karla",
-  display: "swap",
-});
-
-/* The display face, added in v2 to sit beside Ronak's redesign. Ronak sets
-   its headlines in Baloo 2, a heavy rounded face; Arun uses Fredoka,
-   rounder and lighter, so the two read as family without reading as one
-   product. It is only for things said out loud: the sky, headings, the
-   numbers on the crisis screen. Everything read slowly stays in Karla.
-   Latin only; Hindi headings fall back to Noto Sans Devanagari through the
-   data-lang rules in globals.css. */
-const fredoka = Fredoka({
-  subsets: ["latin"],
-  variable: "--font-fredoka",
-  display: "swap",
-});
-
-/* The Devanagari companion. Karla carries no Devanagari glyphs, so Hindi
-   would otherwise fall back to whatever the OS supplies. Noto Sans
-   Devanagari covers copy and display both, at the same three weights, which
-   keeps Hindi and English on the same typographic rules. preload:false — it
-   is dead weight for the English default and only fetches once Hindi is
-   selected. */
-
-const notoDevanagari = Noto_Sans_Devanagari({
-  subsets: ["devanagari", "latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-noto-devanagari",
-  display: "swap",
-  preload: false,
-});
+/* The faces are defined in ./fonts, which the crash screen shares. */
 
 /**
  * Site-wide metadata defaults. Per-page title, description, canonical and
@@ -133,7 +92,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={[karla.variable, fredoka.variable, notoDevanagari.variable].join(" ")}
+      className={fontVariables}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREFS_BOOTSTRAP }} />

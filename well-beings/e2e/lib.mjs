@@ -57,5 +57,20 @@ export async function goRoom(p, room) {
   } else throw new Error(`no such room: ${room}`);
 }
 
+/**
+ * The scripts, styles and fonts a built page names, read the way
+ * public/sw.js reads them (cacheAssetsOf) when it caches a page whole:
+ * every <script> and <link> under /_next/static/ except noModule ones.
+ */
+export function namedAssets(html) {
+  const urls = new Set();
+  for (const tag of html.match(/<(?:script|link)\b[^>]*>/gi) || []) {
+    if (/\bnomodule\b/i.test(tag)) continue;
+    const m = tag.match(/\b(?:src|href)="([^"]*\/_next\/static\/[^"]+)"/);
+    if (m) urls.add(m[1]);
+  }
+  return [...urls];
+}
+
 /** Which room is on screen: here, watch, me, hope, plan or reach. */
 export const roomOf = (p) => p.evaluate(() => document.querySelector("main.haven")?.className.match(/haven-(\w+)/)?.[1] ?? null);

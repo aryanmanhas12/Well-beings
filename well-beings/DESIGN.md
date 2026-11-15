@@ -128,6 +128,14 @@ up). One sun button per screen, with the comic shadow; everything else
 is a cream pill. Ink never sits on the pink at the top of the bright
 stage in the softer plum (4.40:1): that plum is for cream cards only.
 
+## The crash screen
+When something breaks, `app/global-error.tsx` takes the page: the crisis
+strip as on every screen, then one panel (`.crash`) on the page's own
+background. A Fredoka heading, one Karla line that says what is still
+true, then the usual three steps down: a sun "Try again", a soft "All
+support lines", a quiet "Back to Home". Nothing on it moves. It brings
+its own fonts from `app/fonts.ts`, the same file the root layout uses.
+
 ## The brand
 The logo is the sun rising out of a square window beside a lowercase
 "arun" (`lib/mark-geometry.mjs`, never redrawn by hand). The bloom-sun is

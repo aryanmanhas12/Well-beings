@@ -1,5 +1,6 @@
-import { chromium, BASE, LAUNCH, goRoom } from "./lib.mjs";
+import { chromium, BASE, LAUNCH, OUT, goRoom, namedAssets } from "./lib.mjs";
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 const browser = await chromium.launch({ executablePath: LAUNCH.executablePath, args: ["--no-sandbox"] });
 
 /* The sunrise now plays once per session. Tests start past it, unless a
@@ -226,19 +227,37 @@ console.log("8. handoff from Ronak and offline");
   await p.goto(BASE + "?ref=psych-screener&band=3"); await p.waitForTimeout(400);
   ok(await p.getByRole("button", { name: "Talk to someone" }).isVisible(), "band 3 arrival offers people first");
   ok(!p.url().includes("band="), "band stripped from the URL after reading");
-  await p.reload(); await p.waitForTimeout(1200);
-  /* Wait for the service worker to have the support page, not for a
-     fixed moment: on a busy machine 1.2 s was not always enough, and
-     the check below then failed for a reason that had nothing to do
-     with the page. */
-  await p.waitForFunction(async () => !!(await caches.match(new URL("resources/", location.href).href)), null, { timeout: 10000 }).catch(() => {});
+  /* One visit and no reload: the way a person opens Arun once on wifi
+     and next on a train. Home's scripts load before the worker takes over,
+     so until November 2026 none of them were cached after a first visit
+     and Home offline drew but answered no tap; and the support page, never
+     opened, lost its helplines to Next's error screen in 6 of 8 offline
+     opens. The worker now caches both pages with everything they name
+     while it installs, so wait for it to be active, not for a moment. */
+  const ready = await p.evaluate(() => Promise.race([navigator.serviceWorker.ready.then(() => true), new Promise((r) => setTimeout(() => r(false), 15000))]));
+  ok(ready, "the offline worker is active after one visit");
+  const needs = [...new Set(["index.html", "resources/index.html"].flatMap((f) => namedAssets(readFileSync(join(OUT, f), "utf8"))))];
+  const missing = await p.evaluate(async (want) => { const out = []; for (const u of want) if (!(await caches.match(u))) out.push(u.split("/").pop()); return out; }, needs);
+  ok(needs.length > 10 && missing.length === 0, `all ${needs.length} scripts, styles and fonts of Home and the support page are cached after one visit${missing.length ? " (missing " + missing.join(", ") + ")" : ""}`);
   await ctx.setOffline(true);
   await p.reload(); await p.waitForTimeout(600);
   ok(await p.locator(".sky").isVisible(), "the safe place opens offline");
+  await tab(p, "plan");
+  ok(await p.evaluate(() => document.querySelector("main.haven")?.className.includes("haven-plan")), "and answers taps: Me, then the safety plan, opens offline");
+  await p.goto(BASE + "resources/").catch(() => {}); await p.waitForTimeout(1500);
+  ok(await p.locator('main a[href="tel:14416"]').first().isVisible().catch(() => false), "support lines open offline, on a phone that never opened that page");
+  ok((await p.getByText(/couldn.t load|stopped working/).count()) === 0, "and stay: nothing replaces them once the page's scripts run");
+  /* Watch is a part loaded when it is needed, so one visit does not
+     promise it offline (it says so and offers Try again, section 6 of the
+     skills suite). Once it has been opened online, it opens offline, and
+     a video there says honestly that it cannot play. */
+  await ctx.setOffline(false);
+  await p.goto(BASE); await p.waitForTimeout(400);
+  await tab(p, "watch"); await p.getByRole("button", { name: "Watch: I See Something" }).waitFor();
+  await ctx.setOffline(true);
+  await p.reload(); await p.waitForTimeout(600);
   await tab(p, "watch"); await p.getByRole("button", { name: "Watch: I See Something" }).click();
   ok(await p.getByText(/offline, so this can.t load/).isVisible(), "offline videos say so honestly");
-  await p.goto(BASE + "resources/").catch(() => {}); await p.waitForTimeout(400);
-  ok(await p.getByText("Tele-MANAS").first().isVisible().catch(() => false), "support lines open offline");
   await ctx.close();
 }
 
@@ -255,6 +274,33 @@ console.log("9. delete everything takes the minutes too");
   await p.getByRole("button", { name: "Close" }).last().click().catch(() => {});
   await p.getByRole("button", { name: "Not right now" }).click().catch(() => {}); await p.waitForTimeout(200);
   ok((await p.locator(".follow").count()) === 0, "and nothing asks about a move that no longer exists");
+  await ctx.close();
+}
+console.log("10. a crash keeps the crisis lines on screen");
+{
+  /* The support page's own scripts refused a second after they are asked
+     for, the way the empty offline cache failed them: the page had started,
+     needed one, and crashed. (Refused at once, React never starts and the
+     page simply stays as it was served.) app/global-error.tsx takes over
+     with the crisis strip on it; Next's own "This page couldn't load",
+     which drops the strip, never shows; and once the scripts can arrive,
+     "Try again" brings the page back whole. Not counted as page errors:
+     they are the point. */
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce", serviceWorkers: "block" });
+  const p = await ctx.newPage();
+  const home = new Set(namedAssets(readFileSync(join(OUT, "index.html"), "utf8")));
+  const own = namedAssets(readFileSync(join(OUT, "resources/index.html"), "utf8")).filter((u) => u.endsWith(".js") && !home.has(u));
+  const refuse = (u) => own.includes(u.pathname);
+  await p.route(refuse, async (r) => { await new Promise((done) => setTimeout(done, 1000)); await r.abort().catch(() => {}); });
+  await p.goto(BASE + "resources/");
+  await p.locator(".crash").waitFor({ timeout: 6000 }).catch(() => {});
+  ok(own.length > 0 && (await p.locator(".crash").isVisible()), `the crash screen takes over (${own.length} of the page's own scripts refused)`);
+  ok(await p.locator('.crisis-strip a[href="tel:14416"]').isVisible(), "with Tele-MANAS still a button to call");
+  ok((await p.getByText(/couldn.t load/).count()) === 0, "and Next's own error screen, which drops the strip, never shows");
+  await p.unroute(refuse);
+  await p.getByRole("button", { name: "Try again" }).click();
+  await p.locator('main a[href="tel:14416"]').first().waitFor({ timeout: 6000 }).catch(() => {});
+  ok((await p.locator(".crash").count()) === 0 && (await p.locator('main a[href="tel:14416"]').first().isVisible()), "Try again brings the page back whole once its scripts arrive");
   await ctx.close();
 }
 await browser.close();
